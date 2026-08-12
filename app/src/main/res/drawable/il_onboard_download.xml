@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Page three: pick a quality, and it comes down into the tray. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="260dp"
+    android:viewportWidth="320"
+    android:viewportHeight="260">
+
+    <path
+        android:fillAlpha="0.10"
+        android:fillColor="#FFFFFF"
+        android:pathData="M160,118m-104,0a104,104 0,1 1,208 0a104,104 0,1 1,-208 0" />
+
+    <!-- The chooser -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M76,32h168a10,10 0,0 1,10 10v96a10,10 0,0 1,-10 10h-168a10,10 0,0 1,-10 -10v-96a10,10 0,0 1,10 -10z" />
+    <path
+        android:fillColor="#C9A0A6"
+        android:pathData="M80,46m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <path
+        android:fillColor="#C9A0A6"
+        android:pathData="M91,46m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <path
+        android:fillColor="#C9A0A6"
+        android:pathData="M102,46m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+
+    <path
+        android:fillColor="#F3DDE0"
+        android:pathData="M80,58h160a4,4 0,0 1,4 4v72a4,4 0,0 1,-4 4h-160a4,4 0,0 1,-4 -4v-72a4,4 0,0 1,4 -4z" />
+
+    <!-- Three qualities; the chosen one carries the accent. -->
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M90,70h46a11,11 0,0 1,0 22h-46a11,11 0,0 1,0 -22z" />
+    <path
+        android:fillColor="#7A1520"
+        android:pathData="M100,77h8v3h-8zM100,82h20v3h-20z" />
+    <path
+        android:fillColor="#E4C3C8"
+        android:pathData="M144,70h46a11,11 0,0 1,0 22h-46a11,11 0,0 1,0 -22z" />
+    <path
+        android:fillColor="#C99AA1"
+        android:pathData="M154,77h8v3h-8zM154,82h20v3h-20z" />
+    <path
+        android:fillColor="#E4C3C8"
+        android:pathData="M198,70h32a11,11 0,0 1,0 22h-32a11,11 0,0 1,0 -22z" />
+    <path
+        android:fillColor="#C99AA1"
+        android:pathData="M206,77h8v3h-8zM206,82h16v3h-16z" />
+
+    <!-- Progress, part way through. -->
+    <path
+        android:fillColor="#E4C3C8"
+        android:pathData="M90,110h140a5,5 0,0 1,0 10h-140a5,5 0,0 1,0 -10z" />
+    <path
+        android:fillColor="#7A1520"
+        android:pathData="M90,110h84a5,5 0,0 1,0 10h-84a5,5 0,0 1,0 -10z" />
+
+    <!-- The download itself -->
+    <path
+        android:pathData="M160,152v26"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:strokeWidth="10" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M141,176h38l-19,22z" />
+
+    <!-- Tray -->
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M88,206h144a10,10 0,0 1,10 10v6a12,12 0,0 1,-12 12h-140a12,12 0,0 1,-12 -12v-6a10,10 0,0 1,10 -10z" />
+    <path
+        android:fillAlpha="0.35"
+        android:fillColor="#7A1520"
+        android:pathData="M88,206h144a10,10 0,0 1,10 10h-164a10,10 0,0 1,10 -10z" />
+
+    <!-- Saved -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M250,164m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0" />
+    <path
+        android:pathData="M240,164l7,8 14,-15"
+        android:strokeColor="@color/brand_crimson"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M48,96m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+    <path
+        android:fillAlpha="0.5"
+        android:fillColor="#FFFFFF"
+        android:pathData="M276,72m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+    <path
+        android:fillAlpha="0.45"
+        android:fillColor="#FFFFFF"
+        android:pathData="M56,172h9v9h-9z" />
+</vector>

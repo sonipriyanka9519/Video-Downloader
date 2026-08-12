@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/_8sdp">
+
+    <View
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_3sdp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/_11sdp"
+        android:alpha="0.4"
+        android:background="?attr/colorOutline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_15sdp"
+        android:paddingEnd="@dimen/_9sdp"
+        android:paddingBottom="@dimen/_8sdp">
+
+        <TextView
+            android:id="@+id/sheetTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/videos_on_page"
+            android:textColor="@color/on_surface"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnPrev"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:contentDescription="@string/previous_video"
+            android:src="@drawable/ic_chevron_left" />
+
+        <TextView
+            android:id="@+id/pageIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:gravity="center"
+            android:minWidth="@dimen/_33sdp"
+            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+        <ImageButton
+            android:id="@+id/btnNext"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:contentDescription="@string/next_video"
+            android:src="@drawable/ic_chevron_right" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_18sdp"
+        android:text="@string/no_videos_found"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:visibility="gone" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_308sdp"
+        android:layout_marginBottom="@dimen/_6sdp" />
+
+</LinearLayout>

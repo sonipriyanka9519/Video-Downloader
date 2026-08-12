@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Brand -->
+    <color name="brand_crimson">#D8323F</color>
+    <color name="brand_crimson_dark">#A81F2B</color>
+    <color name="brand_plum">#3A1B45</color>
+    <color name="brand_maroon">#6A2338</color>
+
+    <!-- Light scheme. The app is deliberately light-only, so there is one set of these. -->
+    <color name="primary">#D8323F</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#FFDAD9</color>
+    <color name="on_primary_container">#410008</color>
+
+    <color name="secondary">#6B3A6E</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#F7D8F4</color>
+    <color name="on_secondary_container">#28092C</color>
+
+    <color name="surface">#FFFBFF</color>
+    <color name="on_surface">#1F1A1B</color>
+    <color name="surface_variant">#F5E0E1</color>
+    <color name="on_surface_variant">#534345</color>
+    <color name="surface_container">#FBF0F1</color>
+
+    <color name="outline">#857375</color>
+    <color name="outline_variant">#E3D0D1</color>
+
+    <!-- The download button before anything has been found. -->
+    <color name="fab_idle">#9E9AA0</color>
+    <color name="scrim_dark">#B3000000</color>
+
+    <!--
+      Browser chrome. Light to match the rest of the app; the address field is a shade darker
+      than the bar behind it so it still reads as a field rather than as part of the page.
+    -->
+    <color name="toolbar_surface">#FFFBFF</color>
+    <color name="toolbar_pill">#F1E9EC</color>
+    <color name="toolbar_icon">#5A4F52</color>
+    <color name="toolbar_text">#1F1A1B</color>
+    <color name="toolbar_hint">#8B8085</color>
+
+    <!-- Segmented filter on the downloads screen. -->
+    <color name="segment_track">#ECE7EA</color>
+    <color name="segment_active">#FFFFFF</color>
+    <color name="segment_inactive_text">#6B6570</color>
+
+    <!-- Bottom navigation. -->
+    <color name="divider">#EFE4E6</color>
+    <color name="nav_inactive">#8A7F82</color>
+
+    <!-- Splash and onboarding, which are the only crimson-field screens in the app. -->
+    <color name="splash_top">#E14351</color>
+    <color name="onboard_body">#FFD5D8</color>
+    <color name="onboard_dot_idle">#66FFFFFF</color>
+    <color name="onboard_skip">#B3FFFFFF</color>
+</resources>

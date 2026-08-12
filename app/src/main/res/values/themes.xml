@@ -1,0 +1,81 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Light only, on purpose. A browser renders somebody else's pages, and a dark chrome around
+      a light page reads as broken; committing to one scheme also means every surface colour
+      below is the one that actually ships.
+    -->
+    <style name="Base.Theme.Webview" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimaryContainer">@color/primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
+
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondaryContainer">@color/secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container</item>
+
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorOutlineVariant">@color/outline_variant</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- Pages are rendered as their authors intended, not force-inverted. -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="Theme.Webview" parent="Base.Theme.Webview" />
+
+    <!--
+      Shown by the system from the moment the icon is tapped until the first frame is drawn.
+      No timer and no extra activity: an artificial delay would only make the app slower.
+    -->
+    <style name="Theme.Webview.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_crimson</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Webview.Brand</item>
+    </style>
+
+    <!--
+      Splash and onboarding: a full field of brand colour, so the light status-bar icons the
+      rest of the app asks for would be invisible here.
+    -->
+    <style name="Theme.Webview.Brand" parent="Theme.Webview">
+        <item name="android:windowBackground">@drawable/bg_splash_gradient</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- API 27+; simply ignored below that, where the bar is dark anyway. -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
+
+    <!--
+      Material 3 gives a floating action button a rounded-square shape by default; this makes
+      it a circle, which reads better as a single-purpose action over a web page.
+    -->
+    <style name="ShapeAppearance.Webview.Fab" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!--
+      The pill behind the selected bottom-nav icon. Tinted from the brand container rather than
+      the default surface tint, so the selection reads as the app's own colour.
+    -->
+    <style name="BottomNavIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/primary_container</item>
+    </style>
+
+    <!-- The player is the one place a dark surround is right. -->
+    <style name="Theme.Webview.Player" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+
+</resources>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!--
+      Reading the video library is what lets a reinstalled app find the videos its predecessor
+      saved: MediaStore stops treating us as their owner the moment the package is replaced.
+    -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Webview"
+        android:usesCleartextTraffic="true">
+
+        <!--
+          The launcher entry. noHistory keeps it off the back stack, so returning from the app's
+          first screen leaves the app rather than replaying the opening.
+        -->
+        <activity
+            android:name=".ui.SplashActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview.Splash"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.onboard.OnboardingActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview.Brand"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Portrait: the browser and the downloads list have nothing to gain from landscape. -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity">
+
+            <!--
+              Sharing a link from another app. This is what puts this app in the share sheet
+              beside Chrome and Gmail: without it there is nothing for the system to offer, which
+              is why the app was missing from the list.
+
+              singleTop above matters here. Sharing into an app that is already open should hand
+              the link to the running instance through onNewIntent, not build a second copy of
+              the browser on top of the first with its own tabs.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!-- Opening a link, so the app can be chosen to handle one. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          The one screen where landscape is the point, so it follows the device. configChanges
+          keeps the activity alive through a rotation, which is what lets playback continue
+          without a reload.
+        -->
+        <activity
+            android:name=".ui.PlayerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="fullUser"
+            android:theme="@style/Theme.Webview.Player" />
+
+        <service
+            android:name=".download.DownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+    </application>
+
+</manifest>

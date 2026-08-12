@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The live state: a warm pink falling into the brand crimson. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:angle="315"
+        android:endColor="#B81E32"
+        android:startColor="#FF4E73"
+        android:type="linear" />
+</shape>

@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_toolbar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_3sdp"
+            android:paddingVertical="@dimen/_4sdp">
+
+            <ImageButton
+                android:id="@+id/btnHome"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/_27sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:contentDescription="@string/home"
+                android:src="@drawable/ic_home"
+                app:tint="@color/toolbar_icon" />
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/_27sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:contentDescription="@string/go_back"
+                android:src="@drawable/ic_chevron_left"
+                app:tint="@color/toolbar_icon" />
+
+            <ImageButton
+                android:id="@+id/btnForward"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/_27sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:contentDescription="@string/go_forward"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/toolbar_icon" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginHorizontal="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_url_pill"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_11sdp"
+                android:paddingEnd="@dimen/_2sdp">
+
+                <EditText
+                    android:id="@+id/addressBar"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/search_or_url"
+                    android:imeOptions="actionGo"
+                    android:inputType="textUri"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@color/toolbar_text"
+                    android:textColorHint="@color/toolbar_hint"
+                    android:textSize="@dimen/_10ssp" />
+
+                <ImageButton
+                    android:id="@+id/btnReload"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:contentDescription="@string/reload"
+                    android:src="@drawable/ic_refresh"
+                    app:tint="@color/toolbar_icon" />
+            </LinearLayout>
+
+            <!-- How many tabs are open, and the way into them. -->
+            <TextView
+                android:id="@+id/btnTabs"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:background="@drawable/bg_tab_count"
+                android:clickable="true"
+                android:contentDescription="@string/open_tabs"
+                android:focusable="true"
+                android:gravity="center"
+                android:textColor="@color/toolbar_icon"
+                android:textSize="@dimen/_9ssp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pageProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_2sdp"
+            android:max="100"
+            android:visibility="gone" />
+
+        <!--
+          The focused address bar, as three offers stacked under it: the page you are on, what is
+          on the clipboard, and where you usually go. Each is its own rounded row rather than one
+          panel with dividers, which is what makes them read as separate answers to "where next".
+        -->
+        <LinearLayout
+            android:id="@+id/clipPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- The page currently open, and the three things worth doing to its address. -->
+            <LinearLayout
+                android:id="@+id/pageCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_omni_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_4sdp"
+                android:paddingVertical="@dimen/_6sdp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/pageIcon"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:contentDescription="@string/current_page"
+                    android:src="@drawable/ic_globe" />
+
+                <LinearLayout
+                    android:id="@+id/pageOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/_4sdp">
+
+                    <TextView
+                        android:id="@+id/pageTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/pageUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/pageShare"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/share"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/on_surface_variant" />
+
+                <ImageButton
+                    android:id="@+id/pageCopy"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/copy_link"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_copy"
+                    app:tint="@color/on_surface_variant" />
+
+                <ImageButton
+                    android:id="@+id/pageEdit"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/edit_link"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_edit"
+                    app:tint="@color/on_surface_variant" />
+            </LinearLayout>
+
+            <!-- What is on the clipboard: one line, until the eye is pressed. -->
+            <LinearLayout
+                android:id="@+id/clipCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bg_omni_row"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/clipRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_6sdp"
+                    android:paddingVertical="@dimen/_9sdp">
+
+                    <ImageView
+                        android:id="@+id/clipIcon"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:contentDescription="@string/link_you_copied"
+                        android:src="@drawable/ic_globe" />
+
+                    <TextView
+                        android:id="@+id/clipLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:text="@string/link_you_copied"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <ImageButton
+                        android:id="@+id/clipReveal"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="@dimen/_26sdp"
+                        android:layout_height="@dimen/_26sdp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/show_link"
+                        android:padding="@dimen/_3sdp"
+                        android:src="@drawable/ic_eye"
+                        app:tint="@color/on_surface_variant" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/clipDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_4sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/clipOpen"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:paddingVertical="@dimen/_4sdp">
+
+                        <TextView
+                            android:id="@+id/clipTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/clipUrl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@color/on_surface_variant"
+                            android:textSize="@dimen/_9ssp" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/clipShare"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/share"
+                        android:padding="@dimen/_4sdp"
+                        android:src="@drawable/ic_share"
+                        app:tint="@color/on_surface_variant" />
+
+                    <ImageButton
+                        android:id="@+id/clipCopy"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/copy_link"
+                        android:padding="@dimen/_4sdp"
+                        android:src="@drawable/ic_copy"
+                        app:tint="@color/on_surface_variant" />
+
+                    <ImageButton
+                        android:id="@+id/clipEdit"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/edit_link"
+                        android:padding="@dimen/_4sdp"
+                        android:src="@drawable/ic_edit"
+                        app:tint="@color/on_surface_variant" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Where you usually go, along the bottom. -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/omniShortcuts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:clipToPadding="false"
+                android:paddingHorizontal="@dimen/_2sdp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <!-- The launcher grid, shown until a page is opened and again on Home. -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/shortcutGrid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingHorizontal="@dimen/_8sdp"
+                android:paddingTop="@dimen/_9sdp"
+                android:paddingBottom="@dimen/_15sdp" />
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/_12sdp">
+
+        <ImageView
+            android:id="@+id/fabDownload"
+            android:layout_width="@dimen/_43sdp"
+            android:layout_height="@dimen/_43sdp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/fab_bg_idle"
+            android:clickable="true"
+            android:contentDescription="@string/download"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="center"
+            android:src="@drawable/ic_download"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/fabBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_gravity="top|end"
+            android:background="@drawable/bg_fab_badge"
+            android:gravity="center"
+            android:minWidth="@dimen/_16sdp"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:textColor="@color/brand_crimson"
+            android:textSize="@dimen/_8ssp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- The three worth reaching without a menu while a video is playing. -->
+    <item
+        android:id="@+id/action_rotate"
+        android:icon="@drawable/ic_rotate"
+        android:title="@string/rotate"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_aspect"
+        android:icon="@drawable/ic_aspect"
+        android:title="@string/aspect_ratio"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_fullscreen"
+        android:icon="@drawable/ic_fullscreen"
+        android:title="@string/fullscreen"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_speed"
+        android:icon="@drawable/ic_speed"
+        android:title="@string/playback_speed"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share"
+        app:showAsAction="never" />
+
+</menu>

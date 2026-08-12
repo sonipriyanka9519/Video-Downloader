@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The square that holds the open-tab count, drawn as an outline so the number reads as the
+     contents of a tab rather than as a badge. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/transparent" />
+    <stroke
+        android:width="@dimen/_1sdp"
+        android:color="@color/toolbar_icon" />
+    <corners android:radius="@dimen/_5sdp" />
+</shape>

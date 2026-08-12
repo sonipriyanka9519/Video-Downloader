@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Page one: a browser window with the page under a shield.
+
+  Flat shapes and one accent colour, sized for a crimson background — everything here is either
+  white, a deep maroon that reads as shadow against it, or the gold used to pick out the subject.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="260dp"
+    android:viewportWidth="320"
+    android:viewportHeight="260">
+
+    <!-- Soft disc behind the subject, so the artwork sits on something. -->
+    <path
+        android:fillAlpha="0.10"
+        android:fillColor="#FFFFFF"
+        android:pathData="M160,118m-104,0a104,104 0,1 1,208 0a104,104 0,1 1,-208 0" />
+
+    <!-- Monitor -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,44h184a10,10 0,0 1,10 10v112a10,10 0,0 1,-10 10h-184a10,10 0,0 1,-10 -10v-112a10,10 0,0 1,10 -10z" />
+    <path
+        android:fillColor="#F3DDE0"
+        android:pathData="M74,60h172a4,4 0,0 1,4 4v88a4,4 0,0 1,-4 4h-172a4,4 0,0 1,-4 -4v-88a4,4 0,0 1,4 -4z" />
+
+    <!-- Window controls, which is what makes it read as a browser rather than a television. -->
+    <path
+        android:fillColor="#C9A0A6"
+        android:pathData="M81,69m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <path
+        android:fillColor="#C9A0A6"
+        android:pathData="M92,69m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <path
+        android:fillColor="#C9A0A6"
+        android:pathData="M103,69m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <path
+        android:fillColor="#E4C3C8"
+        android:pathData="M116,63h122a6,6 0,0 1,0 12h-122a6,6 0,0 1,0 -12z" />
+
+    <!-- Shield with a padlock: the page's contents, protected. -->
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M160,84l34,12v26c0,20 -14,35 -34,42c-20,-7 -34,-22 -34,-42v-26z" />
+    <path
+        android:pathData="M153,124v-7a7,7 0,0 1,14 0v7"
+        android:strokeColor="#7A1520"
+        android:strokeWidth="4" />
+    <path
+        android:fillColor="#7A1520"
+        android:pathData="M149,123h22a4,4 0,0 1,4 4v17a4,4 0,0 1,-4 4h-22a4,4 0,0 1,-4 -4v-17a4,4 0,0 1,4 -4z" />
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M160,133m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+
+    <!-- Stand -->
+    <path
+        android:fillColor="#E7C9CC"
+        android:pathData="M142,176h36l6,22h-48z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M120,198h80a5,5 0,0 1,0 10h-80a5,5 0,0 1,0 -10z" />
+
+    <!-- A plant, for the same reason every illustration of this kind has one. -->
+    <path
+        android:pathData="M282,206c-8,-30 -6,-58 6,-80"
+        android:strokeColor="#7A1520"
+        android:strokeWidth="3" />
+    <path
+        android:fillColor="#7A1520"
+        android:pathData="M284,170c-14,-4 -20,-16 -18,-28c13,2 20,13 18,28z" />
+    <path
+        android:fillColor="#7A1520"
+        android:pathData="M288,150c12,-6 16,-19 12,-30c-12,4 -17,17 -12,30z" />
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M286,192c-13,-2 -20,-12 -19,-23c12,1 19,10 19,23z" />
+
+    <!-- Ground -->
+    <path
+        android:fillAlpha="0.28"
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,208h228a4,4 0,0 1,0 8h-228a4,4 0,0 1,0 -8z" />
+
+    <!-- Confetti, kept sparse. -->
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M42,74m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+    <path
+        android:fillAlpha="0.6"
+        android:fillColor="#FFFFFF"
+        android:pathData="M280,52m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+    <path
+        android:fillAlpha="0.45"
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,182m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0" />
+    <path
+        android:fillColor="#F7C65A"
+        android:pathData="M36,132h9v9h-9z" />
+</vector>

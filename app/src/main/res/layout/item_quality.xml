@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="@dimen/_9sdp"
+    app:cardElevation="0dp"
+    app:strokeWidth="@dimen/_1sdp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--
+          Text is centred and the tick sits in the top corner, where centred text never reaches —
+          so no padding has to be reserved for it and the tile stays compact.
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:paddingTop="@dimen/_7sdp"
+            android:paddingBottom="@dimen/_7sdp">
+
+            <TextView
+                android:id="@+id/qualityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/on_surface"
+                android:textSize="@dimen/_11ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/qualityMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="@dimen/_8ssp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/qualityCheck"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:contentDescription="@string/selected"
+            android:src="@drawable/ic_check_circle"
+            android:visibility="gone" />
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

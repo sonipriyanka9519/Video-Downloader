@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- White on the red button reads far better than another shade of red. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/white" />
+    <stroke android:width="@dimen/_1sdp" android:color="#B81E32" />
+</shape>

@@ -1,0 +1,66 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.ms.webview'
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.ms.webview"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            optimization {
+                enable false
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation libs.activity.ktx
+    implementation libs.appcompat
+    implementation libs.constraintlayout
+    implementation libs.material
+    implementation libs.recyclerview
+    implementation libs.viewpager2
+    implementation libs.swiperefreshlayout
+    implementation libs.core.splashscreen
+
+    // Scalable dp/sp units, so one set of sizes holds across screen sizes
+    implementation libs.sdp
+    implementation libs.ssp
+    implementation libs.lifecycle.livedata
+
+    // Browser + detection
+    implementation libs.webkit
+    implementation libs.okhttp
+    implementation libs.gson
+
+    // Playback of finished downloads
+    implementation libs.media3.exoplayer
+    implementation libs.media3.ui
+
+    // Thumbnails
+    implementation libs.glide
+
+    testImplementation libs.junit
+    androidTestImplementation libs.espresso.core
+    androidTestImplementation libs.ext.junit
+}

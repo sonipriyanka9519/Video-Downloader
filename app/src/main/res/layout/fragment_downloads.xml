@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/downloadsRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_12sdp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/downloads"
+            android:textColor="@color/on_surface"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Two states, mutually exclusive, so a segmented control rather than a list of filters. -->
+    <LinearLayout
+        android:id="@+id/segments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@drawable/bg_segment_track"
+        android:orientation="horizontal"
+        android:padding="@dimen/_3sdp">
+
+        <TextView
+            android:id="@+id/tabActive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_segment_active"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_7sdp"
+            android:text="@string/tab_downloading"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/_11ssp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tabFinished"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_7sdp"
+            android:text="@string/tab_finished"
+            android:textColor="@color/segment_inactive_text"
+            android:textSize="@dimen/_11ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Swipeable, with the segments above acting as both label and control. -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/downloadPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

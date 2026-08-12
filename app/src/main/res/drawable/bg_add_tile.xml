@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Add tile, drawn to the same 48dp disc as the brand marks so the grid stays even. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:fillColor="@color/surface_variant"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+
+    <path
+        android:fillColor="@color/on_surface_variant"
+        android:pathData="M21.8,14h4.4v7.8h7.8v4.4h-7.8v7.8h-4.4v-7.8h-7.8v-4.4h7.8z" />
+</vector>

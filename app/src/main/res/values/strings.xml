@@ -1,0 +1,142 @@
+<resources>
+    <string name="app_name">Webview</string>
+
+    <!-- Splash -->
+    <string name="app_tagline">Browse. Detect. Download.</string>
+
+    <!--
+      Onboarding. Three pages, each naming one thing the app does, in the order the user will
+      meet them — anything longer would be a manual nobody reads.
+    -->
+    <string name="onboard_title_1">New generation\nsafe &amp; private\nweb browser</string>
+    <string name="onboard_body_1">Browse anywhere you like. Nothing you open is shared, and your session stays on your device.</string>
+    <string name="onboard_title_2">Every video\non the page,\nfound for you</string>
+    <string name="onboard_body_2">Reels, clips and streams are detected as they play — even when a page holds several at once.</string>
+    <string name="onboard_title_3">Download in\nthe quality\nyou choose</string>
+    <string name="onboard_body_3">Pick a resolution, then watch it offline whenever you want. Saved straight to your gallery.</string>
+    <string name="onboard_illustration">Illustration</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get started</string>
+
+    <!-- Browser -->
+    <string name="search_or_url">Search or type a URL</string>
+    <string name="go_back">Back</string>
+    <string name="go_forward">Forward</string>
+    <string name="reload">Reload</string>
+    <string name="page_load_failed">Could not load this page</string>
+    <string name="open_downloads">Downloads</string>
+
+    <!-- Home -->
+    <string name="tab_home">Home</string>
+    <string name="home">Home</string>
+    <string name="add_shortcut">Add</string>
+    <string name="add_shortcut_title">Add a site</string>
+    <string name="add_shortcut_hint">These are the sites this app can detect and download videos from.</string>
+    <string name="all_shortcuts_added">Every supported site is already on your home screen.</string>
+    <string name="remove">Remove</string>
+    <string name="remove_shortcut_title">Remove shortcut?</string>
+    <string name="remove_shortcut_message">“%1$s” goes back into the Add list. You can put it back any time.</string>
+
+    <!-- Address bar suggestions -->
+    <string name="link_you_copied">Link you copied</string>
+    <string name="text_you_copied">Text you copied</string>
+    <string name="current_page">Current page</string>
+    <string name="show_link">Show the copied link</string>
+    <string name="copy_link">Copy link</string>
+    <string name="edit_link">Edit link</string>
+    <string name="share_link_via">Share link</string>
+    <string name="link_copied">Link copied</string>
+
+    <!-- Tabs -->
+    <string name="open_tabs">Open tabs</string>
+    <string name="new_tab">New tab</string>
+    <string name="close_tab">Close tab</string>
+    <string name="close_all_tabs">Close all</string>
+    <string name="close_tabs_view">Close tabs view</string>
+    <string name="tabs">Tabs</string>
+    <string name="tab_preview">Page preview</string>
+    <plurals name="tabs_open">
+        <item quantity="one">%d tab</item>
+        <item quantity="other">%d tabs</item>
+    </plurals>
+
+    <!-- Detection sheet -->
+    <string name="videos_on_page">Videos detected</string>
+    <string name="no_videos_found">No videos detected yet. Scroll to a video and let it start playing — it will appear here.</string>
+    <string name="now_playing">NOW PLAYING</string>
+    <string name="previous_video">Previous video</string>
+    <string name="next_video">Next video</string>
+    <string name="download">Download</string>
+    <string name="choose_quality">Choose quality</string>
+    <string name="quality">Quality</string>
+    <string name="selected">Selected</string>
+    <string name="queued_toast">Added to downloads</string>
+    <string name="format_not_supported">Streaming format not supported yet</string>
+    <string name="unsupported">Unsupported</string>
+    <string name="protected_content">Protected</string>
+    <string name="status_muxing">Converting to MP4…</string>
+    <plurals name="videos_found">
+        <item quantity="one">%d video detected</item>
+        <item quantity="other">%d videos detected</item>
+    </plurals>
+    <plurals name="videos_unreadable">
+        <item quantity="one">Detected %d video, but it could not be opened for download. Let it
+            play for a moment, or reload the page.</item>
+        <item quantity="other">Detected %d videos, but none could be opened for download. Let one
+            play for a moment, or reload the page.</item>
+    </plurals>
+
+    <!-- Downloads -->
+    <string name="downloads">Downloads</string>
+    <string name="tab_downloading">Downloading</string>
+    <string name="tab_finished">Finished</string>
+    <string name="no_downloads">Nothing downloaded yet</string>
+    <string name="no_active_downloads">Nothing downloading right now</string>
+    <string name="segments_progress">%1$d/%2$d segments</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="delete">Delete</string>
+    <string name="open">Open</string>
+    <string name="play">Play</string>
+    <string name="delete_title">Delete this video?</string>
+    <string name="delete_message">“%1$s” will be removed from your device. This cannot be undone.</string>
+    <string name="delete_file_failed">Removed from the list, but the file could not be deleted</string>
+    <string name="playback_failed">This video could not be played</string>
+    <string name="video_missing">This video is no longer on your device</string>
+
+    <!-- Player -->
+    <string name="rotate">Rotate</string>
+    <string name="aspect_ratio">Aspect ratio</string>
+    <string name="fullscreen">Fullscreen</string>
+    <string name="playback_speed">Playback speed</string>
+    <string name="share">Share</string>
+    <string name="orientation_auto">Rotation: follows device</string>
+    <string name="orientation_landscape">Rotation: locked landscape</string>
+    <string name="orientation_portrait">Rotation: locked portrait</string>
+    <string name="aspect_fit">Fit</string>
+    <string name="aspect_crop">Crop to fill</string>
+    <string name="aspect_stretch">Stretch</string>
+    <string name="speed_normal">Normal</string>
+    <string name="share_failed">Nothing available to share this with</string>
+    <string name="preparing">Preparing…</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_failed">Download failed</string>
+    <string name="status_queued">Queued</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_publishing">Saving to gallery…</string>
+    <string name="status_cancelled">Cancelled</string>
+    <plurals name="downloading_n">
+        <item quantity="one">Downloading %d file</item>
+        <item quantity="other">Downloading %d files</item>
+    </plurals>
+
+    <!-- Notification channels -->
+    <string name="channel_progress">Download progress</string>
+    <string name="channel_done">Completed downloads</string>
+
+    <!-- Content descriptions -->
+    <string name="thumbnail">Thumbnail</string>
+</resources>

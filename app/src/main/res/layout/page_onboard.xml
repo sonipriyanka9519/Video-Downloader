@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One page. The badge and headline are pinned to the top so they do not shift between pages as
+  the illustrations change height; the artwork takes whatever room is left.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_26sdp">
+
+    <ImageView
+        android:id="@+id/onboardBadge"
+        android:layout_width="@dimen/_33sdp"
+        android:layout_height="@dimen/_33sdp"
+        android:layout_marginTop="@dimen/_22sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_logo_badge" />
+
+    <TextView
+        android:id="@+id/onboardTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_26sdp"
+        android:letterSpacing="0.02"
+        android:lineSpacingMultiplier="1.15"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_19ssp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/onboardBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:lineSpacingMultiplier="1.25"
+        android:textColor="@color/onboard_body"
+        android:textSize="@dimen/_10ssp" />
+
+    <ImageView
+        android:id="@+id/onboardArt"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/onboard_illustration"
+        android:scaleType="fitCenter" />
+
+</LinearLayout>
