@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The one action worth reaching for in the tab switcher, so it is the one thing filled in. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/brand_crimson" />
+    <corners android:radius="@dimen/_16sdp" />
+</shape>

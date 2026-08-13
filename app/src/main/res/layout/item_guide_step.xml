@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One picture, and nothing else. Everything a step used to say in text — which method it belongs
+  to, its number, what to tap, whether it is the last one — is drawn into the picture itself, so
+  the words and the screenshot can never disagree about what the site currently looks like.
+
+  match_parent on both axes, and it has to be: ViewPager2 refuses a page that does not fill it and
+  throws the moment the page is attached.
+-->
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stepImage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:adjustViewBounds="true"
+    android:contentDescription="@null"
+    android:paddingHorizontal="@dimen/_10sdp"
+    android:paddingVertical="@dimen/_6sdp"
+    android:scaleType="fitCenter" />

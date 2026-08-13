@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  What was copied, and the two things that can be done about it.
+
+  The address is shown in full rather than shortened. It is the whole question — whether this is
+  the link you meant — and a middle-elided URL answers it worse than no URL at all.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_18sdp"
+    android:paddingTop="@dimen/_20sdp"
+    android:paddingBottom="@dimen/_10sdp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/link_you_copied"
+        android:textColor="@color/on_surface"
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/clipDialogLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:background="@drawable/bg_clip_link"
+        android:gravity="center"
+        android:maxLines="3"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_9sdp"
+        android:textColor="@color/clip_link_text"
+        android:ellipsize="end"
+        android:textSize="@dimen/_11ssp" />
+
+    <TextView
+        android:id="@+id/btnClipOpen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:background="@drawable/bg_pill_brand"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingVertical="@dimen/_11sdp"
+        android:text="@string/open"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btnClipCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="@dimen/_11sdp"
+        android:text="@string/cancel"
+        android:textColor="@color/on_surface_variant"
+        android:textSize="@dimen/_12ssp" />
+</LinearLayout>

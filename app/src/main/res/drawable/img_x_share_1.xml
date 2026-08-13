@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp" android:height="220dp"
+    android:viewportWidth="300" android:viewportHeight="220">
+    <!-- Placeholder. Drop the real screenshot in as img_x_share_1.png to replace it. -->
+    <path android:fillColor="#2B3440" android:pathData="M0,0h300v220h-300z" />
+    <path android:fillColor="#3B4757" android:pathData="M0,0h300v34h-300z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M60,96h180a10,10 0 0 1 10,10v22a10,10 0 0 1 -10,10h-180a10,10 0 0 1 -10,-10v-22a10,10 0 0 1 10,-10z" />
+    <path android:fillColor="#3B4757" android:pathData="M0,186h300v34h-300z" />
+</vector>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The button that opens what was pasted. Flat brand fill, square corners: it sits against the
+  paste box and reads as the end of that control rather than as an ornament of its own.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <corners android:radius="@dimen/_12sdp"/>
+    <solid android:color="@color/brand_crimson" />
+</shape>

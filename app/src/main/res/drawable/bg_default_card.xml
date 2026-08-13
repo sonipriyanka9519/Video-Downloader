@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The panel the three benefits sit in, a shade off the dialog behind it so the list reads as
+     one block rather than as three loose rows. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/default_card" />
+    <corners android:radius="@dimen/_14sdp" />
+</shape>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The page you are on. Its own pair rather than the onboarding dots: those are white, drawn for a
+  coloured background, and on this screen's white surface the active one simply disappeared —
+  swiping then looked like nothing had happened.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@color/guide_step" />
+</shape>

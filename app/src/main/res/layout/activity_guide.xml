@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Four things, in the order they are used: somewhere to paste a link, the pictures that explain
+  where to get one, the dots that say how many there are, and the way through to the site.
+
+  Nothing else. The heading, the method names and the step captions have all moved into the
+  pictures, which is where they can be kept truthful — a caption describes a screen, and the
+  picture is the screen.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/guideRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    android:orientation="vertical">
+
+    <!--
+      The way out, and which site this guide is about. The site's own mark, because that is the
+      question a viewer arriving here has: they tapped Instagram, and this screen has to say
+      Instagram back to them.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_6sdp"
+        android:paddingVertical="@dimen/_6sdp">
+
+        <ImageButton
+            android:id="@+id/btnGuideBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:src="@drawable/ic_back"
+            app:tint="@color/toolbar_icon" />
+
+        <ImageView
+            android:id="@+id/guideIcon"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/guideName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/on_surface"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!--
+      The paste box, held in from both edges so it sits as a field on the screen rather than as a
+      bar across it, with the search button as its own rounded, weighted thing beside it.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_guide_input"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_6sdp">
+
+            <EditText
+                android:id="@+id/guideInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:hint="@string/guide_paste_hint"
+                android:imeOptions="actionGo"
+                android:inputType="textUri"
+                android:maxLines="1"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/on_surface_variant"
+                android:textSize="@dimen/_11ssp" />
+
+            <!-- Fills the box from the clipboard, which is where the link almost always is. -->
+            <ImageButton
+                android:id="@+id/btnGuidePaste"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/guide_paste"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_link"
+                app:tint="@color/on_surface_variant" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnGuideSearch"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:background="@drawable/bg_guide_search"
+            android:contentDescription="@string/guide_open_link"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/_12sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_search"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/guideError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/_18sdp"
+        android:textColor="@color/brand_crimson"
+        android:textSize="@dimen/_9ssp"
+        android:visibility="gone" />
+
+    <!--
+      Every step of both methods in one pager, swiped end to end. Two pagers would have made the
+      methods look like alternatives to choose between before reading either; one makes them a
+      sequence you can simply keep going through.
+    -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/guidePager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/guideDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/btnOpenSite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginVertical="@dimen/_12sdp"
+        android:background="@drawable/bg_guide_open"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_11sdp">
+
+        <TextView
+            android:id="@+id/btnOpenSiteLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

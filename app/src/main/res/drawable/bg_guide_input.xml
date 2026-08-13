@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rounded on every corner now: the box stands on its own rather than being squared off against
+     a button, so it reads as one field centred on the screen. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/surface_variant" />
+    <stroke
+        android:width="@dimen/_1sdp"
+        android:color="@color/outline_variant" />
+    <corners android:radius="@dimen/_12sdp" />
+</shape>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The paste box: outlined rather than filled, so it reads as somewhere to put something. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/surface_container" />
+    <stroke
+        android:width="@dimen/_1sdp"
+        android:color="@color/outline_variant" />
+    <corners android:radius="@dimen/_12sdp" />
+</shape>
