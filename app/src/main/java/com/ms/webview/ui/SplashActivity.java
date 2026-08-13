@@ -80,9 +80,22 @@ public class SplashActivity extends AppCompatActivity {
                 .start();
     }
 
+    /**
+     * On to the app, carrying anything the launch arrived with.
+     *
+     * <p>The extras matter for one case in particular. A notification Firebase displays itself
+     * opens the launcher activity — this one — with the message's payload in its extras, so the
+     * link to the video is here and nowhere else. Passing the whole bundle on rather than picking
+     * the link out of it keeps this screen ignorant of what a push contains, which is the right
+     * amount for an opening animation to know.
+     */
     private void openNext() {
-        startActivity(new Intent(this, Onboarding.isDone(this)
-                ? MainActivity.class : OnboardingActivity.class));
+        Intent next = new Intent(this, Onboarding.isDone(this)
+                ? MainActivity.class : OnboardingActivity.class);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            next.putExtras(getIntent().getExtras());
+        }
+        startActivity(next);
         // No reverse transition: this screen must not come back on Back.
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

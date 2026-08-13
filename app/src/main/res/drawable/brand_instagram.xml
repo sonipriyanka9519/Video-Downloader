@@ -1,31 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="48dp"
     android:height="48dp"
     android:viewportWidth="48"
     android:viewportHeight="48">
 
+    <!-- Gradient circle background -->
     <path
-        android:fillColor="#E4405F"
-        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="0"
+                android:startY="48"
+                android:endX="48"
+                android:endY="0">
+                <item android:offset="0.0"  android:color="#FFDC80" />
+                <item android:offset="0.1"  android:color="#FCAF45" />
+                <item android:offset="0.25" android:color="#F77737" />
+                <item android:offset="0.4"  android:color="#F56040" />
+                <item android:offset="0.55" android:color="#FD1D1D" />
+                <item android:offset="0.7"  android:color="#E1306C" />
+                <item android:offset="0.8"  android:color="#C13584" />
+                <item android:offset="0.9"  android:color="#833AB4" />
+                <item android:offset="1.0"  android:color="#405DE6" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
+    <!-- Instagram icon group -->
     <group
         android:scaleX="1.6"
         android:scaleY="1.6"
         android:translateX="4.8"
         android:translateY="4.8">
+
+        <!-- Rounded square -->
         <path
-            android:pathData="M7.6,2.6h8.8a5,5 0,0 1,5 5v8.8a5,5 0,0 1,-5 5h-8.8a5,5 0,0 1,-5 -5v-8.8a5,5 0,0 1,5 -5z"
             android:strokeColor="#FFFFFF"
             android:strokeLineCap="round"
-            android:strokeWidth="2.1" />
+            android:strokeLineJoin="round"
+            android:strokeWidth="2.1"
+            android:pathData="M7.6,2.6h8.8a5,5 0,0 1,5 5v8.8a5,5 0,0 1,-5 5h-8.8a5,5 0,0 1,-5 -5v-8.8a5,5 0,0 1,5 -5z" />
+
+        <!-- Lens circle -->
         <path
-            android:pathData="M12,7.9a4.1,4.1 0,1 1,0 8.2a4.1,4.1 0,1 1,0 -8.2z"
             android:strokeColor="#FFFFFF"
             android:strokeLineCap="round"
-            android:strokeWidth="2.1" />
+            android:strokeWidth="2.1"
+            android:pathData="M12,7.9a4.1,4.1 0,1 1,0 8.2a4.1,4.1 0,1 1,0 -8.2z" />
+
+        <!-- Dot -->
         <path
             android:fillColor="#FFFFFF"
             android:pathData="M17.4,6.6m-1.35,0a1.35,1.35 0,1 1,2.7 0a1.35,1.35 0,1 1,-2.7 0" />
+
     </group>
+
 </vector>

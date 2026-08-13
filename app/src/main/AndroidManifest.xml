@@ -20,6 +20,32 @@
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
+    <!--
+      What the guide screens are allowed to see.
+
+      From Android 11 an app cannot tell which other apps exist unless it says which it cares
+      about. Without this the guide's "Open Facebook" button would find no browser and no app and
+      quietly do nothing — the query returns an empty list rather than an error, so it fails
+      silently, which is the worst way for it to fail.
+
+      The intent covers browsers and any app that claims web addresses; the four packages are
+      named so the site's own app can be launched directly where it claims none.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="https" />
+        </intent>
+
+        <package android:name="com.facebook.katana" />
+        <package android:name="com.instagram.android" />
+        <package android:name="com.pinterest" />
+        <package android:name="com.twitter.android" />
+    </queries>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -65,7 +91,7 @@
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Webview"
             android:windowSoftInputMode="adjustResize"
@@ -76,9 +102,12 @@
               beside Chrome and Gmail: without it there is nothing for the system to offer, which
               is why the app was missing from the list.
 
-              singleTop above matters here. Sharing into an app that is already open should hand
-              the link to the running instance through onNewIntent, not build a second copy of
-              the browser on top of the first with its own tabs.
+              singleTask above matters here, and singleTop was not enough. A share arrives with
+              NEW_TASK set by the app doing the sharing, and singleTop only stops a second copy
+              within one task — so the share opened the app in a task of its own and the phone's
+              recents list showed this app twice, each with its own tabs. singleTask means there
+              is one instance in one task wherever the intent comes from: the existing task comes
+              forward and the link arrives at onNewIntent.
             -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -100,6 +129,62 @@
             </intent-filter>
         </activity>
 
+        <!-- How to get a video out of one site, shown in place of opening it blind. One per
+             site, so each can say exactly what that site's own screens say. -->
+        <activity
+            android:name=".ui.guide.FacebookGuideActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ui.guide.InstagramGuideActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ui.guide.PinterestGuideActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ui.guide.XGuideActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!--
+          Typing an address. adjustResize so the suggestion list shrinks for the keyboard rather
+          than sliding out from under it.
+        -->
+        <activity
+            android:name=".ui.SearchActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview.Search"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
         <!--
           The one screen where landscape is the point, so it follows the device. configChanges
           keeps the activity alive through a rotation, which is what lets playback continue
@@ -117,6 +202,34 @@
             android:name=".download.DownloadService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <!--
+          Pushed messages. exported="false" and yet reachable: the filter is what Firebase's own
+          library binds to inside this process, not something another app can start.
+        -->
+        <service
+            android:name=".push.PushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!--
+          What a notification Firebase displays itself looks like — the case where PushService is
+          never called, so nothing in code gets the chance to decide. Without the icon the system
+          draws a grey square; without the channel it invents one named "Miscellaneous" that the
+          viewer cannot tell apart from any other app's.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_video" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/brand_crimson" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="video_updates" />
 
     </application>
 

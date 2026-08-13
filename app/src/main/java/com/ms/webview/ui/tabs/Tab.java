@@ -2,6 +2,7 @@ package com.ms.webview.ui.tabs;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 
@@ -34,6 +35,24 @@ public class Tab {
      */
     @Nullable
     public transient Bundle state;
+
+    /**
+     * The tab's own browser, alive for as long as the tab is worth keeping loaded.
+     *
+     * <p>This is what makes returning to a tab instant. A page's real state — where it is
+     * scrolled, what its scripts have built, a video's position — lives in the browser instance
+     * and cannot be written down: {@link #state} records the history, and restoring it re-fetches
+     * the page rather than resuming it. Keeping the instance keeps the page.
+     *
+     * <p>Null for a tab showing the grid, and null for one whose browser has been reclaimed to
+     * save memory — see {@code LIVE_TAB_LIMIT}. Either way the tab is still a tab; it simply has
+     * to load its address again when next opened.
+     */
+    @Nullable
+    public transient WebView view;
+
+    /** When this tab was last in front, for deciding whose browser to reclaim first. */
+    public transient long lastShownAt;
 
     public Tab(String id) {
         this.id = id;

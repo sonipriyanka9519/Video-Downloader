@@ -35,26 +35,50 @@
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold" />
 
-        <ImageButton
+        <!-- Named as well as drawn: it is the action people come here for. -->
+        <LinearLayout
             android:id="@+id/btnNewTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_pill_brand"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_9sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_6sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_add"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="@string/new_tab"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Everything else, including the one action that cannot be undone. -->
+        <ImageButton
+            android:id="@+id/btnTabsMenu"
             style="?attr/borderlessButtonStyle"
             android:layout_width="@dimen/_28sdp"
             android:layout_height="@dimen/_28sdp"
-            android:contentDescription="@string/new_tab"
-            android:src="@drawable/ic_add"
-            app:tint="@color/on_surface" />
-
-        <TextView
-            android:id="@+id/btnCloseAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="@dimen/_6sdp"
-            android:text="@string/close_all_tabs"
-            android:textColor="@color/brand_crimson"
-            android:textSize="@dimen/_11ssp" />
+            android:contentDescription="@string/more_options"
+            android:padding="@dimen/_4sdp"
+            android:src="@drawable/ic_more_vert"
+            app:tint="@color/on_surface" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

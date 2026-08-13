@@ -48,12 +48,56 @@
     <string name="share_link_via">Share link</string>
     <string name="link_copied">Link copied</string>
 
+    <!--
+      Becoming the phone's browser. Each benefit says what changes for the person reading it; a
+      list of what the app would gain is not a reason for anyone else.
+    -->
+    <string name="default_browser_title_lead">Set as</string>
+    <string name="default_browser_title_accent">Default Browser</string>
+    <string name="default_browser_subtitle">Experience smoother browsing!</string>
+    <string name="default_browser_safe">Safe Browsing</string>
+    <string name="default_browser_safe_body">Check website security for safe browsing</string>
+    <string name="default_browser_fast">Fast Download</string>
+    <string name="default_browser_fast_body">Enjoy faster and more stable downloads</string>
+    <string name="default_browser_quick">Quick Access</string>
+    <string name="default_browser_quick_body">Browse popular websites with one click</string>
+    <string name="default_browser_set">Set as Default</string>
+    <string name="default_browser_later">Later</string>
+    <string name="default_browser_unavailable">This phone has no screen for choosing a default browser</string>
+
     <!-- Tabs -->
     <string name="open_tabs">Open tabs</string>
     <string name="new_tab">New tab</string>
     <string name="close_tab">Close tab</string>
     <string name="close_all_tabs">Close all</string>
     <string name="close_tabs_view">Close tabs view</string>
+    <string name="more_options">More options</string>
+    <string name="recent">Related to recent searches</string>
+    <string name="from_history">From your history</string>
+    <string name="today_on">Today – %1$s</string>
+    <string name="yesterday_on">Yesterday – %1$s</string>
+    <string name="earlier">Earlier</string>
+
+    <!-- Guide screens -->
+    <string name="guide_paste_hint">Paste the video link here</string>
+    <string name="guide_open_link">Open this link</string>
+    <string name="guide_invalid_link">That is not a link. Paste the whole address, starting with https.</string>
+    <string name="guide_wrong_site">This is the %1$s guide. Paste a %1$s link, or go back and pick the right site.</string>
+    <string name="guide_paste">Paste from clipboard</string>
+    <string name="guide_open_site">Open %1$s</string>
+
+    <!--
+      Only the names remain. Every instruction a guide used to carry is drawn into its pictures,
+      where the words and the screenshot cannot drift apart.
+    -->
+    <string name="guide_instagram">Instagram</string>
+    <string name="guide_pinterest">Pinterest</string>
+    <string name="guide_x">X</string>
+    <string name="guide_facebook">Facebook</string>
+    <string name="use_search">Use this search</string>
+    <string name="history">History</string>
+    <string name="clear_all">Clear all</string>
+    <string name="no_history">Nothing here yet. Pages you visit will be listed.</string>
     <string name="tabs">Tabs</string>
     <string name="tab_preview">Page preview</string>
     <plurals name="tabs_open">
@@ -136,6 +180,10 @@
     <!-- Notification channels -->
     <string name="channel_progress">Download progress</string>
     <string name="channel_done">Completed downloads</string>
+    <string name="channel_push">Video updates</string>
+
+    <!-- Used only when a pushed message carries a link but no wording of its own. -->
+    <string name="push_default_title">A video for you</string>
 
     <!-- Content descriptions -->
     <string name="thumbnail">Thumbnail</string>

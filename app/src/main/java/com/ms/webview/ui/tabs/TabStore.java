@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Bundle;
+import android.os.Parcel;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.webkit.WebView;
 import androidx.annotation.Nullable;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,6 +38,21 @@ public final class TabStore {
     private static final String PREFS = "browser_tabs";
     private static final String KEY_TABS = "tabs";
     private static final String KEY_CURRENT = "current";
+
+    /**
+     * Where each tab's back history is written.
+     *
+     * <p>Kept as files rather than in the tab list, because a history is a {@link Bundle} of
+     * arbitrary size — hundreds of kilobytes on a tab that has been used — and the list is read
+     * and written on every navigation.
+     */
+    private static final String STATE_DIR = "tab_states";
+
+    /**
+     * Past this a history is dropped rather than written. A tab that has wandered far enough to
+     * produce one this large is better reopened at its address than given a slow restore.
+     */
+    private static final int MAX_STATE_BYTES = 512 * 1024;
 
     /**
      * Where page previews are written. Cleared of orphans whenever the list is saved.
@@ -89,6 +107,8 @@ public final class TabStore {
                 if (!TextUtils.isEmpty(tab.previewPath) && !new File(tab.previewPath).exists()) {
                     tab.previewPath = "";
                 }
+                // Its back history, so Back after a restart means the page before this one.
+                loadState(context, tab);
                 tabs.add(tab);
             }
         } catch (Exception e) {
@@ -123,7 +143,90 @@ public final class TabStore {
                 .putString(KEY_TABS, array.toString())
                 .putString(KEY_CURRENT, currentId == null ? "" : currentId)
                 .apply();
-        deleteOrphanPreviews(context, tabs);
+
+        for (Tab tab : tabs) saveState(context, tab);
+        deleteOrphans(context, tabs);
+    }
+
+    // ---------------------------------------------------------------------- history
+
+    /**
+     * Writes a tab's back history so it survives the app closing.
+     *
+     * <p>Without this a restored tab began at its address with nothing behind it, and Back — the
+     * one gesture that means "the page before this" — had no page before this to go to, so it
+     * left for the grid instead.
+     *
+     * <p>A history is a {@link Bundle} the WebView built and only the WebView understands, so it
+     * is stored as the bytes of that bundle rather than as anything readable. The format belongs
+     * to the platform and is not promised to survive an Android upgrade, which is why every read
+     * is allowed to fail: a history that cannot be understood is discarded and the tab opens at
+     * its address, exactly as it did before any of this.
+     */
+    public static void saveState(Context context, Tab tab) {
+        File file = new File(stateDir(context), tab.id + ".bin");
+        if (tab.state == null) {
+            file.delete();
+            return;
+        }
+
+        Parcel parcel = Parcel.obtain();
+        try {
+            parcel.writeBundle(tab.state);
+            byte[] bytes = parcel.marshall();
+            if (bytes.length > MAX_STATE_BYTES) {
+                file.delete();
+                return;
+            }
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                out.write(bytes);
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "could not save history for " + tab.id + ": " + t.getMessage());
+            file.delete();
+        } finally {
+            parcel.recycle();
+        }
+    }
+
+    /** Reads a tab's back history back in, or leaves it null when there is none to be had. */
+    public static void loadState(Context context, Tab tab) {
+        File file = new File(stateDir(context), tab.id + ".bin");
+        if (!file.exists()) return;
+
+        Parcel parcel = Parcel.obtain();
+        try {
+            byte[] bytes = new byte[(int) file.length()];
+            try (FileInputStream in = new FileInputStream(file)) {
+                int read = 0;
+                while (read < bytes.length) {
+                    int n = in.read(bytes, read, bytes.length - read);
+                    if (n < 0) break;
+                    read += n;
+                }
+            }
+            parcel.unmarshall(bytes, 0, bytes.length);
+            parcel.setDataPosition(0);
+            tab.state = parcel.readBundle(TabStore.class.getClassLoader());
+        } catch (Throwable t) {
+            // Written by another version of the platform, or truncated. Not worth a crash: the
+            // tab simply opens at its address.
+            Log.w(TAG, "could not read history for " + tab.id + ": " + t.getMessage());
+            tab.state = null;
+            file.delete();
+        } finally {
+            parcel.recycle();
+        }
+    }
+
+    private static void deleteState(Context context, Tab tab) {
+        new File(stateDir(context), tab.id + ".bin").delete();
+    }
+
+    private static File stateDir(Context context) {
+        File dir = new File(context.getFilesDir(), STATE_DIR);
+        if (!dir.exists()) dir.mkdirs();
+        return dir;
     }
 
     // --------------------------------------------------------------------- previews
@@ -193,18 +296,39 @@ public final class TabStore {
         tab.previewPath = "";
     }
 
-    /** Pictures belonging to tabs that no longer exist — a closed tab, or a crashed run. */
-    private static void deleteOrphanPreviews(Context context, List<Tab> tabs) {
-        File dir = previewDir(context);
-        File[] files = dir.listFiles();
-        if (files == null) return;
+    /** Everything kept on disk for a tab that is going away. */
+    public static void forget(Context context, Tab tab) {
+        deletePreview(tab);
+        deleteState(context, tab);
+    }
 
-        Set<String> keep = new HashSet<>();
+    /**
+     * Pictures and histories belonging to tabs that no longer exist — a closed tab, or a crashed
+     * run. Both are keyed on the tab id, so both are swept the same way.
+     */
+    private static void deleteOrphans(Context context, List<Tab> tabs) {
+        Set<String> previews = new HashSet<>();
+        Set<String> ids = new HashSet<>();
         for (Tab tab : tabs) {
-            if (!TextUtils.isEmpty(tab.previewPath)) keep.add(new File(tab.previewPath).getName());
+            ids.add(tab.id);
+            if (!TextUtils.isEmpty(tab.previewPath)) {
+                previews.add(new File(tab.previewPath).getName());
+            }
         }
-        for (File file : files) {
-            if (!keep.contains(file.getName())) file.delete();
+
+        File[] pictures = previewDir(context).listFiles();
+        if (pictures != null) {
+            for (File file : pictures) {
+                if (!previews.contains(file.getName())) file.delete();
+            }
+        }
+
+        File[] states = stateDir(context).listFiles();
+        if (states != null) {
+            for (File file : states) {
+                String id = file.getName().replace(".bin", "");
+                if (!ids.contains(id)) file.delete();
+            }
         }
     }
 

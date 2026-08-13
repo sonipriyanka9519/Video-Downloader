@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.ms.webview.push.PushLink;
 import com.ms.webview.ui.BrowserFragment;
 import com.ms.webview.ui.MainPagerAdapter;
 
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         setUpTabs();
         setUpPermissions();
         applyRequestedTab(getIntent());
-        applySharedLink(getIntent());
+        applyIncomingLink(getIntent());
     }
 
     @Override
@@ -85,7 +86,44 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         setIntent(intent);
         applyRequestedTab(intent);
-        applySharedLink(intent);
+        applyIncomingLink(intent);
+    }
+
+    /**
+     * Whether the copied link has to wait its turn.
+     *
+     * <p>Some ways in already carry a purpose: a link shared from another app, a link this app was
+     * chosen to open, a pushed video, and a download notification. Each of those is the viewer
+     * telling us what they came for, and a dialog about the clipboard on top of it is an
+     * interruption — the more so because a shared link is usually the very thing on the clipboard.
+     *
+     * <p>The pushed video needs no case of its own here: {@link #sharedUrlOf} finds it, because
+     * from this point on a link is a link however it arrived.
+     *
+     * <p>Deferred, never cancelled. Pressing Home is the viewer finished with what they arrived
+     * with, and the offer is made then. Set on every entry rather than only on those, so an
+     * ordinary launch afterwards clears a deferral left over from the last one.
+     */
+    private void applyClipboardPriority(@Nullable Intent intent, @Nullable String link) {
+        BrowserFragment.deferClipboardPrompt(link != null
+                || (intent != null && intent.getBooleanExtra(EXTRA_OPEN_DOWNLOADS, false)));
+    }
+
+    /**
+     * Raises the default-browser question every time the app comes to the foreground.
+     *
+     * <p>onStart rather than onCreate, because with a single task the activity is created once and
+     * then simply resumed — an app opened again from the launcher an hour later would never reach
+     * onCreate, and the offer would be made once in the lifetime of the process.
+     *
+     * <p>This fires on returns from our own screens too. The browser is what decides whether to
+     * act on it, and it holds a quiet period for exactly that reason: coming back from the search
+     * screen seconds later is not opening the app.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BrowserFragment.askAboutDefaultBrowser();
     }
 
     private void applyRequestedTab(@Nullable Intent intent) {
@@ -95,19 +133,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * A link shared or opened from another app.
+     * A link shared or opened from another app, or pushed to this one.
      *
      * <p>Left for the browser to pick up rather than pushed into it. The fragment may not exist
      * yet — on a cold start this runs before the pager has created it — and a link handed to a
      * fragment that is not there is a link lost. Parking it means the browser collects it
      * whenever it is ready, whether that is in a moment or immediately.
+     *
+     * <p>One pass, and the intent is read once. The clipboard offer has to be told about the same
+     * link, and reading twice would mean reading it after it has been taken — which is exactly
+     * when the answer changes.
      */
-    private void applySharedLink(@Nullable Intent intent) {
+    private void applyIncomingLink(@Nullable Intent intent) {
         String url = sharedUrlOf(intent);
+        applyClipboardPriority(intent, url);
         if (url == null) return;
 
         BrowserFragment.openWhenReady(url);
         pager.setCurrentItem(MainPagerAdapter.PAGE_HOME, false);
+
+        // Taken, so it cannot be taken again. An intent outlives the moment it arrived in: the
+        // one a notification launched us with is still the activity's intent afterwards, and
+        // without this the video would open in a second new tab every time the activity was
+        // rebuilt from it.
+        PushLink.consume(intent);
     }
 
     /**
@@ -119,6 +168,13 @@ public class MainActivity extends AppCompatActivity {
     @Nullable
     private static String sharedUrlOf(@Nullable Intent intent) {
         if (intent == null) return null;
+
+        // A pushed video, whether this app built the notification or Firebase displayed it and
+        // copied the payload into the launch intent. Read first because such an intent carries no
+        // action of its own — it is simply a launch with something in its pocket.
+        String pushed = PushLink.from(intent.getExtras());
+        if (pushed != null) return pushed;
+
         String action = intent.getAction();
 
         if (Intent.ACTION_VIEW.equals(action) && intent.getData() != null) {

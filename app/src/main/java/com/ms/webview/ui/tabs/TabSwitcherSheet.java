@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -87,19 +87,31 @@ public class TabSwitcherSheet extends BottomSheetDialogFragment
 
         view.findViewById(R.id.btnCloseSwitcher).setOnClickListener(v -> dismiss());
 
-        ImageButton newTab = view.findViewById(R.id.btnNewTab);
-        newTab.setOnClickListener(v -> {
+        view.findViewById(R.id.btnNewTab).setOnClickListener(v -> {
             host().newTab();
             dismiss();
         });
 
-        TextView closeAll = view.findViewById(R.id.btnCloseAll);
-        closeAll.setOnClickListener(v -> {
-            host().closeAllTabs();
-            dismiss();
-        });
+        view.findViewById(R.id.btnTabsMenu).setOnClickListener(this::showMenu);
 
         refresh();
+    }
+
+    /**
+     * The overflow: everything that is not opening a tab.
+     *
+     * <p>Closing every tab lives here rather than beside the count, where it sat next to the
+     * button people press most and could not be taken back. A menu is one deliberate tap further
+     * away, which is the right distance for it.
+     */
+    private void showMenu(View anchor) {
+        PopupMenu menu = new PopupMenu(requireContext(), anchor);
+        menu.getMenu().add(R.string.close_all_tabs).setOnMenuItemClickListener(item -> {
+            host().closeAllTabs();
+            dismiss();
+            return true;
+        });
+        menu.show();
     }
 
     private void refresh() {

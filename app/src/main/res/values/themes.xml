@@ -34,6 +34,29 @@
     <style name="Theme.Webview" parent="Base.Theme.Webview" />
 
     <!--
+      The search screen, which should not read as a screen at all.
+
+      <p>It replaces the address bar with a version of itself that can be typed into, so the two
+      are the same thing at different moments. A slide in from the side says otherwise: it says
+      the viewer has gone somewhere, and then going back says they have returned, when all they
+      did was start and stop typing. Removing the animation leaves the field where the bar was.
+    -->
+    <style name="Theme.Webview.Search" parent="Theme.Webview">
+        <item name="android:windowAnimationStyle">@style/Animation.Webview.None</item>
+    </style>
+
+    <style name="Animation.Webview.None" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+        <item name="android:taskOpenEnterAnimation">@null</item>
+        <item name="android:taskOpenExitAnimation">@null</item>
+        <item name="android:taskCloseEnterAnimation">@null</item>
+        <item name="android:taskCloseExitAnimation">@null</item>
+    </style>
+
+    <!--
       Shown by the system from the moment the icon is tapped until the first frame is drawn.
       No timer and no extra activity: an artificial delay would only make the app slower.
     -->
