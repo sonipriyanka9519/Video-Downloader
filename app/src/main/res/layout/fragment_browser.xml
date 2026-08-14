@@ -93,8 +93,8 @@
                 android:id="@+id/btnTabs"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_2sdp"
-                android:layout_marginEnd="@dimen/_3sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:background="@drawable/bg_tab_count"
                 android:clickable="true"
                 android:contentDescription="@string/open_tabs"
@@ -135,15 +135,42 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <!-- The launcher grid, shown until a page is opened and again on Home. -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/shortcutGrid"
+            <!--
+              The home screen: the launcher grid, and the offer of a walkthrough directly beneath
+              it. One panel rather than two loose children of the frame, so the button follows the
+              last row of shortcuts instead of sitting at the bottom of the window with a gap
+              above it.
+
+              The grid wraps its content for the same reason. It holds at most a couple of dozen
+              sites — five rows at four columns — so it has never needed the whole screen, and
+              taking only what it needs is what leaves the button where the shortcuts end.
+
+              Shown with the grid and never over a page: it belongs to the empty screen where
+              somebody is deciding where to go. It also goes for good once the walkthrough has
+              been read — see BrowserFragment.refreshHowTo.
+            -->
+            <LinearLayout
+                android:id="@+id/homePanel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingHorizontal="@dimen/_8sdp"
-                android:paddingTop="@dimen/_9sdp"
-                android:paddingBottom="@dimen/_15sdp" />
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/shortcutGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_14sdp"
+                    android:paddingBottom="@dimen/_10sdp" />
+
+                <include
+                    layout="@layout/view_how_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_4sdp" />
+            </LinearLayout>
 
             <!--
               Inside the page area rather than over the whole window, so it can be dragged
@@ -151,42 +178,68 @@
               bottom. Declared last so it draws above the page — every WebView added in code is
               put behind it. See BrowserFragment.makeFabDraggable.
             -->
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/fabHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/_12sdp">
+                android:layout_margin="@dimen/_12sdp"
+                android:gravity="end"
+                android:orientation="vertical">
 
+                <!--
+                  Raises the site's guide again after it has been dismissed. Inside the holder
+                  rather than beside it, so it travels with the download button when that is
+                  dragged — two loose buttons that drift apart stop reading as a pair.
+                -->
                 <ImageView
-                    android:id="@+id/fabDownload"
-                    android:layout_width="@dimen/_43sdp"
-                    android:layout_height="@dimen/_43sdp"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="@drawable/fab_bg_idle"
+                    android:id="@+id/btnGuideTip"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
+                    android:background="@drawable/bg_guide_tip"
                     android:clickable="true"
-                    android:contentDescription="@string/download"
+                    android:contentDescription="@string/how_to_download"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_download"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:id="@+id/fabBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_16sdp"
-                    android:layout_gravity="top|end"
-                    android:background="@drawable/bg_fab_badge"
-                    android:gravity="center"
-                    android:minWidth="@dimen/_16sdp"
-                    android:paddingHorizontal="@dimen/_4sdp"
-                    android:textColor="@color/brand_crimson"
-                    android:textSize="@dimen/_8ssp"
-                    android:textStyle="bold"
+                    android:padding="@dimen/_6sdp"
                     android:visibility="gone" />
-            </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/fabDownload"
+                        android:layout_width="@dimen/_43sdp"
+                        android:layout_height="@dimen/_43sdp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="@drawable/fab_bg_idle"
+                        android:clickable="true"
+                        android:contentDescription="@string/download"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_download"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/fabBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_gravity="top|end"
+                        android:background="@drawable/bg_fab_badge"
+                        android:gravity="center"
+                        android:minWidth="@dimen/_16sdp"
+                        android:paddingHorizontal="@dimen/_4sdp"
+                        android:textColor="@color/brand_crimson"
+                        android:textSize="@dimen/_8ssp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </LinearLayout>
 
         </FrameLayout>
     </LinearLayout>

@@ -26,7 +26,7 @@
             android:layout_height="@dimen/_27sdp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/go_back"
-            android:src="@drawable/ic_chevron_left"
+            android:src="@drawable/ic_back"
             app:tint="@color/toolbar_icon" />
 
         <LinearLayout

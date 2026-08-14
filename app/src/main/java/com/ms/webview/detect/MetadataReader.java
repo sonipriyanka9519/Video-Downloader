@@ -64,12 +64,45 @@ public class MetadataReader {
         public boolean partialDuration;
 
         /**
+         * Whether the stream actually contains a sound track.
+         *
+         * <p>Measured rather than inferred, and that is the point of it. A video-only rendition
+         * is otherwise indistinguishable from a complete file at every stage that follows: it
+         * downloads, it decodes, it plays, and it is silent. Every silent-download fault so far
+         * has been diagnosed by guessing which address a platform hands its player, when the file
+         * was already open in front of us and could simply be asked.
+         *
+         * <p>Free to collect: the head of the file is fetched for the dimensions and the poster
+         * frame anyway, and an MP4 written for streaming declares all of its tracks in the moov
+         * atom at the front.
+         */
+        public boolean hasAudio;
+
+        /**
          * Whether this is a real, playable video rather than a fragment of one. A media
          * segment or an audio-only stream opens without error but has no dimensions and no
          * duration, so this is the test that keeps them out of the sheet.
          */
         public boolean playableVideo() {
             return width > 0 && height > 0 && durationMs > 0;
+        }
+
+        /**
+         * A complete sound track with no picture — the other half of a video served as two
+         * streams.
+         *
+         * <p>Worth telling apart from a failure, which is what it used to be counted as. Facebook
+         * serves this stream with a {@code video/mp4} content type, so nothing about the response
+         * says audio; only opening it does. It was being fetched, decoded, found to have no
+         * dimensions, and rejected as unreadable — one line after the video it belonged to was
+         * measured silent.
+         *
+         * <p>The dimensions are the test rather than the type. A file whose moov atom sits at the
+         * front declares all of its tracks together, so a read that finds sound, finds a running
+         * time, and finds no picture has genuinely been given a track and not half a video.
+         */
+        public boolean audioOnly() {
+            return hasAudio && durationMs > 0 && width <= 0 && height <= 0;
         }
     }
 
@@ -104,6 +137,13 @@ public class MetadataReader {
                     : readLocalCopy(url, headers, captureFrame);
             if (local != null && local.playableVideo()) {
                 Log.i(MediaRegistry.DIAG, "decoded locally: " + url);
+                return local;
+            }
+            // A sound track, and a complete answer rather than a failed one. Retrying it
+            // remotely would spend a round trip to be told the same thing, and the caller
+            // needs this address: it is the audio for a video that has none.
+            if (local != null && local.audioOnly()) {
+                Log.i(MediaRegistry.DIAG, "decoded locally as AUDIO-ONLY: " + url);
                 return local;
             }
             Log.i(MediaRegistry.DIAG, "local decode failed, trying retriever: " + url);
@@ -204,6 +244,8 @@ public class MetadataReader {
         result.height = intOf(retriever, MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
         result.durationMs = longOf(retriever, MediaMetadataRetriever.METADATA_KEY_DURATION);
         result.bitrate = longOf(retriever, MediaMetadataRetriever.METADATA_KEY_BITRATE);
+        result.hasAudio = "yes".equalsIgnoreCase(
+                stringOf(retriever, MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO));
 
         // A rotated recording reports its stored dimensions, not its displayed ones.
         int rotation = intOf(retriever, MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
@@ -387,6 +429,15 @@ public class MetadataReader {
 
     private static int intOf(MediaMetadataRetriever retriever, int key) {
         return (int) longOf(retriever, key);
+    }
+
+    @Nullable
+    private static String stringOf(MediaMetadataRetriever retriever, int key) {
+        try {
+            return retriever.extractMetadata(key);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private static long longOf(MediaMetadataRetriever retriever, int key) {

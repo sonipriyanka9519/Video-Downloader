@@ -78,14 +78,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.onboard.OnboardingActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Webview.Brand"
-            tools:ignore="LockedOrientationActivity" />
-
         <!-- Portrait: the browser and the downloads list have nothing to gain from landscape. -->
         <activity
             android:name=".MainActivity"
@@ -128,6 +120,19 @@
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <!--
+          How to download anything at all, as opposed to how to get a video out of one particular
+          site. Offered by a button in the browser that disappears once this has been opened.
+        -->
+        <activity
+            android:name=".ui.guide.HowToActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- How to get a video out of one site, shown in place of opening it blind. One per
              site, so each can say exactly what that site's own screens say. -->

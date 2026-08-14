@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -22,11 +23,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
+import androidx.media3.common.Tracks;
 import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.analytics.AnalyticsListener;
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
+import androidx.media3.extractor.DefaultExtractorsFactory;
+import androidx.media3.extractor.mp4.FragmentedMp4Extractor;
+import androidx.media3.extractor.mp4.Mp4Extractor;
 import androidx.media3.ui.AspectRatioFrameLayout;
 import androidx.media3.ui.PlayerView;
 
@@ -40,6 +49,8 @@ import java.util.Locale;
 /** Plays a finished download inside the app. */
 @OptIn(markerClass = UnstableApi.class)
 public class PlayerActivity extends AppCompatActivity {
+
+    private static final String TAG = "PlayerActivity";
 
     private static final String EXTRA_URI   = "uri";
     private static final String EXTRA_TITLE = "title";
@@ -385,30 +396,201 @@ public class PlayerActivity extends AppCompatActivity {
     private void initPlayer() {
         if (player != null || uri == null) return;
 
-        player = new ExoPlayer.Builder(this).build();
+        // Decoder fallback: when the device's first-choice decoder for a stream fails or produces
+        // nothing, try the next one it has — in practice the software decoder. This is why the
+        // same file plays in other players and not here; they fall back and this did not.
+        DefaultRenderersFactory renderers = new DefaultRenderersFactory(this)
+                .setEnableDecoderFallback(true);
+
+        player = new ExoPlayer.Builder(this, renderers)
+                .setMediaSourceFactory(new DefaultMediaSourceFactory(this, forgivingExtractors()))
+                .build();
         playerView.setPlayer(player);
+        watchRenderers();
 
         player.addListener(new Player.Listener() {
+            /**
+             * Every state change, logged.
+             *
+             * <p>A video that will not play without reporting an error is invisible to
+             * {@link #onPlayerError}: the player is doing what it was told and simply never
+             * reaches the picture. The three ways that happens look identical on screen and are
+             * fixed in different places — stuck buffering means the source is not being read,
+             * ready-but-not-playing means something paused it, and ending immediately means the
+             * file's timestamps say it is already over.
+             */
+            @Override
+            public void onPlaybackStateChanged(int state) {
+                Log.i(TAG, "State=" + nameOfState(state)
+                        + " playWhenReady=" + player.getPlayWhenReady()
+                        + " isPlaying=" + player.isPlaying()
+                        + " suppression=" + player.getPlaybackSuppressionReason()
+                        + " position=" + player.getCurrentPosition()
+                        + " buffered=" + player.getBufferedPosition()
+                        + " duration=" + player.getDuration());
+            }
+
+            /**
+             * What the file turned out to contain.
+             *
+             * <p>The one thing a stalled BUFFERING cannot tell you on its own: a player waits for
+             * every selected track before it will play, so a file that declares a track and then
+             * has nothing in it stalls exactly like a file that is still loading. Printing the
+             * tracks separates those two — and says which of them is the one holding it up.
+             */
+            @Override
+            public void onTracksChanged(Tracks tracks) {
+                for (Tracks.Group group : tracks.getGroups()) {
+                    for (int i = 0; i < group.length; i++) {
+                        Format format = group.getTrackFormat(i);
+                        Log.i(TAG, "Track type=" + group.getType()
+                                + " mime=" + format.sampleMimeType
+                                + " codecs=" + format.codecs
+                                + " supported=" + group.isTrackSupported(i)
+                                + " selected=" + group.isTrackSelected(i));
+                    }
+                }
+            }
+
+            /** Says which of the two "not playing" cases this is: paused, or held back. */
+            @Override
+            public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
+                Log.i(TAG, "playWhenReady=" + playWhenReady + " reason=" + reason);
+            }
+
             @Override
             public void onPlayerError(PlaybackException error) {
+                // Logged in full, because "this video will not play" has several causes that look
+                // identical from the outside and are fixed in completely different places: a file
+                // that has been deleted, a container the extractor cannot read, and a codec this
+                // particular device has no decoder for. Without the code, all three arrive here
+                // as the same shrug.
+                Log.w(TAG, "Playback failed: " + error.getErrorCodeName()
+                        + " (" + error.errorCode + ") uri=" + uri, error);
+
                 // A source error on a content uri almost always means the file was deleted from
                 // the gallery while its row was still on screen. Naming that beats "playback
                 // failed", and there is nothing to stay open for.
                 boolean gone = !App.get().repository().library().exists(uri.toString());
-                Toast.makeText(PlayerActivity.this,
-                        getString(gone ? R.string.video_missing : R.string.playback_failed),
-                        Toast.LENGTH_LONG).show();
                 if (gone) {
+                    Toast.makeText(PlayerActivity.this,
+                            R.string.video_missing, Toast.LENGTH_LONG).show();
                     App.get().repository().refreshLibrary();
                     finish();
+                    return;
                 }
+
+                // The file is there and the device cannot decode it. Saying so matters: it is not
+                // a broken download, and reloading or downloading it again will not help.
+                Toast.makeText(PlayerActivity.this,
+                        unsupported(error) ? R.string.format_not_supported
+                                : R.string.playback_failed,
+                        Toast.LENGTH_LONG).show();
             }
         });
 
         player.setMediaItem(MediaItem.fromUri(uri));
+        // Nothing else here needs the mime, but the extractor does: a content uri hides the file
+        // name, and without an extension to go on the player guesses the container by sniffing.
+        // That is where a saved transport stream — what an HLS download falls back to when it
+        // cannot be remuxed into MP4 — most often goes wrong.
         if (resumePosition > 0) player.seekTo(resumePosition);
         player.setPlayWhenReady(true);
         player.prepare();
+    }
+
+    /**
+     * What the decoders actually did.
+     *
+     * <p>The state listener can only say the player is not ready; it cannot say why. These four
+     * say it: which decoder was chosen for each track, whether a single frame ever reached the
+     * screen, and whether audio ran dry. A renderer holding fifty seconds of data and still
+     * reporting itself unready is a decoder swallowing input and returning nothing — and the
+     * missing "first frame rendered" line is what proves it.
+     */
+    private void watchRenderers() {
+        player.addAnalyticsListener(new AnalyticsListener() {
+            @Override
+            public void onVideoDecoderInitialized(EventTime time, String name,
+                                                  long initialised, long durationMs) {
+                Log.i(TAG, "Video decoder=" + name);
+            }
+
+            @Override
+            public void onAudioDecoderInitialized(EventTime time, String name,
+                                                  long initialised, long durationMs) {
+                Log.i(TAG, "Audio decoder=" + name);
+            }
+
+            @Override
+            public void onRenderedFirstFrame(EventTime time, Object output, long renderMs) {
+                Log.i(TAG, "First frame rendered after " + renderMs + "ms");
+            }
+
+            @Override
+            public void onAudioUnderrun(EventTime time, int bufferSize,
+                                        long bufferSizeMs, long sinceLastFeedMs) {
+                Log.w(TAG, "Audio underrun: " + bufferSizeMs + "ms buffer, "
+                        + sinceLastFeedMs + "ms since last feed");
+            }
+        });
+    }
+
+    /**
+     * Reads MP4s the way every other player on the phone reads them.
+     *
+     * <p>An MP4 can carry an edit list: a table saying which parts of the media actually make up
+     * the presentation, and when each begins. This player honours it, as the specification says to.
+     * The system player, VLC and the rest ignore it — and a great many files on the web have one
+     * that is wrong, written by whatever transcoder produced them. Honouring a broken edit list
+     * means the presentation is empty or starts nowhere, so the file loads perfectly, reports its
+     * true duration, and then sits at zero forever. Which is exactly what a viewer describes as
+     * "it plays everywhere else".
+     *
+     * <p>So we ignore them too. The cost is small and bounded: an edit list is normally used to
+     * trim a lead-in or hold audio/video in sync by a few tens of milliseconds, and ignoring a
+     * correct one costs that trim. Ignoring a broken one is the difference between a video that
+     * plays and one that does not.
+     */
+    private static DefaultExtractorsFactory forgivingExtractors() {
+        return new DefaultExtractorsFactory()
+                .setMp4ExtractorFlags(Mp4Extractor.FLAG_WORKAROUND_IGNORE_EDIT_LISTS)
+                .setFragmentedMp4ExtractorFlags(
+                        FragmentedMp4Extractor.FLAG_WORKAROUND_IGNORE_EDIT_LISTS);
+    }
+
+    private static String nameOfState(int state) {
+        switch (state) {
+            case Player.STATE_IDLE:
+                return "IDLE";
+            case Player.STATE_BUFFERING:
+                return "BUFFERING";
+            case Player.STATE_READY:
+                return "READY";
+            case Player.STATE_ENDED:
+                return "ENDED";
+            default:
+                return String.valueOf(state);
+        }
+    }
+
+    /**
+     * Whether the failure is the device's, not the file's.
+     *
+     * <p>These four mean the video is intact and this phone has no decoder for what is inside it —
+     * HEVC and AV1 are the usual answers, and a transport stream saved when a remux failed is the
+     * other. Nothing about downloading it again changes any of that.
+     */
+    private static boolean unsupported(PlaybackException error) {
+        switch (error.errorCode) {
+            case PlaybackException.ERROR_CODE_DECODING_FORMAT_UNSUPPORTED:
+            case PlaybackException.ERROR_CODE_DECODER_INIT_FAILED:
+            case PlaybackException.ERROR_CODE_DECODING_FAILED:
+            case PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private void releasePlayer() {

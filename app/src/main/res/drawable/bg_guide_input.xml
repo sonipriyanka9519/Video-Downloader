@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Rounded on every corner now: the box stands on its own rather than being squared off against
-     a button, so it reads as one field centred on the screen. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/surface_variant" />
-    <stroke
-        android:width="@dimen/_1sdp"
-        android:color="@color/outline_variant" />
-    <corners android:radius="@dimen/_12sdp" />
+<!--
+  The paste box.
+
+  Rounded on the left and square on the right, because the search button butts straight up against
+  it: the two are one control, and a rounded edge in the middle of a control reads as two.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/guide_input_surface" />
+
+    <corners
+        android:bottomLeftRadius="@dimen/_8sdp"
+        android:bottomRightRadius="0dp"
+        android:topLeftRadius="@dimen/_8sdp"
+        android:topRightRadius="0dp" />
 </shape>

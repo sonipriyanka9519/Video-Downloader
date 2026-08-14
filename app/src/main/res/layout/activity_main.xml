@@ -19,13 +19,24 @@
         android:layout_height="@dimen/_1sdp"
         android:background="@color/divider" />
 
+    <!--
+      Flat: no pill behind the chosen icon, no shadow under the bar, and the label always showing.
+      What marks the current tab is its colour, which is the whole of the difference and needs no
+      shape drawn around it — and a label that appears only when chosen makes the other tab a
+      guess.
+    -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/surface"
+        android:minHeight="@dimen/_50sdp"
+        app:elevation="0dp"
         app:itemActiveIndicatorStyle="@style/BottomNavIndicator"
+        app:itemIconSize="@dimen/_19sdp"
         app:itemIconTint="@color/bottom_nav_item"
+        app:itemTextAppearanceActive="@style/TextAppearance.Webview.BottomNav"
+        app:itemTextAppearanceInactive="@style/TextAppearance.Webview.BottomNav"
         app:itemTextColor="@color/bottom_nav_item"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav" />

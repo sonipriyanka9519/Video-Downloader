@@ -34,11 +34,25 @@ import java.util.regex.Pattern;
  */
 public class FacebookExtractor implements SiteExtractor {
 
+    /**
+     * The muxed addresses first, and the order is the whole point.
+     *
+     * <p>These lists are read first-match-wins, and {@code playable_url} used to head both. That
+     * is the address Facebook's own player feeds to Media Source Extensions, and it carries video
+     * and nothing else — the sound arrives on a second stream the page fetches separately. Taking
+     * it meant every Facebook download came out silent, and no later stage could tell: the file
+     * was complete, correct, and mute.
+     *
+     * <p>{@code browser_native_*} and {@code *_src} are the plain progressive files, video and
+     * audio together, which is what Facebook serves to anything that is not running its player —
+     * and what every other downloader takes. They go first. {@code playable_url} stays at the back
+     * as a last resort, because a silent video still beats no video at all.
+     */
     private static final String[] SD_KEYS = {
-            "playable_url", "browser_native_sd_url", "sd_src", "sd_src_no_ratelimit"
+            "browser_native_sd_url", "sd_src", "sd_src_no_ratelimit", "playable_url"
     };
     private static final String[] HD_KEYS = {
-            "playable_url_quality_hd", "browser_native_hd_url", "hd_src", "hd_src_no_ratelimit"
+            "browser_native_hd_url", "hd_src", "hd_src_no_ratelimit", "playable_url_quality_hd"
     };
     private static final String[] MANIFEST_KEYS = {
             "dash_manifest", "dash_manifest_xml", "video_dash_manifest", "manifest_xml"
@@ -97,7 +111,19 @@ public class FacebookExtractor implements SiteExtractor {
         if (nested != null) source = nested;
 
         JsonArray progressive = Json.arr(source, "progressive_urls", "progressiveUrls");
-        if (progressive != null) {
+        // The manifest first, because whether there is one decides what the plain addresses are
+        // worth — see addManifest.
+        boolean manifested = false;
+        JsonArray manifests = Json.arr(source, "dash_manifests", "dashManifests");
+        if (manifests != null) {
+            for (JsonElement element : manifests) {
+                if (!element.isJsonObject()) continue;
+                String xml = Json.str(element.getAsJsonObject(), MANIFEST_KEYS);
+                manifested |= addManifest(out, xml, context);
+            }
+        }
+
+        if (!manifested && progressive != null) {
             for (JsonElement element : progressive) {
                 if (!element.isJsonObject()) continue;
                 JsonObject entry = element.getAsJsonObject();
@@ -107,22 +133,15 @@ public class FacebookExtractor implements SiteExtractor {
             }
         }
 
-        JsonArray manifests = Json.arr(source, "dash_manifests", "dashManifests");
-        if (manifests != null) {
-            for (JsonElement element : manifests) {
-                if (!element.isJsonObject()) continue;
-                String xml = Json.str(element.getAsJsonObject(), MANIFEST_KEYS);
-                addManifest(out, xml, context);
-            }
-        }
-
+        // Kept either way: Facebook's HLS carries its audio inside, so it costs nothing beside
+        // the manifest and covers the payloads that ship one without the other.
         String hls = Json.str(source, HLS_KEYS);
         if (hls != null) add(out, hls, 0, context);
     }
 
     /** The older flat shape, still served to some clients and to fb.watch. */
     private void readFlatKeys(JsonObject node, Context context, List<FoundMedia> out) {
-        addManifest(out, Json.str(node, MANIFEST_KEYS), context);
+        if (addManifest(out, Json.str(node, MANIFEST_KEYS), context)) return;
 
         String hd = Json.str(node, HD_KEYS);
         String sd = Json.str(node, SD_KEYS);
@@ -132,8 +151,25 @@ public class FacebookExtractor implements SiteExtractor {
         if (sd != null && !sd.equals(hd)) add(out, sd, 360, context);
     }
 
-    private void addManifest(List<FoundMedia> out, @Nullable String xml, Context context) {
-        if (xml == null || !xml.contains("<MPD")) return;
+    /**
+     * Takes the manifest, and says whether it took one.
+     *
+     * <p>That answer decides whether the plain addresses beside it are used at all, and both of
+     * Facebook's long-standing complaints come from having preferred them.
+     *
+     * <p>The flat pair is exactly two rungs — {@code playable_url} and its HD twin — so a video
+     * with six qualities in its manifest was offered as two. And on the current player those two
+     * are video-only representations: Facebook plays through MSE and fetches its sound as a
+     * separate stream, so a download of either is a picture with no soundtrack. Nothing later can
+     * repair that, because the address of the audio was never in the record.
+     *
+     * <p>The manifest has neither problem. It lists the whole ladder and names the audio for each
+     * rung, and the resolver already pairs them and muxes on the way out. So where there is one,
+     * it is the only thing worth offering; where there is not, the plain addresses are still
+     * better than nothing.
+     */
+    private boolean addManifest(List<FoundMedia> out, @Nullable String xml, Context context) {
+        if (xml == null || !xml.contains("<MPD")) return false;
 
         String key = context.hint == null ? "fb" : context.hint.replace(':', '_');
         FoundMedia media = new FoundMedia("https://dash.local/" + key);
@@ -141,6 +177,25 @@ public class FacebookExtractor implements SiteExtractor {
         media.inlineManifest = xml;
         apply(media, context);
         out.add(media);
+
+        // Taken either way, but it only earns the right to silence the plain addresses if it can
+        // actually deliver sound. A manifest naming no audio track yields video-only renditions,
+        // and suppressing the progressive pair in favour of those trades two working files for a
+        // ladder of mute ones — which is the worse of the two complaints, not the better.
+        return namesAudio(xml);
+    }
+
+    /**
+     * Whether the manifest lists a separate audio track, read off the text rather than parsed.
+     *
+     * <p>Only the decision above rests on this, and it is made before anything is resolved, so a
+     * full parse here would be work done twice. The resolver still does the real one.
+     */
+    private static boolean namesAudio(String xml) {
+        String lower = xml.toLowerCase(Locale.US);
+        return lower.contains("audio/mp4") || lower.contains("audio/webm")
+                || lower.contains("\"audio\"") || lower.contains("=\"audio")
+                || lower.contains("mp4a") || lower.contains("opus");
     }
 
     private void add(List<FoundMedia> out, String url, int height, Context context) {

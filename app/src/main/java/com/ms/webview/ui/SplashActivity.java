@@ -1,27 +1,33 @@
 package com.ms.webview.ui;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.ms.webview.MainActivity;
 import com.ms.webview.R;
-import com.ms.webview.ui.onboard.Onboarding;
-import com.ms.webview.ui.onboard.OnboardingActivity;
 
 /**
- * The branded opening.
+ * The opening.
  *
- * <p>The system splash still runs first — it is what covers the gap between the icon being
- * tapped and this window existing, and dropping it would put a blank frame in front of the
- * brand. This activity picks the same crimson up and holds it while the animation plays.
+ * <p>The system splash still runs first — it is what covers the gap between the icon being tapped
+ * and this window existing, and dropping it would put a blank frame in front of the mark. This
+ * activity picks up the same white and holds it while the animation plays, so the handover
+ * between the two is not visible as a change of screen.
  *
  * <p>The wait is the length of that animation and nothing more. A splash that lingers past its
  * own transition is just a delay with a logo on it.
@@ -39,13 +45,52 @@ public class SplashActivity extends AppCompatActivity {
         SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        // Forced light rather than left to follow the device. The default adapts the status-bar
+        // icons to the system's dark-mode setting, and this screen is white whatever that setting
+        // says — on a phone in dark mode the icons would come out white on white.
+        EdgeToEdge.enable(this,
+                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
+                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT));
         setContentView(R.layout.activity_splash);
 
-        // Deliberately no inset padding: the gradient is meant to run under the status and
-        // navigation bars, and nothing here sits close enough to either to be clipped.
+        keepClearOfNavigation();
         animateIn();
+        runProgress();
         handler.postDelayed(advance, HOLD_MS);
+    }
+
+    /**
+     * Holds the screen's contents clear of the gesture bar.
+     *
+     * <p>Bottom only. The top is left alone deliberately: the ornaments are meant to run under the
+     * status bar, and nothing up there sits close enough to be clipped. At the bottom the progress
+     * bar does — on a gesture-navigation phone it landed behind the home pill.
+     */
+    private void keepClearOfNavigation() {
+        View root = findViewById(R.id.splashRoot);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, 0, 0, bars.bottom);
+            return insets;
+        });
+    }
+
+    /**
+     * Fills the bar over exactly the time this screen is on show.
+     *
+     * <p>Tied to the wait rather than to any work, because there is no work — the app is already
+     * running by the time this is drawn. A bar that crept along and then jumped to full when the
+     * screen changed would be pretending to measure something; this one measures the only thing
+     * there is to measure, which is how much of the opening is left.
+     */
+    private void runProgress() {
+        ProgressBar bar = findViewById(R.id.splashProgress);
+
+        ValueAnimator fill = ValueAnimator.ofInt(0, 100);
+        fill.setDuration(HOLD_MS);
+        fill.setInterpolator(new DecelerateInterpolator());
+        fill.addUpdateListener(a -> bar.setProgress((int) a.getAnimatedValue()));
+        fill.start();
     }
 
     private void animateIn() {
@@ -90,8 +135,7 @@ public class SplashActivity extends AppCompatActivity {
      * amount for an opening animation to know.
      */
     private void openNext() {
-        Intent next = new Intent(this, Onboarding.isDone(this)
-                ? MainActivity.class : OnboardingActivity.class);
+        Intent next = new Intent(this, MainActivity.class);
         if (getIntent() != null && getIntent().getExtras() != null) {
             next.putExtras(getIntent().getExtras());
         }

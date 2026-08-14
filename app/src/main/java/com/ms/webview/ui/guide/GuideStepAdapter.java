@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,13 @@ public class GuideStepAdapter extends RecyclerView.Adapter<GuideStepAdapter.Step
 
     @Override
     public void onBindViewHolder(@NonNull StepHolder h, int position) {
-        h.image.setImageResource(steps[position].image);
+        GuideStep step = steps[position];
+        // Counted from one, because the viewer is being told to do a first thing, not a zeroth.
+        h.number.setText(String.valueOf(position + 1));
+        // setText(int) reads the resource as styled text, so the <b> around the names of things
+        // to tap survives — that emphasis is what makes the line scannable rather than read.
+        h.title.setText(step.title);
+        h.image.setImageResource(step.image);
     }
 
     @Override
@@ -37,11 +44,16 @@ public class GuideStepAdapter extends RecyclerView.Adapter<GuideStepAdapter.Step
     }
 
     static class StepHolder extends RecyclerView.ViewHolder {
+
+        final TextView number;
+        final TextView title;
         final ImageView image;
 
         StepHolder(@NonNull View itemView) {
             super(itemView);
-            image = (ImageView) itemView;
+            number = itemView.findViewById(R.id.stepNumber);
+            title = itemView.findViewById(R.id.stepTitle);
+            image = itemView.findViewById(R.id.stepImage);
         }
     }
 }

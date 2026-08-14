@@ -29,6 +29,9 @@ public final class Remuxer {
     private static final int DEFAULT_BUFFER = 1024 * 1024;
     private static final int MAX_BUFFER = 8 * 1024 * 1024;
 
+    /** How many samples to look through for the earliest timestamp. See earliestSampleTime. */
+    private static final int REORDER_SCAN = 240;
+
     private Remuxer() {
     }
 
@@ -62,9 +65,9 @@ public final class Remuxer {
 
             // Both renditions share the HLS timeline, so shift them by one common offset rather
             // than normalising each to zero, which would pull them out of sync.
-            long offset = firstSampleTime(videoExtractor);
+            long offset = earliestSampleTime(videoExtractor);
             if (audioExtractor != null) {
-                long audioStart = firstSampleTime(audioExtractor);
+                long audioStart = earliestSampleTime(audioExtractor);
                 if (audioStart >= 0 && (offset < 0 || audioStart < offset)) offset = audioStart;
             }
             if (offset < 0) offset = 0;
@@ -72,9 +75,9 @@ public final class Remuxer {
             muxer.start();
             started = true;
 
-            ByteBuffer buf = ByteBuffer.allocate(Math.min(MAX_BUFFER, Math.max(DEFAULT_BUFFER, buffer)));
-            copy(videoExtractor, muxer, videoTracks, buf, offset);
-            if (audioExtractor != null) copy(audioExtractor, muxer, audioTracks, buf, offset);
+            int capacity = Math.min(MAX_BUFFER, Math.max(DEFAULT_BUFFER, buffer));
+            copy(videoExtractor, muxer, videoTracks, capacity, offset);
+            if (audioExtractor != null) copy(audioExtractor, muxer, audioTracks, capacity, offset);
 
         } finally {
             for (MediaExtractor e : extractors) {
@@ -142,31 +145,66 @@ public final class Remuxer {
         return false;
     }
 
-    /** Peeks the first presentation timestamp, then rewinds. */
-    private static long firstSampleTime(MediaExtractor extractor) {
-        long time = extractor.getSampleTime();
+    /**
+     * The earliest presentation timestamp in the stream, then rewinds.
+     *
+     * <p>Not simply the first sample's, which is the bug this replaces. Samples arrive in decode
+     * order, and any stream with B-frames decodes a frame before the frames it is displayed
+     * after — so the first sample handed over is an I-frame whose timestamp is <em>later</em> than
+     * several of the samples following it. Taking it as the start of the timeline made those
+     * samples negative, and they were then flattened to zero: a run of frames all claiming to be
+     * at 0:00, which no clock can advance through.
+     *
+     * <p>That is why this only ever affected some downloads. Baseline and Main profile encodes
+     * usually carry no B-frames and came out fine; High profile ones carry them as a matter of
+     * course and came out stuck at the first frame.
+     *
+     * <p>Bounded, because reordering is bounded: the decoded picture buffer holds at most sixteen
+     * frames, so the earliest timestamp is always within a few dozen samples of the start. Reading
+     * a few hundred costs nothing and cannot be defeated by a long file.
+     */
+    private static long earliestSampleTime(MediaExtractor extractor) {
+        long earliest = -1;
+        for (int i = 0; i < REORDER_SCAN; i++) {
+            long time = extractor.getSampleTime();
+            if (time < 0) break;
+            if (earliest < 0 || time < earliest) earliest = time;
+            if (!extractor.advance()) break;
+        }
         extractor.seekTo(0, MediaExtractor.SEEK_TO_PREVIOUS_SYNC);
-        return time;
+        return earliest;
     }
 
     private static void copy(MediaExtractor extractor, MediaMuxer muxer, SparseIntArray trackMap,
-                             ByteBuffer buf, long timeOffsetUs) throws IOException {
+                             int capacity, long timeOffsetUs) throws IOException {
         if (trackMap.size() == 0) return;
+
+        ByteBuffer buf = ByteBuffer.allocate(capacity);
         MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
         while (true) {
             int size;
             try {
                 size = extractor.readSampleData(buf, 0);
             } catch (IllegalArgumentException tooBig) {
-                // Sample larger than the buffer. Nothing sensible to do but stop cleanly.
-                Log.w(TAG, "Sample exceeds buffer, truncating stream", tooBig);
-                return;
+                // The sample does not fit. Grow and read the same one again — stopping here is
+                // what produced files that ended early and still reported themselves finished,
+                // because the caller had no way to tell a truncated copy from a complete one.
+                if (buf.capacity() >= MAX_BUFFER) {
+                    throw new IOException("A sample exceeds " + MAX_BUFFER + " bytes", tooBig);
+                }
+                int grown = (int) Math.min(MAX_BUFFER, (long) buf.capacity() * 2);
+                Log.i(TAG, "Sample exceeds buffer, growing to " + grown + " bytes");
+                buf = ByteBuffer.allocate(grown);
+                continue;
             }
             if (size < 0) return;
 
             int outTrack = trackMap.get(extractor.getSampleTrackIndex(), -1);
             if (outTrack >= 0) {
                 long pts = extractor.getSampleTime() - timeOffsetUs;
+                // A safety net only. With the offset taken from the earliest timestamp rather
+                // than the first, nothing should land before zero — and flattening several
+                // samples onto zero is precisely what broke playback before.
                 if (pts < 0) pts = 0;
                 info.offset = 0;
                 info.size = size;

@@ -1,18 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  One picture, and nothing else. Everything a step used to say in text — which method it belongs
-  to, its number, what to tap, whether it is the last one — is drawn into the picture itself, so
-  the words and the screenshot can never disagree about what the site currently looks like.
+  One step: its number, what to do, and a picture of the screen it happens on.
+
+  Centred on both axes, so the block sits in the middle of the page rather than hanging from the
+  top of it — whatever space is left over is shared above and below instead of piling up beneath
+  the picture.
 
   match_parent on both axes, and it has to be: ViewPager2 refuses a page that does not fill it and
   throws the moment the page is attached.
 -->
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/stepImage"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:adjustViewBounds="true"
-    android:contentDescription="@null"
-    android:paddingHorizontal="@dimen/_10sdp"
-    android:paddingVertical="@dimen/_6sdp"
-    android:scaleType="fitCenter" />
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_14sdp">
+
+    <!-- The number beside the line it belongs to, the pair of them centred as one. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/stepNumber"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:background="@drawable/bg_guide_number"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_9ssp"
+            android:textStyle="bold" />
+
+        <!--
+          wrap_content rather than weighted, so a short line sits beside its number in the middle
+          of the screen instead of being stretched across it. It still wraps: what it wraps
+          against is the width left over beside the number.
+        -->
+        <TextView
+            android:id="@+id/stepTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:textColor="@color/on_surface"
+            android:textSize="@dimen/_11ssp" />
+    </LinearLayout>
+
+    <!--
+      A fixed box, the same on every page. Sized rather than measured from the picture, because a
+      picture a little taller than the last one would move the dots and the button under it — and
+      a step that shifts the furniture as you swipe reads as four screens rather than one.
+
+      centerCrop rather than fitCenter, and that is what makes the corners visible at all. The
+      rounding is a shape the view is drawn through, so it falls on the view's edges — with the
+      picture merely fitted inside the box, those edges were empty space beside it and the
+      screenshot kept its own square corners. Filling the box puts the rounding on the picture.
+
+      The cost is that a screenshot whose proportions differ from the box loses a little off its
+      edges. Matching your screenshots to this box's shape is what avoids that; the height here is
+      the one number to change.
+    -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/stepImage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Webview.GuideStep" />
+</LinearLayout>

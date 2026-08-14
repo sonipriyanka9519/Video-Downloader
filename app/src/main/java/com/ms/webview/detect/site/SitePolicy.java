@@ -248,6 +248,31 @@ public interface SitePolicy {
     }
 
     /**
+     * Whether an audio-only stream overheard on this site should be kept and muxed into a video
+     * that turns out to have none.
+     *
+     * <p>False by default, and it has to be. An audio-only response is normally exactly what it
+     * looks like — a music player, an autoplaying clip's soundtrack, an advert — and attaching it
+     * to an unrelated video would dub the wrong sound onto it. Discarding it is right nearly
+     * everywhere.
+     *
+     * <p>True where the platform plays through MediaSource and serves its picture and its sound as
+     * two separate streams. There the audio-only response is not a stray: it is half of the video
+     * on screen, and it is the half that was being thrown away. The page fetches both, which is
+     * why the video has sound in the browser and none once downloaded — the sound was overheard,
+     * classified as not-video, and dropped, and by download time its address was no longer
+     * anywhere in the record.
+     *
+     * <p>Pairing is deliberately narrow: a held track is only ever attached to a variant that has
+     * been <em>opened and measured</em> to contain no audio of its own, and never to one that
+     * already names a track to mux. So the worst case where this is wrong is a video that was
+     * silent anyway.
+     */
+    default boolean pairsSeparateAudio() {
+        return false;
+    }
+
+    /**
      * Whether a video the site itself describes may be offered without opening it first.
      *
      * <p>False by default. Normally a candidate is only offered once it has been fetched and

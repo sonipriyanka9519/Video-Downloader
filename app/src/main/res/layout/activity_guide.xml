@@ -59,13 +59,13 @@
     </LinearLayout>
 
     <!--
-      The paste box, held in from both edges so it sits as a field on the screen rather than as a
-      bar across it, with the search button as its own rounded, weighted thing beside it.
+      The paste box and its search button, one control in two halves: the box is rounded on its
+      left, the button on its right, and they meet square in the middle with nothing between them.
     -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginHorizontal="@dimen/_14sdp"
         android:layout_marginTop="@dimen/_6sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -111,9 +111,8 @@
 
         <ImageButton
             android:id="@+id/btnGuideSearch"
-            android:layout_width="@dimen/_48sdp"
+            android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_44sdp"
-            android:layout_marginStart="@dimen/_8sdp"
             android:background="@drawable/bg_guide_search"
             android:contentDescription="@string/guide_open_link"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -133,6 +132,20 @@
         android:textColor="@color/brand_crimson"
         android:textSize="@dimen/_9ssp"
         android:visibility="gone" />
+
+    <!--
+      Said once, above the pager, rather than repeated on every page. It heads the whole sequence;
+      the numbered line inside each page says which part of it you are looking at.
+    -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:text="@string/guide_how_to"
+        android:textColor="@color/on_surface"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold" />
 
     <!--
       Every step of both methods in one pager, swiped end to end. Two pagers would have made the

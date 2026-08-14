@@ -33,6 +33,9 @@ public class DailymotionExtractor implements SiteExtractor {
         String author = authorOf(node);
         long durationMs = Json.seconds(node, "duration");
 
+        // Whether the adaptive master is on offer decides what the numbered entries are worth.
+        boolean hasMaster = hasMaster(qualities);
+
         for (String key : qualities.keySet()) {
             JsonElement entry = qualities.get(key);
             if (entry == null || !entry.isJsonArray()) continue;
@@ -46,8 +49,11 @@ public class DailymotionExtractor implements SiteExtractor {
                 String url = Json.str(source, "url");
                 if (url == null) continue;
 
+                MediaKind kind = kindOf(url, Json.str(source, "type"));
+                if (hasMaster && kind == MediaKind.HLS && height > 0) continue;
+
                 FoundMedia media = new FoundMedia(url);
-                media.kind = kindOf(url, Json.str(source, "type"));
+                media.kind = kind;
                 media.height = height;
                 media.thumbnail = thumbnail;
                 media.title = title;
@@ -57,6 +63,41 @@ public class DailymotionExtractor implements SiteExtractor {
                 if (media.valid()) out.add(media);
             }
         }
+    }
+
+    /**
+     * Whether the ladder offers its adaptive master, which is the only entry that knows about
+     * sound.
+     *
+     * <p>Dailymotion's numbered entries are media playlists holding video and nothing else; the
+     * audio is a separate rendition, named by an {@code EXT-X-MEDIA} group that only the master
+     * declares. Downloading "1080" directly therefore fetched a picture with no soundtrack, and
+     * nothing later in the pipeline could tell — the playlist it was handed was complete and
+     * correct, it simply had no audio in it.
+     *
+     * <p>So where the master exists, the numbered entries are dropped and it is offered alone.
+     * Nothing is lost by that: the master is expanded into the same ladder of heights further
+     * down, each one carrying the audio address its group named.
+     *
+     * <p>Where it does not exist, they are kept. A silent video is a poor result; no video at all
+     * is a worse one.
+     */
+    private static boolean hasMaster(JsonObject qualities) {
+        for (String key : qualities.keySet()) {
+            if (!"auto".equalsIgnoreCase(key)) continue;
+            JsonElement entry = qualities.get(key);
+            if (entry == null || !entry.isJsonArray()) continue;
+
+            for (JsonElement element : (JsonArray) entry) {
+                if (!element.isJsonObject()) continue;
+                JsonObject source = element.getAsJsonObject();
+                String url = Json.str(source, "url");
+                if (url != null && kindOf(url, Json.str(source, "type")) == MediaKind.HLS) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static MediaKind kindOf(String url, String type) {

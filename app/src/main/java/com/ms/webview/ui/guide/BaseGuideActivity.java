@@ -1,15 +1,10 @@
 package com.ms.webview.ui.guide;
 
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -35,8 +30,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ms.webview.R;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -172,85 +165,13 @@ public abstract class BaseGuideActivity extends AppCompatActivity {
 
     /**
      * Opens the site somewhere else: its own app where that is installed, a browser where it is
-     * not.
-     *
-     * <p>Deliberately never this app's browser, because of what the button is for. The first
-     * method has the viewer share a video from the site into this app, and a share sheet only
-     * exists where the site is a real app or a real browser tab. Opening our own WebView would
-     * put them exactly where the guide is telling them not to be — and this app registers itself
-     * as a handler for web links, so it has to be ruled out by name rather than by hoping.
+     * not. The rules for which, and for why it is never our own browser, live in
+     * {@link SiteLauncher} — the guide dialog raised over the page needs the same behaviour, and
+     * two copies of it would be two chances to get it wrong.
      */
     private void openSiteElsewhere() {
-        if (openInApp()) return;
-        openInBrowser();
-    }
-
-    /**
-     * The site's own app, by its package, and only if it is really there.
-     *
-     * <p>Two ways in, because the two answer different questions. A link intent aimed at the
-     * package lands on the page itself where the app claims its own web addresses; a launch
-     * intent only opens the app at whatever it was showing. The first is better and not always
-     * available.
-     */
-    private boolean openInApp() {
-        PackageManager packages = getPackageManager();
-
-        Intent deepLink = new Intent(Intent.ACTION_VIEW, Uri.parse(siteUrl()))
-                .setPackage(appPackage());
-        if (deepLink.resolveActivity(packages) != null) {
-            return launch(deepLink);
-        }
-
-        Intent launcher = packages.getLaunchIntentForPackage(appPackage());
-        return launcher != null && launch(launcher);
-    }
-
-    /**
-     * A browser, preferring whichever one the phone already treats as the default.
-     *
-     * <p>Only offered as a choice when the default cannot be used — when it is us, or when the
-     * system would have shown a chooser anyway. Anything else would put a list in front of
-     * somebody who has already told their phone which browser they want.
-     */
-    private void openInBrowser() {
-        Intent view = new Intent(Intent.ACTION_VIEW, Uri.parse(siteUrl()))
-                .addCategory(Intent.CATEGORY_BROWSABLE);
-        PackageManager packages = getPackageManager();
-
-        ResolveInfo preferred = packages.resolveActivity(view, PackageManager.MATCH_DEFAULT_ONLY);
-        if (preferred != null && !getPackageName().equals(preferred.activityInfo.packageName)
-                && !"android".equals(preferred.activityInfo.packageName)) {
-            if (launch(view)) return;
-        }
-
-        // No usable default. Offer everything that can open a web address except ourselves.
-        List<Intent> others = new ArrayList<>();
-        for (ResolveInfo info : packages.queryIntentActivities(view, 0)) {
-            if (getPackageName().equals(info.activityInfo.packageName)) continue;
-            others.add(new Intent(view).setComponent(new ComponentName(
-                    info.activityInfo.packageName, info.activityInfo.name)));
-        }
-        if (others.isEmpty()) return;
-
-        if (others.size() == 1) {
-            launch(others.get(0));
-            return;
-        }
-        Intent chooser = Intent.createChooser(others.remove(0),
+        SiteLauncher.open(this, siteUrl(), appPackage(),
                 getString(R.string.guide_open_site, getString(siteName())));
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, others.toArray(new Parcelable[0]));
-        launch(chooser);
-    }
-
-    private boolean launch(Intent intent) {
-        try {
-            startActivity(intent);
-            return true;
-        } catch (ActivityNotFoundException e) {
-            // Uninstalled between being listed and being launched. Not worth a crash.
-            return false;
-        }
     }
 
     /**

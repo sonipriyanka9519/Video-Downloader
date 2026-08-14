@@ -59,22 +59,56 @@
     <!--
       Shown by the system from the moment the icon is tapped until the first frame is drawn.
       No timer and no extra activity: an artificial delay would only make the app slower.
+
+      White, matching the screen it hands over to. It used to be crimson, which was right while
+      the opening was a field of brand colour and is wrong now — the system splash and the
+      activity behind it are meant to look like one screen, and two colours make the handover
+      visible as a flash.
     -->
     <style name="Theme.Webview.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/brand_crimson</item>
+        <item name="windowSplashScreenBackground">@color/splash_surface</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
-        <item name="postSplashScreenTheme">@style/Theme.Webview.Brand</item>
+        <item name="postSplashScreenTheme">@style/Theme.Webview.SplashContent</item>
     </style>
 
     <!--
-      Splash and onboarding: a full field of brand colour, so the light status-bar icons the
-      rest of the app asks for would be invisible here.
+      The opening itself: white, so the status-bar icons have to be dark to be seen at all.
     -->
-    <style name="Theme.Webview.Brand" parent="Theme.Webview">
-        <item name="android:windowBackground">@drawable/bg_splash_gradient</item>
-        <item name="android:windowLightStatusBar">false</item>
+    <style name="Theme.Webview.SplashContent" parent="Theme.Webview">
+        <item name="android:windowBackground">@color/splash_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- API 27+; simply ignored below that, where the bar is dark anyway. -->
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <!--
+      One action in a sheet: an icon, a word, and the whole width to be tapped on. Declared once
+      because four of them in a row have to line up, and four copies of the same eight attributes
+      is four chances for one of them not to.
+    -->
+    <style name="Widget.Webview.SheetAction" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:drawablePadding">@dimen/_16sdp</item>
+        <item name="android:drawableTint">@color/on_surface_variant</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/_18sdp</item>
+        <item name="android:paddingVertical">@dimen/_13sdp</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
+
+    <!--
+      A guide's screenshots, rounded off. An ImageView clips nothing, so the corners have to come
+      from a shape the view is drawn through rather than from the picture — which is what makes
+      this work for screenshots dropped in later without editing them first.
+    -->
+    <style name="ShapeAppearance.Webview.GuideStep" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_10sdp</item>
     </style>
 
     <!--
@@ -90,8 +124,22 @@
       The pill behind the selected bottom-nav icon. Tinted from the brand container rather than
       the default surface tint, so the selection reads as the app's own colour.
     -->
+    <!--
+      No indicator at all. Material 3 draws a filled pill behind the chosen icon; on a two-tab bar
+      it is a large shape asserting something the colour of the icon has already said, and it
+      crowds a bar this short.
+    -->
     <style name="BottomNavIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/primary_container</item>
+        <item name="android:color">@android:color/transparent</item>
+        <item name="android:width">0dp</item>
+        <item name="android:height">0dp</item>
+    </style>
+
+    <!-- Small and quiet: the label names the icon, it does not compete with it. -->
+    <style name="TextAppearance.Webview.BottomNav" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">@dimen/_9ssp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:letterSpacing">0.01</item>
     </style>
 
     <!-- The player is the one place a dark surround is right. -->

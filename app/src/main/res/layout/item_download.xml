@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  One download as a row: what it looks like, what it is called, and how big it is.
+
+  The picture leads at the size a video wants to be read at rather than as a stamp beside the text,
+  and it carries the two facts that belong on a picture — how long it runs, and how far along it is.
+  Everything a row can do beyond playing sits behind the ⋮, so the row itself has one meaning: this
+  video, tapped.
+-->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/_11sdp"
-    android:layout_marginVertical="@dimen/_4sdp"
-    app:cardCornerRadius="@dimen/_12sdp"
+    android:layout_marginHorizontal="@dimen/_6sdp"
+    android:layout_marginVertical="@dimen/_3sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
     app:cardElevation="0dp"
     app:strokeWidth="0dp">
 
@@ -18,13 +26,13 @@
         android:padding="@dimen/_7sdp">
 
         <FrameLayout
-            android:layout_width="@dimen/_57sdp"
-            android:layout_height="@dimen/_44sdp">
+            android:layout_width="@dimen/_92sdp"
+            android:layout_height="@dimen/_56sdp">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardCornerRadius="@dimen/_6sdp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp">
 
@@ -40,18 +48,46 @@
             <!-- Only on a finished item, where tapping actually plays something. -->
             <ImageView
                 android:id="@+id/playBadge"
-                android:layout_width="@dimen/_21sdp"
-                android:layout_height="@dimen/_21sdp"
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/play"
                 android:src="@drawable/ic_play_circle"
                 android:visibility="gone" />
+
+            <!--
+              How long it runs, over the picture. Hidden rather than blank while a download is
+              still going: a duration can only be read out of a finished file.
+            -->
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/bg_duration"
+                android:paddingHorizontal="@dimen/_4sdp"
+                android:paddingVertical="@dimen/_1sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/segment_track"
+                app:trackCornerRadius="@dimen/_2sdp"
+                app:trackThickness="@dimen/_3sdp" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_9sdp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -60,52 +96,63 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:textColor="@color/on_surface"
                 android:textSize="@dimen/_11ssp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/status"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/on_surface_variant"
-                android:textSize="@dimen/_9ssp" />
+                android:layout_marginTop="@dimen/_4sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                app:indicatorColor="@color/primary"
-                app:trackColor="@color/segment_track"
-                app:trackCornerRadius="@dimen/_2sdp"
-                app:trackThickness="@dimen/_4sdp" />
+                <!-- Marks the line as being about a playable file, not about progress. -->
+                <ImageView
+                    android:id="@+id/statusIcon"
+                    android:layout_width="@dimen/_13sdp"
+                    android:layout_height="@dimen/_13sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_play"
+                    android:visibility="gone"
+                    app:tint="@color/on_surface_variant" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="@dimen/_9ssp" />
+            </LinearLayout>
         </LinearLayout>
 
+        <!-- Pause and resume only. A finished row needs no button: tapping it plays. -->
         <ImageButton
             android:id="@+id/btnPrimary"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_27sdp"
-            android:layout_height="@dimen/_27sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/pause"
+            android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_pause"
+            android:visibility="gone"
             app:tint="@color/primary" />
 
         <ImageButton
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnMore"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_27sdp"
-            android:layout_height="@dimen/_27sdp"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/delete"
-            android:src="@drawable/ic_delete"
-            app:tint="@color/primary" />
-
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/more_options"
+            android:padding="@dimen/_2sdp"
+            android:src="@drawable/ic_more_vert"
+            app:tint="@color/on_surface_variant" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -93,6 +93,16 @@ public class DashResolver {
         String audioUrl = audio == null ? null : audio.url;
         long audioBandwidth = audio == null ? 0 : audio.bandwidth;
 
+        // A manifest that names no audio and whose renditions do not carry their own describes a
+        // silent download. Saying so here is the only chance anything has to notice: past this
+        // point a video-only rendition is indistinguishable from a complete file — it fetches,
+        // decodes, plays, and reports success, with no sound. This is what Facebook was doing.
+        boolean silent = audioUrl == null && !manifest.videoCarriesAudio();
+        Log.i(MediaRegistry.DIAG, "dash " + manifest.videos.size() + " video / "
+                + manifest.audios.size() + " audio"
+                + (audioUrl == null ? "" : ", muxing " + audioBandwidth + "bps")
+                + (silent ? " -- NO AUDIO TRACK, downloads from this manifest will be mute" : ""));
+
         if (manifest.durationMs > 0 && item.durationMs <= 0) item.durationMs = manifest.durationMs;
 
         for (DashManifest.Representation video : manifest.videos) {

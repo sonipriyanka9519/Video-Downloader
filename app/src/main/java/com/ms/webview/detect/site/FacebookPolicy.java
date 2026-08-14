@@ -85,6 +85,22 @@ public class FacebookPolicy implements SitePolicy {
     }
 
     /**
+     * True. Facebook plays through MediaSource, and its picture and its sound are two separate
+     * streams the page fetches side by side.
+     *
+     * <p>This is what the long-running silent-download complaint actually was. The sound was
+     * overheard exactly like the picture, answered {@code audio/mp4} to the probe, was classified
+     * as not-video and discarded — so the video played with sound in the browser, where the page
+     * had fetched both, and came out mute once downloaded, where only one of the two had been
+     * kept. By the time anything could have noticed, the audio's address was no longer in the
+     * record at all.
+     */
+    @Override
+    public boolean pairsSeparateAudio() {
+        return true;
+    }
+
+    /**
      * False. It was set true to copy Instagram and had to come back, and the difference between
      * the two platforms is worth stating because it is not a matter of degree.
      *

@@ -45,11 +45,7 @@ public class PinterestGuideActivity extends BaseGuideActivity {
 
     @Override
     protected GuideStep[] steps() {
-        return new GuideStep[]{
-                new GuideStep(R.drawable.img_pin_share_1),
-                new GuideStep(R.drawable.img_pin_share_2),
-                new GuideStep(R.drawable.img_pin_copy_1),
-                new GuideStep(R.drawable.img_pin_copy_2),
-        };
+        // The same four steps the browser raises in a dialog, so the two cannot disagree.
+        return GuideSite.PINTEREST.steps;
     }
 }

@@ -33,11 +33,7 @@ public class FacebookGuideActivity extends BaseGuideActivity {
 
     @Override
     protected GuideStep[] steps() {
-        return new GuideStep[]{
-                new GuideStep(R.drawable.img_fb_share_1),
-                new GuideStep(R.drawable.img_fb_share_2),
-                new GuideStep(R.drawable.img_fb_copy_1),
-                new GuideStep(R.drawable.img_fb_copy_2),
-        };
+        // The same four steps the browser raises in a dialog, so the two cannot disagree.
+        return GuideSite.FACEBOOK.steps;
     }
 }

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  One list of everything downloaded, under the day each belongs to.
+
+  There were two tabs here, in progress and finished, and the split cost more than it explained: a
+  download that completed while you watched it left the page you were on for the one you were not.
+  The two controls at the top right are what replaced them — one decides how much room a video
+  gets, the other which states are worth showing.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/downloadsRoot"
@@ -13,7 +21,7 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/_14sdp"
         android:paddingTop="@dimen/_5sdp"
-        android:paddingEnd="@dimen/_12sdp">
+        android:paddingEnd="@dimen/_8sdp">
 
         <TextView
             android:layout_width="0dp"
@@ -23,55 +31,73 @@
             android:textColor="@color/on_surface"
             android:textSize="@dimen/_15ssp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnDownloadSort"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/sort_downloads"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_sort"
+            app:tint="@color/toolbar_icon" />
+
+        <!-- Shows the layout it switches to, not the one already on screen. -->
+        <ImageButton
+            android:id="@+id/btnDownloadLayout"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/switch_layout"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_view_grid"
+            app:tint="@color/toolbar_icon" />
     </LinearLayout>
 
-    <!-- Two states, mutually exclusive, so a segmented control rather than a list of filters. -->
-    <LinearLayout
-        android:id="@+id/segments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:background="@drawable/bg_segment_track"
-        android:orientation="horizontal"
-        android:padding="@dimen/_3sdp">
-
-        <TextView
-            android:id="@+id/tabActive"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_segment_active"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:paddingVertical="@dimen/_7sdp"
-            android:text="@string/tab_downloading"
-            android:textColor="@color/primary"
-            android:textSize="@dimen/_11ssp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tabFinished"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:paddingVertical="@dimen/_7sdp"
-            android:text="@string/tab_finished"
-            android:textColor="@color/segment_inactive_text"
-            android:textSize="@dimen/_11ssp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <!-- Swipeable, with the segments above acting as both label and control. -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/downloadPager"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/downloadList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_12sdp" />
+
+        <!--
+          Centred rather than pinned to the top: with nothing in the list there is nothing for it
+          to sit above, and a line of text alone against the top of a blank screen reads as a
+          heading for something that failed to load.
+        -->
+        <TextView
+            android:id="@+id/downloadEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingHorizontal="@dimen/_28sdp"
+            android:textAlignment="center"
+            android:textColor="@color/on_surface_variant"
+            android:textSize="@dimen/_11ssp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <!--
+      Under the list rather than over it. This screen is where somebody looks when a download did
+      not appear, so the walkthrough is worth offering here too — but the list is the answer they
+      came for, and the offer takes its room from the bottom of the screen, not from the list.
+    -->
+    <include
+        layout="@layout/view_how_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_10sdp" />
 
 </LinearLayout>

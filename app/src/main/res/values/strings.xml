@@ -1,23 +1,16 @@
 <resources>
     <string name="app_name">Webview</string>
 
-    <!-- Splash -->
+    <!--
+      Splash. Its own words rather than app_name, which is the launcher label and has a length
+      limit the opening does not — the icon caption has to be short, this line does not.
+    -->
+    <string name="splash_title">Free Video Downloader</string>
+    <string name="splash_subtitle">One-click Fast Download</string>
     <string name="app_tagline">Browse. Detect. Download.</string>
 
-    <!--
-      Onboarding. Three pages, each naming one thing the app does, in the order the user will
-      meet them — anything longer would be a manual nobody reads.
-    -->
-    <string name="onboard_title_1">New generation\nsafe &amp; private\nweb browser</string>
-    <string name="onboard_body_1">Browse anywhere you like. Nothing you open is shared, and your session stays on your device.</string>
-    <string name="onboard_title_2">Every video\non the page,\nfound for you</string>
-    <string name="onboard_body_2">Reels, clips and streams are detected as they play — even when a page holds several at once.</string>
-    <string name="onboard_title_3">Download in\nthe quality\nyou choose</string>
-    <string name="onboard_body_3">Pick a resolution, then watch it offline whenever you want. Saved straight to your gallery.</string>
-    <string name="onboard_illustration">Illustration</string>
-    <string name="skip">Skip</string>
+    <!-- Kept: the download walkthrough steps through its pages with it. -->
     <string name="next">Next</string>
-    <string name="get_started">Get started</string>
 
     <!-- Browser -->
     <string name="search_or_url">Search or type a URL</string>
@@ -54,14 +47,15 @@
     -->
     <string name="default_browser_title_lead">Set as</string>
     <string name="default_browser_title_accent">Default Browser</string>
-    <string name="default_browser_subtitle">Experience smoother browsing!</string>
+    <string name="default_browser_subtitle">Experience faster browsing!</string>
     <string name="default_browser_safe">Safe Browsing</string>
-    <string name="default_browser_safe_body">Check website security for safe browsing</string>
-    <string name="default_browser_fast">Fast Download</string>
-    <string name="default_browser_fast_body">Enjoy faster and more stable downloads</string>
+    <string name="default_browser_safe_body">Auto scan websites to block threats every time</string>
+    <string name="default_browser_fast">6x Download Speed</string>
+    <string name="default_browser_fast_body">Enjoy fast downloading with just one tap</string>
     <string name="default_browser_quick">Quick Access</string>
-    <string name="default_browser_quick_body">Browse popular websites with one click</string>
-    <string name="default_browser_set">Set as Default</string>
+    <string name="default_browser_quick_body">Instant access to popular websites</string>
+    <string name="default_browser_set">Set as default</string>
+    <!-- Only read aloud now: the way out is the cross in the corner, which needs a name, not a label. -->
     <string name="default_browser_later">Later</string>
     <string name="default_browser_unavailable">This phone has no screen for choosing a default browser</string>
 
@@ -78,8 +72,24 @@
     <string name="yesterday_on">Yesterday – %1$s</string>
     <string name="earlier">Earlier</string>
 
+    <!--
+      How to download. Each step is split in two so the noun it turns on can be coloured, which is
+      what lets the line be taken in at a glance rather than read.
+    -->
+    <string name="how_to_download">How to Download</string>
+    <string name="how_to_mark">?</string>
+    <string name="how_to_done">Got it</string>
+    <string name="how_step_1">Go to</string>
+    <string name="how_step_1_accent">website</string>
+    <string name="how_step_2">Play the</string>
+    <string name="how_step_2_accent">video</string>
+    <string name="how_step_3">Tap the</string>
+    <string name="how_step_3_accent">download button</string>
+    <string name="how_step_4">Choose a</string>
+    <string name="how_step_4_accent">quality</string>
+
     <!-- Guide screens -->
-    <string name="guide_paste_hint">Paste the video link here</string>
+    <string name="guide_paste_hint">Paste URL</string>
     <string name="guide_open_link">Open this link</string>
     <string name="guide_invalid_link">That is not a link. Paste the whole address, starting with https.</string>
     <string name="guide_wrong_site">This is the %1$s guide. Paste a %1$s link, or go back and pick the right site.</string>
@@ -87,9 +97,35 @@
     <string name="guide_open_site">Open %1$s</string>
 
     <!--
-      Only the names remain. Every instruction a guide used to carry is drawn into its pictures,
-      where the words and the screenshot cannot drift apart.
+      The steps, in text again rather than drawn into the screenshots. The name of whatever has to
+      be tapped is bolded, which is what lets the line be scanned instead of read.
+
+      Two methods, four steps: share the post straight into this app, or copy its link and bring it
+      back. The order matters — sharing is fewer taps, so it goes first.
     -->
+    <string name="guide_how_to">How to Download:</string>
+
+    <string name="guide_fb_step_1">Open \"<b>Facebook</b>\" and click \"<b>Share to</b>\"</string>
+    <string name="guide_fb_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
+    <string name="guide_fb_step_3">Open \"<b>Facebook</b>\" and click \"<b>Copy link</b>\"</string>
+    <string name="guide_fb_step_4">Paste the link above and click \"<b>Search</b>\"</string>
+
+    <string name="guide_ig_step_1">Open \"<b>Instagram</b>\" and click \"<b>Share to</b>\"</string>
+    <string name="guide_ig_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
+    <string name="guide_ig_step_3">Open \"<b>Instagram</b>\" and click \"<b>Copy link</b>\"</string>
+    <string name="guide_ig_step_4">Paste the link above and click \"<b>Search</b>\"</string>
+
+    <!-- Placeholders until the wording for these two arrives. -->
+    <string name="guide_pin_step_1">Open \"<b>Pinterest</b>\" and click \"<b>Share</b>\"</string>
+    <string name="guide_pin_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
+    <string name="guide_pin_step_3">Open \"<b>Pinterest</b>\" and click \"<b>Copy link</b>\"</string>
+    <string name="guide_pin_step_4">Paste the link above and click \"<b>Search</b>\"</string>
+
+    <string name="guide_x_step_1">Open \"<b>X</b>\" and click \"<b>Share post</b>\"</string>
+    <string name="guide_x_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
+    <string name="guide_x_step_3">Open \"<b>X</b>\" and click \"<b>Copy link</b>\"</string>
+    <string name="guide_x_step_4">Paste the link above and click \"<b>Search</b>\"</string>
+
     <string name="guide_instagram">Instagram</string>
     <string name="guide_pinterest">Pinterest</string>
     <string name="guide_x">X</string>
@@ -133,10 +169,42 @@
 
     <!-- Downloads -->
     <string name="downloads">Downloads</string>
-    <string name="tab_downloading">Downloading</string>
-    <string name="tab_finished">Finished</string>
     <string name="no_downloads">Nothing downloaded yet</string>
-    <string name="no_active_downloads">Nothing downloading right now</string>
+
+    <!--
+      Day headings. "Today" and "Yesterday" carry their date too: the word is what people scan
+      for, and the date is what they need the moment they are looking for a particular day.
+    -->
+    <string name="downloads_today">Today · %1$s</string>
+    <string name="downloads_yesterday">Yesterday · %1$s</string>
+    <string name="downloads_undated">Undated</string>
+
+    <!-- Whatever is still arriving, pinned above the days. -->
+    <string name="downloads_in_progress">Downloading</string>
+
+    <!-- The two controls at the top right. -->
+    <string name="sort_downloads">Sort by</string>
+    <string name="switch_layout">Change layout</string>
+    <string name="sort_newest">Newest first</string>
+    <string name="sort_oldest">Oldest first</string>
+    <string name="sort_name">Name (A–Z)</string>
+    <string name="sort_largest">Largest first</string>
+    <string name="sort_smallest">Smallest first</string>
+
+    <!-- One row's own menu. -->
+    <string name="rename">Rename</string>
+    <string name="rename_hint">Video name</string>
+    <string name="rename_failed">Could not rename this video</string>
+    <string name="property">Property</string>
+    <string name="property_name">Name</string>
+    <string name="property_size">Size</string>
+    <string name="property_duration">Duration</string>
+    <string name="property_quality">Quality</string>
+    <string name="property_type">Type</string>
+    <string name="property_date">Saved</string>
+    <string name="property_source">From</string>
+    <string name="property_stream">Stream</string>
+    <string name="property_location">Location</string>
     <string name="segments_progress">%1$d/%2$d segments</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>

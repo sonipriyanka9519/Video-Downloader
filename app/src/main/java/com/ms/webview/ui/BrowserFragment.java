@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.PermissionRequest;
@@ -60,11 +62,10 @@ import com.ms.webview.detect.MediaVariant;
 import com.ms.webview.detect.NetworkSniffer;
 import com.ms.webview.detect.site.SitePolicies;
 import com.ms.webview.download.DownloadService;
-import com.ms.webview.ui.guide.BaseGuideActivity;
-import com.ms.webview.ui.guide.FacebookGuideActivity;
-import com.ms.webview.ui.guide.InstagramGuideActivity;
-import com.ms.webview.ui.guide.PinterestGuideActivity;
-import com.ms.webview.ui.guide.XGuideActivity;
+import com.ms.webview.ui.guide.GuideDialog;
+import com.ms.webview.ui.guide.GuideSite;
+import com.ms.webview.ui.guide.HowTo;
+import com.ms.webview.ui.guide.HowToActivity;
 import com.ms.webview.ui.home.SearchHistory;
 import com.ms.webview.ui.home.Shortcut;
 import com.ms.webview.ui.home.ShortcutAdapter;
@@ -164,6 +165,15 @@ public class BrowserFragment extends Fragment
      */
     private static final long DEFAULT_BROWSER_QUIET_MS = 60_000L;
 
+    /**
+     * How far the page behind the default-browser sheet is taken down.
+     *
+     * <p>Well past the 0.32 a dialog dims by, because this sheet covers only the lower half of the
+     * screen: at the usual amount the shortcut grid above it still reads as the live screen, and
+     * the eye has two things to choose between when only one of them can be touched.
+     */
+    private static final float DEFAULT_BROWSER_SCRIM = 0.75f;
+
     /** Called by the activity as the app comes to the foreground. */
     public static void askAboutDefaultBrowser() {
         ASK_DEFAULT_BROWSER.set(true);
@@ -176,10 +186,32 @@ public class BrowserFragment extends Fragment
     private TextView addressBar;
     private ProgressBar pageProgress;
     private RecyclerView shortcutGrid;
+    /** The grid and the walkthrough button together: what "the home screen" means here. */
+    private View homePanel;
     private ImageView fab;
     private TextView fabBadge;
     /** Button and badge together: what is dragged, and what receives the touches. */
     private View fabHolder;
+    /** The offer of a walkthrough, on the grid and nowhere else. */
+    @Nullable
+    private View howTo;
+
+    /**
+     * The guide belonging to the site in front, or null on a site with none.
+     *
+     * <p>What the button beside the download button raises. Set when a shortcut with a guide is
+     * opened and cleared when the tab is emptied — it follows the page, not the app.
+     */
+    @Nullable
+    private GuideSite currentGuide;
+    /** The same guide while it is still waiting for its page to finish loading. */
+    @Nullable
+    private GuideSite pendingGuide;
+    /** The guide while it is on screen, so a second copy cannot open behind it. */
+    @Nullable
+    private AlertDialog guideDialog;
+    /** Raises the guide again once it has been dismissed. */
+    private ImageView guideTip;
     private TextView tabCount;
 
     /**
@@ -190,8 +222,6 @@ public class BrowserFragment extends Fragment
      * leaves the page and its address exactly as they were.
      */
     private ActivityResultLauncher<Intent> searchLauncher;
-    /** The guide screen, and the address it settled on. */
-    private ActivityResultLauncher<Intent> guideLauncher;
 
     /**
      * Every open tab, newest last, and which of them is in front.
@@ -254,21 +284,6 @@ public class BrowserFragment extends Fragment
                     if (!TextUtils.isEmpty(query)) load(query);
                 });
 
-        // A guide hands back either the pasted link or the site itself. Either way it is a new
-        // thing to look at, so it gets a tab of its own rather than replacing the grid the
-        // shortcut was tapped from.
-        guideLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() != android.app.Activity.RESULT_OK) return;
-                    Intent data = result.getData();
-                    if (data == null) return;
-
-                    String url = data.getStringExtra(BaseGuideActivity.EXTRA_URL);
-                    if (TextUtils.isEmpty(url)) return;
-                    newTab();
-                    load(url);
-                });
-
         // The result code is not the answer and cannot be trusted as one: the settings screen
         // returns cancelled however it is left, and even the role dialog reports only what was
         // tapped. The state itself is the answer, so it is read back when the viewer returns —
@@ -321,9 +336,11 @@ public class BrowserFragment extends Fragment
         addressBar = view.findViewById(R.id.addressBar);
         pageProgress = view.findViewById(R.id.pageProgress);
         shortcutGrid = view.findViewById(R.id.shortcutGrid);
+        homePanel = view.findViewById(R.id.homePanel);
         fab = view.findViewById(R.id.fabDownload);
         fabBadge = view.findViewById(R.id.fabBadge);
         fabHolder = view.findViewById(R.id.fabHolder);
+        guideTip = view.findViewById(R.id.btnGuideTip);
         tabCount = view.findViewById(R.id.btnTabs);
         tabCount.setOnClickListener(v -> {
             // Photographed on the way in, so the card for the tab being left shows the page as it
@@ -379,6 +396,31 @@ public class BrowserFragment extends Fragment
         // Pressed, not typed into. The bar shows where the browser is; where it is going is
         // decided on a screen of its own.
         addressBar.setOnClickListener(v -> openSearch());
+
+        howTo = view.findViewById(R.id.btnHowTo);
+        howTo.setOnClickListener(v -> openHowTo());
+        refreshHowTo();
+    }
+
+    /** Opens the walkthrough, from the button or from the overflow. */
+    private void openHowTo() {
+        startActivity(new Intent(requireContext(), HowToActivity.class));
+    }
+
+    /**
+     * Shows the walkthrough button under the shortcuts, until the walkthrough has been read.
+     *
+     * <p>Once, here, unlike on the downloads screen where it stays. It sits directly beneath the
+     * last row of shortcuts — in the space somebody is aiming at — and once the question has been
+     * answered a permanent row there is an obstacle, not an offer. It remains in the browser's
+     * overflow for anyone who wants it again.
+     *
+     * <p>Checked again whenever the grid comes back rather than only when the view is built,
+     * because the thing that changes the answer is the screen the viewer has just returned from.
+     */
+    private void refreshHowTo() {
+        if (howTo == null || getContext() == null) return;
+        howTo.setVisibility(HowTo.isSeen(requireContext()) ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -439,6 +481,12 @@ public class BrowserFragment extends Fragment
             new HistorySheet().show(getChildFragmentManager(), "history");
             return true;
         });
+        // Kept here for good, because the button that offers it disappears after one reading.
+        // Hiding help is reasonable; making it unreachable is not.
+        menu.getMenu().add(R.string.how_to_download).setOnMenuItemClickListener(item -> {
+            openHowTo();
+            return true;
+        });
 
         menu.show();
     }
@@ -458,43 +506,70 @@ public class BrowserFragment extends Fragment
     }
 
     /**
-     * A shortcut, which for some sites is a guide first.
+     * A shortcut. Every one of them opens its site, and some of them explain it on the way.
      *
-     * <p>The sites people arrive with a copied link for are the ones worth explaining, and
-     * dropping straight onto a logged-out home page teaches nothing. Everything else opens
-     * directly — a screen to dismiss is not help.
+     * <p>The site first, always. A guide used to open in front of the shortcut, which meant
+     * reading instructions about a page, dismissing them, and only then seeing the page — the
+     * explanation and the thing explained were never on screen together. Now the page loads and
+     * the guide arrives over it, so the instructions are read against the screen they describe.
      */
     @Override
     public void onOpen(Shortcut shortcut) {
-        Class<?> guide = guideFor(shortcut.id);
-        if (guide == null) {
-            load(shortcut.url);
-            return;
-        }
-        guideLauncher.launch(new Intent(requireContext(), guide));
+        pendingGuide = GuideSite.forShortcut(shortcut.id);
+        currentGuide = pendingGuide;
+        load(shortcut.url);
+    }
+
+    // ----------------------------------------------------------- the site's own guide
+
+    /**
+     * Raises the guide for a site that has just finished loading, if one was waiting.
+     *
+     * <p>Taken as it is read, so it is raised once for the shortcut that asked for it. A site's
+     * pages go on loading as the viewer moves around it, and a guide that reappeared at every one
+     * of them would be an argument rather than an explanation.
+     */
+    private void showPendingGuide() {
+        GuideSite site = pendingGuide;
+        pendingGuide = null;
+        if (site == null || !isResumed() || getContext() == null) return;
+        openGuide(site);
     }
 
     /**
-     * The guide screen for a site, or null where there is none.
+     * Shows one, and puts up the button that brings it back when it goes.
      *
-     * <p>Null is the ordinary answer. Most sites need no explaining — you open them and scroll —
-     * and a screen you only dismiss is not help.
+     * <p>The button appears on dismissal rather than alongside the dialog, because until then
+     * there is nothing to bring back — and it is bound to every way out, not only the cross, so
+     * backing out or tapping beside it leaves the same trail back.
      */
-    @Nullable
-    private static Class<?> guideFor(@Nullable String shortcutId) {
-        if (shortcutId == null) return null;
-        switch (shortcutId) {
-            case "facebook":
-                return FacebookGuideActivity.class;
-            case "instagram":
-                return InstagramGuideActivity.class;
-            case "pinterest":
-                return PinterestGuideActivity.class;
-            case "x":
-                return XGuideActivity.class;
-            default:
-                return null;
-        }
+    private void openGuide(GuideSite site) {
+        if (guideDialog != null && guideDialog.isShowing()) return;
+
+        guideDialog = GuideDialog.show(requireContext(), site, dialog -> {
+            guideDialog = null;
+            showGuideTip();
+        });
+    }
+
+    /**
+     * Shows the button that raises the guide again, beside the download button.
+     *
+     * <p>Beside it, and inside the same holder, so dragging one moves both — and it carries the
+     * site's own mark rather than a question mark, because that is the shortest way of saying
+     * which guide it is about to open.
+     */
+    private void showGuideTip() {
+        if (guideTip == null || currentGuide == null) return;
+        guideTip.setImageResource(currentGuide.icon);
+        guideTip.setVisibility(browsing ? View.VISIBLE : View.GONE);
+    }
+
+    /** Called when the tab stops being about a guided site: the button has nothing left to open. */
+    private void hideGuideTip() {
+        currentGuide = null;
+        pendingGuide = null;
+        if (guideTip != null) guideTip.setVisibility(View.GONE);
     }
 
     /** From the history screen behind the overflow. */
@@ -540,10 +615,13 @@ public class BrowserFragment extends Fragment
     private void showHome() {
         browsing = false;
         if (webView != null) webView.setVisibility(View.GONE);
-        shortcutGrid.setVisibility(View.VISIBLE);
+        // The panel, not the grid alone: the walkthrough button is part of the home screen and
+        // hiding only the grid would leave it floating over whatever page comes next.
+        homePanel.setVisibility(View.VISIBLE);
         addressBar.setText("");
         hideKeyboard();
         updateFab();
+        refreshHowTo();
     }
 
     /**
@@ -556,7 +634,7 @@ public class BrowserFragment extends Fragment
      */
     private void showBrowser() {
         browsing = true;
-        shortcutGrid.setVisibility(View.GONE);
+        homePanel.setVisibility(View.GONE);
         if (webView != null) {
             webView.setVisibility(View.VISIBLE);
             // The browser's own answer first: after a step back through history it is already
@@ -710,6 +788,9 @@ public class BrowserFragment extends Fragment
                 // directly rather than hoping to overhear it.
                 registry.resolvePage(url);
                 noteTabPage(url, view.getTitle());
+                // The guide waits for this: it explains what is on the page, so it is raised once
+                // there is a page to explain rather than over a blank one still loading.
+                showPendingGuide();
             }
 
             @Override
@@ -861,6 +942,11 @@ public class BrowserFragment extends Fragment
         // this, taking the search screen's own "Link you copied" card would be followed a second
         // later by a dialog offering the link that had just been opened.
         ClipboardPrompt.markHandled(requireContext(), url);
+
+        // Going somewhere else means the last shortcut's guide no longer describes what is on
+        // screen. A guide about to be raised is the one exception, and it is the one case where
+        // this method was called by the shortcut that set it.
+        if (pendingGuide == null) hideGuideTip();
 
         Tab tab = currentTab();
         if (tab == null) return;
@@ -1029,6 +1115,9 @@ public class BrowserFragment extends Fragment
 
     private void setUpFab() {
         fab.setOnClickListener(v -> new MediaSheet().show(getChildFragmentManager(), "media"));
+        guideTip.setOnClickListener(v -> {
+            if (currentGuide != null) openGuide(currentGuide);
+        });
         makeFabDraggable();
         countObserver = items -> {
             readyCount = items == null ? 0 : items.size();
@@ -1129,6 +1218,9 @@ public class BrowserFragment extends Fragment
         super.onResume();
         // A pager only resumes the page in view, which is exactly the condition we want.
         if (backCallback != null) backCallback.setEnabled(true);
+        // Picked up where it was left, and only when a page is what is showing — a tab on the
+        // grid has a browser behind it that should stay stopped until it is looked at again.
+        if (webView != null && browsing) webView.onResume();
         openPendingLink();
 
         // The default-browser offer needs no clipboard and so needs no window focus, and this is
@@ -1197,9 +1289,9 @@ public class BrowserFragment extends Fragment
      *
      * <p>A sheet rather than a dialog, and the difference is not only where it sits: a sheet is
      * something the app is holding out, which can be pushed back down with the thumb already on
-     * the screen. "Later" is a real answer either way — the app works perfectly well without the
-     * role — so swiping it down, backing out and tapping outside all mean the same thing and all
-     * end in the same place.
+     * the screen. Declining is a real answer — the app works perfectly well without the role — so
+     * the cross, a swipe down, a back press and a tap outside all mean the same thing and all end
+     * in the same place.
      */
     private void showDefaultBrowserSheet() {
         View content = LayoutInflater.from(requireContext())
@@ -1207,6 +1299,16 @@ public class BrowserFragment extends Fragment
 
         defaultBrowserSheet = new BottomSheetDialog(requireContext());
         defaultBrowserSheet.setContentView(content);
+
+        // Dimmed hard behind it, and deliberately harder than a sheet dims by default. The offer
+        // covers only the lower half of the screen, so a light scrim leaves the shortcut grid
+        // above it looking as live as ever — two things asking to be looked at, one of which
+        // cannot be touched. Taking the page well down settles which of them is in front.
+        Window window = defaultBrowserSheet.getWindow();
+        if (window != null) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setDimAmount(DEFAULT_BROWSER_SCRIM);
+        }
 
         // The sheet's own container is opaque and square. Left as it is, its corners sit behind
         // the rounded ones this layout draws and the rounding is only visible as two white
@@ -1219,7 +1321,7 @@ public class BrowserFragment extends Fragment
             dismissDefaultBrowserSheet();
             requestDefaultBrowser();
         });
-        content.findViewById(R.id.btnSetDefaultLater).setOnClickListener(v -> {
+        content.findViewById(R.id.btnDefaultClose).setOnClickListener(v -> {
             dismissDefaultBrowserSheet();
             // Answered, so whatever was waiting behind it may now be asked.
             offerClipboardLink(false);
@@ -1343,6 +1445,11 @@ public class BrowserFragment extends Fragment
     public void onPause() {
         super.onPause();
         if (backCallback != null) backCallback.setEnabled(false);
+        // The page keeps running when this tab is not the one on screen — timers, scripts and,
+        // audibly, any video that was playing. A pager only resumes the page in view, so this is
+        // also what happens on the way to the downloads list: the browser goes quiet and comes
+        // back where it was, rather than playing on from behind another screen.
+        if (webView != null) webView.onPause();
         // Persist session cookies: Instagram and Facebook only serve media URLs to a logged-in
         // session, and the downloader replays those cookies out of band.
         CookieManager.getInstance().flush();
@@ -1388,23 +1495,25 @@ public class BrowserFragment extends Fragment
             tab.state = state;
         }
 
-        // The picture is of whatever the tab is actually showing, which on the grid is the grid.
-        View shown = browsing && webView != null ? webView : shortcutGrid;
+        // The picture is of whatever the tab is actually showing, which on the grid is the home
+        // panel. The panel rather than the grid inside it: the grid is only as tall as its rows,
+        // so photographing it would give the switcher a strip where every other card is a page.
+        View shown = browsing && webView != null ? webView : homePanel;
         tab.previewPath = TabStore.capture(requireContext(), shown, tab, true);
     }
 
     /**
      * Takes the blank tab's picture once the grid has been laid out.
      *
-     * <p>Posted rather than taken now: the grid was hidden a moment ago and a hidden view has no
+     * <p>Posted rather than taken now: the panel was hidden a moment ago and a hidden view has no
      * size, so drawing it immediately produces nothing. One frame later it has one.
      */
     private void captureGridSoon() {
-        if (shortcutGrid == null) return;
-        shortcutGrid.post(() -> {
+        if (homePanel == null) return;
+        homePanel.post(() -> {
             Tab tab = currentTab();
             if (tab == null || !tab.isBlank()) return;
-            tab.previewPath = TabStore.capture(requireContext(), shortcutGrid, tab, true);
+            tab.previewPath = TabStore.capture(requireContext(), homePanel, tab, true);
             saveTabs();
         });
     }
@@ -1466,6 +1575,9 @@ public class BrowserFragment extends Fragment
         currentTabId = tab.id;
         tab.lastShownAt = System.currentTimeMillis();
         useRegistryOf(tab);
+        // The guide was raised for a page in the tab being left, so it goes with it. It is not
+        // carried across: the tab arrived at is a different page, and the button is about this one.
+        hideGuideTip();
         loadedUrl = tab.url;
 
         if (tab.isBlank()) {
@@ -1562,6 +1674,7 @@ public class BrowserFragment extends Fragment
         }
         webView = null;
         loadedUrl = null;
+        hideGuideTip();
         showHome();
         captureGridSoon();
         saveTabs();
@@ -1582,6 +1695,7 @@ public class BrowserFragment extends Fragment
         webView = null;
         loadedUrl = null;
         useRegistryOf(tab);
+        hideGuideTip();
 
         showHome();
         captureGridSoon();
@@ -1672,6 +1786,8 @@ public class BrowserFragment extends Fragment
         // window goes is a leaked window.
         dismissClipboardDialog();
         dismissDefaultBrowserSheet();
+        if (guideDialog != null) guideDialog.dismiss();
+        guideDialog = null;
         if (focusWatch != null && getView() != null) {
             getView().getViewTreeObserver().removeOnWindowFocusChangeListener(focusWatch);
             focusWatch = null;

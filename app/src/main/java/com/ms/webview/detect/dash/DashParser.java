@@ -123,14 +123,39 @@ public final class DashParser {
         return manifest;
     }
 
+    /**
+     * Video or audio, asking what the rendition says it is before what it measures.
+     *
+     * <p>The dimensions used to be consulted first, and that was the bug behind silent Facebook
+     * downloads. Width and height are inherited from the enclosing AdaptationSet — see the
+     * {@code orElse} calls in the parse — so an audio Representation sitting under a set that
+     * states them is handed a resolution it never declared, and was read as video on the strength
+     * of it. It went into {@link DashManifest#videos}, {@link DashManifest#audios} was left empty,
+     * and {@link DashManifest#bestAudio()} then answered null — which the resolver takes to mean
+     * "these renditions carry their own sound". So the download muxed nothing and the file came
+     * out mute, with every stage of the pipeline reporting success.
+     *
+     * <p>A declared {@code mimeType} or {@code codecs} is the rendition speaking for itself, and
+     * it is never wrong. The dimensions are a guess for manifests that state neither, so they go
+     * last, where a guess belongs.
+     */
     private static boolean isVideo(DashManifest.Representation r) {
-        if (r.width > 0 || r.height > 0) return true;
         String mime = r.mimeType == null ? "" : r.mimeType.toLowerCase(Locale.US);
-        if (mime.contains("video")) return true;
         if (mime.contains("audio")) return false;
+        if (mime.contains("video")) return true;
+
         String codecs = r.codecs == null ? "" : r.codecs.toLowerCase(Locale.US);
-        return codecs.startsWith("avc") || codecs.startsWith("hev") || codecs.startsWith("hvc")
-                || codecs.startsWith("vp9") || codecs.startsWith("vp0") || codecs.startsWith("av0");
+        if (codecs.startsWith("mp4a") || codecs.startsWith("opus") || codecs.startsWith("vorbis")
+                || codecs.startsWith("ac-3") || codecs.startsWith("ec-3")
+                || codecs.startsWith("flac")) {
+            return false;
+        }
+        if (codecs.startsWith("avc") || codecs.startsWith("hev") || codecs.startsWith("hvc")
+                || codecs.startsWith("vp9") || codecs.startsWith("vp0") || codecs.startsWith("av0")) {
+            return true;
+        }
+        // Nothing declared: fall back to the dimensions, which only a video track carries.
+        return r.width > 0 || r.height > 0;
     }
 
     static long parseDuration(String value) {

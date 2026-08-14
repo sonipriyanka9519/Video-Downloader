@@ -8,218 +8,224 @@
 
   Raised from the bottom of the screen rather than the middle of it: a sheet is something the app
   is offering, which can be pushed back down, and a dialog is something in the way.
+
+  A frame rather than a plain column, only so the way out can sit in the corner of the heading
+  instead of taking a row of its own beneath the button.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_default_sheet"
-    android:orientation="vertical"
-    android:paddingHorizontal="@dimen/_16sdp"
-    android:paddingTop="@dimen/_8sdp"
-    android:paddingBottom="@dimen/_16sdp">
-
-    <!-- Says the sheet can be dragged, which is the one thing about a sheet nothing else says. -->
-    <View
-        android:layout_width="@dimen/_34sdp"
-        android:layout_height="@dimen/_4sdp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/_14sdp"
-        android:background="@drawable/bg_sheet_handle" />
-
-    <!-- Two views rather than one styled string: the accent falls on "Default Browser", which is
-         the part of the sentence being asked about. -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/default_browser_title_lead"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:text="@string/default_browser_title_accent"
-            android:textColor="@color/default_accent"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:gravity="center"
-        android:text="@string/default_browser_subtitle"
-        android:textColor="@color/on_surface_variant"
-        android:textSize="@dimen/_11ssp" />
+    android:background="@drawable/bg_default_sheet">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:background="@drawable/bg_default_card"
         android:orientation="vertical"
-        android:padding="@dimen/_14sdp">
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingTop="@dimen/_22sdp"
+        android:paddingBottom="@dimen/_18sdp">
+
+        <!-- Two views rather than one styled string: the accent falls on "Default Browser", which
+             is the part of the sentence being asked about. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_browser_title_lead"
+                android:textColor="@color/on_surface"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="@string/default_browser_title_accent"
+                android:textColor="@color/default_accent"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:gravity="center"
+            android:text="@string/default_browser_subtitle"
+            android:textColor="@color/on_surface_variant"
+            android:textSize="@dimen/_11ssp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:background="@drawable/bg_tile_safe"
-                android:contentDescription="@null"
-                android:padding="@dimen/_7sdp"
-                android:src="@drawable/ic_shield_check"
-                app:tint="@color/white" />
+            android:layout_marginTop="@dimen/_18sdp"
+            android:background="@drawable/bg_default_card"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_14sdp"
+            android:paddingVertical="@dimen/_16sdp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_browser_safe"
-                    android:textColor="@color/on_surface"
-                    android:textSize="@dimen/_12ssp"
-                    android:textStyle="bold" />
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/bg_tile_safe"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_shield_check"
+                    app:tint="@color/white" />
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:text="@string/default_browser_safe_body"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="@dimen/_9ssp" />
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_browser_safe"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="@string/default_browser_safe_body"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/bg_tile_fast"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_download"
+                    app:tint="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_browser_fast"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="@string/default_browser_fast_body"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/bg_tile_quick"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_globe"
+                    app:tint="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_browser_quick"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="@string/default_browser_quick_body"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/btnSetDefault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:background="@drawable/bg_tile_fast"
-                android:contentDescription="@null"
-                android:padding="@dimen/_7sdp"
-                android:src="@drawable/ic_download"
-                app:tint="@color/white" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_browser_fast"
-                    android:textColor="@color/on_surface"
-                    android:textSize="@dimen/_12ssp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:text="@string/default_browser_fast_body"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="@dimen/_9ssp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:background="@drawable/bg_tile_quick"
-                android:contentDescription="@null"
-                android:padding="@dimen/_7sdp"
-                android:src="@drawable/ic_globe"
-                app:tint="@color/white" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_browser_quick"
-                    android:textColor="@color/on_surface"
-                    android:textSize="@dimen/_12ssp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:text="@string/default_browser_quick_body"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="@dimen/_9ssp" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/bg_default_action"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_12sdp"
+            android:text="@string/default_browser_set"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/btnSetDefault"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_18sdp"
-        android:background="@drawable/bg_pill_brand"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:paddingVertical="@dimen/_11sdp"
-        android:text="@string/default_browser_set"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_13ssp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/btnSetDefaultLater"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:paddingVertical="@dimen/_11sdp"
-        android:text="@string/default_browser_later"
-        android:textColor="@color/on_surface_variant"
-        android:textSize="@dimen/_12ssp" />
-</LinearLayout>
+    <!--
+      The way out, in the corner rather than as a row of its own under the button. The sheet can
+      also be swiped down or backed out of; all three mean the same thing and end in the same
+      place, so none of them needs a label.
+    -->
+    <ImageButton
+        android:id="@+id/btnDefaultClose"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:background="@drawable/bg_default_close"
+        android:contentDescription="@string/default_browser_later"
+        android:padding="@dimen/_5sdp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_close"
+        app:tint="@color/white" />
+</FrameLayout>

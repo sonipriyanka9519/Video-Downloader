@@ -8,6 +8,9 @@
     <color name="brand_crimson_dark">#A81F2B</color>
     <!-- The step numbers on a guide, which read as instructions rather than as brand. -->
     <color name="guide_step">#1A73E8</color>
+    <!-- The paste row: a pale field with a dark block on the end of it. -->
+    <color name="guide_input_surface">#F1F2F4</color>
+    <color name="guide_search">#0B3C5D</color>
     <color name="brand_plum">#3A1B45</color>
     <color name="brand_maroon">#6A2338</color>
 
@@ -35,9 +38,30 @@
     <color name="clip_link_surface">#EEF1FD</color>
     <color name="clip_link_text">#1A56DB</color>
 
-    <!-- The default-browser offer: the benefits panel, and the words picked out in its heading. -->
-    <color name="default_card">#F3F6FC</color>
-    <color name="default_accent">#2563EB</color>
+    <!--
+      The default-browser offer. The sheet warms from the top down, so the heading sits on colour
+      and the benefits card sits on white — the eye lands on the words before the list.
+    -->
+    <color name="default_sheet_top">#FB8C5A</color>
+    <color name="default_sheet_mid">#FCE3D2</color>
+    <color name="default_sheet_bottom">#FFFFFF</color>
+    <color name="default_card">#FFFFFF</color>
+    <color name="default_accent">#F04A2F</color>
+    <color name="default_close">#40FFFFFF</color>
+    <color name="default_action_start">#F0453F</color>
+    <color name="default_action_end">#CE1F26</color>
+
+    <!--
+      How to download: a pale pill in the browser, and a dark walkthrough behind it. The
+      walkthrough is dark on purpose — the step pictures are screenshots of light screens, and a
+      light page around them would leave nothing to tell picture from page.
+    -->
+    <color name="how_to_surface">#EDF0FA</color>
+    <color name="how_scrim">#2C2C2E</color>
+    <color name="how_step_accent">#F5A623</color>
+    <color name="how_dot_idle">#59FFFFFF</color>
+    <color name="how_next_start">#F2762B</color>
+    <color name="how_next_end">#E01E63</color>
 
     <!-- The download button before anything has been found. -->
     <color name="fab_idle">#9E9AA0</color>
@@ -58,13 +82,23 @@
     <color name="segment_active">#FFFFFF</color>
     <color name="segment_inactive_text">#6B6570</color>
 
-    <!-- Bottom navigation. -->
-    <color name="divider">#EFE4E6</color>
-    <color name="nav_inactive">#8A7F82</color>
+    <!-- Bottom navigation: white, a hairline above it, and grey for whatever is not chosen. -->
+    <color name="nav_surface">#FFFFFF</color>
+    <color name="divider">#ECECEF</color>
+    <color name="nav_inactive">#9A9AA0</color>
 
-    <!-- Splash and onboarding, which are the only crimson-field screens in the app. -->
-    <color name="splash_top">#E14351</color>
-    <color name="onboard_body">#FFD5D8</color>
-    <color name="onboard_dot_idle">#66FFFFFF</color>
-    <color name="onboard_skip">#B3FFFFFF</color>
+    <!--
+      The splash: white, with the brand kept to the mark and the bar. The ornaments are barely
+      there on purpose — they are texture behind the name, not pictures to look at.
+    -->
+    <color name="splash_surface">#FFFFFF</color>
+    <color name="splash_ornament">#FDECEC</color>
+    <color name="splash_title">#1B1B1F</color>
+    <color name="splash_subtitle">#6E6E76</color>
+    <color name="splash_track">#E7E9F3</color>
+    <color name="splash_track_fill">#E5262F</color>
+    <color name="splash_mark_start">#FF8A3D</color>
+    <color name="splash_mark_mid">#F0323F</color>
+    <color name="splash_mark_end">#E5177B</color>
+
 </resources>

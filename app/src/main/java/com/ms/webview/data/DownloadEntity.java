@@ -41,6 +41,14 @@ public class DownloadEntity {
     public int segmentTotal;
     public int segmentsDone;
 
+    /**
+     * How long the video runs, where that is known.
+     *
+     * <p>Zero for a transfer still in flight: a duration can only be read out of a finished file,
+     * and guessing one from a partial download would put a number on the screen that changes.
+     */
+    public long durationMs;
+
     public long totalBytes;
     public long downloadedBytes;
     /** True while totalBytes is extrapolated rather than measured, as it is early in an HLS run. */

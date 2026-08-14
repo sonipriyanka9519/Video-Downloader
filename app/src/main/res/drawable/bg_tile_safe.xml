@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The tile behind a benefit's icon. One per benefit, so the three read as a list of distinct
-     things rather than as three copies of the same badge. -->
+<!-- The disc behind a benefit's icon. One colour each, so the three read as distinct things
+     rather than as three copies of the same badge. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+    android:shape="oval">
 
     <gradient
         android:angle="270"
-        android:endColor="#6366F1"
-        android:startColor="#A78BFA"
+        android:endColor="#6D4AEF"
+        android:startColor="#9B7BFF"
         android:type="linear" />
-
-    <corners android:radius="@dimen/_10sdp" />
 </shape>

@@ -36,6 +36,21 @@ public class MediaItem {
     public long durationMs;
     public boolean drmProtected;
 
+    /**
+     * This video's sound, when the platform serves it as a stream of its own.
+     *
+     * <p>Held on the item rather than on the registry, and that is the whole safeguard. A feed
+     * has many videos in flight at once, so a single most-recent track kept centrally would be
+     * attached to whichever video happened to be measured next — dubbing one clip's sound onto
+     * another, which is a good deal worse than silence. Grouping already places a track and the
+     * pictures it belongs to on the same item, so scoping it here means it can only ever reach
+     * its own video.
+     */
+    @Nullable
+    public String audioTrackUrl;
+    /** Headers the audio track was reachable with, replayed at download time. */
+    public final Map<String, String> audioTrackHeaders = new ConcurrentHashMap<>();
+
     /** True for the video currently playing on screen; the sheet opens on this one. */
     public volatile boolean playing;
 
@@ -387,18 +402,26 @@ public class MediaItem {
     /**
      * Whether this belongs in the sheet.
      *
-     * <p>Three conditions, each earned the hard way:
+     * <p>Two conditions, each earned the hard way:
      *
      * <ul>
-     *   <li>{@link #videoConfirmed} — some variant was opened and decoded as real video;
-     *   <li>a known duration, which a fragment or a broken stream never has;
-     *   <li>a preview to show for it.
+     *   <li>{@link #videoConfirmed} with a verified variant — some address was opened and decoded
+     *       as real video;
+     *   <li>a known duration, which a fragment or a broken stream never has.
      * </ul>
      *
      * <p>Decoding is the load-bearing condition. Accepting an entry on the platform's word was
      * tried and produced exactly the cards that show no preview and then fail to download —
      * unsurprisingly, since a file we cannot open is usually one we cannot use. If a real video
      * is being hidden, the fix belongs in the decoder, not in this test.
+     *
+     * <p>A preview used to be required too, and that was a mistake. It is not evidence of
+     * anything: an item that has been opened and decoded, and whose running time is known, is a
+     * real video whether or not a picture was found to put on its card. Requiring one meant a
+     * clip that was playing on screen could be withheld with "could not be opened for download"
+     * — a message that was not merely unhelpful but untrue, since opening it is exactly what had
+     * already succeeded. A card with no picture is a small ugliness; a video that cannot be saved
+     * is a broken app.
      *
      * <p>DRM items are the exception: shown as protected, so the sheet explains itself rather
      * than looking empty.
@@ -407,8 +430,7 @@ public class MediaItem {
         if (drmProtected) return true;
         return videoConfirmed
                 && hasVerifiedVariant()
-                && durationMs > 0
-                && !TextUtils.isEmpty(thumbnail());
+                && durationMs > 0;
     }
 
     /**

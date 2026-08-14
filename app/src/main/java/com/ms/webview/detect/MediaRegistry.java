@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -934,6 +935,8 @@ public class MediaRegistry {
                     : r.kind + " " + r.mime + " " + r.contentLength + "B"));
 
             if (!variant.kind.downloadable()) {
+                // Not offerable itself, but it may be the other half of something that is.
+                if (r != null) holdIfAudio(item, variant, r.mime);
                 publish();
                 return;
             }
@@ -1016,6 +1019,10 @@ public class MediaRegistry {
                 boolean accepted;
 
                 if (playable) {
+                    target.noAudioTrack = !result.hasAudio;
+                    // Measured silent, and the sound may already be in hand from the page's own
+                    // fetch of it. This is the half that was being thrown away.
+                    if (target.noAudioTrack) pairAcrossLadder(item, target);
                     if (result.width > 0) target.width = result.width;
                     if (result.height > 0) target.height = result.height;
                     if (result.bitrate > 0 && target.bandwidth <= 0) target.bandwidth = result.bitrate;
@@ -1031,13 +1038,26 @@ public class MediaRegistry {
                     item.videoConfirmed = true;
                     accepted = true;
 
+                } else if (result != null && result.audioOnly()) {
+                    // The sound half of a video served as two streams. Never offered on its own
+                    // — it is not a video — but its address is exactly what the silent variants
+                    // beside it are missing, so it is kept rather than dropped.
+                    //
+                    // Ahead of the sibling case deliberately: a track that reached this point
+                    // without strictness would otherwise be waved through as a quality, and the
+                    // sheet would list the soundtrack as something to download.
+                    target.kind = MediaKind.NONE;
+                    target.verified = false;
+                    accepted = false;
+                    holdAudioTrack(item, target);
+
                 } else if (!requireVideo) {
                     // A sibling of an already-decoded video: same ladder, same source.
                     target.verified = target.kind.downloadable();
                     accepted = true;
 
                 } else {
-                    // A fragment, an image, an audio track, or something unplayable.
+                    // A fragment, an image, or something unplayable.
                     target.kind = MediaKind.NONE;
                     target.verified = false;
                     accepted = false;
@@ -1047,6 +1067,9 @@ public class MediaRegistry {
                         + " -> " + (playable
                         ? result.width + "x" + result.height + ' ' + result.durationMs + "ms"
                         + (result.thumbnailPath == null ? " NO-FRAME" : " +frame")
+                        + audioNote(target, result)
+                        : result != null && result.audioOnly()
+                        ? "AUDIO-ONLY " + result.durationMs + "ms, held for muxing"
                         : "UNDECODABLE")
                         + (accepted ? " accepted" : " REJECTED")
                         + (requireVideo ? " [strict]" : " [sibling]"));
@@ -1055,6 +1078,129 @@ public class MediaRegistry {
             }
             publish();
         });
+    }
+
+    /**
+     * Keeps an audio-only stream that would otherwise be discarded, and gives it to any video
+     * already known to need it.
+     *
+     * <p>Only on a platform that serves sound separately — elsewhere an audio response is a music
+     * player or an advert, and pairing it would dub the wrong sound onto an unrelated video.
+     *
+     * <p>The two halves are overheard in whichever order the page happens to fetch them, so both
+     * directions are covered: this back-fills the videos already measured silent, and
+     * {@link #pairHeldAudio} catches the ones measured afterwards.
+     */
+    private void holdIfAudio(MediaItem item, MediaVariant variant, @Nullable String mime) {
+        if (mime == null || !mime.toLowerCase(Locale.US).startsWith("audio/")) return;
+        holdAudioTrack(item, variant);
+    }
+
+    /**
+     * Keeps an audio-only stream that would otherwise be discarded, and gives it to any video
+     * already known to need it.
+     *
+     * <p>Reached two ways, and the second is the one that matters. A server may label the stream
+     * {@code audio/*}, which {@link #holdIfAudio} catches at probe time. Facebook does not — it
+     * serves its sound as {@code video/mp4}, so the only thing that can tell is opening it, and
+     * this is called again from {@link #inspect} once the decode has shown a running time, a
+     * sound track and no picture.
+     *
+     * <p>Only on a platform that serves sound separately — elsewhere an audio-only response is a
+     * music player or an advert, and pairing it would dub the wrong sound onto a video.
+     *
+     * <p>The two halves are overheard in whichever order the page fetches them, and on Facebook
+     * the sound reliably arrives last: both videos were already measured silent by the time this
+     * runs. So the back-fill below is not a corner case, it is the normal path.
+     */
+    private void holdAudioTrack(MediaItem item, MediaVariant variant) {
+        synchronized (lock) {
+            if (!SitePolicies.forHost(Formats.hostOf(pageUrl)).pairsSeparateAudio()) return;
+
+            item.audioTrackUrl = variant.url;
+            item.audioTrackHeaders.clear();
+            item.audioTrackHeaders.putAll(variant.headers);
+            Log.i(DIAG, "holding audio track for " + item.groupKey + ": " + shorten(variant.url));
+
+            // The pictures were measured silent before the sound arrived, so this is the normal
+            // path rather than a corner of it.
+            for (MediaVariant v : item.variants()) {
+                if (v.decoded && v.noAudioTrack) {
+                    pairAcrossLadder(item, v);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Attaches the held audio track to a variant proven to have none of its own.
+     *
+     * <p>Deliberately narrow. It requires {@link MediaVariant#noAudioTrack} — set by opening a
+     * stream and asking it, or carried to the rest of a ladder from the rung that was opened, and
+     * never guessed from an address — and it refuses a variant that already names a track to mux.
+     * So the worst case where this fires wrongly is a video that was going to be silent anyway.
+     *
+     * @return whether this call attached one
+     */
+    private boolean pairHeldAudio(MediaItem item, MediaVariant v) {
+        String audio = item.audioTrackUrl;
+        if (audio == null) return false;
+        if (!v.noAudioTrack || !TextUtils.isEmpty(v.audioUrl)) return false;
+        if (!v.kind.downloadable() || audio.equals(v.url)) return false;
+
+        v.audioUrl = audio;
+        // The download path muxes a video and an audio file only for this kind.
+        v.kind = MediaKind.DASH;
+        for (Map.Entry<String, String> e : item.audioTrackHeaders.entrySet()) {
+            if (!v.headers.containsKey(e.getKey())) v.headers.put(e.getKey(), e.getValue());
+        }
+        return true;
+    }
+
+    /**
+     * Gives the held audio to every rung of a ladder whose measured rung turned out to be silent.
+     *
+     * <p>Only one variant per video is ever opened — the rest are vouched for as siblings, which
+     * is what keeps a six-rung ladder from costing six decodes. So pairing only the measured one
+     * would fix whichever rung happened to be inspected and leave the others mute, and the rung
+     * the user picks is rarely the rung we opened.
+     *
+     * <p>Extending it is sound for the same reason the sibling shortcut is: the rungs of one
+     * ladder are alternative encodes of one video from one packager. Where that packager splits
+     * the sound off, it splits it off for all of them — a platform does not serve 360p muxed and
+     * 720p not. This is the same inference {@code videoConfirmed} already makes in the other
+     * direction.
+     */
+    private void pairAcrossLadder(MediaItem item, MediaVariant measured) {
+        if (item.audioTrackUrl == null) return;
+
+        int paired = 0;
+        for (MediaVariant v : item.variants()) {
+            // The measured one is proven; its siblings inherit the finding.
+            if (v != measured && !v.noAudioTrack && TextUtils.isEmpty(v.audioUrl)) {
+                v.noAudioTrack = true;
+            }
+            if (pairHeldAudio(item, v)) paired++;
+        }
+        if (paired > 0) {
+            Log.i(DIAG, "paired held audio into " + paired + " rung(s) of "
+                    + shorten(measured.url));
+        }
+    }
+
+    /**
+     * What the opened stream had to say about its sound, for the log.
+     *
+     * <p>Three outcomes worth telling apart: it has audio; it has none but names a track to mux
+     * in, which is a normal adaptive rendition; or it has none and nothing to add, which is a
+     * download that will land mute. Only the last is a fault, and until now it left no trace
+     * anywhere — every stage downstream reports success on a silent file.
+     */
+    private static String audioNote(MediaVariant target, MetadataReader.Result result) {
+        if (result.hasAudio) return " +audio";
+        if (!TextUtils.isEmpty(target.audioUrl)) return " video-only, audio muxed in";
+        return " SILENT (no audio track, nothing to mux)";
     }
 
     /**

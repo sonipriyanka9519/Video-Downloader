@@ -29,6 +29,14 @@ public class MediaVariant {
     public boolean inspected;
     /** True when this exact URL was opened and decoded as video, not merely reachable. */
     public boolean decoded;
+    /**
+     * True when the stream was opened and found to hold no sound of its own.
+     *
+     * <p>Harmless where {@link #audioUrl} names a track to mux in — that is what a DASH or HLS
+     * video rendition is meant to look like. Where it does not, this variant downloads to a mute
+     * file, and this is the only place that fact is ever visible.
+     */
+    public boolean noAudioTrack;
 
     /** HLS: bits per second advertised by the master playlist. */
     public long bandwidth;

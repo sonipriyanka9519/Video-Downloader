@@ -106,8 +106,8 @@ public class DownloadRepository {
      *
      * @return a confirmation the caller must launch, when the system will not delete silently
      */
-    public MediaLibrary.DeleteResult delete(DownloadEntity d) {
-        if (d == null) return new MediaLibrary.DeleteResult(false, null);
+    public MediaLibrary.WriteResult delete(DownloadEntity d) {
+        if (d == null) return new MediaLibrary.WriteResult(false, null);
 
         if (!d.fromLibrary) {
             store.delete(d.id);
@@ -123,7 +123,24 @@ public class DownloadRepository {
 
         // Synchronous, because a delete the system wants confirmed hands back an IntentSender
         // that the caller has to launch from the tap that is still in progress.
-        MediaLibrary.DeleteResult result = library.delete(d.outputUri);
+        MediaLibrary.WriteResult result = library.delete(d.outputUri);
+        refreshLibrary();
+        return result;
+    }
+
+    /**
+     * Gives a finished video a new name.
+     *
+     * <p>Synchronous for the same reason a delete is: a write the system wants confirmed hands
+     * back an IntentSender, and that has to reach the caller while the tap that asked for it is
+     * still in progress.
+     */
+    public MediaLibrary.WriteResult rename(DownloadEntity d, String newName) {
+        if (d == null) return new MediaLibrary.WriteResult(false, null);
+
+        MediaLibrary.WriteResult result = library.rename(d.outputUri, newName, d.fileName);
+        // The list is rebuilt from MediaStore, so the new name arrives with the refresh rather
+        // than being patched into the row we happen to be holding.
         refreshLibrary();
         return result;
     }
