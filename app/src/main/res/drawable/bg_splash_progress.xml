@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The bar at the foot of the splash.
+
+  Determinate, and honestly so: it is driven by the length of the opening itself, not by work
+  being measured. It says how long is left of this screen, which is the only thing it could
+  truthfully say.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/splash_track" />
+            <corners android:radius="@dimen/_4sdp" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="@color/splash_track_fill" />
+                <corners android:radius="@dimen/_4sdp" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

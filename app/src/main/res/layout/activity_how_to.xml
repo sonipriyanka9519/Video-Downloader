@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  How to download, in four pictures.
+
+  Dark, and that is not a style choice: every picture here is a screenshot of a light screen, and
+  on a light page there would be nothing to tell where the picture ends and the guide begins.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/howRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/how_scrim"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/btnHowClose"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="@dimen/_26sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/close_tabs_view"
+        android:padding="@dimen/_3sdp"
+        android:src="@drawable/ic_close"
+        app:tint="@color/white" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/howPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/howDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/btnHowNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:background="@drawable/bg_how_next"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:letterSpacing="0.05"
+        android:paddingVertical="@dimen/_13sdp"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold" />
+</LinearLayout>

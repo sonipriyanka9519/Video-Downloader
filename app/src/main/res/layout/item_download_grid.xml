@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One download as a tile.
+
+  Same ids as item_download.xml, and that is deliberate: one holder and one binding serve both, so
+  what differs between a row and a tile is where the parts sit and never what they mean.
+
+  The picture leads here, where the row leads with its text. A tile is chosen when somebody is
+  looking for a video they would recognise on sight rather than reading down a list of names.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_5sdp"
+    android:layout_marginVertical="@dimen/_4sdp"
+    app:cardCornerRadius="@dimen/_12sdp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_6sdp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_78sdp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <ImageView
+                    android:id="@+id/thumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/surface_variant"
+                    android:contentDescription="@string/thumbnail"
+                    android:scaleType="centerCrop" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
+                android:id="@+id/playBadge"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_26sdp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/play"
+                android:src="@drawable/ic_play_circle"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/bg_duration"
+                android:paddingHorizontal="@dimen/_4sdp"
+                android:paddingVertical="@dimen/_1sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <!-- Across the foot of the picture, where it reads as this video's progress. -->
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/segment_track"
+                app:trackCornerRadius="@dimen/_2sdp"
+                app:trackThickness="@dimen/_3sdp" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/on_surface"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/statusIcon"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_play"
+                android:visibility="gone"
+                app:tint="@color/on_surface_variant" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="@dimen/_8ssp" />
+
+            <ImageButton
+                android:id="@+id/btnPrimary"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/pause"
+                android:padding="@dimen/_3sdp"
+                android:src="@drawable/ic_pause"
+                android:visibility="gone"
+                app:tint="@color/primary" />
+
+            <ImageButton
+                android:id="@+id/btnMore"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/more_options"
+                android:padding="@dimen/_2sdp"
+                android:src="@drawable/ic_more_vert"
+                app:tint="@color/on_surface_variant" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

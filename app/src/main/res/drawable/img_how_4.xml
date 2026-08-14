@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Placeholder: the quality list, and the download beginning. Replace with a screenshot. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="340dp"
+    android:height="480dp"
+    android:viewportWidth="340"
+    android:viewportHeight="480">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0h340v480h-340z" />
+
+    <path
+        android:fillColor="#1F2430"
+        android:pathData="M0,0h340v190h-340z" />
+
+    <!-- The sheet, and a row for each quality. -->
+    <path
+        android:fillColor="#F5F6FA"
+        android:pathData="M0,190h340v290h-340z" />
+
+    <path
+        android:fillColor="#C9CDD6"
+        android:pathData="M148,206h44v6h-44z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,236h300v52h-300z M20,300h300v52h-300z M20,364h300v52h-300z" />
+
+    <path
+        android:fillColor="#E4E7EE"
+        android:pathData="M40,254h80v16h-80z M40,318h80v16h-80z M40,382h80v16h-80z" />
+
+    <path
+        android:fillColor="#D8323F"
+        android:pathData="M262,262m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+
+    <path
+        android:fillColor="#C9CDD6"
+        android:pathData="M262,326m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0 M262,390m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+</vector>

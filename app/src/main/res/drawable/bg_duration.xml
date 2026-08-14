@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Behind the running time, over the picture: dark enough for white text on any frame. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/scrim_dark" />
+    <corners android:radius="@dimen/_3sdp" />
+</shape>

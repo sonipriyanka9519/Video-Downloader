@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The guide, raised over the site it is about.
+
+  No paste box and no "open the site" button, unlike the full screen this is drawn from: both were
+  ways of getting to the site, and by the time this appears the viewer is already on it. What is
+  left is the part that was always the point — the four pictures.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_14sdp"
+    android:paddingTop="@dimen/_12sdp"
+    android:paddingBottom="@dimen/_14sdp">
+
+    <!--
+      No mark and no site name. The dialog opens over the site itself, so both were answering a
+      question nobody was asking — what is left is what it is for, said once.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/guide_how_to"
+            android:textColor="@color/on_surface"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnGuideDialogClose"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close_tabs_view"
+            android:padding="@dimen/_4sdp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/on_surface_variant" />
+    </LinearLayout>
+
+    <!--
+      A fixed height, because the pages inside are a fixed height: a dialog that resized itself as
+      you swiped would jump under your thumb.
+    -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/guideDialogPager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_265sdp"
+        android:layout_marginTop="@dimen/_6sdp" />
+
+    <LinearLayout
+        android:id="@+id/guideDialogDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:orientation="horizontal" />
+
+    <!--
+      The way out to the site's own app, which is where the first method has to happen: a share
+      sheet exists in a real app, not in a WebView. Never this app's browser — see SiteLauncher.
+    -->
+    <TextView
+        android:id="@+id/btnGuideDialogOpen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@drawable/bg_guide_open"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingVertical="@dimen/_11sdp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold" />
+</LinearLayout>

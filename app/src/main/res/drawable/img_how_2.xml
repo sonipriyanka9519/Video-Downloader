@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Placeholder: a video playing on the page. Replace with a real screenshot. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="340dp"
+    android:height="480dp"
+    android:viewportWidth="340"
+    android:viewportHeight="480">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0h340v480h-340z" />
+
+    <path
+        android:fillColor="#D8323F"
+        android:pathData="M0,0h340v58h-340z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,14h236a15,15 0 0 1 0,30h-236a15,15 0 0 1 0,-30z" />
+
+    <path
+        android:fillColor="#C9CDD6"
+        android:pathData="M70,24h120v10h-120z" />
+
+    <!-- The video, and the triangle that says it is one. -->
+    <path
+        android:fillColor="#1F2430"
+        android:pathData="M24,96h292v168h-292z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M152,158 L192,180 L152,202 Z" />
+
+    <path
+        android:fillColor="#E4E7EE"
+        android:pathData="M24,292h200v14h-200z M24,320h256v14h-256z M24,348h164v14h-164z" />
+</vector>

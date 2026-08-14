@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The "How to Download" pill: a pale field so it reads as an offer, not as a warning. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/how_to_surface" />
+    <corners android:radius="@dimen/_24sdp" />
+</shape>

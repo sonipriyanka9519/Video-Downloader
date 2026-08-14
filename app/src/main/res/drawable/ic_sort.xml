@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sorting: lines of decreasing length with an arrow, which reads as "put these in an order". -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="@color/toolbar_icon">
+
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M3,5h12v2h-12z M3,10h9v2h-9z M3,15h6v2h-6z M18,7h2v9.2l2.1,-2.1 1.4,1.4 -4.5,4.5 -4.5,-4.5 1.4,-1.4 2.1,2.1z" />
+</vector>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Top-left ornament: a cone of stripes with a cluster above it, and a few loose dots. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="180dp"
+    android:height="220dp"
+    android:viewportWidth="180"
+    android:viewportHeight="220">
+
+    <!-- The cluster: two overlapping rounds, so it reads as a shape rather than a circle. -->
+    <path
+        android:fillColor="@color/splash_ornament"
+        android:pathData="M62,18m-34,0a34,34 0,1 1,68 0a34,34 0,1 1,-68 0" />
+
+    <path
+        android:fillColor="@color/splash_ornament"
+        android:pathData="M96,40m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0" />
+
+    <!-- The cone below it, drawn as stripes rather than filled. -->
+    <path
+        android:pathData="M26,86 L92,152 M46,72 L118,144 M12,110 L64,162"
+        android:strokeColor="@color/splash_ornament"
+        android:strokeWidth="13" />
+
+    <!-- Loose dots, out to the side. -->
+    <path
+        android:fillColor="@color/splash_ornament"
+        android:pathData="M140,86m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0 M158,46m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0" />
+</vector>

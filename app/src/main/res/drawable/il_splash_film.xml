@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom-right ornament: a strip of film, sprockets and all. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="130dp"
+    android:viewportWidth="220"
+    android:viewportHeight="130">
+
+    <path
+        android:pathData="M18,10 H202 A10,10 0 0 1 212,20 V110 A10,10 0 0 1 202,120 H18 A10,10 0 0 1 8,110 V20 A10,10 0 0 1 18,10 Z"
+        android:strokeColor="@color/splash_ornament"
+        android:strokeWidth="11" />
+
+    <!-- Sprockets, top row then bottom row. -->
+    <path
+        android:fillColor="@color/splash_ornament"
+        android:pathData="M26,24 h20 v16 h-20 z M62,24 h20 v16 h-20 z M98,24 h20 v16 h-20 z M134,24 h20 v16 h-20 z M170,24 h20 v16 h-20 z" />
+
+    <path
+        android:fillColor="@color/splash_ornament"
+        android:pathData="M26,90 h20 v16 h-20 z M62,90 h20 v16 h-20 z M98,90 h20 v16 h-20 z M134,90 h20 v16 h-20 z M170,90 h20 v16 h-20 z" />
+</vector>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Top-right ornament: a play button, drawn faintly and half off the edge.
+
+  Ornament rather than illustration. It says what the app is about without asking to be looked at,
+  which is the most a splash screen should ask of anyone.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <path
+        android:pathData="M100,20 C144.18,20 180,55.82 180,100 C180,144.18 144.18,180 100,180 C55.82,180 20,144.18 20,100 C20,55.82 55.82,20 100,20 Z"
+        android:strokeColor="@color/splash_ornament"
+        android:strokeWidth="13" />
+
+    <path
+        android:fillColor="@color/splash_ornament"
+        android:pathData="M84,66 L140,100 L84,134 Z" />
+</vector>

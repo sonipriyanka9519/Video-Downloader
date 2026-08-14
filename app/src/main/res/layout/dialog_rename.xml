@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A new name for one video. The extension is not shown, because it is not being changed. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/_6sdp"
+    android:paddingTop="@dimen/_6sdp">
+
+    <EditText
+        android:id="@+id/renameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/rename_hint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/on_surface"
+        android:textColorHint="@color/on_surface_variant"
+        android:textSize="@dimen/_12ssp" />
+</FrameLayout>

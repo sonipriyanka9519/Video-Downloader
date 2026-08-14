@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Placeholder: the download button, found and about to be tapped. Replace with a screenshot. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="340dp"
+    android:height="480dp"
+    android:viewportWidth="340"
+    android:viewportHeight="480">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0h340v480h-340z" />
+
+    <path
+        android:fillColor="#D8323F"
+        android:pathData="M0,0h340v58h-340z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,14h236a15,15 0 0 1 0,30h-236a15,15 0 0 1 0,-30z" />
+
+    <path
+        android:fillColor="#C9CDD6"
+        android:pathData="M70,24h120v10h-120z" />
+
+    <path
+        android:fillColor="#1F2430"
+        android:pathData="M24,96h292v168h-292z" />
+
+    <!-- The button, where the app really puts it. -->
+    <path
+        android:fillColor="#D8323F"
+        android:pathData="M268,352m-36,0a36,36 0,1 1,72 0a36,36 0,1 1,-72 0" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M262,332h12v18h10l-16,18 -16,-18h10z" />
+
+    <path
+        android:fillColor="#F7B733"
+        android:pathData="M258,392c0,-9 14,-9 14,0v20h12a10,10 0 0 1 10,10v24a22,22 0 0 1 -22,22h-18a20,20 0 0 1 -20,-20v-26a8,8 0 0 1 16,0v-10z" />
+</vector>

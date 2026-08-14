@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The day the downloads under it belong to. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/downloadDay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/_13sdp"
+    android:paddingTop="@dimen/_12sdp"
+    android:paddingBottom="@dimen/_5sdp"
+    android:textColor="@color/on_surface_variant"
+    android:textSize="@dimen/_10ssp"
+    android:textStyle="bold" />

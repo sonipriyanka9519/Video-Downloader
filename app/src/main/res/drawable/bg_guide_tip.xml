@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The disc behind the button that raises the guide again. White with a hairline, so a site's own
+  mark sits on it legibly whatever colour the page behind it is.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <solid android:color="@color/white" />
+    <stroke
+        android:width="@dimen/_1sdp"
+        android:color="@color/outline_variant" />
+</shape>

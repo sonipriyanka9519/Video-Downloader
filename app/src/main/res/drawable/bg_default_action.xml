@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The one thing the sheet is asking for, so the one thing filled in.
+
+  Its own drawable rather than bg_pill_brand, which the tab switcher also uses — this button is
+  fully rounded and carries the sheet's warmer red, and the two should not have to change together.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <gradient
+        android:angle="0"
+        android:endColor="@color/default_action_end"
+        android:startColor="@color/default_action_start"
+        android:type="linear" />
+
+    <corners android:radius="@dimen/_28sdp" />
+</shape>
