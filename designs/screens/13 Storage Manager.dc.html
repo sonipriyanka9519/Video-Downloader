@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:max-content">
+
+<div style="width:1160px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="height:22px;padding:0 9px;border-radius:6px;background:#211B1A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;letter-spacing:.04em">SCREEN 13</div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Storage manager</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;max-width:900px;text-wrap:pretty">Built to prevent the storage-full uninstall. It answers three questions in order — how much am I using, what can I safely delete, what is biggest — and every action hands off to select mode rather than inventing new deletion UI.</div>
+<div style="font:400 12px/1.55 Roboto,sans-serif;color:#9C8F8A;max-width:900px;text-wrap:pretty">Assumptions: "Other content" is everything else on the device, read from the system. No auto-delete rules and no cache controls — the app never deletes anything the user didn't confirm.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:28px;align-items:flex-start;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · STORAGE</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:30</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>69%</div></div></div>
+<div style="height:56px;padding:0 8px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">arrow_back</span></div>
+<div style="flex:1;font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Storage</div>
+</div>
+
+<div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:8px 16px 0">
+<div style="padding:16px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:12px">
+<div><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">1.2 GB used by 43 videos</div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">12 GB free of 51 GB on this phone</div></div>
+<div style="display:flex;height:10px;border-radius:8px;overflow:hidden;gap:2px">
+<div style="width:2.4%;min-width:9px;background:#D93A3A"></div>
+<div style="width:74.5%;background:#9C8F8A"></div>
+<div style="flex:1;background:#E7DDDA"></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px">
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#D93A3A"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">Videos 1.2 GB</div></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#9C8F8A"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">Other 38 GB</div></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#E7DDDA"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">Free 12 GB</div></div>
+</div>
+</div>
+
+<div style="padding:16px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:12px;align-items:flex-start">
+<div style="width:40px;height:40px;border-radius:10px;background:#FBE3E1;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:22px;color:#D93A3A">task_alt</span></div>
+<div style="flex:1;min-width:0"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">Watched videos</div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">18 videos you've finished · 640 MB</div></div>
+</div>
+<div style="height:44px;border-radius:12px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:600 14px/1 Roboto,sans-serif;color:#211B1A">Review &amp; free up</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D;padding:2px 0 6px">LARGEST FILES</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="position:relative;width:72px;height:41px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Episode 4 — full stream</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:2px;font-variant-numeric:tabular-nums">1080p • 22:14</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#211B1A;flex:none;font-variant-numeric:tabular-nums">218 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="position:relative;width:72px;height:41px;border-radius:8px;background:linear-gradient(200deg,#F2ECEA,#E7DDDA);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Court highlights — final quarter</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:2px;font-variant-numeric:tabular-nums">1080p • 12:40</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#211B1A;flex:none;font-variant-numeric:tabular-nums">131 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="position:relative;width:72px;height:41px;border-radius:8px;background:linear-gradient(120deg,#E7DDDA,#F2ECEA);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Warm-up drills, full session</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:2px;font-variant-numeric:tabular-nums">720p • 8:02</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#211B1A;flex:none;font-variant-numeric:tabular-nums">88 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="position:relative;width:72px;height:41px;border-radius:8px;background:linear-gradient(160deg,#F2ECEA,#E7DDDA);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roadside repair in ninety seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:2px;font-variant-numeric:tabular-nums">480p • 1:30</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#211B1A;flex:none;font-variant-numeric:tabular-nums">50 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#6B605D">more_vert</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · STORAGE</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>17:30</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>69%</div></div></div>
+<div style="height:56px;padding:0 8px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#F0E8E5">arrow_back</span></div>
+<div style="flex:1;font:700 22px/1.2 Roboto,sans-serif;color:#F0E8E5">Storage</div>
+</div>
+
+<div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:8px 16px 0">
+<div style="padding:16px;background:#201A19;border:1px solid #362D2B;border-radius:12px;display:flex;flex-direction:column;gap:12px">
+<div><div style="font:600 18px/1.3 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">1.2 GB used by 43 videos</div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#B3A6A1;margin-top:3px;font-variant-numeric:tabular-nums">12 GB free of 51 GB on this phone</div></div>
+<div style="display:flex;height:10px;border-radius:8px;overflow:hidden;gap:2px">
+<div style="width:2.4%;min-width:9px;background:#E05F5C"></div>
+<div style="width:74.5%;background:#7D716C"></div>
+<div style="flex:1;background:#362D2B"></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px">
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#E05F5C"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">Videos 1.2 GB</div></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#7D716C"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">Other 38 GB</div></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#362D2B"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">Free 12 GB</div></div>
+</div>
+</div>
+
+<div style="padding:16px;background:#201A19;border:1px solid #362D2B;border-radius:12px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:12px;align-items:flex-start">
+<div style="width:40px;height:40px;border-radius:10px;background:#3E2422;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:22px;color:#E05F5C">task_alt</span></div>
+<div style="flex:1;min-width:0"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#F0E8E5">Watched videos</div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#B3A6A1;margin-top:3px;font-variant-numeric:tabular-nums">18 videos you've finished · 640 MB</div></div>
+</div>
+<div style="height:44px;border-radius:12px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:600 14px/1 Roboto,sans-serif;color:#F0E8E5">Review &amp; free up</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1;padding:2px 0 6px">LARGEST FILES</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="width:72px;height:41px;border-radius:8px;background:linear-gradient(135deg,#2A2322,#362D2B);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Episode 4 — full stream</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;margin-top:2px;font-variant-numeric:tabular-nums">1080p • 22:14</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#F0E8E5;flex:none;font-variant-numeric:tabular-nums">218 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#B3A6A1">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="width:72px;height:41px;border-radius:8px;background:linear-gradient(200deg,#362D2B,#2A2322);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Court highlights — final quarter</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;margin-top:2px;font-variant-numeric:tabular-nums">1080p • 12:40</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#F0E8E5;flex:none;font-variant-numeric:tabular-nums">131 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#B3A6A1">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="width:72px;height:41px;border-radius:8px;background:linear-gradient(120deg,#2A2322,#362D2B);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Warm-up drills, full session</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;margin-top:2px;font-variant-numeric:tabular-nums">720p • 8:02</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#F0E8E5;flex:none;font-variant-numeric:tabular-nums">88 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#B3A6A1">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="width:72px;height:41px;border-radius:8px;background:linear-gradient(160deg,#362D2B,#2A2322);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roadside repair in ninety seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;margin-top:2px;font-variant-numeric:tabular-nums">480p • 1:30</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#F0E8E5;flex:none;font-variant-numeric:tabular-nums">50 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#B3A6A1">more_vert</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showHandoffPanel }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · REVIEW HANDOFF · SELECT MODE</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:31</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>69%</div></div></div>
+<div style="height:56px;padding:0 12px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">close</span></div>
+<div style="flex:1;font:600 18px/1.2 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">18 selected</div>
+<div style="font:500 14px/1 Roboto,sans-serif;color:#D93A3A;flex:none">Select all</div>
+</div>
+
+<div style="padding:0 16px 10px;flex:none"><div style="display:flex;align-items:center;gap:9px;padding:11px 12px;background:#FBE3E1;border-radius:12px"><span class="ms msf" style="font-size:19px;color:#D93A3A;flex:none">task_alt</span><div style="font:400 12.5px/1.45 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Everything you've finished watching is pre-selected — 640 MB.</div></div></div>
+
+<div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#FBE3E1">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">22:14</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Episode 4 — full stream</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">218 MB • 1080p • watched</div></div>
+<div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#FBE3E1">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(200deg,#F2ECEA,#E7DDDA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">12:40</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Court highlights — final quarter</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">131 MB • 1080p • watched</div></div>
+<div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#FBE3E1">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(120deg,#E7DDDA,#F2ECEA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">8:02</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Warm-up drills, full session</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">88 MB • 720p • watched</div></div>
+<div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#FBE3E1">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(160deg,#F2ECEA,#E7DDDA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">1:30</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Roadside repair in ninety seconds</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">50 MB • 480p • watched</div></div>
+<div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#FBE3E1">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(140deg,#E7DDDA,#F2ECEA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">3:12</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Knife skills, one take</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">44 MB • 720p • watched</div></div>
+<div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div>
+</div>
+</div></sc-if>
+
+
+<div style="display:flex;background:#FFFFFF;border-top:1px solid #E7DDDA;flex:none;box-shadow:0 -3px 12px rgba(33,27,26,.08)">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:21px;color:#211B1A">share</span><div style="font:400 11px/1 Roboto,sans-serif;color:#6B605D">Share</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:21px;color:#211B1A">folder</span><div style="font:400 11px/1 Roboto,sans-serif;color:#6B605D">Collection</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:21px;color:#211B1A">lock</span><div style="font:400 11px/1 Roboto,sans-serif;color:#6B605D">Lock</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:21px;color:#C62828">delete</span><div style="font:400 11px/1 Roboto,sans-serif;color:#C62828">Delete</div></div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showNothingToFreePanel }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">C · NOTHING TO FREE UP</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:32</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>69%</div></div></div>
+<div style="height:56px;padding:0 8px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">arrow_back</span></div>
+<div style="flex:1;font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Storage</div>
+</div>
+
+<div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:8px 16px 0">
+<div style="padding:16px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:12px">
+<div><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">96 MB used by 4 videos</div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">31 GB free of 51 GB on this phone</div></div>
+<div style="display:flex;height:10px;border-radius:8px;overflow:hidden;gap:2px">
+<div style="width:3%;background:#D93A3A"></div>
+<div style="width:36%;background:#9C8F8A"></div>
+<div style="flex:1;background:#E7DDDA"></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px">
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#D93A3A"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">Videos 96 MB</div></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#9C8F8A"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">Other 19 GB</div></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;border-radius:3px;background:#E7DDDA"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#211B1A;font-variant-numeric:tabular-nums">Free 31 GB</div></div>
+</div>
+</div></sc-if>
+
+
+<div style="padding:20px 16px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center">
+<div style="width:64px;height:64px;border-radius:16px;background:#F2ECEA;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:32px;color:#2E7D4F">check_circle</span></div>
+<div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">Nothing to clear up</div>
+<div style="font:400 13px/1.45 Roboto,sans-serif;color:#6B605D;max-width:230px;text-wrap:pretty">You haven't finished watching anything yet. We'll suggest videos here once you do.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D;padding:2px 0 6px">LARGEST FILES</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="width:72px;height:41px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Balcony rain, thirty seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:2px;font-variant-numeric:tabular-nums">1080p • 0:30</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#211B1A;flex:none;font-variant-numeric:tabular-nums">44 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+<div style="width:72px;height:41px;border-radius:8px;background:linear-gradient(200deg,#F2ECEA,#E7DDDA);flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:400 14.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Jersey outfit ideas</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:2px;font-variant-numeric:tabular-nums">720p • 0:06</div></div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#211B1A;flex:none;font-variant-numeric:tabular-nums">28 MB</div>
+<div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:20px;color:#6B605D">more_vert</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div style="width:1160px;display:flex;gap:20px;align-items:flex-start">
+<div style="flex:1;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:9px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DESIGN NOTES</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• The bar shows the app's slice honestly against the whole device — accent for our videos, ink-faint for other content, line for free.</div>
+<div>• One suggestion, not a scoreboard: watched videos, with the count and the megabytes it would return.</div>
+<div>• "Review &amp; free up" is a secondary button and hands off to Screen 07's select mode, pre-checked — no new deletion UI exists here.</div>
+<div>• Select mode arrives with a one-line accent-soft banner explaining why 18 rows are already ticked, so nothing feels automatic.</div>
+<div>• Largest files emphasise size in semibold and keep the per-row overflow, so a single fix is one tap away.</div>
+<div>• When there's nothing safe to suggest, the card says so instead of hiding — the screen never looks broken.</div>
+</div>
+</div>
+<div style="width:300px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">OPEN QUESTION</div>
+<div style="font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">"Watched" means finished. Should partially watched files over, say, 90% count too — they're usually done in practice — or does that risk deleting something mid-series?</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A">Next: Screen 14 — splash and walkthrough.</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showHandoffPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;},&quot;showNothingToFreePanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;}}"></script>
+</body>
+</html>

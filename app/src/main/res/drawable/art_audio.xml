@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  What the player shows in place of a picture.
+
+  Wrapped in a layer-list purely to pin the size. PlayerView scales its artwork to fit the
+  surface, and a bare note handed straight over is stretched to the full height of the screen —
+  a vector so it stays sharp, but a 700px music note is a poster, not a hint.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="96dp"
+        android:height="96dp"
+        android:drawable="@drawable/ic_audio_white"
+        android:gravity="center" />
+</layer-list>

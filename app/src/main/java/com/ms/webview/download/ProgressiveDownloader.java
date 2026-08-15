@@ -11,6 +11,7 @@ import com.ms.webview.data.DownloadStore;
 import com.ms.webview.data.ChunkEntity;
 import com.ms.webview.data.DownloadEntity;
 import com.ms.webview.data.DownloadStatus;
+import com.ms.webview.detect.MediaKind;
 import com.ms.webview.detect.Prober;
 
 import java.io.File;
@@ -193,9 +194,13 @@ public class ProgressiveDownloader implements DownloadTask {
             if (!finished.playable()) {
                 throw new IOException("Downloaded file is not a playable video");
             }
+            // A sound track yields no frame, which is not a fault — the test above is a running
+            // time, so it passes on its own merits and simply arrives without a poster.
             if (finished.posterPath != null) d.posterUrl = finished.posterPath;
 
-            String output = new MediaStorePublisher(context).publish(temp, d.fileName, d.mime);
+            boolean audio = d.kind == MediaKind.AUDIO;
+            String output = new MediaStorePublisher(context)
+                    .publish(temp, d.fileName, d.mime, audio);
             d.outputUri = output;
             d.completedAt = System.currentTimeMillis();
             if (d.totalBytes <= 0) d.totalBytes = downloaded.get();

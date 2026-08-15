@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:26px;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:6px;max-width:920px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="width:28px;height:28px;border-radius:8px;background:#D93A3A;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:18px;color:#fff">download</span></div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Free Video Downloader — Design Foundation</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;text-wrap:pretty">Section 0 of the design structure, built as the shared source every screen inherits. Left column is light, right is dark — the same tokens, same components, same spacing. Brand personality: fast, safe, private. Clean utility, not playful, not corporate.</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A">Assumptions: Roboto stands in for the Android system sans. Material Symbols Rounded at 24dp is the only icon set. 1dp = 1px at this scale; screens are drawn at 360dp logical width.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:24px;align-items:flex-start;width:max-content">
+
+<div style="width:466px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:16px;overflow:hidden">
+<div style="padding:14px 20px;background:#FFFFFF;border-bottom:1px solid #E7DDDA;display:flex;align-items:center;justify-content:space-between">
+<div style="font:600 13px/1 Roboto,sans-serif;color:#211B1A">LIGHT THEME</div>
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">default</div>
+</div>
+<div style="padding:24px 20px 28px;display:flex;flex-direction:column;gap:26px">
+
+<sc-if value="{{ showColors }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">COLOR</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#FAF7F6;border:1px solid #E7DDDA;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">bg</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#FAF7F6</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#FFFFFF;border:1px solid #E7DDDA;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">surface</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#FFFFFF</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#F2ECEA;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">surface-alt</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#F2ECEA</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#E7DDDA;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">line</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#E7DDDA</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#211B1A;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">ink</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#211B1A</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#6B605D;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">ink-soft</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#6B605D</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#9C8F8A;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">ink-faint</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#9C8F8A</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#D93A3A;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">accent</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#D93A3A</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#FBE3E1;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">accent-soft</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#FBE3E1</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#2E7D4F;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">success</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#2E7D4F</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#B07818;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">warning</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#B07818</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#C62828;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#211B1A">error</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">#C62828</div></div></div>
+</div>
+<div style="display:flex;gap:8px;align-items:flex-start;padding:10px 12px;background:#FBE3E1;border-radius:10px"><span class="ms" style="font-size:18px;color:#D93A3A">info</span><div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty"><b>accent</b> and <b>error</b> are near-neighbours by design. Error is only ever read in context: always paired with an error icon, never used on a primary button.</div></div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">TYPOGRAPHY · ROBOTO</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E7DDDA"><div style="font:700 24px/1.2 Roboto,sans-serif;color:#211B1A">Downloads</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;text-align:right;flex:none">title-xl<br>24sp · bold</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E7DDDA"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A">1 video detected</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;text-align:right;flex:none">title<br>18sp · semibold</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E7DDDA"><div style="font:400 15px/1.4 Roboto,sans-serif;color:#211B1A">Jersey outfit ideas — 32 pins</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;text-align:right;flex:none">body<br>15sp · regular</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E7DDDA"><div style="font:400 13px/1.4 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">1.2 MB • 720p • 0:30</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;text-align:right;flex:none">body-sm<br>13sp · regular</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E7DDDA"><div style="font:500 12px/1.4 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">CONTINUE WATCHING</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;text-align:right;flex:none">label<br>12sp · medium · .08em</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><div style="font:600 15px/1.4 Roboto,sans-serif;color:#211B1A">Download • 24.1 MB</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#9C8F8A;text-align:right;flex:none">button<br>15sp · semibold</div></div>
+</div>
+<div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#9C8F8A;text-wrap:pretty">All numbers in sizes, speeds and timecodes use tabular figures so a progress row never jitters.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">SHAPE, SPACING, ELEVATION</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#F2ECEA;border:1px solid #E7DDDA;border-radius:12px"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#6B605D">card 12</div></div>
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#F2ECEA;border:1px solid #E7DDDA;border-radius:20px 20px 0 0"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#6B605D">sheet 20</div></div>
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#F2ECEA;border:1px solid #E7DDDA;border-radius:16px"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#6B605D">dialog 16</div></div>
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#F2ECEA;border:1px solid #E7DDDA;border-radius:999px"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#6B605D">pill full</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:16px;height:8px;background:#FBE3E1;border-left:2px solid #D93A3A;border-right:2px solid #D93A3A"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#211B1A">4dp base unit</div></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:64px;height:8px;background:#FBE3E1;border-left:2px solid #D93A3A;border-right:2px solid #D93A3A"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#211B1A">16dp screen side padding</div></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:96px;height:8px;background:#FBE3E1;border-left:2px solid #D93A3A;border-right:2px solid #D93A3A"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#211B1A">24dp gap between sections</div></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:48px;height:8px;background:#FBE3E1;border-left:2px solid #D93A3A;border-right:2px solid #D93A3A"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#211B1A">12dp list item padding</div></div>
+</div>
+<div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#9C8F8A;text-wrap:pretty">Cards carry a 1dp <b>line</b> border instead of a shadow — flatter and calmer. Only sheets and dialogs get shadow, always over a 40% black scrim.</div>
+</div>
+
+<sc-if value="{{ showComponents }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">CORE COMPONENTS</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Bottom nav · 56dp · badge while downloading</div>
+<div style="display:flex;background:#FFFFFF;border-top:1px solid #E7DDDA;border-radius:0 0 12px 12px;overflow:hidden">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#D93A3A">home</span><div style="font:500 11px/1 Roboto,sans-serif;color:#D93A3A">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><div style="position:relative"><span class="ms" style="font-size:22px;color:#9C8F8A">download</span><div style="position:absolute;top:-3px;right:-9px;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:#D93A3A;color:#fff;font:500 10px/15px Roboto,sans-serif;text-align:center">2</div></div><div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Downloads</div></div>
+</div>
+</div>
+
+<div style="display:flex;gap:14px;align-items:flex-end">
+<div style="display:flex;flex-direction:column;gap:7px;flex:1">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Primary · 52dp</div>
+<div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff">Download • 24.1 MB</div>
+<div style="height:52px;border-radius:12px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#211B1A">Review &amp; free up</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:7px;align-items:center">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Detection FAB</div>
+<div style="position:relative;width:64px;height:64px;display:flex;align-items:flex-end;justify-content:flex-start">
+<div style="width:56px;height:56px;border-radius:999px;background:#D93A3A;box-shadow:0 3px 10px rgba(33,27,26,.24);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:26px;color:#fff">download</span></div>
+<div style="position:absolute;top:0;right:0;width:20px;height:20px;border-radius:999px;background:#fff;border:1.5px solid #D93A3A;color:#D93A3A;font:600 11px/17px Roboto,sans-serif;text-align:center">3</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Video thumbnail 16:9 · duration chip · play glyph</div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden;display:flex;align-items:center;justify-content:center">
+<div style="font:400 11px/1.4 Roboto,sans-serif;color:#9C8F8A;text-align:center">thumbnail placeholder<br>16:9</div>
+<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:22px;color:#211B1A">play_arrow</span></div>
+<div style="position:absolute;left:8px;bottom:8px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:30</div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.4)"><div style="width:38%;height:3px;background:#D93A3A"></div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">List row · 96×54 thumb · unwatched dot · overflow</div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff">0:30</div></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;align-items:center;gap:7px"><div style="width:8px;height:8px;border-radius:999px;background:#D93A3A;flex:none"></div><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">Pandithurai (1992) Tamil romantic family drama</div></div>
+<div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">1.2 MB • 720p • 0:30</div>
+</div>
+<span class="ms" style="font-size:22px;color:#6B605D;flex:none">more_vert</span>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Quality rungs · selected · audio · protected</div>
+<div style="display:flex;gap:8px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#FBE3E1;border:1.5px solid #D93A3A;text-align:center;position:relative"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">720p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">24.1 MB</div><div style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:999px;background:#D93A3A;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:12px;color:#fff">check</span></div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">480p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">11.4 MB</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;opacity:.55"><span class="ms" style="font-size:17px;color:#9C8F8A">lock</span><div style="font:600 13px/1.3 Roboto,sans-serif;color:#9C8F8A">1080p</div></div>
+</div>
+<div style="display:flex;gap:8px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px"><span class="ms msf" style="font-size:17px;color:#211B1A">music_note</span><div style="font:600 13px/1.3 Roboto,sans-serif;color:#211B1A">Audio</div><div style="font:400 12px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">2.1 MB</div></div>
+<div style="flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;background:#F2ECEA"><span class="ms" style="font-size:18px;color:#6B605D;flex:none">shield</span><div style="font:400 12.5px/1.45 Roboto,sans-serif;color:#6B605D">Sizes still probing show a shimmer, never a blocked selection.</div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Filter chips · 32dp · selected state</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#FBE3E1;display:flex;align-items:center;font:500 13px/1 Roboto,sans-serif;color:#D93A3A">All</div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#211B1A">Videos</div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#211B1A">Unwatched</div>
+<div style="height:32px;padding:0 12px 0 14px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;gap:3px;font:400 13px/1 Roboto,sans-serif;color:#211B1A">Collections<span class="ms" style="font-size:16px;color:#6B605D">expand_more</span></div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;gap:5px;font:400 13px/1 Roboto,sans-serif;color:#211B1A"><span class="ms" style="font-size:15px;color:#6B605D">lock</span>Private</div>
+</div>
+</div>
+
+<div style="display:flex;gap:14px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Progress states</div>
+<div style="display:flex;flex-direction:column;gap:9px;padding:12px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px">
+<div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#211B1A">Downloading</div><div style="height:3px;border-radius:2px;background:#F2ECEA;margin:5px 0 4px"><div style="width:52%;height:3px;border-radius:2px;background:#D93A3A"></div></div><div style="font:400 11.5px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">12.4 MB of 24.1 MB • 2.1 MB/s</div></div>
+<div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#211B1A">Waiting for Wi-Fi</div><div style="height:3px;border-radius:2px;background:#F2ECEA;margin:5px 0 4px"><div style="width:30%;height:3px;border-radius:2px;background:#B07818"></div></div><div style="font:400 11.5px/1.3 Roboto,sans-serif;color:#6B605D">Paused</div></div>
+<div><div style="display:flex;align-items:center;gap:5px"><span class="ms" style="font-size:15px;color:#C62828">error</span><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#211B1A">Failed</div></div><div style="height:3px;border-radius:2px;background:#F2ECEA;margin:5px 0 4px"><div style="width:66%;height:3px;border-radius:2px;background:#C62828"></div></div><div style="font:400 11.5px/1.3 Roboto,sans-serif;color:#6B605D">Link expired — reopen the page</div></div>
+<div style="display:flex;align-items:center;gap:5px"><span class="ms msf" style="font-size:15px;color:#2E7D4F">check_circle</span><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#211B1A">Saved to your library</div></div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Empty state · max 280dp</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:16px 14px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;text-align:center">
+<div style="width:64px;height:64px;border-radius:16px;background:#FBE3E1;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:34px;color:#D93A3A">inbox</span></div>
+<div style="font:600 16px/1.3 Roboto,sans-serif;color:#211B1A">No downloads yet</div>
+<div style="font:400 13px/1.45 Roboto,sans-serif;color:#6B605D;max-width:220px;text-wrap:pretty">Videos you download will appear here.</div>
+<div style="height:40px;padding:0 18px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;font:600 14px/1 Roboto,sans-serif;color:#fff;margin-top:2px">How to download</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Snackbar · 4s · one action word · sheet handle 32×4</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;background:#211B1A;border-radius:12px"><div style="font:400 13.5px/1.35 Roboto,sans-serif;color:#F0E8E5">Added to downloads</div><div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C;flex:none">View</div></div>
+<div style="padding-top:9px;background:#FFFFFF;border:1px solid #E7DDDA;border-bottom:0;border-radius:20px 20px 0 0;height:34px;display:flex;justify-content:center"><div style="width:32px;height:4px;border-radius:2px;background:#9C8F8A"></div></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showIcons }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">ICONOGRAPHY · MATERIAL SYMBOLS ROUNDED 24dp</div>
+<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:12px 6px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">home</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">home</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">download</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">download</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">search</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">search</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">more_vert</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">overflow</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">refresh</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">refresh</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">lock</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">lock</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">visibility_off</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">private</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">play_arrow</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">play</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">pause</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">pause</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">swap_vert</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">sort</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">grid_view</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">layout</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">folder</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">collection</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">share</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">share</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">edit</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">rename</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#211B1A">info</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">properties</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#C62828">delete</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#9C8F8A">delete</div></div>
+</div>
+<div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#9C8F8A;text-wrap:pretty">Motion: 200–250ms, standard easing. Sheets slide up, screens slide horizontally. No bounce, no parallax, no looping animation — the FAB pulses once when the count changes. Reduced-motion disables all of it.</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+
+<div style="width:466px;background:#171212;border:1px solid #362D2B;border-radius:16px;overflow:hidden">
+<div style="padding:14px 20px;background:#201A19;border-bottom:1px solid #362D2B;display:flex;align-items:center;justify-content:space-between">
+<div style="font:600 13px/1 Roboto,sans-serif;color:#F0E8E5">DARK THEME</div>
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">follows system</div>
+</div>
+<div style="padding:24px 20px 28px;display:flex;flex-direction:column;gap:26px">
+
+<sc-if value="{{ showColors }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">COLOR</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#171212;border:1px solid #362D2B;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">bg</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#171212</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#201A19;border:1px solid #362D2B;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">surface</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#201A19</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#2A2322;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">surface-alt</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#2A2322</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#362D2B;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">line</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#362D2B</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#F0E8E5;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">ink</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#F0E8E5</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#B3A6A1;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">ink-soft</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#B3A6A1</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#7D716C;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">ink-faint</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#7D716C</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#E05F5C;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">accent</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#E05F5C</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#3E2422;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">accent-soft</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#3E2422</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#5CBB86;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">success</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#5CBB86</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#D9A64C;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">warning</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#D9A64C</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#201A19;border:1px solid #362D2B;border-radius:10px"><div style="width:34px;height:34px;border-radius:8px;background:#E57373;flex:none"></div><div><div style="font:500 12px/1.3 Roboto,sans-serif;color:#F0E8E5">error</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">#E57373</div></div></div>
+</div>
+<div style="display:flex;gap:8px;align-items:flex-start;padding:10px 12px;background:#3E2422;border-radius:10px"><span class="ms" style="font-size:18px;color:#E05F5C">info</span><div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#F0E8E5;text-wrap:pretty">Dark accent is lightened to hold 4.5:1 on <b>bg</b>. Never reuse the light-theme red here — it fails contrast on #171212.</div></div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">TYPOGRAPHY · ROBOTO</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #362D2B"><div style="font:700 24px/1.2 Roboto,sans-serif;color:#F0E8E5">Downloads</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;text-align:right;flex:none">title-xl<br>24sp · bold</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #362D2B"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#F0E8E5">1 video detected</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;text-align:right;flex:none">title<br>18sp · semibold</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #362D2B"><div style="font:400 15px/1.4 Roboto,sans-serif;color:#F0E8E5">Jersey outfit ideas — 32 pins</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;text-align:right;flex:none">body<br>15sp · regular</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #362D2B"><div style="font:400 13px/1.4 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">1.2 MB • 720p • 0:30</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;text-align:right;flex:none">body-sm<br>13sp · regular</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #362D2B"><div style="font:500 12px/1.4 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">CONTINUE WATCHING</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;text-align:right;flex:none">label<br>12sp · medium · .08em</div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><div style="font:600 15px/1.4 Roboto,sans-serif;color:#F0E8E5">Download • 24.1 MB</div><div style="font:400 11px/1.3 Roboto,sans-serif;color:#7D716C;text-align:right;flex:none">button<br>15sp · semibold</div></div>
+</div>
+<div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#7D716C;text-wrap:pretty">All numbers in sizes, speeds and timecodes use tabular figures so a progress row never jitters.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">SHAPE, SPACING, ELEVATION</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#2A2322;border:1px solid #362D2B;border-radius:12px"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#B3A6A1">card 12</div></div>
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#2A2322;border:1px solid #362D2B;border-radius:20px 20px 0 0"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#B3A6A1">sheet 20</div></div>
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#2A2322;border:1px solid #362D2B;border-radius:16px"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#B3A6A1">dialog 16</div></div>
+<div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:60px;height:44px;background:#2A2322;border:1px solid #362D2B;border-radius:999px"></div><div style="font:400 11px/1.2 Roboto,sans-serif;color:#B3A6A1">pill full</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px;background:#201A19;border:1px solid #362D2B;border-radius:12px">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:16px;height:8px;background:#3E2422;border-left:2px solid #E05F5C;border-right:2px solid #E05F5C"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#F0E8E5">4dp base unit</div></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:64px;height:8px;background:#3E2422;border-left:2px solid #E05F5C;border-right:2px solid #E05F5C"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#F0E8E5">16dp screen side padding</div></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:96px;height:8px;background:#3E2422;border-left:2px solid #E05F5C;border-right:2px solid #E05F5C"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#F0E8E5">24dp gap between sections</div></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:48px;height:8px;background:#3E2422;border-left:2px solid #E05F5C;border-right:2px solid #E05F5C"></div><div style="font:400 12px/1.4 Roboto,sans-serif;color:#F0E8E5">12dp list item padding</div></div>
+</div>
+<div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#7D716C;text-wrap:pretty">Cards carry a 1dp <b>line</b> border instead of a shadow — flatter and calmer. Only sheets and dialogs get shadow, always over a 40% black scrim.</div>
+</div>
+
+<sc-if value="{{ showComponents }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">CORE COMPONENTS</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Bottom nav · 56dp · badge while downloading</div>
+<div style="display:flex;background:#201A19;border-top:1px solid #362D2B;border-radius:0 0 12px 12px;overflow:hidden">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#E05F5C">home</span><div style="font:500 11px/1 Roboto,sans-serif;color:#E05F5C">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><div style="position:relative"><span class="ms" style="font-size:22px;color:#7D716C">download</span><div style="position:absolute;top:-3px;right:-9px;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:#E05F5C;color:#171212;font:500 10px/15px Roboto,sans-serif;text-align:center">2</div></div><div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Downloads</div></div>
+</div>
+</div>
+
+<div style="display:flex;gap:14px;align-items:flex-end">
+<div style="display:flex;flex-direction:column;gap:7px;flex:1">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Primary · 52dp</div>
+<div style="height:52px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#171212">Download • 24.1 MB</div>
+<div style="height:52px;border-radius:12px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#F0E8E5">Review &amp; free up</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:7px;align-items:center">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Detection FAB</div>
+<div style="position:relative;width:64px;height:64px;display:flex;align-items:flex-end;justify-content:flex-start">
+<div style="width:56px;height:56px;border-radius:999px;background:#E05F5C;box-shadow:0 3px 12px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:26px;color:#171212">download</span></div>
+<div style="position:absolute;top:0;right:0;width:20px;height:20px;border-radius:999px;background:#171212;border:1.5px solid #E05F5C;color:#E05F5C;font:600 11px/17px Roboto,sans-serif;text-align:center">3</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Video thumbnail 16:9 · duration chip · play glyph</div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#2A2322,#362D2B);border:1px solid #362D2B;overflow:hidden;display:flex;align-items:center;justify-content:center">
+<div style="font:400 11px/1.4 Roboto,sans-serif;color:#7D716C;text-align:center">thumbnail placeholder<br>16:9</div>
+<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:999px;background:rgba(240,232,229,.55);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:22px;color:#171212">play_arrow</span></div>
+<div style="position:absolute;left:8px;bottom:8px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.5 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">0:30</div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.22)"><div style="width:38%;height:3px;background:#E05F5C"></div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">List row · 96×54 thumb · unwatched dot · overflow</div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px;background:#201A19;border:1px solid #362D2B;border-radius:12px">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(135deg,#2A2322,#362D2B);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#F0E8E5">0:30</div></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;align-items:center;gap:7px"><div style="width:8px;height:8px;border-radius:999px;background:#E05F5C;flex:none"></div><div style="font:400 15px/1.35 Roboto,sans-serif;color:#F0E8E5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">Pandithurai (1992) Tamil romantic family drama</div></div>
+<div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">1.2 MB • 720p • 0:30</div>
+</div>
+<span class="ms" style="font-size:22px;color:#B3A6A1;flex:none">more_vert</span>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Quality rungs · selected · audio · protected</div>
+<div style="display:flex;gap:8px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#3E2422;border:1.5px solid #E05F5C;text-align:center;position:relative"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#F0E8E5">720p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">24.1 MB</div><div style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:999px;background:#E05F5C;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:12px;color:#171212">check</span></div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#2A2322;text-align:center"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#F0E8E5">480p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">11.4 MB</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#2A2322;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;opacity:.55"><span class="ms" style="font-size:17px;color:#7D716C">lock</span><div style="font:600 13px/1.3 Roboto,sans-serif;color:#7D716C">1080p</div></div>
+</div>
+<div style="display:flex;gap:8px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#2A2322;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px"><span class="ms msf" style="font-size:17px;color:#F0E8E5">music_note</span><div style="font:600 13px/1.3 Roboto,sans-serif;color:#F0E8E5">Audio</div><div style="font:400 12px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">2.1 MB</div></div>
+<div style="flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;background:#2A2322"><span class="ms" style="font-size:18px;color:#B3A6A1;flex:none">shield</span><div style="font:400 12.5px/1.45 Roboto,sans-serif;color:#B3A6A1">Sizes still probing show a shimmer, never a blocked selection.</div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Filter chips · 32dp · selected state</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#3E2422;display:flex;align-items:center;font:500 13px/1 Roboto,sans-serif;color:#E05F5C">All</div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#2A2322;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5">Videos</div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#2A2322;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5">Unwatched</div>
+<div style="height:32px;padding:0 12px 0 14px;border-radius:999px;background:#2A2322;display:flex;align-items:center;gap:3px;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5">Collections<span class="ms" style="font-size:16px;color:#B3A6A1">expand_more</span></div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:#2A2322;display:flex;align-items:center;gap:5px;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5"><span class="ms" style="font-size:15px;color:#B3A6A1">lock</span>Private</div>
+</div>
+</div>
+
+<div style="display:flex;gap:14px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Progress states</div>
+<div style="display:flex;flex-direction:column;gap:9px;padding:12px;background:#201A19;border:1px solid #362D2B;border-radius:12px">
+<div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#F0E8E5">Downloading</div><div style="height:3px;border-radius:2px;background:#2A2322;margin:5px 0 4px"><div style="width:52%;height:3px;border-radius:2px;background:#E05F5C"></div></div><div style="font:400 11.5px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">12.4 MB of 24.1 MB • 2.1 MB/s</div></div>
+<div><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#F0E8E5">Waiting for Wi-Fi</div><div style="height:3px;border-radius:2px;background:#2A2322;margin:5px 0 4px"><div style="width:30%;height:3px;border-radius:2px;background:#D9A64C"></div></div><div style="font:400 11.5px/1.3 Roboto,sans-serif;color:#B3A6A1">Paused</div></div>
+<div><div style="display:flex;align-items:center;gap:5px"><span class="ms" style="font-size:15px;color:#E57373">error</span><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#F0E8E5">Failed</div></div><div style="height:3px;border-radius:2px;background:#2A2322;margin:5px 0 4px"><div style="width:66%;height:3px;border-radius:2px;background:#E57373"></div></div><div style="font:400 11.5px/1.3 Roboto,sans-serif;color:#B3A6A1">Link expired — reopen the page</div></div>
+<div style="display:flex;align-items:center;gap:5px"><span class="ms msf" style="font-size:15px;color:#5CBB86">check_circle</span><div style="font:400 12.5px/1.4 Roboto,sans-serif;color:#F0E8E5">Saved to your library</div></div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Empty state · max 280dp</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:16px 14px;background:#201A19;border:1px solid #362D2B;border-radius:12px;text-align:center">
+<div style="width:64px;height:64px;border-radius:16px;background:#3E2422;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:34px;color:#E05F5C">inbox</span></div>
+<div style="font:600 16px/1.3 Roboto,sans-serif;color:#F0E8E5">No downloads yet</div>
+<div style="font:400 13px/1.45 Roboto,sans-serif;color:#B3A6A1;max-width:220px;text-wrap:pretty">Videos you download will appear here.</div>
+<div style="height:40px;padding:0 18px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;font:600 14px/1 Roboto,sans-serif;color:#171212;margin-top:2px">How to download</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Snackbar · 4s · one action word · sheet handle 32×4</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;background:#2A2322;border:1px solid #362D2B;border-radius:12px"><div style="font:400 13.5px/1.35 Roboto,sans-serif;color:#F0E8E5">Added to downloads</div><div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C;flex:none">View</div></div>
+<div style="padding-top:9px;background:#201A19;border:1px solid #362D2B;border-bottom:0;border-radius:20px 20px 0 0;height:34px;display:flex;justify-content:center"><div style="width:32px;height:4px;border-radius:2px;background:#7D716C"></div></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showIcons }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">ICONOGRAPHY · MATERIAL SYMBOLS ROUNDED 24dp</div>
+<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:12px 6px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">home</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">home</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">download</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">download</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">search</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">search</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">more_vert</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">overflow</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">refresh</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">refresh</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">lock</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">lock</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">visibility_off</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">private</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">play_arrow</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">play</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">pause</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">pause</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">swap_vert</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">sort</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">grid_view</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">layout</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">folder</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">collection</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">share</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">share</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">edit</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">rename</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#F0E8E5">info</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">properties</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="ms" style="font-size:23px;color:#E57373">delete</span><div style="font:400 9.5px/1.2 Roboto,sans-serif;color:#7D716C">delete</div></div>
+</div>
+<div style="font:400 11.5px/1.5 Roboto,sans-serif;color:#7D716C;text-wrap:pretty">Motion: 200–250ms, standard easing. Sheets slide up, screens slide horizontally. No bounce, no parallax, no looping animation — the FAB pulses once when the count changes. Reduced-motion disables all of it.</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+
+</div>
+
+<div style="width:956px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:8px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DECISIONS THIS FOUNDATION LOCKS IN</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• One primary button per screen or sheet — never two reds competing.</div>
+<div>• Cards use borders, not shadows. Shadow means "floating above" and only sheets/dialogs do.</div>
+<div>• Every progress state names a remedy in plain language, not an error code.</div>
+<div>• Destructive actions sit far from primary actions and always state the consequence.</div>
+<div>• Touch targets ≥48dp even where the visual is 24dp.</div>
+<div>• Dark theme is a token swap, never a separate layout.</div>
+</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A;padding-top:2px">Next: Screen 01 — Home (browser start page). Say the word and I'll build it on these primitives, light + dark side by side.</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showColors&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;},&quot;showComponents&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;},&quot;showIcons&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}"></script>
+</body>
+</html>

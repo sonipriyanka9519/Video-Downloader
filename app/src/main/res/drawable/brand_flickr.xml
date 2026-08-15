@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,0h26a11,11 0 0 1 11,11v26a11,11 0 0 1 -11,11h-26a11,11 0 0 1 -11,-11v-26a11,11 0 0 1 11,-11z" />
+
+    <!--
+      A white tile, like Google's. Flickr's mark is the two dots and nothing else, and they are
+      only themselves against white — laid over a coloured tile the blue one all but disappears.
+    -->
+    <path
+        android:fillColor="#E5E5E5"
+        android:pathData="M11,0.75h26a10.25,10.25 0 0 1 10.25,10.25v26a10.25,10.25 0 0 1 -10.25,10.25h-26a10.25,10.25 0 0 1 -10.25,-10.25v-26a10.25,10.25 0 0 1 10.25,-10.25zM11,1.5a9.5,9.5 0 0 0 -9.5,9.5v26a9.5,9.5 0 0 0 9.5,9.5h26a9.5,9.5 0 0 0 9.5,-9.5v-26a9.5,9.5 0 0 0 -9.5,-9.5z" />
+
+    <path
+        android:fillColor="#0063DC"
+        android:pathData="M17,24m-6.5,0a6.5,6.5 0 1 1 13,0a6.5,6.5 0 1 1 -13,0" />
+    <path
+        android:fillColor="#FF0084"
+        android:pathData="M31,24m-6.5,0a6.5,6.5 0 1 1 13,0a6.5,6.5 0 1 1 -13,0" />
+</vector>

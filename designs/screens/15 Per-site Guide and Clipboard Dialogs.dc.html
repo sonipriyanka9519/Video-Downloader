@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:max-content">
+
+<div style="width:1160px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="height:22px;padding:0 9px;border-radius:6px;background:#211B1A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;letter-spacing:.04em">SCREEN 15</div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Per-site guide &amp; clipboard dialogs</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;max-width:900px;text-wrap:pretty">Two interruptions, both earning their place. The guide appears only where in-browser detection is unreliable and the user needs the native app; the copied-link dialog only after the user taps the address bar, and never twice for the same link.</div>
+<div style="font:400 12px/1.55 Roboto,sans-serif;color:#9C8F8A;max-width:900px;text-wrap:pretty">Assumptions: guide screenshots are placeholders for real annotated captures per site. Deep link falls back to the Play Store listing if the app isn't installed, and the button reads "Get Instagram" in that case. We never read the clipboard on cold open — Android 14+ would surface its own paste-access toast for a prompt the user didn't ask for.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:28px;align-items:flex-start;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · PER-SITE GUIDE · STEP 1</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:32</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>68%</div></div></div><div style="height:56px;padding:0 12px;display:flex;align-items:center;gap:8px"><span class="ms msf" style="font-size:22px;color:#211B1A">home</span><span class="ms" style="font-size:22px;color:#211B1A">chevron_left</span><div style="flex:1;height:40px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;gap:7px;padding:0 12px"><span class="ms" style="font-size:15px;color:#6B605D">lock</span><div style="font:400 13px/1 Roboto,sans-serif;color:#211B1A">instagram.com</div></div><div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #6B605D;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#6B605D">2</div></div><div style="flex:1;background:#FFFFFF"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.45)"></div>
+
+<div style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:0 18px">
+<div style="width:100%;background:#FFFFFF;border-radius:16px;box-shadow:0 8px 28px rgba(33,27,26,.3);padding:18px 18px 14px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<div style="flex:1;font:600 18px/1.35 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">How to download from Instagram</div>
+<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex:none;margin:-2px -4px 0 0"><span class="ms" style="font-size:20px;color:#6B605D">close</span></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:9px">
+<div style="height:24px;padding:0 10px;border-radius:999px;background:#FBE3E1;display:flex;align-items:center;font:600 11.5px/1 Roboto,sans-serif;color:#D93A3A;letter-spacing:.03em">STEP 1</div>
+<div style="font:400 12.5px/1 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">of 3</div>
+</div>
+<div style="font:400 14.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">In the Instagram app, tap <b style="font-weight:600">⋯</b> above the post and choose <b style="font-weight:600">Copy link</b>.</div>
+
+<div style="position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;background:linear-gradient(150deg,#E7DDDA,#F2ECEA);overflow:hidden">
+<div style="position:absolute;left:10px;top:10px;right:10px;display:flex;align-items:center;gap:7px"><div style="width:20px;height:20px;border-radius:999px;background:rgba(255,255,255,.85)"></div><div style="width:74px;height:8px;border-radius:3px;background:rgba(255,255,255,.85)"></div><div style="flex:1"></div><div style="font:600 13px/1 Roboto,sans-serif;color:#211B1A;letter-spacing:.12em">⋯</div></div>
+<div style="position:absolute;left:10px;right:10px;top:40px;bottom:34px;border-radius:8px;background:rgba(255,255,255,.5)"></div>
+<div style="position:absolute;right:14px;top:38px;width:104px;background:#FFFFFF;border-radius:8px;box-shadow:0 4px 14px rgba(33,27,26,.24);padding:5px 0"><div style="padding:5px 9px;font:400 10.5px/1 Roboto,sans-serif;color:#6B605D">Share to…</div><div style="padding:5px 9px;font:600 10.5px/1 Roboto,sans-serif;color:#D93A3A;background:#FBE3E1">Copy link</div><div style="padding:5px 9px;font:400 10.5px/1 Roboto,sans-serif;color:#6B605D">Report</div></div>
+<svg viewBox="0 0 60 40" style="position:absolute;left:26px;top:74px;width:60px;height:40px" fill="none"><path d="M4 36 C 4 14, 26 8, 50 12" stroke="#D93A3A" stroke-width="3" stroke-linecap="round"></path><path d="M50 12 L 41 6 M50 12 L 41 20" stroke="#D93A3A" stroke-width="3" stroke-linecap="round"></path></svg>
+</div>
+
+<div style="display:flex;justify-content:center;gap:6px"><div style="width:18px;height:6px;border-radius:999px;background:#D93A3A"></div><div style="width:6px;height:6px;border-radius:999px;background:#E7DDDA"></div><div style="width:6px;height:6px;border-radius:999px;background:#E7DDDA"></div></div>
+
+<div style="height:48px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;gap:7px;font:600 15px/1 Roboto,sans-serif;color:#fff"><span class="ms" style="font-size:19px">open_in_new</span>Open Instagram app</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:17px;height:17px;border-radius:4px;border:1.5px solid #9C8F8A;box-sizing:border-box"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#6B605D">Don't show again</div></div>
+<div style="font:600 14px/1 Roboto,sans-serif;color:#6B605D">Got it</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · STEP 2</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:32</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>68%</div></div></div><div style="height:56px;padding:0 12px;display:flex;align-items:center;gap:8px"><span class="ms msf" style="font-size:22px;color:#211B1A">home</span><span class="ms" style="font-size:22px;color:#211B1A">chevron_left</span><div style="flex:1;height:40px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;gap:7px;padding:0 12px"><span class="ms" style="font-size:15px;color:#6B605D">lock</span><div style="font:400 13px/1 Roboto,sans-serif;color:#211B1A">instagram.com</div></div><div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #6B605D;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#6B605D">2</div></div><div style="flex:1;background:#FFFFFF"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.45)"></div>
+
+<div style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:0 18px">
+<div style="width:100%;background:#FFFFFF;border-radius:16px;box-shadow:0 8px 28px rgba(33,27,26,.3);padding:18px 18px 14px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<div style="flex:1;font:600 18px/1.35 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">How to download from Instagram</div>
+<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex:none;margin:-2px -4px 0 0"><span class="ms" style="font-size:20px;color:#6B605D">close</span></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:9px">
+<div style="height:24px;padding:0 10px;border-radius:999px;background:#FBE3E1;display:flex;align-items:center;font:600 11.5px/1 Roboto,sans-serif;color:#D93A3A;letter-spacing:.03em">STEP 2</div>
+<div style="font:400 12.5px/1 Roboto,sans-serif;color:#9C8F8A;font-variant-numeric:tabular-nums">of 3</div>
+</div>
+<div style="font:400 14.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Come back here — we'll offer the link the moment you return.</div>
+
+<div style="position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;background:linear-gradient(150deg,#F2ECEA,#E7DDDA);overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0 14px">
+<div style="width:100%;background:#FFFFFF;border-radius:10px;box-shadow:0 3px 12px rgba(33,27,26,.18);padding:10px;display:flex;align-items:center;gap:9px">
+<div style="width:26px;height:26px;border-radius:8px;background:#F2ECEA;flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font:600 11px/1.3 Roboto,sans-serif;color:#211B1A">Link you copied</div><div style="font:400 10px/1.3 Roboto,sans-serif;color:#9C8F8A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">instagram.com/reel/C8x…</div></div>
+<div style="height:24px;padding:0 10px;border-radius:999px;background:#D93A3A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;flex:none">Open</div>
+</div>
+<svg viewBox="0 0 60 40" style="position:absolute;left:30px;bottom:12px;width:56px;height:38px" fill="none"><path d="M6 34 C 10 14, 30 10, 48 16" stroke="#D93A3A" stroke-width="3" stroke-linecap="round"></path><path d="M48 16 L 39 10 M48 16 L 39 24" stroke="#D93A3A" stroke-width="3" stroke-linecap="round"></path></svg>
+</div>
+
+<div style="display:flex;justify-content:center;gap:6px"><div style="width:6px;height:6px;border-radius:999px;background:#E7DDDA"></div><div style="width:18px;height:6px;border-radius:999px;background:#D93A3A"></div><div style="width:6px;height:6px;border-radius:999px;background:#E7DDDA"></div></div>
+
+<div style="height:48px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;gap:7px;font:600 15px/1 Roboto,sans-serif;color:#fff"><span class="ms" style="font-size:19px">open_in_new</span>Open Instagram app</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:17px;height:17px;border-radius:4px;border:1.5px solid #9C8F8A;box-sizing:border-box"></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#6B605D">Don't show again</div></div>
+<div style="font:600 14px/1 Roboto,sans-serif;color:#6B605D">Got it</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · STEP 3 · DISMISS OPTED</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>17:33</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>68%</div></div></div><div style="height:56px;padding:0 12px;display:flex;align-items:center;gap:8px"><span class="ms msf" style="font-size:22px;color:#F0E8E5">home</span><span class="ms" style="font-size:22px;color:#F0E8E5">chevron_left</span><div style="flex:1;height:40px;border-radius:999px;background:#2A2322;display:flex;align-items:center;gap:7px;padding:0 12px"><span class="ms" style="font-size:15px;color:#B3A6A1">lock</span><div style="font:400 13px/1 Roboto,sans-serif;color:#F0E8E5">instagram.com</div></div><div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #B3A6A1;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#B3A6A1">2</div></div><div style="flex:1;background:#FFFFFF"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.6)"></div>
+
+<div style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:0 18px">
+<div style="width:100%;background:#201A19;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.6);padding:18px 18px 14px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<div style="flex:1;font:600 18px/1.35 Roboto,sans-serif;color:#F0E8E5;text-wrap:pretty">How to download from Instagram</div>
+<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex:none;margin:-2px -4px 0 0"><span class="ms" style="font-size:20px;color:#B3A6A1">close</span></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:9px">
+<div style="height:24px;padding:0 10px;border-radius:999px;background:#3E2422;display:flex;align-items:center;font:600 11.5px/1 Roboto,sans-serif;color:#E05F5C;letter-spacing:.03em">STEP 3</div>
+<div style="font:400 12.5px/1 Roboto,sans-serif;color:#7D716C;font-variant-numeric:tabular-nums">of 3</div>
+</div>
+<div style="font:400 14.5px/1.5 Roboto,sans-serif;color:#F0E8E5;text-wrap:pretty">Tap <b style="font-weight:600">Open</b>, then pick a quality. Private posts can't be downloaded.</div>
+
+<div style="position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;background:linear-gradient(150deg,#2A2322,#362D2B);overflow:hidden;display:flex;align-items:flex-end;padding:12px">
+<div style="width:100%;background:#171212;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px">
+<div style="font:600 11px/1.3 Roboto,sans-serif;color:#F0E8E5">1 video detected</div>
+<div style="display:flex;gap:6px">
+<div style="flex:1;padding:6px 0;border-radius:8px;background:#2A2322;text-align:center;font:600 11px/1.3 Roboto,sans-serif;color:#F0E8E5">1080p</div>
+<div style="flex:1;padding:6px 0;border-radius:8px;background:#3E2422;border:1.5px solid #E05F5C;text-align:center;font:600 11px/1.3 Roboto,sans-serif;color:#F0E8E5">720p</div>
+<div style="flex:1;padding:6px 0;border-radius:8px;background:#2A2322;text-align:center;font:600 11px/1.3 Roboto,sans-serif;color:#F0E8E5">Audio</div>
+</div>
+<div style="height:28px;border-radius:8px;background:#E05F5C;display:flex;align-items:center;justify-content:center;font:600 11px/1 Roboto,sans-serif;color:#171212">Download</div>
+</div>
+</div>
+
+<div style="display:flex;justify-content:center;gap:6px"><div style="width:6px;height:6px;border-radius:999px;background:#362D2B"></div><div style="width:6px;height:6px;border-radius:999px;background:#362D2B"></div><div style="width:18px;height:6px;border-radius:999px;background:#E05F5C"></div></div>
+
+<div style="height:48px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;justify-content:center;gap:7px;font:600 15px/1 Roboto,sans-serif;color:#171212"><span class="ms" style="font-size:19px">open_in_new</span>Open Instagram app</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:17px;height:17px;border-radius:4px;background:#E05F5C;display:flex;align-items:center;justify-content:center;box-sizing:border-box"><span class="ms msf" style="font-size:13px;color:#171212">check</span></div><div style="font:400 12.5px/1 Roboto,sans-serif;color:#F0E8E5">Don't show again</div></div>
+<div style="font:600 14px/1 Roboto,sans-serif;color:#B3A6A1">Got it</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · COPIED LINK · AFTER TAPPING ADDRESS BAR</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:35</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>67%</div></div></div><div style="height:56px;padding:0 12px;display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:8px;background:#D93A3A;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:17px;color:#fff">download</span></div><div style="flex:1;height:40px;border-radius:999px;background:#F2ECEA"></div><div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #6B605D"></div></div><div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:12px"><div style="width:52px;height:11px;border-radius:3px;background:#E7DDDA"></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px"><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div></div></div><div style="flex:1"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.45)"></div>
+
+<div style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:0 24px">
+<div style="width:100%;background:#FFFFFF;border-radius:16px;box-shadow:0 8px 28px rgba(33,27,26,.3);padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+<div style="width:44px;height:44px;border-radius:12px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:600 16px/1 Roboto,sans-serif;color:#6B605D">Ig</div>
+<div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A">Link you copied</div>
+</div>
+<div style="padding:11px 13px;background:#F2ECEA;border-radius:10px;font:400 13px/1.45 Roboto,sans-serif;color:#211B1A;word-break:break-all">instagram.com/reel/C8xQ2mR…/?igsh=MXQ</div>
+<div style="height:50px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff;margin-top:2px">Open</div>
+<div style="height:24px;display:flex;align-items:center;justify-content:center;font:600 14px/1 Roboto,sans-serif;color:#6B605D">Cancel</div>
+</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showClipboardDark }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · COPIED LINK · AFTER TAPPING ADDRESS BAR</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>17:35</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>67%</div></div></div><div style="height:56px;padding:0 12px;display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:8px;background:#E05F5C;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:17px;color:#171212">download</span></div><div style="flex:1;height:40px;border-radius:999px;background:#2A2322"></div><div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #B3A6A1"></div></div><div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:12px"><div style="width:52px;height:11px;border-radius:3px;background:#2A2322"></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px"><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div><div style="height:56px;border-radius:12px;background:#2A2322"></div></div></div><div style="flex:1"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.6)"></div>
+
+<div style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:0 24px">
+<div style="width:100%;background:#201A19;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.6);padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+<div style="width:44px;height:44px;border-radius:12px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:600 16px/1 Roboto,sans-serif;color:#B3A6A1">Ig</div>
+<div style="font:600 18px/1.3 Roboto,sans-serif;color:#F0E8E5">Link you copied</div>
+</div>
+<div style="padding:11px 13px;background:#2A2322;border-radius:10px;font:400 13px/1.45 Roboto,sans-serif;color:#F0E8E5;word-break:break-all">instagram.com/reel/C8xQ2mR…/?igsh=MXQ</div>
+<div style="height:50px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#171212;margin-top:2px">Open</div>
+<div style="height:24px;display:flex;align-items:center;justify-content:center;font:600 14px/1 Roboto,sans-serif;color:#B3A6A1">Cancel</div>
+</div>
+</div>
+</div>
+</div></sc-if>
+
+
+<sc-if value="{{ showUnsupportedStrip }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">C · IN-PAGE OFFER</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:36</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>67%</div></div></div><div style="height:56px;padding:0 12px;display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:8px;background:#D93A3A;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:17px;color:#fff">download</span></div><div style="flex:1;height:40px;border-radius:999px;background:#F2ECEA"></div><div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #6B605D"></div></div><div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:12px"><div style="width:52px;height:11px;border-radius:3px;background:#E7DDDA"></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px"><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div><div style="height:56px;border-radius:12px;background:#F2ECEA"></div></div></div><div style="flex:1"></div></div>
+
+<div style="position:relative;flex:1;display:flex;align-items:flex-start;justify-content:center;padding:88px 16px 0">
+<div style="width:100%;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;padding:12px 12px 12px 14px;display:flex;align-items:center;gap:11px">
+<span class="ms" style="font-size:20px;color:#6B605D;flex:none">content_paste</span>
+<div style="flex:1;min-width:0"><div style="font:400 13.5px/1.4 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Open copied link — example.com/watch</div></div>
+<div style="height:30px;padding:0 12px;border-radius:999px;background:#FBE3E1;display:flex;align-items:center;font:600 12px/1 Roboto,sans-serif;color:#D93A3A;flex:none">Open</div>
+<div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:17px;color:#9C8F8A">close</span></div>
+</div>
+</div>
+</div>
+</div></sc-if>
+
+
+</div>
+
+<div style="width:1160px;display:flex;gap:20px;align-items:flex-start">
+<div style="flex:1;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:9px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DESIGN NOTES</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• Guide steps are a horizontal pager, not a scroll: three short instructions, each with its own annotated capture and one accent arrow.</div>
+<div>• Step 3 states the limit honestly — private posts can't be downloaded — instead of letting the user discover it as a failure.</div>
+<div>• "Don't show again" is a checkbox, not a hidden preference, and is per-site: dismissing Instagram doesn't silence Facebook.</div>
+<div>• Deep-link button is primary because it's the reliable path; <b>Got it</b> stays a text button so dismissing costs nothing.</div>
+<div>• We read the clipboard only when the user taps the address bar — an act that already means "I want to go somewhere" — so the system paste toast lands on an intentional gesture.</div>
+<div>• A declined link is never offered again — the strip's X marks that URL as refused, so there's no second prompt for the same paste.</div>
+</div>
+</div>
+<div style="width:300px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DECIDED</div>
+<div style="font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">No clipboard read on cold open. The copied link surfaces as a chip in the search screen when the user taps the address bar, and this dialog confirms it. Panel C is the same offer mid-page, as a dismissible strip.</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A">Next: Screen 16 — notifications and widget.</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showClipboardDark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;},&quot;showUnsupportedStrip&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;}}"></script>
+</body>
+</html>

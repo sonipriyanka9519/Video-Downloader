@@ -7,7 +7,10 @@
       "PowerShell($f=\"C:\\\\Users\\\\Admin\\\\Desktop\\\\Workspace\\\\Webview\\\\app\\\\src\\\\main\\\\assets\\\\vd_scan.js\"; $c=\\(Get-Content $f -Raw\\).ToCharArray\\(\\); \"braces {0}/{1}  parens {2}/{3}\" -f \\($c|?{$_ -eq '{'}\\).Count,\\($c|?{$_ -eq '}'}\\).Count,\\($c|?{$_ -eq '\\('}\\).Count,\\($c|?{$_ -eq '\\)'}\\).Count)",
       "PowerShell($f=\"C:\\\\Users\\\\Admin\\\\Desktop\\\\Workspace\\\\Webview\\\\app\\\\src\\\\main\\\\java\\\\com\\\\ms\\\\webview\\\\detect\\\\site\\\\FacebookSheetRules.java\"; $c=\\(Get-Content $f -Raw\\).ToCharArray\\(\\); \"braces {0}/{1} parens {2}/{3}\" -f \\($c|?{$_ -eq '{'}\\).Count,\\($c|?{$_ -eq '}'}\\).Count,\\($c|?{$_ -eq '\\('}\\).Count,\\($c|?{$_ -eq '\\)'}\\).Count)",
       "Bash(perl -0pi -e 's/adapter = new SearchHistoryAdapter\\\\\\(this\\\\\\);/adapter = new SearchHistoryAdapter\\(requireContext\\(\\), this\\);/' ui/HistorySheet.java)",
-      "Bash(perl -0pi -e 's/historyAdapter = new SearchHistoryAdapter\\\\\\(this\\\\\\);/historyAdapter = new SearchHistoryAdapter\\(this, this\\);/' ui/SearchActivity.java)"
+      "Bash(perl -0pi -e 's/historyAdapter = new SearchHistoryAdapter\\\\\\(this\\\\\\);/historyAdapter = new SearchHistoryAdapter\\(this, this\\);/' ui/SearchActivity.java)",
+      "Bash(awk '/private void scan\\\\\\(/,/^    private DownloadEntity rowOf/' data/MediaLibrary.java)",
+      "Bash(grep -nE \"return|^\\\\s*\\\\}$\")",
+      "Bash(awk '/private static void copy\\\\\\(/,/^    \\\\}$/' download/Remuxer.java)"
     ]
   }
 }

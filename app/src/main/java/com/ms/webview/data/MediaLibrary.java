@@ -57,6 +57,24 @@ public class MediaLibrary {
     }
 
     /**
+     * The other half of the library: sound tracks downloaded on their own.
+     *
+     * <p>A separate collection because that is where they were published, and they were published
+     * there because MediaStore sorts the device's media by it — filing an audio file under video
+     * puts it in the gallery as something that opens to a black screen and will not play.
+     */
+    public static Uri audioCollection() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                ? MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                : MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    }
+
+    /** Where published sound tracks live, as MediaStore spells it. */
+    public static String audioRelativePath() {
+        return Environment.DIRECTORY_MUSIC + File.separator + ALBUM + File.separator;
+    }
+
+    /**
      * Everything this app has saved, newest first.
      *
      * <p>Scoped to our own album rather than the whole video collection: the downloads list is a
@@ -64,16 +82,32 @@ public class MediaLibrary {
      */
     public List<DownloadEntity> saved() {
         List<DownloadEntity> out = new ArrayList<>();
+        scan(out, collection(), relativePath(), Environment.DIRECTORY_MOVIES, false);
+        scan(out, audioCollection(), audioRelativePath(), Environment.DIRECTORY_MUSIC, true);
+        // Each scan is sorted, the pair is not. One list, newest first, whichever it came from.
+        Collections.sort(out, (a, b) -> Long.compare(b.createdAt, a.createdAt));
+        return out;
+    }
 
+    /**
+     * Reads one collection's worth of this app's own album into {@code out}.
+     *
+     * <p>Written once and run twice. Every column named here is a {@link MediaStore.MediaColumns}
+     * — the same string on the video table and the audio one — so the only things that differ
+     * between the two passes are the collection, the folder, and whether a row is expected to
+     * have a picture.
+     */
+    private void scan(List<DownloadEntity> out, Uri collection, String path, String directory,
+                      boolean audio) {
         String[] columns = {
-                MediaStore.Video.Media._ID,
-                MediaStore.Video.Media.DISPLAY_NAME,
-                MediaStore.Video.Media.SIZE,
-                MediaStore.Video.Media.DURATION,
-                MediaStore.Video.Media.WIDTH,
-                MediaStore.Video.Media.HEIGHT,
-                MediaStore.Video.Media.MIME_TYPE,
-                MediaStore.Video.Media.DATE_ADDED,
+                MediaStore.MediaColumns._ID,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.SIZE,
+                MediaStore.MediaColumns.DURATION,
+                MediaStore.MediaColumns.WIDTH,
+                MediaStore.MediaColumns.HEIGHT,
+                MediaStore.MediaColumns.MIME_TYPE,
+                MediaStore.MediaColumns.DATE_ADDED,
         };
 
         // Exactly this app's own folder, never the device's video collection at large. The
@@ -85,51 +119,53 @@ public class MediaLibrary {
         String[] args;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Written with a trailing separator, but not every OEM stores it back that way.
-            selection = MediaStore.Video.Media.RELATIVE_PATH + " IN (?, ?) AND "
-                    + MediaStore.Video.Media.BUCKET_DISPLAY_NAME + " = ?";
-            String path = relativePath();
+            selection = MediaStore.MediaColumns.RELATIVE_PATH + " IN (?, ?) AND "
+                    + MediaStore.MediaColumns.BUCKET_DISPLAY_NAME + " = ?";
             args = new String[]{path, path.substring(0, path.length() - 1), ALBUM};
         } else {
             // No RELATIVE_PATH before Q, so match on the path column the publisher wrote to.
-            selection = MediaStore.Video.Media.DATA + " LIKE ? AND "
-                    + MediaStore.Video.Media.BUCKET_DISPLAY_NAME + " = ?";
-            args = new String[]{
-                    "%/" + Environment.DIRECTORY_MOVIES + "/" + ALBUM + "/%", ALBUM};
+            selection = MediaStore.MediaColumns.DATA + " LIKE ? AND "
+                    + MediaStore.MediaColumns.BUCKET_DISPLAY_NAME + " = ?";
+            args = new String[]{"%/" + directory + "/" + ALBUM + "/%", ALBUM};
         }
 
         try (Cursor c = context.getContentResolver().query(
-                collection(), columns, selection, args,
-                MediaStore.Video.Media.DATE_ADDED + " DESC")) {
+                collection, columns, selection, args,
+                MediaStore.MediaColumns.DATE_ADDED + " DESC")) {
 
-            if (c == null) return out;
+            if (c == null) return;
 
-            int idAt = c.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
-            int nameAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
-            int sizeAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE);
-            int durationAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION);
-            int widthAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.WIDTH);
-            int heightAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT);
-            int mimeAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE);
-            int dateAt = c.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_ADDED);
+            int idAt = c.getColumnIndexOrThrow(MediaStore.MediaColumns._ID);
+            int nameAt = c.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
+            int sizeAt = c.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE);
+            int durationAt = c.getColumnIndexOrThrow(MediaStore.MediaColumns.DURATION);
+            int mimeAt = c.getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE);
+            int dateAt = c.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED);
+            // Not OrThrow: the audio table carries no picture, and some OEMs omit the columns
+            // rather than returning them empty. A missing index is answered with no quality
+            // label, which is the right answer for a sound track anyway.
+            int widthAt = c.getColumnIndex(MediaStore.MediaColumns.WIDTH);
+            int heightAt = c.getColumnIndex(MediaStore.MediaColumns.HEIGHT);
 
             while (c.moveToNext()) {
-                out.add(rowOf(c, idAt, nameAt, sizeAt, durationAt, widthAt, heightAt,
-                        mimeAt, dateAt));
+                out.add(rowOf(c, collection, audio, idAt, nameAt, sizeAt, durationAt,
+                        widthAt, heightAt, mimeAt, dateAt));
             }
         } catch (SecurityException e) {
             // No media permission yet. An empty list is the honest answer until it is granted.
             Log.i(TAG, "Cannot read the library without permission");
-            return Collections.emptyList();
         } catch (Exception e) {
             Log.w(TAG, "Library scan failed: " + e.getMessage());
         }
-        return out;
     }
 
-    private DownloadEntity rowOf(Cursor c, int idAt, int nameAt, int sizeAt, int durationAt,
+    private DownloadEntity rowOf(Cursor c, Uri collection, boolean audio,
+                                 int idAt, int nameAt, int sizeAt, int durationAt,
                                  int widthAt, int heightAt, int mimeAt, int dateAt) {
         long mediaId = c.getLong(idAt);
-        Uri uri = Uri.withAppendedPath(collection(), String.valueOf(mediaId));
+        // The collection this row came from, not the video one. An audio id resolved against
+        // the video table is a uri that points at nothing, or worse at some other file.
+        Uri uri = Uri.withAppendedPath(collection, String.valueOf(mediaId));
 
         DownloadEntity d = new DownloadEntity();
         // Negative, so a video read off the device can never be mistaken for a transfer this
@@ -137,7 +173,7 @@ public class MediaLibrary {
         d.id = -mediaId;
         d.fromLibrary = true;
         d.status = DownloadStatus.COMPLETED;
-        d.kind = MediaKind.PROGRESSIVE;
+        d.kind = audio ? MediaKind.AUDIO : MediaKind.PROGRESSIVE;
 
         d.title = stripExtension(c.getString(nameAt));
         d.fileName = c.getString(nameAt);
@@ -151,9 +187,11 @@ public class MediaLibrary {
         d.downloadedBytes = d.totalBytes;
         d.durationMs = c.getLong(durationAt);
 
-        int width = c.getInt(widthAt);
-        int height = c.getInt(heightAt);
-        if (width > 0 && height > 0) d.quality = Formats.quality(width, height);
+        if (widthAt >= 0 && heightAt >= 0) {
+            int width = c.getInt(widthAt);
+            int height = c.getInt(heightAt);
+            if (width > 0 && height > 0) d.quality = Formats.quality(width, height);
+        }
 
         long addedSeconds = c.getLong(dateAt);
         d.createdAt = addedSeconds * 1000L;
@@ -168,7 +206,7 @@ public class MediaLibrary {
         try {
             ContentResolver resolver = context.getContentResolver();
             try (Cursor c = resolver.query(Uri.parse(uriString),
-                    new String[]{MediaStore.Video.Media._ID}, null, null, null)) {
+                    new String[]{MediaStore.MediaColumns._ID}, null, null, null)) {
                 return c != null && c.moveToFirst();
             }
         } catch (Exception e) {
@@ -238,7 +276,7 @@ public class MediaLibrary {
 
         Uri uri = Uri.parse(uriString);
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Video.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
         try {
             int rows = context.getContentResolver().update(uri, values, null, null);
             return new WriteResult(rows > 0, null);

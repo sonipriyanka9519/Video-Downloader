@@ -1039,16 +1039,21 @@ public class MediaRegistry {
                     accepted = true;
 
                 } else if (result != null && result.audioOnly()) {
-                    // The sound half of a video served as two streams. Never offered on its own
-                    // — it is not a video — but its address is exactly what the silent variants
-                    // beside it are missing, so it is kept rather than dropped.
+                    // The sound half of a video served as two streams. It does two jobs from
+                    // here: it is muxed into the silent renditions beside it, and it is offered
+                    // by itself as the sound alone. Both come free — by this point it has been
+                    // found, opened, measured and proved fetchable.
                     //
-                    // Ahead of the sibling case deliberately: a track that reached this point
-                    // without strictness would otherwise be waved through as a quality, and the
-                    // sheet would list the soundtrack as something to download.
-                    target.kind = MediaKind.NONE;
-                    target.verified = false;
-                    accepted = false;
+                    // Ahead of the sibling case deliberately. Reaching that branch would mark it
+                    // PROGRESSIVE and it would sit in the grid claiming to be a picture.
+                    target.kind = MediaKind.AUDIO;
+                    target.verified = true;
+                    target.decoded = true;
+                    if (result.bitrate > 0 && target.bandwidth <= 0) target.bandwidth = result.bitrate;
+                    if (result.durationMs > 0 && item.durationMs <= 0) {
+                        item.durationMs = result.durationMs;
+                    }
+                    accepted = true;
                     holdAudioTrack(item, target);
 
                 } else if (!requireVideo) {
@@ -1177,6 +1182,8 @@ public class MediaRegistry {
 
         int paired = 0;
         for (MediaVariant v : item.variants()) {
+            // The sound track itself is not a silent picture waiting to be fixed.
+            if (!v.kind.visual()) continue;
             // The measured one is proven; its siblings inherit the finding.
             if (v != measured && !v.noAudioTrack && TextUtils.isEmpty(v.audioUrl)) {
                 v.noAudioTrack = true;

@@ -164,7 +164,18 @@ public class HlsDownloader implements DownloadTask {
             // A remux that produced nothing usable is caught here rather than in the gallery.
             DownloadThumbnails.Result finished =
                     new DownloadThumbnails(context).inspect(playable, downloadId);
-            if (!finished.playable()) {
+            // A raw transport stream is exempt from the duration test, and has to be.
+            // MediaMetadataRetriever frequently reports no duration for a bare .ts — there is no
+            // index in the container to read one from — so applying the MP4 test here would
+            // reject the very file the fallback exists to save, turning a working download into
+            // a failed one. Its bytes came off the network intact; that it will not measure is a
+            // property of the container, not evidence of damage.
+            boolean rawStream = "video/mp2ts".equals(d.mime);
+            if (rawStream) {
+                if (playable.length() <= 0) {
+                    throw new IOException("The assembled transport stream is empty");
+                }
+            } else if (!finished.playable()) {
                 throw new IOException("Assembled file is not a playable video");
             }
             if (finished.posterPath != null) d.posterUrl = finished.posterPath;
@@ -221,6 +232,14 @@ public class HlsDownloader implements DownloadTask {
                     HlsHttp.fetchText(d.audioUrl, headers), d.audioUrl);
             if (audio.drmProtected) throw new IOException("Audio stream is DRM protected");
             appendTrack(all, audio, SegmentEntity.TRACK_AUDIO);
+            Log.i(TAG, "Muxing a separate audio rendition: " + audio.segments.size() + " segments");
+        } else {
+            // Not a fault on its own, and it was wrong to warn about it. Most playlists name no
+            // audio group because they do not need one: Dailymotion's renditions advertise
+            // CODECS="mp4a.40.2,avc1.64001f" and ship muxed MPEG-TS, so the sound arrives inside
+            // the segments below. Whether it survives to the finished file is the remuxer's
+            // business, and the remuxer now refuses to write a silent one.
+            Log.i(TAG, "No separate audio rendition; expecting the segments to carry their own");
         }
         return all;
     }
@@ -427,7 +446,11 @@ public class HlsDownloader implements DownloadTask {
                 // usable single file to hand over.
                 throw new IOException("Could not mux audio and video: " + e.getMessage());
             }
-            Log.w(TAG, "Remux failed, keeping the raw transport stream", e);
+            // Keeping the .ts is the right answer, not a consolation. The transport stream is
+            // what was downloaded and it is intact — it is the repackaging into MP4 that failed,
+            // and the commonest reason now is that the repackaged copy would have lost most of
+            // its sound. A .ts that plays with audio beats an .mp4 that does not.
+            Log.w(TAG, "Keeping the raw transport stream: " + e.getMessage(), e);
             d.mime = "video/mp2ts";
             d.fileName = swapExtension(d.fileName, "ts");
             return video;

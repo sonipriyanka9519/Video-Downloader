@@ -1,0 +1,107 @@
+Detection
+
+Network sniffer (NetworkSniffer) — Layer 1. Watches every subresource the WebView fetches, catching media URLs that never appear in the DOM. Also captures the exact request headers, which is what stops the CDN answering 403 when we replay them later.
+
+DOM scanner (DomScanner) — Layer 2. Injects vd_scan.js to walk the page for <video> elements and grab live frames from whatever is playing. Carries the good metadata: poster, title, duration, dimensions.
+
+MSE/fetch hook (vd_hook.js, via DomScanner) — Layer 3. Patches fetch/XHR so platforms that play only through MediaSource still surrender their real media addresses. Without it, sites like Facebook and Instagram look like they have no video at all.
+
+Site extractors (22 files under detect/extract/) — Layer 4. Reads each platform's own JSON to recover the full quality ladder rather than whatever the page happened to fetch. Covers Facebook, Instagram, TikTok, Twitter/X, Reddit, Vimeo, Twitch, Dailymotion, Pinterest, Threads, Snapchat, LinkedIn, Tumblr, VK, Bilibili, Kwai, Likee, ShareChat, Flickr, Fandom, IMDb, plus a generic JSON walker.
+
+Page resolvers (detect/page/) — Asks a platform's public endpoint directly instead of waiting to overhear it. Covers the cases where a site loads everything in one request before our hook is installed — Dailymotion, Fandom, Instagram, Tumblr, Twitch, Twitter.
+
+Site policies (detect/site/) — Per-platform behaviour objects for grouping, identity, whole-file recovery from MSE slices, and the new separate-audio pairing. Keeps one site's quirks out of every other site's path.
+
+Sheet rules (SheetRules, FacebookSheetRules) — Per-platform answers to what the sheet holds and in what order. Replaced a run of if statements in the registry that made every change to one site arrive at all of them.
+
+URL classifier (UrlClassifier) — Decides from an address alone whether something is HLS, DASH, progressive, a segment, or not media. First-pass filter before anything is fetched.
+
+Prober (Prober) — One cheap ranged request per candidate for type, byte size and range support, retrying with relaxed headers when a CDN refuses. Confirms an address is actually fetchable before it reaches the user.
+
+Metadata reader (MetadataReader) — Downloads the first megabyte and decodes it locally for real resolution, duration, a poster frame, and now audio presence. Local decode is preferred over the retriever's own HTTP stack, which blocks until timeout on CDNs it can't handle.
+
+HLS parser/resolver (detect/hls/, HlsResolver) — Expands a master playlist into its renditions and links each to its EXT-X-MEDIA audio group. Detects encryption and DRM rather than downloading garbage.
+
+DASH parser/resolver (detect/dash/, DashResolver) — Reads an MPD, usually inline in the page's own JSON, into a quality ladder plus a separate audio track to mux. Flags segment-template manifests instead of mis-parsing them.
+
+Media registry (MediaRegistry) — The core: folds every layer's sightings into one card per video with a quality ladder, budgets probes and decodes, and drives resolution. One instance per tab, with LRU reclaim at four live tabs.
+
+Download engine
+
+Progressive downloader — Multi-connection byte-range transfer for ordinary files. Per-chunk progress is persisted, so a killed process resumes mid-transfer instead of restarting.
+
+HLS downloader — Fetches segments in parallel with retries, decrypting AES-128 where present, then concatenates and remuxes. Segment-level checkpointing gives the same resume behaviour as byte ranges.
+
+DASH downloader — Fetches a video rendition and its separate audio track, then muxes them into one MP4. Both are pulled before either is used, so a failure on the second never leaves a silent video in the gallery.
+
+Remuxer — Repackages into MP4 with MediaExtractor/MediaMuxer, no re-encoding. Scans ahead for the earliest presentation timestamp so B-frame reordering doesn't produce a file that sits at 0:00.
+
+Download service (DownloadService) — Foreground service owning the queue, routing each job to the right downloader, and handling pause, resume, cancel and retry. Survives the app being backgrounded.
+
+Notifier (DownloadNotifier) — Progress notification while transferring and a completion notification after, on separate channels. Tapping through opens the file.
+
+MediaStore publisher — Moves a finished file from private scratch space into the user's video library in one step. Keeps partial files out of the gallery and needs no storage permission on Q and above.
+
+Download thumbnails — Regenerates the poster from the downloaded file itself once complete, stored in filesDir. A detection-time frame lives in the cache and can be evicted, leaving a blank tile weeks later.
+
+Speeds (DownloadSpeeds) — Live transfer rates held in memory, keyed by download id. Not persisted: it changes every few hundred milliseconds and means nothing after a restart.
+
+Errors (Errors) — Maps transfer failures onto remedies the user can act on. An expired signed URL needs the page reopening, a refused one needs a login, a timeout just needs retrying.
+
+Browser
+
+Browser fragment — Tabbed WebView with the detection pipeline wired in, a FAB showing the detected count, and the home grid of site shortcuts. Pauses the WebView when you leave so audio doesn't keep playing on the Downloads tab.
+
+Media sheet (MediaSheet) — One swipeable page per detected video, opening on whatever is playing. That page's thumbnail is a live frame rather than a static poster, which on a reel feed is often missing or wrong.
+
+Quality picker — Grid of rungs with resolution and size, sized from one duration so the ladder stays internally consistent. Marks protected and unsupported streams honestly rather than failing at download time.
+
+Tabs (ui/tabs/) — Switcher sheet with previews, plus persistence of addresses, titles and thumbnails across runs. WebView session state is deliberately dropped so a restored tab loads fresh.
+
+Search screen (SearchActivity) — A separate screen rather than a dropdown under the address bar. The browser is told nothing until you choose something, so leaving without picking can't change the page.
+
+Search history & suggestions — Recent queries and visited pages, with clipboard-link and current-page suggestions. Clearable in one action.
+
+History sheet — Visited pages grouped under Today / Yesterday / Earlier. Clear-all included.
+
+Shortcuts (ui/home/) — Editable home grid of supported sites with a picker sheet for adding and long-press to remove. Removed sites go back into the Add list rather than disappearing.
+
+Downloads screen
+
+Unified list — Downloading and finished items in one list, with in-flight transfers pinned under a "Downloading" heading above the day sections. Replaced the two-tab split.
+
+Grid / list toggle & sorting — Switch between compact list rows and grid tiles, with newest, oldest, name, largest and smallest orderings. Day headings appear only when sorting by date.
+
+Row menu — Per-item Share, Rename, Property and Delete from a bottom sheet. Property shows name, size, duration, quality, type, date, source and location.
+
+Rename — Renames in MediaStore while preserving the extension, requesting a write grant on API 30+ and retrying after approval. Uses createWriteRequest, not the delete request that previously destroyed the file.
+
+Player
+
+PlayerActivity — Media3/ExoPlayer with rotation lock, aspect ratio modes, playback speed, fullscreen and share. Falls back through a forgiving extractor configuration and decoder fallback when a file is awkward.
+
+Onboarding & guides
+
+Splash — Branded opening screen with the logo, laid out above the gesture bar.
+
+How-to-download walkthrough (HowToActivity) — Four illustrated steps from opening a site to picking a quality. Shows once in the browser after being seen; always available from Downloads.
+
+Per-site guides (ui/guide/) — Facebook, Instagram, Pinterest and X. Tapping a shortcut opens the site and shows the guide as a dialog over the page, with a button to open the site's own app.
+
+Clipboard prompt (ClipboardPrompt) — Offers a copied link on app open, remembering the last eight handled so a declined link is never re-offered. Suppressed when arriving via share, deep link or notification.
+
+Default browser (DefaultBrowser) — Bottom sheet asking to be set as the default, routed through RoleManager on Q+ and the settings screen below it. Dimmed scrim behind, with a quiet period between asks.
+
+Push
+
+FCM (push/) — Handles both data-only and notification payloads carrying a video link. Tapping opens the link in a new tab, and suppresses the clipboard dialog on that entry path.
+
+Infrastructure
+
+Http (core/Http) — Shared OkHttp client plus the header handling that decides whether a CDN answers at all. Includes the relaxed-header retry used across probing, resolving and downloading.
+
+Formats (core/Formats) — Byte sizes, durations, quality labels and host extraction. One place so a ladder never disagrees with itself.
+
+Storage (data/) — Room database for downloads, chunks and segments, plus MediaLibrary wrapping MediaStore reads, deletes and renames. Chunk and segment rows are what make resume possible.
+
+ShimmerView — Hand-rolled loading placeholder, one gradient and one animator, themed. Animation is tied to attachment and visibility so off-screen pager pages don't burn frames.

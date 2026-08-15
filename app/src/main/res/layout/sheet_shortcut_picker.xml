@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_11sdp"
         android:paddingHorizontal="@dimen/_15sdp"
+        android:gravity="center_horizontal"
         android:text="@string/add_shortcut_title"
         android:textColor="@color/on_surface"
         android:textSize="@dimen/_13ssp"

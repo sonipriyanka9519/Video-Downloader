@@ -38,6 +38,22 @@ public final class Thumbnails {
     }
 
     /**
+     * The stand-in for a download with no picture in it.
+     *
+     * <p>A sound track has no frame to decode, and letting it go through the loader gets the
+     * wrong answer rather than none: the poster is the file's own content uri, Glide fails to
+     * find an image in it, and the error drawable puts a <em>video</em> glyph on a music file.
+     *
+     * <p>Centred rather than cropped. The views this lands in are {@code centerCrop} because they
+     * normally hold a photograph, and a 24dp glyph blown up to fill one is a blurred smear.
+     */
+    public static void audio(ImageView view) {
+        clear(view);
+        view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        view.setImageResource(R.drawable.ic_audio);
+    }
+
+    /**
      * @param placeholder shown while the image is being fetched and hidden once it settles,
      *                    either way. Left visible when there is nothing to load yet, because
      *                    that is a preview still on its way rather than one that failed.

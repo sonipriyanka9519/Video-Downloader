@@ -63,6 +63,10 @@ public class MediaVariant {
 
     /** Top line of a quality card: "1080p", or a bitrate when the dimensions are unknown. */
     public String qualityName() {
+        // Named for what it is rather than measured. A sound track has no resolution, and the
+        // bitrate fallback below would label it "51k" — a number that reads as a very bad video
+        // sitting at the bottom of a ladder of good ones.
+        if (kind == MediaKind.AUDIO) return "Audio";
         String q = Formats.quality(width, height);
         if (!q.isEmpty()) return q;
         if (bandwidth > 0) return Math.round(bandwidth / 1000d) + "k";
@@ -107,6 +111,9 @@ public class MediaVariant {
 
     /** Higher is better. Drives the default selection and the order of the quality grid. */
     public int rank() {
+        // Last in the grid whatever its bitrate, because it is not on the same scale as the
+        // others: it is a different thing to download, not a worse version of them.
+        if (kind == MediaKind.AUDIO) return -1;
         int rung = qualityRung();
         if (rung > 0) return rung;
         if (bandwidth > 0) return (int) Math.min(Integer.MAX_VALUE, bandwidth / 5000);

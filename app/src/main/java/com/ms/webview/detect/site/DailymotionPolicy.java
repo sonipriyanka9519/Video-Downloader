@@ -56,4 +56,25 @@ public class DailymotionPolicy implements SitePolicy {
     public boolean strictHintMatch() {
         return false;
     }
+
+    /**
+     * True. Dailymotion splits picture from sound the same way Facebook does, and the same
+     * pairing repairs it.
+     *
+     * <p>Its numbered renditions — "480", "1080" — are video-only media playlists. The audio is
+     * a separate rendition named by an {@code EXT-X-MEDIA} group, and only the adaptive master
+     * declares that group. Where the master is on offer the extractor drops the numbered entries
+     * and everything is well; where the payload ships numbered entries and no master, the only
+     * thing left to download is a picture, and the address of its sound appears nowhere in the
+     * record the extractor can read.
+     *
+     * <p>It does appear on the wire, though — the player fetches it to play the video at all —
+     * so overhearing it is what closes the gap the manifest leaves open. The pairing itself stays
+     * as narrow as it is everywhere else: only a stream measured to be audio-only, only into a
+     * rendition measured to have no sound of its own.
+     */
+    @Override
+    public boolean pairsSeparateAudio() {
+        return true;
+    }
 }

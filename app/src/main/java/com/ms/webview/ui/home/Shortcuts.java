@@ -56,6 +56,8 @@ public final class Shortcuts {
         put("imdb", "IMDb", "https://www.imdb.com", R.drawable.brand_imdb);
         put("kwai", "Kwai", "https://www.kwai.com", R.drawable.brand_kwai);
         put("likee", "Likee", "https://likee.video", R.drawable.brand_likee);
+        put("fandom", "Fandom", "https://www.fandom.com", R.drawable.brand_fandom);
+        put("flickr", "Flickr", "https://www.flickr.com", R.drawable.brand_flickr);
         put("google", "Google", "https://www.google.com", R.drawable.brand_google);
     }
 

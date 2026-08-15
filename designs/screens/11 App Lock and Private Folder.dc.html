@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:max-content">
+
+<div style="width:1160px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="height:22px;padding:0 9px;border-radius:6px;background:#211B1A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;letter-spacing:.04em">SCREEN 11</div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">App lock and private folder</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;max-width:900px;text-wrap:pretty">One credential protects both the app and the private folder — no separate PIN, no decoy modes. Everything private is signposted with an ink wash so the user always knows which side of the line they are on.</div>
+<div style="font:400 12px/1.55 Roboto,sans-serif;color:#9C8F8A;max-width:900px;text-wrap:pretty">Assumptions: biometric prompt is the system sheet, drawn here as the app's own copy behind it. Private items are absent from MediaStore, so they never appear in the gallery, widget, notifications or Recent Downloads.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:28px;align-items:flex-start;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · CHOOSE A METHOD</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:20</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>71%</div></div></div>
+<div style="height:56px;padding:0 8px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">arrow_back</span></div>
+<div style="flex:1;font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">App lock</div>
+</div>
+
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="padding:16px;background:#FFFFFF;border:1.5px solid #D93A3A;border-radius:12px;display:flex;gap:14px;align-items:flex-start">
+<div style="width:44px;height:44px;border-radius:12px;background:#FBE3E1;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:24px;color:#D93A3A">fingerprint</span></div>
+<div style="flex:1;min-width:0">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font:600 16px/1.3 Roboto,sans-serif;color:#211B1A">Fingerprint or face</div><div style="height:20px;padding:0 8px;border-radius:999px;background:#FBE3E1;display:flex;align-items:center;font:500 11px/1 Roboto,sans-serif;color:#D93A3A">Recommended</div></div>
+<div style="font:400 13px/1.45 Roboto,sans-serif;color:#6B605D;margin-top:5px;text-wrap:pretty">Unlocks with whatever your phone already uses.</div>
+</div>
+</div>
+<div style="padding:16px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;gap:14px;align-items:flex-start">
+<div style="width:44px;height:44px;border-radius:12px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:24px;color:#6B605D">dialpad</span></div>
+<div style="flex:1;min-width:0">
+<div style="font:600 16px/1.3 Roboto,sans-serif;color:#211B1A">4-digit PIN</div>
+<div style="font:400 13px/1.45 Roboto,sans-serif;color:#6B605D;margin-top:5px;text-wrap:pretty">Works on any phone, and backs up the fingerprint.</div>
+</div>
+</div>
+<div style="font:400 13px/1.5 Roboto,sans-serif;color:#9C8F8A;padding:2px 2px 0;text-wrap:pretty">App lock protects the whole app when it opens, and is the only key to the private folder.</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="padding:16px;flex:none"><div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff">Continue</div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · CREATE PIN</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:21</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>71%</div></div></div>
+<div style="height:56px;padding:0 8px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">arrow_back</span></div>
+<div style="flex:1;font:400 13px/1.2 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">Step 1 of 3</div>
+</div>
+
+<div style="padding:22px 16px 0;display:flex;flex-direction:column;align-items:center;gap:10px">
+<div style="font:700 22px/1.3 Roboto,sans-serif;color:#211B1A">Create a PIN</div>
+<div style="font:400 13px/1.5 Roboto,sans-serif;color:#6B605D;text-align:center;max-width:250px;text-wrap:pretty">Four digits. You'll confirm it, then pick a recovery question.</div>
+<div style="display:flex;gap:16px;margin-top:16px">
+<div style="width:14px;height:14px;border-radius:999px;background:#D93A3A"></div>
+<div style="width:14px;height:14px;border-radius:999px;background:#D93A3A"></div>
+<div style="width:14px;height:14px;border-radius:999px;background:#E7DDDA"></div>
+<div style="width:14px;height:14px;border-radius:999px;background:#E7DDDA"></div>
+</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="padding:0 32px 34px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px 24px;justify-items:center;flex:none">
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">1</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">2</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">3</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">4</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">5</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">6</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">7</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">8</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">9</div>
+<div style="width:64px;height:64px"></div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">0</div>
+<div style="width:64px;height:64px;border-radius:999px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:24px;color:#6B605D">backspace</span></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">C · LOCK SCREEN ON OPEN</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>17:22</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>71%</div></div></div>
+
+<div style="padding:92px 32px 0;display:flex;flex-direction:column;align-items:center;gap:14px">
+<div style="width:72px;height:72px;border-radius:20px;background:#E05F5C;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:38px;color:#171212">download</span></div>
+<div style="font:600 18px/1.3 Roboto,sans-serif;color:#F0E8E5;text-align:center">Unlock Video Downloader</div>
+<div style="font:400 13px/1.5 Roboto,sans-serif;color:#B3A6A1;text-align:center;max-width:240px;text-wrap:pretty">Touch the sensor, or enter your PIN below.</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;margin-top:6px"><span class="ms msf" style="font-size:32px;color:#E05F5C">fingerprint</span></div>
+<div style="display:flex;gap:16px;margin-top:14px">
+<div style="width:14px;height:14px;border-radius:999px;background:#362D2B"></div>
+<div style="width:14px;height:14px;border-radius:999px;background:#362D2B"></div>
+<div style="width:14px;height:14px;border-radius:999px;background:#362D2B"></div>
+<div style="width:14px;height:14px;border-radius:999px;background:#362D2B"></div>
+</div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C;margin-top:16px">Forgot PIN?</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="padding:0 32px 34px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;justify-items:center;flex:none">
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">1</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">2</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">3</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">4</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">5</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">6</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">7</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">8</div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">9</div>
+<div style="width:60px;height:60px"></div>
+<div style="width:60px;height:60px;border-radius:999px;background:#2A2322;display:flex;align-items:center;justify-content:center;font:400 23px/1 Roboto,sans-serif;color:#F0E8E5">0</div>
+<div style="width:60px;height:60px;border-radius:999px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#B3A6A1">backspace</span></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">D · PRIVATE FOLDER INTRO</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column"><div style="height:24px"></div><div style="height:56px;padding:0 16px;display:flex;align-items:center;gap:12px"><span class="ms" style="font-size:23px;color:#211B1A">arrow_back</span><div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Settings</div></div><div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:20px"><div style="height:40px;border-radius:8px;background:#F2ECEA"></div><div style="height:40px;border-radius:8px;background:#F2ECEA"></div><div style="height:40px;border-radius:8px;background:#F2ECEA"></div></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>
+
+<div style="position:relative;background:#FFFFFF;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(33,27,26,.22);padding:8px 20px 20px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding-bottom:14px"><div style="width:32px;height:4px;border-radius:2px;background:#9C8F8A"></div></div>
+<div style="display:flex;justify-content:center;padding-bottom:14px"><div style="width:88px;height:88px;border-radius:24px;background:#FBE3E1;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:44px;color:#D93A3A">shield_lock</span></div></div>
+<div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A;text-align:center">Private folder</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+<div style="display:flex;gap:12px;align-items:flex-start"><span class="ms msf" style="font-size:19px;color:#2E7D4F;flex:none">check_circle</span><div style="font:400 14px/1.45 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Hidden from your phone's gallery</div></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span class="ms msf" style="font-size:19px;color:#2E7D4F;flex:none">check_circle</span><div style="font:400 14px/1.45 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Only visible after you unlock</div></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span class="ms msf" style="font-size:19px;color:#2E7D4F;flex:none">check_circle</span><div style="font:400 14px/1.45 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Never shown in Downloads or notifications</div></div>
+</div>
+<div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff;margin-top:22px">Turn on</div>
+<div style="font:400 12.5px/1.5 Roboto,sans-serif;color:#9C8F8A;text-align:center;margin-top:12px;text-wrap:pretty">Uses the same fingerprint or PIN as app lock.</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showPrivateLibrary }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">E · PRIVATE LIBRARY</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light app theme</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;background:#211B1A;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>17:24</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>70%</div></div></div>
+<div style="background:#211B1A;padding:0 8px 12px 6px;flex:none">
+<div style="height:56px;display:flex;align-items:center;gap:8px">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#F0E8E5">arrow_back</span></div>
+<div style="flex:1;display:flex;align-items:center;gap:8px"><span class="ms msf" style="font-size:20px;color:#F0E8E5">lock</span><div style="font:700 20px/1.2 Roboto,sans-serif;color:#F0E8E5">Private</div></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#F0E8E5">more_vert</span></div>
+</div>
+<div style="padding:0 10px;font:400 12.5px/1.4 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">4 videos · 128 MB · hidden from your gallery</div>
+</div>
+
+<div style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding-top:8px">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">1:04</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Saved clip 4</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">31.4 MB • 720p • 1:04</div></div>
+<div style="width:32px;height:48px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(200deg,#F2ECEA,#E7DDDA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:36</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Saved clip 3</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">12.8 MB • 480p • 0:36</div></div>
+<div style="width:32px;height:48px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(120deg,#E7DDDA,#F2ECEA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">2:11</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Saved clip 2</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">58.2 MB • 1080p • 2:11</div></div>
+<div style="width:32px;height:48px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#6B605D">more_vert</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px">
+<div style="position:relative;width:96px;height:54px;border-radius:8px;background:linear-gradient(160deg,#F2ECEA,#E7DDDA);flex:none;overflow:hidden"><div style="position:absolute;left:6px;bottom:5px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.7);font:400 10px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:19</div></div>
+<div style="flex:1;min-width:0"><div style="font:400 15px/1.35 Roboto,sans-serif;color:#211B1A">Saved clip 1</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">25.6 MB • 720p • 0:19</div></div>
+<div style="width:32px;height:48px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#6B605D">more_vert</span></div>
+</div>
+</div></sc-if>
+
+
+<div style="padding:0 16px 14px;flex:none"><div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;background:#211B1A;border-radius:12px"><div style="font:400 13.5px/1.35 Roboto,sans-serif;color:#F0E8E5">Moved to Private</div><div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C;flex:none">Undo</div></div></div>
+
+<div style="display:flex;background:#FFFFFF;border-top:1px solid #E7DDDA;flex:none">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:22px;color:#9C8F8A">home</span><div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#D93A3A">download</span><div style="font:500 11px/1 Roboto,sans-serif;color:#D93A3A">Downloads</div></div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showMismatchPanel }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">F · PIN MISMATCH</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>17:21</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>71%</div></div></div>
+<div style="height:56px;padding:0 8px 0 6px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">arrow_back</span></div>
+<div style="flex:1;font:400 13px/1.2 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">Step 2 of 3</div>
+</div>
+
+<div style="padding:22px 16px 0;display:flex;flex-direction:column;align-items:center;gap:10px">
+<div style="font:700 22px/1.3 Roboto,sans-serif;color:#211B1A">Confirm your PIN</div>
+<div style="font:400 13px/1.5 Roboto,sans-serif;color:#C62828;text-align:center;max-width:250px;text-wrap:pretty">Those didn't match. Try again.</div>
+<div style="display:flex;gap:16px;margin-top:16px">
+<div style="width:14px;height:14px;border-radius:999px;border:2px solid #C62828;box-sizing:border-box"></div>
+<div style="width:14px;height:14px;border-radius:999px;border:2px solid #C62828;box-sizing:border-box"></div>
+<div style="width:14px;height:14px;border-radius:999px;border:2px solid #C62828;box-sizing:border-box"></div>
+<div style="width:14px;height:14px;border-radius:999px;border:2px solid #C62828;box-sizing:border-box"></div>
+</div>
+</div></sc-if>
+
+
+<div style="flex:1"></div>
+<div style="padding:0 32px 34px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px 24px;justify-items:center;flex:none">
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">1</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">2</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">3</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">4</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">5</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">6</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">7</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">8</div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">9</div>
+<div style="width:64px;height:64px"></div>
+<div style="width:64px;height:64px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;font:400 24px/1 Roboto,sans-serif;color:#211B1A">0</div>
+<div style="width:64px;height:64px;border-radius:999px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:24px;color:#6B605D">backspace</span></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div style="width:1160px;display:flex;gap:20px;align-items:flex-start">
+<div style="flex:1;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:9px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DESIGN NOTES</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• Biometric is preselected and badged Recommended; PIN is always set up too, because a fingerprint can fail.</div>
+<div>• Keypad keys are 64dp circles in the bottom 40% of the screen — reachable one-handed, far from the back arrow.</div>
+<div>• Mismatch turns the dots to outlines in <b>error</b> with one plain sentence, plus a shake. No lockout copy at four digits.</div>
+<div>• A recovery question is set as step 3 of PIN setup, and <b>Forgot PIN?</b> on the lock screen answers it — the only route back in, and it never unlocks by email.</div>
+<div>• Private mode is signposted by an ink header wash and a lock glyph, so there's no doubt which library you're in.</div>
+<div>• Moving items is reversible: a snackbar with Undo, never a confirm dialog — nothing was destroyed.</div>
+</div>
+</div>
+<div style="width:300px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DECIDED · TO DRAW</div>
+<div style="font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Recovery is a <b>security question</b>, set as step 3 of PIN setup and answered from <b>Forgot PIN?</b>. The question-picker and answer screens still need drawing — say the word and I'll add them here.</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A">Next: Screen 12 — history sheet.</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showPrivateLibrary&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;},&quot;showMismatchPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;}}"></script>
+</body>
+</html>

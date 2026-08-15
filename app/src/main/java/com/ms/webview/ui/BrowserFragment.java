@@ -619,6 +619,11 @@ public class BrowserFragment extends Fragment
         // hiding only the grid would leave it floating over whatever page comes next.
         homePanel.setVisibility(View.VISIBLE);
         addressBar.setText("");
+        // The bar measures a page load, and there is no page here. It was only ever cleared by
+        // the load finishing, so leaving a still-loading page — which is exactly what backing
+        // out of one is — stranded it above the shortcut grid, filling up for a page nobody was
+        // looking at any more.
+        pageProgress.setVisibility(View.GONE);
         hideKeyboard();
         updateFab();
         refreshHowTo();
@@ -641,6 +646,12 @@ public class BrowserFragment extends Fragment
             // the page in view, while loadedUrl is only refreshed once the load finishes.
             String showing = webView.getUrl();
             addressBar.setText(TextUtils.isEmpty(showing) ? loadedUrl : showing);
+            // Hidden on the way out, so it has to be asked for again on the way back. The
+            // WebView knows where it got to; onProgressChanged only fires on the next step, and
+            // a page that finished loading while the grid was up would never fire again at all.
+            int progress = webView.getProgress();
+            pageProgress.setProgress(progress);
+            pageProgress.setVisibility(progress >= 100 ? View.GONE : View.VISIBLE);
         }
         updateFab();
     }
@@ -771,8 +782,12 @@ public class BrowserFragment extends Fragment
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 // A real navigation invalidates everything found on the previous page.
                 registry.startPage(url);
-                addressBar.setText(url);
-                pageProgress.setVisibility(View.VISIBLE);
+                // Both only while the page is the thing on screen — see onProgressChanged. A
+                // page left mid-load carries on loading, and redirects land here as fresh starts.
+                if (browsing) {
+                    addressBar.setText(url);
+                    pageProgress.setVisibility(View.VISIBLE);
+                }
                 hideKeyboard();
             }
 
@@ -797,7 +812,10 @@ public class BrowserFragment extends Fragment
             public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
                 // SPA route changes land here without a page load.
                 registry.updatePageUrl(url);
-                addressBar.setText(url);
+                // Only while the page is on screen. A feed rewrites its address on every scroll
+                // and goes on doing so after the grid is up, so this is the call that refilled a
+                // bar showHome had just cleared — and it names a page the user has left.
+                if (browsing) addressBar.setText(url);
                 domScanner.scanNow(view);
                 registry.resolvePage(url);
                 maybeReloadForRoute(url);
@@ -808,7 +826,13 @@ public class BrowserFragment extends Fragment
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 pageProgress.setProgress(newProgress);
-                pageProgress.setVisibility(newProgress >= 100 ? View.GONE : View.VISIBLE);
+                // Leaving the page does not stop it loading, so these keep arriving after the
+                // grid is up — and each one put the bar back, which is why hiding it on the way
+                // out was not enough on its own. The scan below still runs: detection is meant
+                // to carry on in the background, it is only the bar that has no business here.
+                if (browsing) {
+                    pageProgress.setVisibility(newProgress >= 100 ? View.GONE : View.VISIBLE);
+                }
                 if (newProgress >= 70) domScanner.scanNow(view);
             }
 

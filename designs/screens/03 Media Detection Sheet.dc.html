@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:max-content">
+
+<div style="width:1160px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="height:22px;padding:0 9px;border-radius:6px;background:#211B1A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;letter-spacing:.04em">SCREEN 03</div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Media detection sheet</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;max-width:900px;text-wrap:pretty">The money screen. One glance, one tap for the single-video case; a pager when a page has several; a checklist only when the user asks for it. Opens over the page at 40% scrim — the page never navigates, and the sheet dismisses straight back to it.</div>
+<div style="font:400 12px/1.55 Roboto,sans-serif;color:#9C8F8A;max-width:900px;text-wrap:pretty">Assumptions: thumbnails are placeholders standing in for the live frame the detector grabs. No codec or bitrate on cards — that detail lives in Properties after download. Default selection is the highest rung ≤720p unless the user changed "Default quality" in Settings.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:28px;align-items:flex-start;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · DEFAULT VIEW · 3 DETECTED</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:#FFFFFF">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:38px 0 0"><div style="padding:0 14px;display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:6px;background:#E7DDDA"></div><div style="width:96px;height:14px;border-radius:4px;background:#E7DDDA"></div></div><div style="padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="height:120px;border-radius:12px;background:#F2ECEA"></div><div style="height:150px;border-radius:12px;background:#F2ECEA"></div></div><div style="width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#E7DDDA,#F2ECEA)"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>
+
+<div style="position:relative;background:#FFFFFF;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(33,27,26,.22);padding:8px 16px 20px;display:flex;flex-direction:column;gap:0">
+<div style="display:flex;justify-content:center;padding-bottom:12px"><div style="width:32px;height:4px;border-radius:2px;background:#9C8F8A"></div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A">3 videos detected</div><div style="display:flex;align-items:center;gap:6px"><span class="ms msf" style="font-size:18px;color:#9C8F8A">arrow_left</span><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">1 / 3</div><span class="ms msf" style="font-size:18px;color:#211B1A">arrow_right</span></div></div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden;margin-top:14px;display:flex;align-items:center;justify-content:center">
+<div style="font:400 11px/1.4 Roboto,sans-serif;color:#9C8F8A">live frame (placeholder)</div>
+<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:22px;color:#211B1A">play_arrow</span></div>
+<div style="position:absolute;right:8px;bottom:8px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:06</div>
+</div>
+<div style="font:600 18px/1.35 Roboto,sans-serif;color:#211B1A;margin-top:12px">Jersey outfit ideas — 32 pins</div>
+<div style="font:400 13px/1.4 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">0:06 · 3 qualities · pinterest.com</div>
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D;margin-top:20px">QUALITY</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">1080p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">1.1 MB</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#FBE3E1;border:1.5px solid #D93A3A;text-align:center;position:relative;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">720p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">648 KB</div><div style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:999px;background:#D93A3A;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:12px;color:#fff">check</span></div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;flex:none"><span class="ms msf" style="font-size:17px;color:#211B1A">music_note</span><div style="font:600 13px/1.3 Roboto,sans-serif;color:#211B1A">Audio</div><div style="font:400 12px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">96 KB</div></div>
+</div>
+<div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff;margin-top:24px;font-variant-numeric:tabular-nums">Download • 648 KB</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · DEFAULT VIEW · 3 DETECTED</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:#FFFFFF">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:38px 0 0"><div style="padding:0 14px;display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:6px;background:#E7DDDA"></div><div style="width:96px;height:14px;border-radius:4px;background:#E7DDDA"></div></div><div style="padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="height:120px;border-radius:12px;background:#F2ECEA"></div><div style="height:150px;border-radius:12px;background:#F2ECEA"></div></div><div style="width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#E7DDDA,#F2ECEA)"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.55)"></div>
+
+<div style="position:relative;background:#201A19;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.6);padding:8px 16px 20px;display:flex;flex-direction:column;gap:0">
+<div style="display:flex;justify-content:center;padding-bottom:12px"><div style="width:32px;height:4px;border-radius:2px;background:#7D716C"></div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#F0E8E5">3 videos detected</div><div style="display:flex;align-items:center;gap:6px"><span class="ms msf" style="font-size:18px;color:#7D716C">arrow_left</span><div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">1 / 3</div><span class="ms msf" style="font-size:18px;color:#F0E8E5">arrow_right</span></div></div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#2A2322,#362D2B);border:1px solid #362D2B;overflow:hidden;margin-top:14px;display:flex;align-items:center;justify-content:center">
+<div style="font:400 11px/1.4 Roboto,sans-serif;color:#7D716C">live frame (placeholder)</div>
+<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:999px;background:rgba(240,232,229,.55);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:22px;color:#171212">play_arrow</span></div>
+<div style="position:absolute;right:8px;bottom:8px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.5 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">0:06</div>
+</div>
+<div style="font:600 18px/1.35 Roboto,sans-serif;color:#F0E8E5;margin-top:12px">Jersey outfit ideas — 32 pins</div>
+<div style="font:400 13px/1.4 Roboto,sans-serif;color:#B3A6A1;margin-top:3px;font-variant-numeric:tabular-nums">0:06 · 3 qualities · pinterest.com</div>
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1;margin-top:20px">QUALITY</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#2A2322;text-align:center;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#F0E8E5">1080p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">1.1 MB</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#3E2422;border:1.5px solid #E05F5C;text-align:center;position:relative;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#F0E8E5">720p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">648 KB</div><div style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:999px;background:#E05F5C;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:12px;color:#171212">check</span></div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#2A2322;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;flex:none"><span class="ms msf" style="font-size:17px;color:#F0E8E5">music_note</span><div style="font:600 13px/1.3 Roboto,sans-serif;color:#F0E8E5">Audio</div><div style="font:400 12px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">96 KB</div></div>
+</div>
+<div style="height:52px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#171212;margin-top:24px;font-variant-numeric:tabular-nums">Download • 648 KB</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · 4 DETECTED · PAGER</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:#FFFFFF">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:38px 0 0"><div style="padding:0 14px;display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:999px;background:#E7DDDA"></div><div style="width:78px;height:13px;border-radius:4px;background:#E7DDDA"></div></div><div style="width:100%;aspect-ratio:1;background:linear-gradient(135deg,#E7DDDA,#F2ECEA)"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>
+
+<div style="position:relative;background:#FFFFFF;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(33,27,26,.22);padding:8px 0 20px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding-bottom:12px"><div style="width:32px;height:4px;border-radius:2px;background:#9C8F8A"></div></div>
+<div style="padding:0 16px;display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A">4 videos detected</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">2 / 4</div></div>
+
+<div style="display:flex;gap:10px;padding:14px 16px 0;overflow:hidden">
+<div style="width:34px;flex:none;border-radius:12px;background:#F2ECEA;aspect-ratio:auto;margin-left:-24px"></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden;display:flex;align-items:center;justify-content:center">
+<div style="font:400 11px/1.4 Roboto,sans-serif;color:#9C8F8A">live frame (placeholder)</div>
+<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:22px;color:#211B1A">play_arrow</span></div>
+<div style="position:absolute;right:8px;bottom:8px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:41</div>
+</div>
+</div>
+<div style="width:34px;flex:none;border-radius:12px;background:#F2ECEA;margin-right:-24px"></div>
+</div>
+
+<div style="padding:12px 16px 0"><div style="font:600 18px/1.35 Roboto,sans-serif;color:#211B1A">Amber Wallin is live — soundcheck and setup</div><div style="font:400 13px/1.4 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">0:41 · 4 qualities · facebook.com</div></div>
+
+<div style="padding:20px 16px 0;font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">QUALITY</div>
+<div style="display:flex;gap:8px;padding:10px 16px 0;overflow:hidden">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">1080p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">38.2 MB</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#FBE3E1;border:1.5px solid #D93A3A;text-align:center;position:relative;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">720p</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">17.6 MB</div><div style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:999px;background:#D93A3A;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:12px;color:#fff">check</span></div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;flex:none"><div style="font:600 15px/1.3 Roboto,sans-serif;color:#211B1A">480p</div><div style="display:flex;justify-content:center;gap:3px;padding-top:6px"><div style="width:4px;height:4px;border-radius:999px;background:#9C8F8A"></div><div style="width:4px;height:4px;border-radius:999px;background:#C9BEBA"></div><div style="width:4px;height:4px;border-radius:999px;background:#E7DDDA"></div></div></div>
+</div>
+
+<div style="padding:22px 16px 0;display:flex;justify-content:center"><div style="font:500 14px/1 Roboto,sans-serif;color:#D93A3A">Download all 4…</div></div>
+<div style="padding:14px 16px 0"><div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">Download • 17.6 MB</div></div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showSelectMode }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">C · SELECT MODE</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:#FFFFFF">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:38px 0 0"><div style="padding:0 14px;display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:999px;background:#E7DDDA"></div><div style="width:78px;height:13px;border-radius:4px;background:#E7DDDA"></div></div><div style="width:100%;aspect-ratio:1;background:linear-gradient(135deg,#E7DDDA,#F2ECEA)"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>
+
+<div style="position:relative;background:#FFFFFF;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(33,27,26,.22);padding:8px 0 20px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding-bottom:12px"><div style="width:32px;height:4px;border-radius:2px;background:#9C8F8A"></div></div>
+<div style="padding:0 16px;display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A">4 videos detected</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">3 of 4 selected</div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px 4px"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #9C8F8A;box-sizing:border-box;flex:none"></div><div style="flex:1;font:500 14px/1.3 Roboto,sans-serif;color:#211B1A">Select all 4</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">96.0 MB</div></div>
+
+<div style="display:flex;gap:8px;padding:14px 16px 0;overflow:hidden">
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#FBE3E1;display:flex;align-items:center;font:500 13px/1 Roboto,sans-serif;color:#D93A3A;flex:none">Best ≤720p</div>
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#211B1A;flex:none">Best</div>
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#211B1A;flex:none">Smallest</div>
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#211B1A;flex:none">Audio</div>
+</div>
+
+<div style="display:flex;flex-direction:column;padding-top:6px">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Warm-up drills, full session</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">720p · 24.1 MB</div></div><div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#FBE3E1"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Amber Wallin is live — soundcheck</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">720p · 17.6 MB</div></div><div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Balcony rain, thirty seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">720p · 4.0 MB</div></div><div style="width:22px;height:22px;border-radius:6px;background:#D93A3A;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#fff">check</span></div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roadside repair in ninety seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">480p · 50.3 MB</div></div><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #9C8F8A;flex:none"></div></div>
+</div>
+
+<div style="padding:16px 16px 0"><div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">Download 3 • 45.7 MB</div></div>
+<div style="padding:12px 16px 0;display:flex;justify-content:center"><div style="font:500 14px/1 Roboto,sans-serif;color:#6B605D">Cancel</div></div>
+</div>
+</div>
+</div></sc-if>
+
+
+<sc-if value="{{ showSelectMode }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">C · SELECT MODE</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:#FFFFFF">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:38px 0 0"><div style="padding:0 14px;display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:999px;background:#E7DDDA"></div><div style="width:78px;height:13px;border-radius:4px;background:#E7DDDA"></div></div><div style="width:100%;aspect-ratio:1;background:linear-gradient(135deg,#E7DDDA,#F2ECEA)"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.55)"></div>
+
+<div style="position:relative;background:#201A19;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.6);padding:8px 0 20px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding-bottom:12px"><div style="width:32px;height:4px;border-radius:2px;background:#7D716C"></div></div>
+<div style="padding:0 16px;display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#F0E8E5">4 videos detected</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">3 of 4 selected</div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px 4px"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #7D716C;box-sizing:border-box;flex:none"></div><div style="flex:1;font:500 14px/1.3 Roboto,sans-serif;color:#F0E8E5">Select all 4</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">96.0 MB</div></div>
+
+<div style="display:flex;gap:8px;padding:14px 16px 0;overflow:hidden">
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#3E2422;display:flex;align-items:center;font:500 13px/1 Roboto,sans-serif;color:#E05F5C;flex:none">Best ≤720p</div>
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#2A2322;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5;flex:none">Best</div>
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#2A2322;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5;flex:none">Smallest</div>
+<div style="height:32px;padding:0 13px;border-radius:999px;background:#2A2322;display:flex;align-items:center;font:400 13px/1 Roboto,sans-serif;color:#F0E8E5;flex:none">Audio</div>
+</div>
+
+<div style="display:flex;flex-direction:column;padding-top:6px">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#2A2322,#362D2B);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Warm-up drills, full session</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">720p · 24.1 MB</div></div><div style="width:22px;height:22px;border-radius:6px;background:#E05F5C;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#171212">check</span></div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:#3E2422"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#2A2322,#362D2B);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Amber Wallin is live — soundcheck</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">720p · 17.6 MB</div></div><div style="width:22px;height:22px;border-radius:6px;background:#E05F5C;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#171212">check</span></div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#2A2322,#362D2B);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Balcony rain, thirty seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">720p · 4.0 MB</div></div><div style="width:22px;height:22px;border-radius:6px;background:#E05F5C;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms msf" style="font-size:15px;color:#171212">check</span></div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 16px"><div style="width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#2A2322,#362D2B);flex:none"></div><div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roadside repair in ninety seconds</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">480p · 50.3 MB</div></div><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #7D716C;flex:none"></div></div>
+</div>
+
+<div style="padding:16px 16px 0"><div style="height:52px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;justify-content:center;font:600 15px/1 Roboto,sans-serif;color:#171212;font-variant-numeric:tabular-nums">Download 3 • 45.7 MB</div></div>
+<div style="padding:12px 16px 0;display:flex;justify-content:center"><div style="font:500 14px/1 Roboto,sans-serif;color:#B3A6A1">Cancel</div></div>
+</div>
+</div>
+</div></sc-if>
+
+
+<sc-if value="{{ showProtected }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">D · PROTECTED &amp; IN-FLIGHT</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:#FFFFFF">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:38px 0 0"><div style="padding:0 14px;display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:6px;background:#E7DDDA"></div><div style="width:110px;height:14px;border-radius:4px;background:#E7DDDA"></div></div><div style="width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#E7DDDA,#F2ECEA)"></div></div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>
+
+<div style="position:relative;background:#FFFFFF;border-radius:20px 20px 0 0;box-shadow:0 -6px 24px rgba(33,27,26,.22);padding:8px 16px 20px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:center;padding-bottom:12px"><div style="width:32px;height:4px;border-radius:2px;background:#9C8F8A"></div></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 18px/1.3 Roboto,sans-serif;color:#211B1A">2 videos detected</div><div style="font:400 13px/1.3 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">1 / 2</div></div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden;margin-top:14px;display:flex;align-items:center;justify-content:center">
+<div style="font:400 11px/1.4 Roboto,sans-serif;color:#9C8F8A">live frame (placeholder)</div>
+<div style="position:absolute;left:8px;top:8px;width:26px;height:26px;border-radius:999px;border:2.5px solid rgba(255,255,255,.55);border-top-color:#D93A3A"></div>
+<div style="position:absolute;right:8px;bottom:8px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.5 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">1:13</div>
+</div>
+<div style="font:600 18px/1.35 Roboto,sans-serif;color:#211B1A;margin-top:12px">Episode 4 — full stream</div>
+<div style="font:400 13px/1.4 Roboto,sans-serif;color:#6B605D;margin-top:3px;font-variant-numeric:tabular-nums">1:13 · 3 qualities · vimeo.com</div>
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D;margin-top:20px">QUALITY</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;opacity:.55"><span class="ms" style="font-size:17px;color:#9C8F8A">lock</span><div style="font:600 14px/1.2 Roboto,sans-serif;color:#9C8F8A">1080p</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;opacity:.55"><span class="ms" style="font-size:17px;color:#9C8F8A">lock</span><div style="font:600 14px/1.2 Roboto,sans-serif;color:#9C8F8A">720p</div></div>
+<div style="width:100px;padding:11px 0;border-radius:12px;background:#F2ECEA;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;opacity:.55"><span class="ms" style="font-size:17px;color:#9C8F8A">lock</span><div style="font:600 14px/1.2 Roboto,sans-serif;color:#9C8F8A">Audio</div></div>
+</div>
+<div style="display:flex;gap:9px;align-items:flex-start;margin-top:22px;padding:13px 14px;background:#F2ECEA;border-radius:12px"><span class="ms" style="font-size:19px;color:#6B605D;flex:none">shield</span><div style="font:400 13px/1.45 Roboto,sans-serif;color:#6B605D;text-wrap:pretty">This video is protected and can't be downloaded.</div></div>
+
+<div style="height:1px;background:#E7DDDA;margin:22px 0 0"></div>
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D;margin-top:18px">ALREADY QUEUED FROM THIS PAGE</div>
+<div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+<div style="position:relative;width:72px;height:40px;border-radius:8px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:22px;height:22px;border-radius:999px;border:2.5px solid rgba(255,255,255,.7);border-top-color:#D93A3A"></div></div>
+<div style="flex:1;min-width:0"><div style="font:400 14px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Episode 3 — full stream</div><div style="font:400 12.5px/1.3 Roboto,sans-serif;color:#9C8F8A">Downloading…</div></div>
+</div>
+</div>
+</div>
+</div></sc-if>
+
+
+</div>
+
+<div style="width:1160px;display:flex;gap:20px;align-items:flex-start">
+<div style="flex:1;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:9px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DESIGN NOTES</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• Pager arrows sit either side of the page indicator in the header — left dimmed on the first card. They appear only when more than one video is detected; swipe still works, the arrows just make it discoverable.</div>
+<div>• One tap does everything: the primary button carries the live size, queues the job, dismisses the sheet and leaves a snackbar with <b>View</b>.</div>
+<div>• Select mode is hidden until asked for — a centred "Download all 4…" text button, never a second red button competing with Download.</div>
+<div>• In select mode one shared chip row sets quality for every item, so the user makes one decision instead of four.</div>
+<div>• Sizes still probing show a three-dot shimmer in place of the size and never block selection — the rung stays tappable.</div>
+<div>• Locked rungs are honest: grey, lock glyph, not selectable. When every rung is locked the primary button is replaced by a plain shield notice.</div>
+<div>• Reopening the sheet shows anything already queued from this page with a progress ring and "Downloading…", so nothing gets queued twice.</div>
+</div>
+</div>
+<div style="width:300px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">AFTER THE TAP</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;background:#211B1A;border-radius:12px"><div style="font:400 13.5px/1.35 Roboto,sans-serif;color:#F0E8E5">Added to downloads</div><div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C;flex:none">View</div></div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A;text-wrap:pretty">Sheet slides away, page stays exactly where it was, FAB flashes a checkmark for 600ms. Next: Screen 04 — search / address.</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showSelectMode&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;},&quot;showProtected&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;}}"></script>
+</body>
+</html>

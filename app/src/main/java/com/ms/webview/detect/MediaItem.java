@@ -164,6 +164,12 @@ public class MediaItem {
     public synchronized List<MediaVariant> variants() {
         Map<Integer, MediaVariant> byRung = new LinkedHashMap<>();
         List<MediaVariant> unkeyed = new ArrayList<>();
+        // Kept out of the ladder's reckoning entirely. It has no rung, so it would fall into
+        // unkeyed and be weighed against the video rungs as a nameless duplicate of one of them
+        // — and preferProgressive, which drops everything that is not a plain file, would drop
+        // it outright on the platforms that have one. It is not a rung; it is the other thing
+        // this video can be downloaded as.
+        MediaVariant audio = null;
 
         // Where the platform asks for it, a real file wins outright over the ladder beside it:
         // one fetch, no segments to stitch, nothing to remux. Only applied when such a file is
@@ -172,6 +178,11 @@ public class MediaItem {
 
         for (MediaVariant v : variants) {
             if (v.hidden || v.kind == MediaKind.NONE) continue;
+            if (v.kind == MediaKind.AUDIO) {
+                // The largest, on the rare payload naming more than one.
+                if (audio == null || v.sizeBytes > audio.sizeBytes) audio = v;
+                continue;
+            }
             if (fileOnly && v.kind != MediaKind.PROGRESSIVE) continue;
             // Keyed by rung rather than raw height, so 720x1274 and 720x1254 are recognised as
             // two encodes of one quality instead of two qualities with contradictory sizes.
@@ -187,6 +198,9 @@ public class MediaItem {
         List<MediaVariant> result = new ArrayList<>(byRung.values());
         result.addAll(filterUnkeyed(unkeyed, byRung.values()));
         Collections.sort(result, (a, b) -> Integer.compare(b.rank(), a.rank()));
+        // After the sort, so it is last however the rungs shuffle. Its rank already says last;
+        // appending as well means the order does not depend on that agreeing.
+        if (audio != null) result.add(audio);
         return result;
     }
 
@@ -211,6 +225,13 @@ public class MediaItem {
 
         List<MediaVariant> kept = new ArrayList<>(all.size());
         for (MediaVariant v : all) {
+            // Always kept: it is named "Audio", so neither rule below applies to it. Both exist
+            // to drop tiles that say nothing useful next to a real rung, and this one says
+            // exactly what it is.
+            if (v.kind == MediaKind.AUDIO) {
+                kept.add(v);
+                continue;
+            }
             if (v.qualityRung() == THROWAWAY_RUNG) continue;
             if (isUnlabelled(v)) continue;
             kept.add(v);
@@ -352,7 +373,10 @@ public class MediaItem {
         MediaVariant anyFile = null;
         MediaVariant anything = null;
         for (MediaVariant v : variants()) {
-            if (!v.kind.downloadable()) continue;
+            // Only ever what the user asks for, never what they land on. This picks the tile the
+            // sheet opens with, and opening on the sound track would mean the download button
+            // silently offers audio for a video someone came to save.
+            if (!v.kind.visual()) continue;
             if (anything == null) anything = v;
             boolean isFile = v.kind == MediaKind.PROGRESSIVE;
             if (isFile && anyFile == null) anyFile = v;
@@ -369,7 +393,10 @@ public class MediaItem {
 
     public synchronized boolean hasVerifiedVariant() {
         for (MediaVariant v : variants) {
-            if (!v.hidden && v.verified && v.kind.downloadable()) return true;
+            // Visual, not merely downloadable. This is what decides whether the card appears at
+            // all, and a sound track on its own is not a video to show — it earns its tile by
+            // sitting beside one, never by standing in for one.
+            if (!v.hidden && v.verified && v.kind.visual()) return true;
         }
         return false;
     }

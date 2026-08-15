@@ -36,6 +36,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.extractor.DefaultExtractorsFactory;
 import androidx.media3.extractor.mp4.FragmentedMp4Extractor;
 import androidx.media3.extractor.mp4.Mp4Extractor;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.media3.ui.AspectRatioFrameLayout;
 import androidx.media3.ui.PlayerView;
 
@@ -108,6 +109,17 @@ public class PlayerActivity extends AppCompatActivity {
         //        and the player view sits above the navigation bar / gesture bar.
         toolbar    = findViewById(R.id.toolbar);
         playerView = findViewById(R.id.playerView);
+
+        // What to show when the file turns out to have no picture in it. PlayerView raises this
+        // by itself the moment the tracks come back without a video one, so nothing here has to
+        // know in advance whether it was handed a video or a sound track — which matters, since
+        // it is opened from a content uri and from share intents alike.
+        //
+        // Its own mechanism rather than a view laid over the top: the surface underneath is a
+        // SurfaceView, and anything placed behind it is painted over.
+        playerView.setDefaultArtwork(
+                AppCompatResources.getDrawable(this, R.drawable.art_audio));
+        playerView.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
 
         applyWindowInsets();
 

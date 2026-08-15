@@ -196,12 +196,22 @@ public class DownloadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         h.title.setText(d.title);
         h.status.setText(statusLine(ctx, d));
 
-        // Same headers the media was captured with: CDN posters 403 a bare image request.
-        Thumbnails.load(h.thumb, d.posterUrl, d.headers());
+        boolean audio = d.kind == MediaKind.AUDIO;
+        if (audio) {
+            Thumbnails.audio(h.thumb);
+        } else {
+            // Rows are recycled, and the audio glyph leaves the view centred. Put the crop back
+            // before loading, or the first video to reuse an audio row's view is letterboxed.
+            h.thumb.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            // Same headers the media was captured with: CDN posters 403 a bare image request.
+            Thumbnails.load(h.thumb, d.posterUrl, d.headers());
+        }
 
         // A play badge, a running time and a play glyph beside the size all say the same thing —
-        // that this is a file you can watch — so all three appear together or not at all.
-        h.playBadge.setVisibility(done ? View.VISIBLE : View.GONE);
+        // that this is a file you can watch — so all three appear together or not at all. The
+        // badge is dropped for sound: it is drawn over a preview to say the still is really a
+        // video, and there is no still here for it to qualify.
+        h.playBadge.setVisibility(done && !audio ? View.VISIBLE : View.GONE);
         h.statusIcon.setVisibility(done ? View.VISIBLE : View.GONE);
 
         boolean hasDuration = done && d.durationMs > 0;

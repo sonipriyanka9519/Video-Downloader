@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:max-content">
+
+<div style="width:1160px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="height:22px;padding:0 9px;border-radius:6px;background:#211B1A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;letter-spacing:.04em">SCREEN 01</div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Home — browser start page</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;max-width:900px;text-wrap:pretty">The front door: launch a site, resume watching, jump back into recent activity. Every content row is conditional — a new install sees only the toolbar and the shortcut grid, so Home stays as light as the MVP. No FAB here: there is nothing to detect on Home.</div>
+<div style="font:400 12px/1.55 Roboto,sans-serif;color:#9C8F8A;max-width:900px;text-wrap:pretty">Assumptions: 360dp screen at 1dp = 1px. Site tiles are <b>placeholders</b> — official brand marks drop in later at the same 56dp rounded-square. Thumbnails are placeholder frames. Status bar is the OS, drawn only for context.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:28px;align-items:flex-start;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · RETURNING USER</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;position:relative">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>16:35</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>78%</div></div></div>
+
+<div style="height:56px;padding:0 8px 0 4px;display:flex;align-items:center;gap:6px;flex:none">
+<div style="display:flex;align-items:center;gap:4px;flex:none"><div style="width:32px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:23px;color:#211B1A">home</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#211B1A">chevron_left</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#9C8F8A">chevron_right</span></div></div>
+<div style="flex:1;height:40px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;gap:8px;padding:0 14px;min-width:0"><span class="ms" style="font-size:19px;color:#9C8F8A;flex:none">search</span><div style="font:400 14px/1 Roboto,sans-serif;color:#9C8F8A;white-space:nowrap;overflow:hidden">Search or paste link</div></div>
+<div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #6B605D;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#211B1A;flex:none">4</div>
+<div style="width:28px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#211B1A">more_vert</span></div>
+</div>
+
+<sc-if value="{{ showPasteHelper }}" hint-placeholder-val="{{ true }}"><div style="margin:0 16px 16px;padding:9px 10px 9px 12px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;align-items:center;gap:10px">
+<div style="width:20px;height:20px;border-radius:5px;background:#F2ECEA;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:13px;color:#6B605D">link</span></div>
+<div style="flex:1;font:400 13.5px/1.3 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Link copied — open it?</div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#D93A3A;flex:none">Open</div>
+<span class="ms" style="font-size:18px;color:#9C8F8A;flex:none">close</span>
+</div></sc-if>
+
+<div style="padding:0 16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">SITES</div><div style="font:500 13px/1 Roboto,sans-serif;color:#6B605D">Edit</div></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Ig</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Instagram</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Fb</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Facebook</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">X</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">X</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Pi</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Pinterest</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Rd</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Reddit</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Th</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Threads</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Dm</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Dailymotion</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:999px;border:1.5px dashed #9C8F8A;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:24px;color:#6B605D">add</span></div><div style="font:400 12px/1 Roboto,sans-serif;color:#6B605D">Add</div></div>
+</div>
+</div>
+
+<div style="padding:24px 0 0;display:flex;flex-direction:column;gap:10px">
+<div style="padding:0 16px;display:flex;align-items:center;justify-content:space-between"><div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">RECENT DOWNLOADS</div><div style="font:500 13px/1 Roboto,sans-serif;color:#D93A3A">See all</div></div>
+<div style="display:flex;gap:10px;padding:0 16px;overflow:hidden">
+<div style="width:148px;flex:none;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;width:148px;height:83px;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.5)"><div style="width:34%;height:3px;background:#D93A3A"></div></div></div>
+<div style="font:400 13px/1.35 Roboto,sans-serif;color:#211B1A">Jersey outfit ideas</div>
+<div style="font:400 12px/1 Roboto,sans-serif;color:#D93A3A">Downloading…</div>
+</div>
+<div style="width:148px;flex:none;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;width:148px;height:83px;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden"><div style="position:absolute;left:8px;bottom:7px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.4 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:43</div></div>
+<div style="font:400 13px/1.35 Roboto,sans-serif;color:#211B1A;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">Roadside repair in ninety seconds</div>
+</div>
+<div style="width:148px;flex:none;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;width:148px;height:83px;border-radius:12px;background:linear-gradient(135deg,#E7DDDA,#F2ECEA);border:1px solid #E7DDDA;overflow:hidden"><div style="position:absolute;left:8px;bottom:7px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.4 Roboto,sans-serif;color:#fff;font-variant-numeric:tabular-nums">0:07</div></div>
+<div style="font:400 13px/1.35 Roboto,sans-serif;color:#211B1A">Balcony rain</div>
+</div>
+</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="display:flex;background:#FFFFFF;border-top:1px solid #E7DDDA;flex:none">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#D93A3A">home</span><div style="font:500 11px/1 Roboto,sans-serif;color:#D93A3A">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><div style="position:relative"><span class="ms" style="font-size:22px;color:#9C8F8A">download</span><div style="position:absolute;top:-3px;right:-9px;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:#D93A3A;color:#fff;font:500 10px/15px Roboto,sans-serif;text-align:center">1</div></div><div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Downloads</div></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · RETURNING USER</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;position:relative">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>16:35</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>78%</div></div></div>
+
+<div style="height:56px;padding:0 8px 0 4px;display:flex;align-items:center;gap:6px;flex:none">
+<div style="display:flex;align-items:center;gap:4px;flex:none"><div style="width:32px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:23px;color:#F0E8E5">home</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#F0E8E5">chevron_left</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#7D716C">chevron_right</span></div></div>
+<div style="flex:1;height:40px;border-radius:999px;background:#2A2322;display:flex;align-items:center;gap:8px;padding:0 14px;min-width:0"><span class="ms" style="font-size:19px;color:#7D716C;flex:none">search</span><div style="font:400 14px/1 Roboto,sans-serif;color:#7D716C;white-space:nowrap;overflow:hidden">Search or paste link</div></div>
+<div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #B3A6A1;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#F0E8E5;flex:none">4</div>
+<div style="width:28px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#F0E8E5">more_vert</span></div>
+</div>
+
+<sc-if value="{{ showPasteHelper }}" hint-placeholder-val="{{ true }}"><div style="margin:0 16px 16px;padding:9px 10px 9px 12px;background:#201A19;border:1px solid #362D2B;border-radius:12px;display:flex;align-items:center;gap:10px">
+<div style="width:20px;height:20px;border-radius:5px;background:#2A2322;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:13px;color:#B3A6A1">link</span></div>
+<div style="flex:1;font:400 13.5px/1.3 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Link copied — open it?</div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C;flex:none">Open</div>
+<span class="ms" style="font-size:18px;color:#7D716C;flex:none">close</span>
+</div></sc-if>
+
+<div style="padding:0 16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">SITES</div><div style="font:500 13px/1 Roboto,sans-serif;color:#B3A6A1">Edit</div></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Ig</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Instagram</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Fb</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Facebook</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">X</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">X</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Pi</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Pinterest</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Rd</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Reddit</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Th</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Threads</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Dm</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Dailymotion</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:999px;border:1.5px dashed #7D716C;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:24px;color:#B3A6A1">add</span></div><div style="font:400 12px/1 Roboto,sans-serif;color:#B3A6A1">Add</div></div>
+</div>
+</div>
+
+<div style="padding:24px 0 0;display:flex;flex-direction:column;gap:10px">
+<div style="padding:0 16px;display:flex;align-items:center;justify-content:space-between"><div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">RECENT DOWNLOADS</div><div style="font:500 13px/1 Roboto,sans-serif;color:#E05F5C">See all</div></div>
+<div style="display:flex;gap:10px;padding:0 16px;overflow:hidden">
+<div style="width:148px;flex:none;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;width:148px;height:83px;border-radius:12px;background:linear-gradient(135deg,#2A2322,#362D2B);border:1px solid #362D2B;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.22)"><div style="width:34%;height:3px;background:#E05F5C"></div></div></div>
+<div style="font:400 13px/1.35 Roboto,sans-serif;color:#F0E8E5">Jersey outfit ideas</div>
+<div style="font:400 12px/1 Roboto,sans-serif;color:#E05F5C">Downloading…</div>
+</div>
+<div style="width:148px;flex:none;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;width:148px;height:83px;border-radius:12px;background:linear-gradient(135deg,#2A2322,#362D2B);border:1px solid #362D2B;overflow:hidden"><div style="position:absolute;left:8px;bottom:7px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.4 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">0:43</div></div>
+<div style="font:400 13px/1.35 Roboto,sans-serif;color:#F0E8E5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">Roadside repair in ninety seconds</div>
+</div>
+<div style="width:148px;flex:none;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;width:148px;height:83px;border-radius:12px;background:linear-gradient(135deg,#2A2322,#362D2B);border:1px solid #362D2B;overflow:hidden"><div style="position:absolute;left:8px;bottom:7px;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.7);font:400 11px/1.4 Roboto,sans-serif;color:#F0E8E5;font-variant-numeric:tabular-nums">0:07</div></div>
+<div style="font:400 13px/1.35 Roboto,sans-serif;color:#F0E8E5">Balcony rain</div>
+</div>
+</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="display:flex;background:#201A19;border-top:1px solid #362D2B;flex:none">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#E05F5C">home</span><div style="font:500 11px/1 Roboto,sans-serif;color:#E05F5C">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><div style="position:relative"><span class="ms" style="font-size:22px;color:#7D716C">download</span><div style="position:absolute;top:-3px;right:-9px;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:#E05F5C;color:#171212;font:500 10px/15px Roboto,sans-serif;text-align:center">1</div></div><div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Downloads</div></div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showFirstRun }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · FIRST RUN</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>16:35</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>78%</div></div></div>
+
+<div style="height:56px;padding:0 8px 0 4px;display:flex;align-items:center;gap:6px;flex:none">
+<div style="display:flex;align-items:center;gap:4px;flex:none"><div style="width:32px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:23px;color:#211B1A">home</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#211B1A">chevron_left</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#9C8F8A">chevron_right</span></div></div>
+<div style="flex:1;height:40px;border-radius:999px;background:#F2ECEA;display:flex;align-items:center;gap:8px;padding:0 14px;min-width:0"><span class="ms" style="font-size:19px;color:#9C8F8A;flex:none">search</span><div style="font:400 14px/1 Roboto,sans-serif;color:#9C8F8A;white-space:nowrap;overflow:hidden">Search or paste link</div></div>
+<div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #6B605D;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#211B1A;flex:none">1</div>
+<div style="width:28px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#211B1A">more_vert</span></div>
+</div>
+
+<div style="padding:16px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">SITES</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Ig</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Instagram</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Fb</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Facebook</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">X</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">X</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Pi</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Pinterest</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Rd</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Reddit</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Th</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Threads</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#F2ECEA;border:1px solid #E7DDDA;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#6B605D">Dm</div><div style="font:400 12px/1 Roboto,sans-serif;color:#211B1A">Dailymotion</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:999px;border:1.5px dashed #9C8F8A;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:24px;color:#6B605D">add</span></div><div style="font:400 12px/1 Roboto,sans-serif;color:#6B605D">Add</div></div>
+</div>
+</div>
+
+<div style="margin:28px 16px 0;padding:18px 16px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+<div style="width:64px;height:64px;border-radius:16px;background:#FBE3E1;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:32px;color:#D93A3A">touch_app</span></div>
+<div style="font:400 14px/1.45 Roboto,sans-serif;color:#211B1A;max-width:250px;text-wrap:pretty">Tap a site and play any video — we'll detect it for download.</div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#D93A3A">How it works</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="display:flex;background:#FFFFFF;border-top:1px solid #E7DDDA;flex:none">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#D93A3A">home</span><div style="font:500 11px/1 Roboto,sans-serif;color:#D93A3A">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:22px;color:#9C8F8A">download</span><div style="font:400 11px/1 Roboto,sans-serif;color:#9C8F8A">Downloads</div></div>
+</div>
+</div>
+</div></sc-if>
+
+<sc-if value="{{ showFirstRun }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · FIRST RUN</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>16:35</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>78%</div></div></div>
+
+<div style="height:56px;padding:0 8px 0 4px;display:flex;align-items:center;gap:6px;flex:none">
+<div style="display:flex;align-items:center;gap:4px;flex:none"><div style="width:32px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:23px;color:#F0E8E5">home</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#F0E8E5">chevron_left</span></div><div style="width:26px;height:40px;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:23px;color:#7D716C">chevron_right</span></div></div>
+<div style="flex:1;height:40px;border-radius:999px;background:#2A2322;display:flex;align-items:center;gap:8px;padding:0 14px;min-width:0"><span class="ms" style="font-size:19px;color:#7D716C;flex:none">search</span><div style="font:400 14px/1 Roboto,sans-serif;color:#7D716C;white-space:nowrap;overflow:hidden">Search or paste link</div></div>
+<div style="width:32px;height:32px;border-radius:8px;border:1.5px solid #B3A6A1;display:flex;align-items:center;justify-content:center;font:500 13px/1 Roboto,sans-serif;color:#F0E8E5;flex:none">1</div>
+<div style="width:28px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#F0E8E5">more_vert</span></div>
+</div>
+
+<div style="padding:16px 16px 0;display:flex;flex-direction:column;gap:12px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#B3A6A1">SITES</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Ig</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Instagram</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Fb</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Facebook</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">X</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">X</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Pi</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Pinterest</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Rd</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Reddit</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Th</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Threads</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:12px;background:#2A2322;border:1px solid #362D2B;display:flex;align-items:center;justify-content:center;font:600 20px/1 Roboto,sans-serif;color:#B3A6A1">Dm</div><div style="font:400 12px/1 Roboto,sans-serif;color:#F0E8E5">Dailymotion</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;border-radius:999px;border:1.5px dashed #7D716C;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:24px;color:#B3A6A1">add</span></div><div style="font:400 12px/1 Roboto,sans-serif;color:#B3A6A1">Add</div></div>
+</div>
+</div>
+
+<div style="margin:28px 16px 0;padding:18px 16px;background:#201A19;border:1px solid #362D2B;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+<div style="width:64px;height:64px;border-radius:16px;background:#3E2422;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:32px;color:#E05F5C">touch_app</span></div>
+<div style="font:400 14px/1.45 Roboto,sans-serif;color:#F0E8E5;max-width:250px;text-wrap:pretty">Tap a site and play any video — we'll detect it for download.</div>
+<div style="font:600 13.5px/1 Roboto,sans-serif;color:#E05F5C">How it works</div>
+</div>
+
+<div style="flex:1"></div>
+<div style="display:flex;background:#201A19;border-top:1px solid #362D2B;flex:none">
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms msf" style="font-size:22px;color:#E05F5C">home</span><div style="font:500 11px/1 Roboto,sans-serif;color:#E05F5C">Home</div></div>
+<div style="flex:1;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><span class="ms" style="font-size:22px;color:#7D716C">download</span><div style="font:400 11px/1 Roboto,sans-serif;color:#7D716C">Downloads</div></div>
+</div>
+</div>
+</div></sc-if>
+
+</div>
+
+<div style="width:1160px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:9px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DESIGN NOTES</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• The address pill is the whole touch target and the only way into search — one obvious entry, no dropdown under the toolbar.</div>
+<div>• Paste-link helper is a single line, never a dialog on Home, and never re-offered once dismissed.</div>
+<div>• Recent Downloads is the only content row: it appears when a download exists, never as a skeleton — Home renders instantly or shows less.</div>
+<div>• A downloading item lives in Recent Downloads with an accent bar and "Downloading…", so Home reflects live state without a second nav badge story.</div>
+<div>• Private-tab content never appears in Recent Downloads.</div>
+<div>• First run is deliberately near-identical to today's MVP: grid plus one hint card, no rows, no FAB.</div>
+</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A;padding-top:2px">Toolbar now matches the MVP: home, back, forward (forward faint when there is no forward history), then the address pill, tab counter and overflow. Open questions: (1) Edit mode — a fifth panel here, or its own screen with the Add-a-site sheet? (2) Real site marks: send the icon set and I'll swap the placeholders.</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showFirstRun&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;},&quot;showPasteHelper&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;}}"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"><style>body{margin:0;background:#e8e2e0;font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#D93A3A}a:hover{color:#b32e2e}.ms{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr}.msf{font-variation-settings:'FILL' 1}</style></helmet>
+
+<div style="padding:36px 40px 56px;display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:max-content">
+
+<div style="width:1160px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="height:22px;padding:0 9px;border-radius:6px;background:#211B1A;display:flex;align-items:center;font:600 11px/1 Roboto,sans-serif;color:#fff;letter-spacing:.04em">SCREEN 05</div>
+<div style="font:700 22px/1.2 Roboto,sans-serif;color:#211B1A">Tab switcher, including private</div>
+</div>
+<div style="font:400 13px/1.55 Roboto,sans-serif;color:#6B605D;max-width:900px;text-wrap:pretty">Switch, open and close tabs — nothing more. Full-screen slide-up over the active tab, one primary action at the bottom, and a segmented control that only exists once a private tab has been opened this session.</div>
+<div style="font:400 12px/1.55 Roboto,sans-serif;color:#9C8F8A;max-width:900px;text-wrap:pretty">Assumptions: page previews are placeholders for cached snapshots. No tab groups, no drag reorder. Older tabs beyond four live WebViews reload on tap — invisible here, since a tab never looks dead.</div>
+</div>
+
+<div style="display:flex;flex-wrap:nowrap;gap:28px;align-items:flex-start;width:max-content">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · TABS</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>16:56</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>75%</div></div></div>
+<div style="height:56px;padding:0 8px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">close</span></div>
+<div style="flex:1;font:700 20px/1.2 Roboto,sans-serif;color:#211B1A">Tabs <span style="font:400 15px/1.2 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">4</span></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#211B1A">more_vert</span></div>
+</div>
+
+<div style="padding:4px 16px 0"><div style="display:flex;gap:4px;padding:4px;background:#F2ECEA;border-radius:999px">
+<div style="flex:1;height:36px;border-radius:999px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font:500 14px/1 Roboto,sans-serif;color:#211B1A">Tabs</div>
+<div style="flex:1;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;font:400 14px/1 Roboto,sans-serif;color:#6B605D"><span class="ms" style="font-size:17px">visibility_off</span>Private</div>
+</div></div>
+
+<div style="flex:1;overflow:hidden;padding:16px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start">
+<div style="border:2px solid #D93A3A;border-radius:12px;overflow:hidden;background:#FFFFFF;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#FFFFFF;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#E7DDDA;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Jersey outfit ideas</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#6B605D">close</span></div></div>
+<div style="flex:1;background:linear-gradient(160deg,#E7DDDA,#F2ECEA)"></div>
+</div>
+<div style="border:1px solid #E7DDDA;border-radius:12px;overflow:hidden;background:#FFFFFF;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#FFFFFF;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#E7DDDA;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Instagram</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#6B605D">close</span></div></div>
+<div style="flex:1;background:linear-gradient(160deg,#F2ECEA,#E7DDDA)"></div>
+</div>
+<div style="border:1px solid #E7DDDA;border-radius:12px;overflow:hidden;background:#FFFFFF;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#FFFFFF;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#E7DDDA;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">r/videos</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#6B605D">close</span></div></div>
+<div style="flex:1;background:linear-gradient(200deg,#E7DDDA,#F2ECEA)"></div>
+</div>
+<div style="border:1px solid #E7DDDA;border-radius:12px;overflow:hidden;background:#FFFFFF;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#FFFFFF;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#E7DDDA;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">New tab</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#6B605D">close</span></div></div>
+<div style="flex:1;background:#FAF7F6;display:flex;align-items:center;justify-content:center"><div style="width:28px;height:28px;border-radius:8px;background:#FBE3E1;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:17px;color:#D93A3A">download</span></div></div>
+</div>
+</div>
+
+<div style="padding:16px;flex:none"><div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 Roboto,sans-serif;color:#fff"><span class="ms" style="font-size:20px">add</span>New tab</div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">A · TABS</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">dark</div></div>
+<div style="width:360px;height:812px;background:#171212;border:1px solid #362D2B;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>16:56</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>75%</div></div></div>
+<div style="height:56px;padding:0 8px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#F0E8E5">close</span></div>
+<div style="flex:1;font:700 20px/1.2 Roboto,sans-serif;color:#F0E8E5">Tabs <span style="font:400 15px/1.2 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">4</span></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#F0E8E5">more_vert</span></div>
+</div>
+
+<div style="padding:4px 16px 0"><div style="display:flex;gap:4px;padding:4px;background:#2A2322;border-radius:999px">
+<div style="flex:1;height:36px;border-radius:999px;background:#201A19;display:flex;align-items:center;justify-content:center;font:500 14px/1 Roboto,sans-serif;color:#F0E8E5">Tabs</div>
+<div style="flex:1;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;font:400 14px/1 Roboto,sans-serif;color:#B3A6A1"><span class="ms" style="font-size:17px">visibility_off</span>Private</div>
+</div></div>
+
+<div style="flex:1;overflow:hidden;padding:16px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start">
+<div style="border:2px solid #E05F5C;border-radius:12px;overflow:hidden;background:#201A19;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#201A19;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#362D2B;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Jersey outfit ideas</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#B3A6A1">close</span></div></div>
+<div style="flex:1;background:linear-gradient(160deg,#2A2322,#362D2B)"></div>
+</div>
+<div style="border:1px solid #362D2B;border-radius:12px;overflow:hidden;background:#201A19;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#201A19;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#362D2B;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Instagram</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#B3A6A1">close</span></div></div>
+<div style="flex:1;background:linear-gradient(160deg,#362D2B,#2A2322)"></div>
+</div>
+<div style="border:1px solid #362D2B;border-radius:12px;overflow:hidden;background:#201A19;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#201A19;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#362D2B;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">r/videos</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#B3A6A1">close</span></div></div>
+<div style="flex:1;background:linear-gradient(200deg,#2A2322,#362D2B)"></div>
+</div>
+<div style="border:1px solid #362D2B;border-radius:12px;overflow:hidden;background:#201A19;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#201A19;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#362D2B;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">New tab</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#B3A6A1">close</span></div></div>
+<div style="flex:1;background:#171212;display:flex;align-items:center;justify-content:center"><div style="width:28px;height:28px;border-radius:8px;background:#3E2422;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:17px;color:#E05F5C">download</span></div></div>
+</div>
+</div>
+
+<div style="padding:16px;flex:none"><div style="height:52px;border-radius:12px;background:#E05F5C;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 Roboto,sans-serif;color:#171212"><span class="ms" style="font-size:20px">add</span>New tab</div></div>
+</div>
+</div>
+
+<sc-if value="{{ showPrivateSegment }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">B · PRIVATE SEGMENT</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light app theme</div></div>
+<div style="width:360px;height:812px;background:#2C2422;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums"><div>16:57</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>75%</div></div></div>
+<div style="height:56px;padding:0 8px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#F0E8E5">close</span></div>
+<div style="flex:1;font:700 20px/1.2 Roboto,sans-serif;color:#F0E8E5;display:flex;align-items:center;gap:7px"><span class="ms msf" style="font-size:20px;color:#F0E8E5">visibility_off</span>Private <span style="font:400 15px/1.2 Roboto,sans-serif;color:#B3A6A1;font-variant-numeric:tabular-nums">2</span></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#F0E8E5">more_vert</span></div>
+</div>
+
+<div style="padding:4px 16px 0"><div style="display:flex;gap:4px;padding:4px;background:#1C1615;border-radius:999px">
+<div style="flex:1;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;font:400 14px/1 Roboto,sans-serif;color:#B3A6A1">Tabs</div>
+<div style="flex:1;height:36px;border-radius:999px;background:#F0E8E5;display:flex;align-items:center;justify-content:center;gap:6px;font:500 14px/1 Roboto,sans-serif;color:#211B1A"><span class="ms msf" style="font-size:17px">visibility_off</span>Private</div>
+</div></div>
+
+<div style="flex:1;overflow:hidden;padding:16px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start">
+<div style="border:2px solid #F0E8E5;border-radius:12px;overflow:hidden;background:#211B1A;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;flex:none"><span class="ms" style="font-size:14px;color:#B3A6A1;flex:none">visibility_off</span><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Private 1</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#B3A6A1">close</span></div></div>
+<div style="flex:1;background:linear-gradient(160deg,#3A2F2D,#2A2322)"></div>
+</div>
+<div style="border:1px solid #4A3E3B;border-radius:12px;overflow:hidden;background:#211B1A;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;flex:none"><span class="ms" style="font-size:14px;color:#B3A6A1;flex:none">visibility_off</span><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#F0E8E5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Private 2</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#B3A6A1">close</span></div></div>
+<div style="flex:1;background:linear-gradient(200deg,#3A2F2D,#2A2322)"></div>
+</div>
+</div></sc-if>
+
+
+<div style="padding:0 24px 14px;font:400 13px/1.5 Roboto,sans-serif;color:#B3A6A1;text-align:center;text-wrap:pretty;flex:none">Private tabs and their history vanish when closed</div>
+<div style="padding:0 16px 16px;flex:none"><div style="height:52px;border-radius:12px;background:#F0E8E5;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 Roboto,sans-serif;color:#211B1A"><span class="ms" style="font-size:20px">add</span>New private tab</div></div>
+</div>
+</div>
+
+<sc-if value="{{ showSingleTabPanel }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 12px/1 Roboto,sans-serif;letter-spacing:.06em;color:#211B1A">C · ONE TAB · NO PRIVATE YET</div><div style="font:400 11.5px/1 Roboto,sans-serif;color:#6B605D">light</div></div>
+<div style="width:360px;height:812px;background:#FAF7F6;border:1px solid #E7DDDA;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+<div style="height:24px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 10.5px/1 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums"><div>16:58</div><div style="display:flex;gap:5px;align-items:center"><span class="ms" style="font-size:12px">wifi</span><span class="ms" style="font-size:12px">battery_full</span><div>75%</div></div></div>
+<div style="height:56px;padding:0 8px;display:flex;align-items:center;gap:8px;flex:none">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:23px;color:#211B1A">close</span></div>
+<div style="flex:1;font:700 20px/1.2 Roboto,sans-serif;color:#211B1A">Tabs <span style="font:400 15px/1.2 Roboto,sans-serif;color:#6B605D;font-variant-numeric:tabular-nums">1</span></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:22px;color:#211B1A">more_vert</span></div>
+</div>
+
+<div style="flex:1;overflow:hidden;padding:16px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start">
+<div style="border:2px solid #D93A3A;border-radius:12px;overflow:hidden;background:#FFFFFF;display:flex;flex-direction:column;height:216px">
+<div style="height:32px;padding:0 6px 0 8px;display:flex;align-items:center;gap:6px;background:#FFFFFF;flex:none"><div style="width:16px;height:16px;border-radius:4px;background:#E7DDDA;flex:none"></div><div style="flex:1;font:400 12px/1.2 Roboto,sans-serif;color:#211B1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">New tab</div><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms" style="font-size:16px;color:#6B605D">close</span></div></div>
+<div style="flex:1;background:#FAF7F6;display:flex;align-items:center;justify-content:center"><div style="width:28px;height:28px;border-radius:8px;background:#FBE3E1;display:flex;align-items:center;justify-content:center"><span class="ms msf" style="font-size:17px;color:#D93A3A">download</span></div></div>
+</div>
+</div></sc-if>
+
+
+<div style="padding:16px;flex:none"><div style="height:52px;border-radius:12px;background:#D93A3A;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 Roboto,sans-serif;color:#fff"><span class="ms" style="font-size:20px">add</span>New tab</div></div>
+</div>
+</div>
+
+</div>
+
+<div style="width:1160px;display:flex;gap:20px;align-items:flex-start">
+<div style="flex:1;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:9px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DESIGN NOTES</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A">
+<div>• Segmented control is absent until a private tab has been opened this session — panel C is what a new user sees.</div>
+<div>• Active tab carries a 2dp accent border; in the private segment it borders in <b>ink</b>, since accent would read as "downloading".</div>
+<div>• Closing: X on the card or a sideways swipe, both reversible through a snackbar Undo. Close all tabs lives in the overflow, behind a confirm.</div>
+<div>• Private grid sits on an ink-tinted wash so the mode is unmistakable even mid-scroll, and its primary button is ink, not accent.</div>
+<div>• Private cards are labelled Private 1, 2, 3 — enough to tell them apart, with no page title or favicon, so nothing identifying survives on screen or on disk.</div>
+<div>• One primary action per screen: New tab. Everything else is an icon or a row.</div>
+</div>
+</div>
+<div style="width:300px;padding:16px 18px;background:#FFFFFF;border:1px solid #E7DDDA;border-radius:12px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 12px/1 Roboto,sans-serif;letter-spacing:.08em;color:#6B605D">DECIDED</div>
+<div style="font:400 12.5px/1.5 Roboto,sans-serif;color:#211B1A;text-wrap:pretty">Private cards use numbered labels — <b>Private 1, 2, 3</b> — so a user can tell them apart without any page title or favicon being written to screen or disk.</div>
+<div style="font:400 12px/1.5 Roboto,sans-serif;color:#9C8F8A">Next: Screen 06 — Downloads library.</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showPrivateSegment&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;},&quot;showSingleTabPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;States&quot;}}"></script>
+</body>
+</html>

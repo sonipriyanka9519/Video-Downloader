@@ -41,23 +41,43 @@ public class MediaStorePublisher {
 
     /** @return the published location, as a content uri string or an absolute path. */
     public String publish(File source, String displayName, String mime) throws IOException {
-        if (mime == null || mime.isEmpty()) mime = "video/mp4";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return publishToMediaStore(source, displayName, mime);
-        }
-        return publishLegacy(source, displayName);
+        return publish(source, displayName, mime, false);
     }
 
-    private String publishToMediaStore(File source, String displayName, String mime) throws IOException {
-        ContentResolver resolver = context.getContentResolver();
-        Uri collection = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+    /**
+     * @param audio whether this is a sound track rather than a video, which decides both the
+     *              collection it joins and the folder it lands in. Passed rather than read off
+     *              {@code mime}, because the platforms that serve sound as its own stream label
+     *              it {@code video/mp4} — believing them files music into the gallery, where it
+     *              shows as a video that will not play.
+     * @return the published location, as a content uri string or an absolute path.
+     */
+    public String publish(File source, String displayName, String mime, boolean audio)
+            throws IOException {
+        if (audio && (mime == null || !mime.startsWith("audio/"))) mime = "audio/mp4";
+        if (mime == null || mime.isEmpty()) mime = "video/mp4";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return publishToMediaStore(source, displayName, mime, audio);
+        }
+        return publishLegacy(source, displayName, audio);
+    }
 
+    private String publishToMediaStore(File source, String displayName, String mime, boolean audio)
+            throws IOException {
+        ContentResolver resolver = context.getContentResolver();
+        Uri collection = audio
+                ? MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                : MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+
+        // The column names are the same strings on both collections — DISPLAY_NAME is
+        // MediaColumns either way — so one set of values serves both.
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Video.Media.DISPLAY_NAME, displayName);
-        values.put(MediaStore.Video.Media.MIME_TYPE, mime);
-        values.put(MediaStore.Video.Media.RELATIVE_PATH,
-                Environment.DIRECTORY_MOVIES + File.separator + ALBUM);
-        values.put(MediaStore.Video.Media.IS_PENDING, 1);
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
+        values.put(MediaStore.MediaColumns.MIME_TYPE, mime);
+        values.put(MediaStore.MediaColumns.RELATIVE_PATH,
+                (audio ? Environment.DIRECTORY_MUSIC : Environment.DIRECTORY_MOVIES)
+                        + File.separator + ALBUM);
+        values.put(MediaStore.MediaColumns.IS_PENDING, 1);
 
         Uri item = resolver.insert(collection, values);
         if (item == null) throw new IOException("MediaStore rejected the insert");
@@ -72,7 +92,7 @@ public class MediaStorePublisher {
         }
 
         values.clear();
-        values.put(MediaStore.Video.Media.IS_PENDING, 0);
+        values.put(MediaStore.MediaColumns.IS_PENDING, 0);
         resolver.update(item, values, null, null);
 
         //noinspection ResultOfMethodCallIgnored
@@ -80,9 +100,9 @@ public class MediaStorePublisher {
         return item.toString();
     }
 
-    private String publishLegacy(File source, String displayName) throws IOException {
-        File dir = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), ALBUM);
+    private String publishLegacy(File source, String displayName, boolean audio) throws IOException {
+        File dir = new File(Environment.getExternalStoragePublicDirectory(
+                audio ? Environment.DIRECTORY_MUSIC : Environment.DIRECTORY_MOVIES), ALBUM);
         if (!dir.exists() && !dir.mkdirs()) throw new IOException("Cannot create " + dir);
 
         File target = new File(dir, displayName);

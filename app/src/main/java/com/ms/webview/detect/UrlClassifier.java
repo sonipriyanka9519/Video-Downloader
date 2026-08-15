@@ -191,6 +191,16 @@ public final class UrlClassifier {
     }
 
     public static String extensionFor(MediaKind kind, String mime, String url) {
+        // Ahead of everything, and it has to be: the platforms that serve sound as its own
+        // stream label it video/mp4, so every test below would answer "mp4" and the file would
+        // land in the library as a video with no picture.
+        if (kind == MediaKind.AUDIO) {
+            String m = mime == null ? "" : mime.toLowerCase(Locale.US);
+            if (m.contains("mpeg")) return "mp3";
+            if (m.contains("webm") || m.contains("opus")) return "webm";
+            // AAC in an MP4 container, which is what these streams almost always are.
+            return "m4a";
+        }
         if (mime != null) {
             String m = mime.toLowerCase(Locale.US);
             if (m.contains("webm")) return "webm";
