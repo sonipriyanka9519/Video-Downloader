@@ -44,6 +44,8 @@
 
         <!-- In flight: the only continuous motion the design allows. -->
         <com.google.android.material.progressindicator.LinearProgressIndicator
+            app:trackStopIndicatorSize="0dp"
+            app:trackInsideCornerSize="0dp"
             android:id="@+id/recentProgress"
             style="@style/Widget.Ds.Progress"
             android:layout_width="match_parent"

@@ -244,6 +244,13 @@
         <item name="trackCornerRadius">@dimen/ds_radius_progress</item>
         <item name="indicatorColor">@color/ds_accent</item>
         <item name="trackColor">@color/ds_surface_alt</item>
+        <!--
+          Material 3 draws a dot at the end of the track from 1.12 - the "stop indicator" - which
+          on a 3dp bar under a thumbnail reads as a speck of dirt rather than as a marker. Off, and
+          the inside corner with it, so the bar is one clean line.
+        -->
+        <item name="trackStopIndicatorSize">0dp</item>
+        <item name="trackInsideCornerSize">0dp</item>
     </style>
 
     <!-- ─────────────────────────────── Navigation ─────────────────────────────── -->

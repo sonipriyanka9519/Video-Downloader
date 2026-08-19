@@ -94,6 +94,8 @@
         </LinearLayout>
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
+            app:trackStopIndicatorSize="0dp"
+            app:trackInsideCornerSize="0dp"
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

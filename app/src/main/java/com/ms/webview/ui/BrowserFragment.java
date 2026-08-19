@@ -2530,12 +2530,24 @@ public class BrowserFragment extends Fragment
             webView = null;
             showHome();
         } else {
+            // Opened on Home, not on the page — the same state pressing Home leaves behind.
+            //
+            // The tab is still here and still knows where it was; what does not happen is the
+            // fetch. Coming back to the app is not the same act as asking for a page, and
+            // reloading whatever was open last time spends somebody's data on a page they have
+            // not asked for yet — and puts a video in front of them, playing, on launch.
+            //
+            // A shared link or one opened from a notification is a different matter entirely:
+            // those arrive with a purpose. They come through openWhenReady and are opened by
+            // openPendingLink in their own new tab, over the top of this, so they are unaffected.
             webView = webViewFor(open);
             loadedUrl = open.url;
-            showBrowser();
-            // The same choice openTab makes: history if we have it, address if we do not.
-            if (open.state != null) webView.restoreState(open.state);
-            else webView.loadUrl(open.url);
+            showHome();
+
+            // After showHome, not before. showHome writes this field itself from the browser's
+            // current address, which on a browser this new is nothing at all — setting it first
+            // would have it immediately overwritten with null and the page would be unreachable.
+            closedForHome = open.url;
         }
         updateTabCount();
     }

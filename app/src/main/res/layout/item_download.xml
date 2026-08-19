@@ -86,6 +86,8 @@
               back. Square-ended and flush to the bottom edge, as the design has it.
             -->
             <com.google.android.material.progressindicator.LinearProgressIndicator
+                app:trackStopIndicatorSize="0dp"
+                app:trackInsideCornerSize="0dp"
                 android:id="@+id/watchedBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

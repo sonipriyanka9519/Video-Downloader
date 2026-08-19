@@ -68,6 +68,8 @@
 
             <!-- The watched bar, same meaning and same place as on the row. -->
             <com.google.android.material.progressindicator.LinearProgressIndicator
+                app:trackStopIndicatorSize="0dp"
+                app:trackInsideCornerSize="0dp"
                 android:id="@+id/watchedBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
