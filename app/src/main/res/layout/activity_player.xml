@@ -1,26 +1,545 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Screen 09 — the player. Immersive and black whatever theme the app is in.
+
+  The chrome is ours rather than PlayerView's: the design puts the transport in the middle of the
+  picture, the seek bar and the speed chip along the foot, and everything else behind a gradient
+  that fades after three seconds. None of that is what the stock controller draws, and fighting
+  it would have cost more than replacing it.
+
+  Every control here has a gesture twin — that is what lets the whole overlay disappear without
+  taking any functionality with it.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/playerRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    android:orientation="vertical">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/black"
-        app:navigationIcon="@drawable/ic_back"
-        app:titleTextColor="@android:color/white" />
+    android:keepScreenOn="true">
 
     <androidx.media3.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         app:resize_mode="fit"
-        app:show_buffering="when_playing" />
+        app:show_buffering="when_playing"
+        app:use_controller="false" />
 
-</LinearLayout>
+    <!--
+      A sound file, in the same player — screen 09, panel F.
+
+      Not a separate audio screen: the transport, the seek bar, the speed chip and every gesture
+      mean exactly what they mean for video, and a second screen would be the same controls
+      maintained twice. Only the picture changes, because there isn't one.
+
+      Inset top and bottom so it sits between the two bars of chrome rather than under them.
+    -->
+    <LinearLayout
+        android:id="@+id/audioPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_space_8"
+        android:paddingTop="@dimen/ds_player_audio_top"
+        android:paddingBottom="@dimen/ds_player_audio_bottom"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/audioArt"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/ds_player_audio_art"
+            app:cardCornerRadius="@dimen/ds_radius_dialog"
+            app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:layout_width="@dimen/ds_player_audio_glyph"
+                android:layout_height="@dimen/ds_player_audio_glyph"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_audio"
+                app:tint="@color/ds_player_accent" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- The name moves down here, out of the top bar: with no picture to caption, it is the
+             thing on screen rather than a label over it. -->
+        <TextView
+            android:id="@+id/audioTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_6"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/ds_player_ink"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:text="Podcast clip — the storage problem" />
+
+        <TextView
+            android:id="@+id/audioMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:ellipsize="end"
+            android:fontFeatureSettings="tnum"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@color/ds_player_ink_dim"
+            android:textSize="13sp"
+            tools:text="Audio · 2.1 MB · 3:12" />
+    </LinearLayout>
+
+    <!--
+      What blooms under a double-tap. Behind the chrome and in front of the video, so a seek
+      taken while the controls are up does not paint over them.
+    -->
+    <LinearLayout
+        android:id="@+id/seekFeedback"
+        android:layout_width="@dimen/ds_player_gesture_disc"
+        android:layout_height="@dimen/ds_player_gesture_disc"
+        android:layout_gravity="center_vertical|start"
+        android:background="@drawable/ds_player_gesture_disc"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/seekFeedbackIcon"
+            android:layout_width="@dimen/ds_icon"
+            android:layout_height="@dimen/ds_icon"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_replay_10"
+            app:tint="@color/ds_player_ink" />
+
+        <TextView
+            android:id="@+id/seekFeedbackLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:fontFeatureSettings="tnum"
+            android:textColor="@color/ds_player_ink"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="-10s" />
+    </LinearLayout>
+
+    <!-- Brightness on the left, volume on the right, each up only while its swipe is running. -->
+    <include
+        android:id="@+id/brightnessRail"
+        layout="@layout/part_player_rail"
+        android:layout_width="@dimen/ds_player_rail_width"
+        android:layout_height="@dimen/ds_player_rail_height"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="@dimen/ds_space_4" />
+
+    <include
+        android:id="@+id/volumeRail"
+        layout="@layout/part_player_rail"
+        android:layout_width="@dimen/ds_player_rail_width"
+        android:layout_height="@dimen/ds_player_rail_height"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="@dimen/ds_space_4" />
+
+    <!-- Long-press: the speed the video is running at while the finger is down. -->
+    <LinearLayout
+        android:id="@+id/speedBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/ds_player_chip_height"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="@dimen/ds_player_badge_top"
+        android:background="@drawable/ds_player_rail"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/speedBadgeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFeatureSettings="tnum"
+            android:textColor="@color/ds_player_ink"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="2x" />
+
+        <!-- Doubled, because the badge is only ever up while playback is running fast. -->
+        <ImageView
+            android:layout_width="@dimen/ds_icon_tiny"
+            android:layout_height="@dimen/ds_icon_tiny"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_fast_forward"
+            app:tint="@color/ds_player_ink" />
+    </LinearLayout>
+
+
+    <!-- ─────────────────────────── the chrome, which fades ─────────────────────────── -->
+
+    <FrameLayout
+        android:id="@+id/playerControls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_player_scrim_top"
+            android:layout_gravity="top"
+            android:background="@drawable/ds_player_scrim_top" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_player_scrim_bottom"
+            android:layout_gravity="bottom"
+            android:background="@drawable/ds_player_scrim_bottom" />
+
+        <!-- Top: back, the title, and the three switches worth reaching mid-video. -->
+        <LinearLayout
+            android:id="@+id/playerTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_toolbar_height"
+            android:layout_gravity="top"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/ds_space_1">
+
+            <ImageButton
+                android:id="@+id/btnPlayerBack"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/go_back"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/playerTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/ds_space_1"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ds_player_ink"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Warm-up drills, full session" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerRotate"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/rotate"
+                android:src="@drawable/ic_rotate" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerAspect"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/aspect_ratio"
+                android:src="@drawable/ic_aspect" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerPip"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/pip"
+                android:src="@drawable/ic_pip" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerMore"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/more_options"
+                android:src="@drawable/ic_more_vert" />
+        </LinearLayout>
+
+        <!-- Centre: the transport, on the picture where the eye already is. -->
+        <LinearLayout
+            android:id="@+id/playerTransport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnPlayerPrev"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/previous_video"
+                android:src="@drawable/ic_skip_previous"
+                app:tint="@color/ds_player_ink_dim" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerRewind"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:layout_marginStart="@dimen/ds_space_3"
+                android:contentDescription="@string/rewind_10"
+                android:src="@drawable/ic_replay_10"
+                app:tint="@color/ds_player_ink_dim" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerPlay"
+                android:layout_width="@dimen/ds_player_play_size"
+                android:layout_height="@dimen/ds_player_play_size"
+                android:layout_marginHorizontal="@dimen/ds_space_4"
+                android:background="@drawable/ds_player_disc"
+                android:contentDescription="@string/play"
+                android:padding="@dimen/ds_space_3"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_pause"
+                app:tint="@color/ds_player_ink" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerForward"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:layout_marginEnd="@dimen/ds_space_3"
+                android:contentDescription="@string/forward_10"
+                android:src="@drawable/ic_forward_10"
+                app:tint="@color/ds_player_ink_dim" />
+
+            <ImageButton
+                android:id="@+id/btnPlayerNext"
+                style="@style/Widget.Ds.PlayerIcon"
+                android:contentDescription="@string/next_video"
+                android:src="@drawable/ic_skip_next"
+                app:tint="@color/ds_player_ink_dim" />
+        </LinearLayout>
+
+        <!-- Foot: where you are, and the two settings worth a permanent control. -->
+        <LinearLayout
+            android:id="@+id/playerBottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_screen_padding"
+            android:paddingBottom="@dimen/ds_space_5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/playerElapsed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFeatureSettings="tnum"
+                    android:textColor="@color/ds_player_ink"
+                    android:textSize="12.5sp"
+                    tools:text="3:14" />
+
+                <!--
+                  The only accent in the chrome, per the design: played portion red, the rest
+                  white at 30%, and a thumb that grows under a finger. A Slider rather than a
+                  SeekBar so the thumb and halo come out at the design's sizes without a set of
+                  nine-patches.
+                -->
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/playerSeek"
+                    style="@style/Widget.Ds.PlayerSeek"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/seek"
+                    android:stepSize="0"
+                    android:value="0"
+                    android:valueFrom="0"
+                    android:valueTo="1000" />
+
+                <TextView
+                    android:id="@+id/playerDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFeatureSettings="tnum"
+                    android:textColor="@color/ds_player_ink_dim"
+                    android:textSize="12.5sp"
+                    tools:text="8:02" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--
+                  A chip, not a menu item: tap cycles, long-press opens the list. Speed is the
+                  one setting people change repeatedly during a single video.
+                -->
+                <TextView
+                    android:id="@+id/btnPlayerSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/ds_player_chip_height"
+                    android:background="@drawable/ds_player_chip"
+                    android:contentDescription="@string/playback_speed"
+                    android:fontFeatureSettings="tnum"
+                    android:gravity="center"
+                    android:minWidth="@dimen/ds_player_chip_min"
+                    android:paddingHorizontal="@dimen/ds_space_3"
+                    android:textColor="@color/ds_player_ink"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="1x" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <!-- What is queued after this one. Hidden when there is nothing after it. -->
+                <LinearLayout
+                    android:id="@+id/btnPlayerQueue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/ds_touch_min"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/ds_space_2"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="@dimen/ds_icon"
+                        android:layout_height="@dimen/ds_icon"
+                        android:contentDescription="@string/queue"
+                        android:src="@drawable/ic_queue"
+                        app:tint="@color/ds_player_ink" />
+
+                    <TextView
+                        android:id="@+id/playerQueueCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/ds_space_1"
+                        android:fontFeatureSettings="tnum"
+                        android:textColor="@color/ds_player_ink"
+                        android:textSize="13sp"
+                        tools:text="12" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+    <!--
+      Up next — screen 09, panel D.
+
+      Over everything, including the chrome, because it is the only thing on screen that matters
+      while it is up. It names the video it is about to play and it can always be stopped: an
+      auto-advance nobody asked for and nobody could explain is the failure mode this exists to
+      avoid.
+    -->
+    <FrameLayout
+        android:id="@+id/upNext"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ds_player_countdown_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_space_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.08"
+                android:text="@string/up_next"
+                android:textColor="@color/ds_player_ink_dim"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="@dimen/ds_player_upnext_width"
+                android:layout_height="@dimen/ds_player_upnext_height"
+                android:layout_marginTop="@dimen/ds_space_4">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/ds_player_queue_thumb"
+                    app:cardCornerRadius="@dimen/ds_radius_card"
+                    app:cardElevation="0dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:id="@+id/upNextThumb"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@null"
+                        android:scaleType="centerCrop" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--
+                  The ring is the countdown, drawn round the play glyph it will trigger. A number
+                  alone says how long is left; the ring says it without being read.
+                -->
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/upNextRing"
+                    android:layout_width="@dimen/ds_player_upnext_ring"
+                    android:layout_height="@dimen/ds_player_upnext_ring"
+                    android:layout_gravity="center"
+                    app:indicatorColor="@color/ds_player_accent"
+                    app:indicatorSize="@dimen/ds_player_upnext_ring"
+                    app:trackColor="@color/ds_player_track"
+                    app:trackThickness="3dp" />
+
+                <ImageView
+                    android:layout_width="@dimen/ds_icon"
+                    android:layout_height="@dimen/ds_icon"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_play"
+                    app:tint="@color/ds_player_ink" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/upNextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_4"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:maxWidth="@dimen/ds_player_upnext_text"
+                android:textColor="@color/ds_player_ink"
+                android:textSize="15sp"
+                tools:text="Kettlebell swing — form check" />
+
+            <TextView
+                android:id="@+id/upNextCountdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:fontFeatureSettings="tnum"
+                android:textColor="@color/ds_player_ink_dim"
+                android:textSize="13sp"
+                tools:text="Playing in 3s" />
+
+            <TextView
+                android:id="@+id/btnUpNextCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ds_touch_min"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/ds_space_4"
+                android:text="@android:string/cancel"
+                android:textColor="@color/ds_player_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

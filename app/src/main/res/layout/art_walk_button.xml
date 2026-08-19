@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Page 3's diagram: the detection button wearing a count — screen 14, B3.
+
+  The one page whose diagram is a picture of something real, and the closest the walkthrough comes
+  to showing a control. It is still abstract: no page behind it, no position on the screen, and the
+  badge holds a plain 2 rather than a number pulled from anywhere.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/ds_walk_disc_mid"
+    android:layout_height="@dimen/ds_walk_disc_mid">
+
+    <View
+        android:layout_width="@dimen/ds_walk_disc_small"
+        android:layout_height="@dimen/ds_walk_disc_small"
+        android:layout_gravity="center"
+        android:background="@drawable/ds_bg_walk_disc_soft" />
+
+    <ImageView
+        android:layout_width="@dimen/ds_walk_fab"
+        android:layout_height="@dimen/ds_walk_fab"
+        android:layout_gravity="center"
+        android:background="@drawable/ds_bg_walk_disc_accent"
+        android:contentDescription="@null"
+        android:padding="@dimen/ds_space_5"
+        android:src="@drawable/ic_download"
+        app:tint="@color/ds_on_accent" />
+
+    <TextView
+        android:layout_width="@dimen/ds_walk_badge"
+        android:layout_height="@dimen/ds_walk_badge"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:layout_marginEnd="@dimen/ds_space_4"
+        android:background="@drawable/ds_bg_walk_badge"
+        android:gravity="center"
+        android:text="@string/walk_badge_count"
+        android:textColor="@color/ds_accent"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</FrameLayout>

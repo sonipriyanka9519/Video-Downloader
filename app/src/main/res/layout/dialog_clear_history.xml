@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The body of the Clear all confirm — screen 12, panel D.
+
+  Two parts. The message names the real count, because "all history" is a phrase people agree to
+  without knowing what it covers, and says outright that downloads are untouched — on a downloader
+  that is the fear worth answering before it is felt.
+
+  Then the retention offer, pre-ticked, in a tinted block so it reads as a second thing being asked
+  rather than a footnote of the first. It is put once, here, and never again: whatever is answered
+  becomes the Settings row.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingHorizontal="@dimen/ds_dialog_content_padding"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <TextView
+        android:id="@+id/clearMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft"
+        tools:text="All 86 visited pages are removed. Your downloads stay where they are." />
+
+    <LinearLayout
+        android:id="@+id/retentionBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:background="@drawable/ds_bg_inset"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:paddingVertical="@dimen/ds_space_2">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/retentionCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:clickable="false"
+            android:focusable="false"
+            app:buttonTint="@color/ds_checkbox" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:text="@string/history_retention"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textColor="@color/ds_ink"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>

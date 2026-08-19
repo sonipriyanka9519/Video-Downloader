@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The count badge: a white disc ringed in accent, with accent digits. Reversed out of the FAB
+  rather than tinted onto it, so the number stays legible against the red beneath it.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@color/ds_fab_count" />
+    <!-- Ringed in the disc's own colour, so the pip reads as sitting on the button rather than
+         floating over it — and the ring stays right when the two swap in dark. -->
+    <stroke android:width="@dimen/ds_stroke_selected" android:color="@color/ds_fab" />
+</shape>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The keypad — screen 11, panels B and C.
+
+  64dp discs in the bottom of the screen, reachable one-handed and a long way from the back
+  arrow. Written out rather than generated in code because the grid is the one part of this
+  screen where a wrong gap is immediately obvious, and a layout file is where anyone would look
+  for it.
+
+  Rows of LinearLayout rather than a GridLayout: four rows of three is not enough structure to
+  justify pulling in another library for it.
+
+  No key at the bottom left. The design leaves it empty rather than filling it for symmetry — an
+  extra control beside 0 is one a thumb finds by accident.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/Widget.Ds.PinRow">
+
+        <TextView android:id="@+id/key1" style="@style/Widget.Ds.PinKey" android:text="@string/key_1" />
+        <TextView android:id="@+id/key2" style="@style/Widget.Ds.PinKey" android:text="@string/key_2" />
+        <TextView android:id="@+id/key3" style="@style/Widget.Ds.PinKey" android:text="@string/key_3" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/Widget.Ds.PinRow">
+
+        <TextView android:id="@+id/key4" style="@style/Widget.Ds.PinKey" android:text="@string/key_4" />
+        <TextView android:id="@+id/key5" style="@style/Widget.Ds.PinKey" android:text="@string/key_5" />
+        <TextView android:id="@+id/key6" style="@style/Widget.Ds.PinKey" android:text="@string/key_6" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/Widget.Ds.PinRow">
+
+        <TextView android:id="@+id/key7" style="@style/Widget.Ds.PinKey" android:text="@string/key_7" />
+        <TextView android:id="@+id/key8" style="@style/Widget.Ds.PinKey" android:text="@string/key_8" />
+        <TextView android:id="@+id/key9" style="@style/Widget.Ds.PinKey" android:text="@string/key_9" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/Widget.Ds.PinRow">
+
+        <Space
+            android:layout_width="@dimen/ds_keypad_key"
+            android:layout_height="@dimen/ds_keypad_key"
+            android:layout_marginStart="@dimen/ds_keypad_gap_h"
+            android:layout_marginTop="@dimen/ds_keypad_gap_v"
+            android:layout_marginEnd="@dimen/ds_keypad_gap_h"
+            android:layout_marginBottom="@dimen/ds_keypad_gap_v" />
+
+        <TextView android:id="@+id/key0" style="@style/Widget.Ds.PinKey" android:text="@string/key_0" />
+
+        <!-- No disc behind it: it undoes rather than enters, and looking like the digits would
+             invite it to be pressed as one. -->
+        <ImageView
+            android:id="@+id/keyBackspace"
+            android:layout_width="@dimen/ds_keypad_key"
+            android:layout_height="@dimen/ds_keypad_key"
+            android:layout_marginStart="@dimen/ds_keypad_gap_h"
+            android:layout_marginTop="@dimen/ds_keypad_gap_v"
+            android:layout_marginEnd="@dimen/ds_keypad_gap_h"
+            android:layout_marginBottom="@dimen/ds_keypad_gap_v"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/key_delete"
+            android:padding="@dimen/ds_space_4"
+            android:src="@drawable/ic_backspace"
+            app:tint="?attr/colorOnSurfaceVariant" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The plus inside the Add tile. Its own file so the ring and the glyph can be sized apart. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/ds_icon"
+    android:height="@dimen/ds_icon"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="@color/ds_ink_soft">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M11,5h2v6h6v2h-6v6h-2v-6H5v-2h6z" />
+</vector>

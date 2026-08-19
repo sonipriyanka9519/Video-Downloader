@@ -2,19 +2,22 @@ package com.ms.webview.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.app.PictureInPictureParams;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsetsController;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +26,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.media3.common.C;
 import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
@@ -40,16 +44,20 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.media3.ui.AspectRatioFrameLayout;
 import androidx.media3.ui.PlayerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.ms.webview.App;
 import com.ms.webview.R;
+import com.ms.webview.core.Formats;
+import com.ms.webview.ui.downloads.WatchedStore;
+import com.ms.webview.ui.player.PlayerChrome;
+import com.ms.webview.ui.player.PlayerQueue;
+import com.ms.webview.ui.player.QueueSheet;
+import com.ms.webview.ui.player.UpNextCountdown;
 
 import java.io.File;
-import java.util.Locale;
 
 /** Plays a finished download inside the app. */
 @OptIn(markerClass = UnstableApi.class)
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity implements PlayerChrome.Host {
 
     private static final String TAG = "PlayerActivity";
 
@@ -65,16 +73,32 @@ public class PlayerActivity extends AppCompatActivity {
     private static final int ASPECT_CROP = 1;
     private static final int ASPECT_STRETCH = 2;
 
-    private static final float[] SPEEDS = {0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f};
+    private static final int MENU_LOOP = 1;
+    private static final int MENU_SPEED = 2;
+    private static final int MENU_SHARE = 3;
+
+    private static final String PREFS_PLAYER = "player";
+    private static final String KEY_AUTOPLAY = "autoplay";
+
+    /** Past this, Previous restarts the current video instead of leaving it. */
+    private static final long RESTART_WINDOW_MS = 3000L;
 
     private int orientation = ORIENTATION_AUTO;
     private int aspect = ASPECT_FIT;
-    private boolean fullscreen;
+    private boolean looping;
 
     private PlayerView     playerView;
-    private MaterialToolbar toolbar;
+    /** The overlay — screen 09. Owns every control and the gesture that twins it. */
+    private PlayerChrome   chrome;
+    /** What plays after this one, and the pause before it does — panels C and D. */
+    private PlayerQueue    queue;
+    private UpNextCountdown upNext;
+    @Nullable
+    private QueueSheet     queueSheet;
     private ExoPlayer      player;
     private Uri            uri;
+    /** The uri exactly as the library holds it — the key progress is filed under. */
+    private String         libraryUri;
     private long           resumePosition;
 
     // -------------------------------------------------------------------------
@@ -82,9 +106,39 @@ public class PlayerActivity extends AppCompatActivity {
     // -------------------------------------------------------------------------
 
     public static void open(Context context, String outputUri, String title) {
+        open(context, outputUri, title, null, null);
+    }
+
+    /**
+     * The same destination as {@link #open}, handed back rather than started.
+     *
+     * <p>For callers that cannot start an activity themselves - a notification action needs a
+     * PendingIntent, and screen 16's "Watch now" is meant to reach the player rather than drop
+     * somebody on the downloads list to find the video again.
+     */
+    public static Intent intent(Context context, String outputUri, String title) {
+        return new Intent(context, PlayerActivity.class)
+                .putExtra(EXTRA_URI,   outputUri)
+                .putExtra(EXTRA_TITLE, title);
+    }
+
+    /**
+     * Opens a video with what the viewer was looking at when they tapped it.
+     *
+     * <p>The queue travels in the intent because the library's narrowing lives on the downloads
+     * screen — a chip, a search box, an open collection — and none of that is knowable from in
+     * here. Sending the answer cannot disagree with what was on screen.
+     *
+     * @param queue every video in the list, in the order it was shown; null for no queue
+     * @param scope what that list was narrowed by, for the sheet's caption
+     */
+    public static void open(Context context, String outputUri, String title,
+                            @Nullable java.util.List<PlayerQueue.Item> queue,
+                            @Nullable String scope) {
         Intent intent = new Intent(context, PlayerActivity.class)
                 .putExtra(EXTRA_URI,   outputUri)
                 .putExtra(EXTRA_TITLE, title);
+        if (queue != null) PlayerQueue.putInto(intent, queue, scope);
         context.startActivity(intent);
     }
 
@@ -105,9 +159,8 @@ public class PlayerActivity extends AppCompatActivity {
         //        We have a black background, so we want light (white) icons.
         applyStatusBarAppearance();
 
-        // ── 3. Apply window-insets so the toolbar sits below the status bar
-        //        and the player view sits above the navigation bar / gesture bar.
-        toolbar    = findViewById(R.id.toolbar);
+        // ── 3. The video surface. The overlay is built later, once the queue is known — it
+        //        asks hasQueue() while wiring its own buttons.
         playerView = findViewById(R.id.playerView);
 
         // What to show when the file turns out to have no picture in it. PlayerView raises this
@@ -121,8 +174,6 @@ public class PlayerActivity extends AppCompatActivity {
                 AppCompatResources.getDrawable(this, R.drawable.art_audio));
         playerView.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
 
-        applyWindowInsets();
-
         // ── 4. Validate URI
         String raw = getIntent().getStringExtra(EXTRA_URI);
         if (TextUtils.isEmpty(raw)) {
@@ -130,6 +181,7 @@ public class PlayerActivity extends AppCompatActivity {
             finish();
             return;
         }
+        libraryUri = raw;
         uri = raw.startsWith("content://")
                 ? Uri.parse(raw)
                 : Uri.fromFile(new File(raw));
@@ -143,14 +195,37 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
 
-        // ── 5. Toolbar
-        toolbar.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
-        toolbar.setNavigationOnClickListener(v -> finish());
-        setUpMenu();
+        // ── 5. The queue, then the overlay that reads it, then the countdown that follows it.
+        queue = PlayerQueue.readFrom(getIntent(), libraryUri);
+        chrome = new PlayerChrome(this, findViewById(R.id.playerRoot), this);
+        upNext = new UpNextCountdown(findViewById(R.id.upNext), new UpNextCountdown.Listener() {
+            @Override
+            public void onCountdownFinished() {
+                onNext();
+            }
+
+            @Override
+            public void onCountdownCancelled() {
+                // Stays on the last frame of what just finished, which is where it was. The
+                // chrome comes back so there is something to press.
+                chrome.show();
+            }
+        });
+
+        chrome.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
+        chrome.setQueueCount(queue.remaining());
+        applyWindowInsets();
+        applyStatusBarPolicy();
 
         // ── 6. Restore playback position
         if (savedInstanceState != null) {
+            // A rotation, which is the same viewing continuing — it wins over anything on disk.
             resumePosition = savedInstanceState.getLong(STATE_POSITION, 0);
+        } else {
+            // A fresh open of something left part-way through. The store returns zero for a
+            // video that was finished or barely started, so this is silent unless there is
+            // genuinely somewhere to go back to.
+            resumePosition = WatchedStore.resumePosition(this, libraryUri);
         }
     }
 
@@ -169,6 +244,12 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        // Filed here as well as on release, and the ordering is the point. Activities hand over as
+        // A.onPause, B.onResume, A.onStop — so a position written only on the way out landed after
+        // the library screen had already refreshed, and the row went on showing the old bar until
+        // something else happened to rebuild it. Writing it now means the list reads the new value
+        // on the very next breath.
+        recordProgress();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) releasePlayer();
     }
 
@@ -190,55 +271,19 @@ public class PlayerActivity extends AppCompatActivity {
     // -------------------------------------------------------------------------
 
     /**
-     * Pads the toolbar by the status-bar height so it clears the status bar,
-     * and pads the player view by the navigation-bar height so video never
-     * goes under the gesture bar / nav buttons.
+     * Keeps the chrome clear of the system bars, and lets the video fill the window.
+     *
+     * <p>The overlay is inset; the picture is not. A video letterboxed by the system bars as
+     * well as by its own aspect ratio is a video in a box in a box, and the black it would sit
+     * in is the same black the bars are drawn over anyway.
      */
     private void applyWindowInsets() {
-        // Toolbar: add top padding = status bar height
-        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (view, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            // Preserve the original (XML) top padding and add status-bar inset
-            view.setPadding(
-                    view.getPaddingLeft(),
-                    systemBars.top,           // push content below status bar
-                    view.getPaddingRight(),
-                    view.getPaddingBottom()
-            );
-
-            // Also grow the toolbar's height so it doesn't shrink to zero
-            ViewGroup.LayoutParams lp = view.getLayoutParams();
-            // actionBarSize is already set in XML; just add status bar on top
-            int actionBarSize = getActionBarSize();
-            lp.height = actionBarSize + systemBars.top;
-            view.setLayoutParams(lp);
-
-            return insets; // pass insets down so children can also react
-        });
-
-        // PlayerView: add bottom padding = navigation-bar height
-        ViewCompat.setOnApplyWindowInsetsListener(playerView, (view, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            view.setPadding(
-                    view.getPaddingLeft(),
-                    view.getPaddingTop(),
-                    view.getPaddingRight(),
-                    systemBars.bottom         // keep video above nav / gesture bar
-            );
-
-            return insets;
-        });
-    }
-
-    /** Returns the resolved ?attr/actionBarSize in pixels. */
-    private int getActionBarSize() {
-        int[] attrs = { androidx.appcompat.R.attr.actionBarSize };
-        android.content.res.TypedArray ta = obtainStyledAttributes(attrs);
-        int size = ta.getDimensionPixelSize(0, 0);
-        ta.recycle();
-        return size;
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.playerRoot),
+                (view, insets) -> {
+                    Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    chrome.applyInsets(bars.top, bars.bottom, bars.left, bars.right);
+                    return insets;
+                });
     }
 
     // -------------------------------------------------------------------------
@@ -278,32 +323,234 @@ public class PlayerActivity extends AppCompatActivity {
     // Controls
     // -------------------------------------------------------------------------
 
-    private void setUpMenu() {
-        toolbar.inflateMenu(R.menu.player);
-        toolbar.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.action_rotate) {
-                cycleOrientation();
-                return true;
+    // The chrome asks for these; it owns the buttons and the gestures that reach them.
+
+    @Override
+    public void onBack() {
+        finish();
+    }
+
+    @Override
+    public void onRotate() {
+        cycleOrientation();
+    }
+
+    @Override
+    public void onAspect() {
+        cycleAspect();
+    }
+
+    @Override
+    public void onQueue() {
+        if (queue.isEmpty()) return;
+
+        dismissQueueSheet();
+        queueSheet = new QueueSheet(this, queue, autoplay(), new QueueSheet.Listener() {
+            @Override
+            public void onQueueItemChosen(int position) {
+                playAt(position);
             }
-            if (id == R.id.action_aspect) {
-                cycleAspect();
-                return true;
+
+            @Override
+            public void onAutoplayChanged(boolean enabled) {
+                setAutoplay(enabled);
             }
-            if (id == R.id.action_fullscreen) {
-                toggleFullscreen();
-                return true;
-            }
-            if (id == R.id.action_speed) {
-                showSpeedMenu();
-                return true;
-            }
-            if (id == R.id.action_share) {
-                share();
-                return true;
-            }
-            return false;
         });
+        queueSheet.show();
+    }
+
+    @Override
+    public boolean hasQueue() {
+        return queue != null && !queue.isEmpty();
+    }
+
+    @Override
+    public void onPrevious() {
+        // From part-way in, back means the start of this one — the same thing every other player
+        // does, and the reason nobody loses their place by reaching for it.
+        if (player != null && player.getCurrentPosition() > RESTART_WINDOW_MS) {
+            player.seekTo(0);
+            return;
+        }
+        if (queue.hasPrevious()) playAt(queue.index() - 1);
+        else if (player != null) player.seekTo(0);
+    }
+
+    @Override
+    public void onNext() {
+        if (queue.hasNext()) playAt(queue.index() + 1);
+    }
+
+    /**
+     * Switches to another video in the queue without leaving the player.
+     *
+     * <p>The one that is finishing has its position recorded first: moving on is still watching
+     * it up to the point you moved on from, and the library should say so.
+     */
+    private void playAt(int position) {
+        PlayerQueue.Item item = queue.at(position);
+        if (item == null) return;
+
+        upNext.stop();
+        recordProgress();
+        queue.moveTo(position);
+
+        libraryUri = item.uri;
+        uri = item.uri.startsWith("content://")
+                ? Uri.parse(item.uri)
+                : Uri.fromFile(new File(item.uri));
+        resumePosition = WatchedStore.resumePosition(this, libraryUri);
+
+        chrome.setTitle(item.title);
+        chrome.setQueueCount(queue.remaining());
+
+        if (player == null) {
+            initPlayer();
+            return;
+        }
+        player.setMediaItem(MediaItem.fromUri(uri));
+        if (resumePosition > 0) player.seekTo(resumePosition);
+        player.setPlayWhenReady(true);
+        player.prepare();
+        chrome.syncPlayIcon();
+    }
+
+    /**
+     * The video ended — screen 09, panel D.
+     *
+     * <p>Only when autoplay is on and there is something after it. Otherwise the player stays on
+     * the last frame, which is what "the end" looks like and is what somebody who turned autoplay
+     * off asked for.
+     */
+    private void onPlaybackEnded() {
+        recordProgress();
+        PlayerQueue.Item next = queue.next();
+        if (!autoplay() || next == null) return;
+        upNext.start(next);
+    }
+
+    /**
+     * Swaps the picture for the art tile when the file has no picture — screen 09, panel F.
+     *
+     * <p>PlayerView's own default artwork is dropped at the same moment: it draws its own
+     * fallback the instant the tracks come back without video, and two answers to "there is no
+     * picture here" stacked on top of each other is one too many.
+     */
+    private void applyAudioMode(boolean audio) {
+        playerView.setDefaultArtwork(audio ? null
+                : AppCompatResources.getDrawable(this, R.drawable.art_audio));
+        chrome.setAudio(audio, getIntent().getStringExtra(EXTRA_TITLE), audioMeta());
+    }
+
+    /**
+     * "Audio · 2.1 MB · 3:12", with any part it does not know left out.
+     *
+     * <p>The size comes from the queue, which is the only thing here that has it — the player is
+     * handed a uri, and asking the file system how big it is on the main thread is not worth a
+     * line of text. A video opened with no queue simply shows its length.
+     */
+    private String audioMeta() {
+        StringBuilder meta = new StringBuilder(getString(R.string.kind_audio));
+
+        PlayerQueue.Item item = queue == null ? null : queue.at(queue.index());
+        if (item != null && item.sizeBytes > 0) {
+            meta.append(" · ").append(Formats.bytes(item.sizeBytes));
+        }
+        long length = player == null ? 0 : player.getDuration();
+        if (length > 0) meta.append(" · ").append(Formats.duration(length));
+        return meta.toString();
+    }
+
+    private boolean autoplay() {
+        return getSharedPreferences(PREFS_PLAYER, MODE_PRIVATE).getBoolean(KEY_AUTOPLAY, true);
+    }
+
+    private void setAutoplay(boolean enabled) {
+        getSharedPreferences(PREFS_PLAYER, MODE_PRIVATE).edit()
+                .putBoolean(KEY_AUTOPLAY, enabled).apply();
+    }
+
+    /** Files how far through the current video got, without tearing the player down. */
+    private void recordProgress() {
+        if (player == null) return;
+        WatchedStore.setProgress(this, libraryUri,
+                Math.max(0, player.getCurrentPosition()), player.getDuration());
+    }
+
+    private void dismissQueueSheet() {
+        if (queueSheet != null) queueSheet.dismiss();
+        queueSheet = null;
+    }
+
+    /**
+     * The rest — the settings somebody changes once and forgets, and sharing.
+     *
+     * <p>Behind a menu because none of them is reached mid-video: the design keeps the overlay
+     * to the four controls with a gesture twin, and everything else here.
+     */
+    @Override
+    public void onOverflow(View anchor) {
+        PopupMenu menu = new PopupMenu(this, anchor);
+        menu.getMenu().add(0, MENU_LOOP, 0, R.string.loop_video)
+                .setCheckable(true).setChecked(looping);
+        menu.getMenu().add(0, MENU_SPEED, 1, R.string.playback_speed);
+        menu.getMenu().add(0, MENU_SHARE, 2, R.string.share);
+
+        menu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case MENU_LOOP:
+                    toggleLoop();
+                    return true;
+                case MENU_SPEED:
+                    onSpeedList();
+                    return true;
+                case MENU_SHARE:
+                    share();
+                    return true;
+                default:
+                    return false;
+            }
+        });
+        menu.show();
+    }
+
+    private void toggleLoop() {
+        looping = !looping;
+        if (player != null) {
+            player.setRepeatMode(looping ? Player.REPEAT_MODE_ONE : Player.REPEAT_MODE_OFF);
+        }
+        toast(looping ? R.string.loop_on : R.string.loop_off);
+    }
+
+    /**
+     * Picture in picture, from the button and from a swipe down.
+     *
+     * <p>Guarded twice: the API arrived in Android 8, and even there a device or a policy can
+     * refuse it. A button that silently does nothing is worse than one that says why.
+     */
+    @Override
+    public void onPictureInPicture() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+                || !getPackageManager().hasSystemFeature(
+                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            toast(R.string.pip_unavailable);
+            return;
+        }
+        try {
+            enterPictureInPictureMode(new PictureInPictureParams.Builder().build());
+        } catch (Exception e) {
+            Log.w(TAG, "PiP refused", e);
+            toast(R.string.pip_unavailable);
+        }
+    }
+
+    /**
+     * The chrome has no place in a thumbnail, and neither has the screen staying awake for one.
+     */
+    @Override
+    public void onPictureInPictureModeChanged(boolean inPip, @NonNull Configuration config) {
+        super.onPictureInPictureModeChanged(inPip, config);
+        chrome.setChromeAllowed(!inPip);
     }
 
     /**
@@ -350,35 +597,42 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     /**
-     * Hides the toolbar and the system bars together. The bars come back on a swipe rather than
-     * staying gone, so there is always a way out even if the button is no longer on screen.
+     * The status bar stays.
+     *
+     * <p>The design calls this screen immersive and hides the system bars with the chrome. That
+     * was built and then taken out at the user's request: the clock and the battery are worth
+     * more here than the last strip of black, and a video being watched is exactly when somebody
+     * wants to know the time without leaving it.
+     *
+     * <p>The overlay still hides itself after three seconds, which is the part of immersive that
+     * was actually about the video. What stays is the bar, and the chrome is padded clear of it
+     * by {@link PlayerChrome#applyInsets} rather than drawn underneath.
      */
-    private void toggleFullscreen() {
-        fullscreen = !fullscreen;
-        toolbar.setVisibility(fullscreen ? View.GONE : View.VISIBLE);
-
+    private void applyStatusBarPolicy() {
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(getWindow(), playerView);
-        controller.setSystemBarsBehavior(
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-        if (fullscreen) controller.hide(WindowInsetsCompat.Type.systemBars());
-        else controller.show(WindowInsetsCompat.Type.systemBars());
+        controller.show(WindowInsetsCompat.Type.systemBars());
     }
 
-    private void showSpeedMenu() {
-        View anchor = findViewById(R.id.action_speed);
-        if (anchor == null) anchor = toolbar;
-
-        PopupMenu menu = new PopupMenu(this, anchor);
-        for (int i = 0; i < SPEEDS.length; i++) {
-            float speed = SPEEDS[i];
-            String label = speed == 1f
+    /**
+     * The full ladder, from a long-press on the speed chip.
+     *
+     * <p>Set through the chrome rather than on the player directly, so the chip shows what was
+     * chosen — a speed the player is running at and the chip disagrees about is worse than no
+     * chip at all.
+     */
+    @Override
+    public void onSpeedList() {
+        float[] speeds = chrome.speeds();
+        PopupMenu menu = new PopupMenu(this, findViewById(R.id.btnPlayerSpeed));
+        for (int i = 0; i < speeds.length; i++) {
+            String label = speeds[i] == 1f
                     ? getString(R.string.speed_normal)
-                    : String.format(Locale.US, "%.2fx", speed).replace(".00", "");
+                    : getString(R.string.speed_label, Formats.speedLabel(speeds[i]));
             menu.getMenu().add(0, i, i, label);
         }
         menu.setOnMenuItemClickListener(item -> {
-            if (player != null) player.setPlaybackSpeed(SPEEDS[item.getItemId()]);
+            chrome.setSpeed(speeds[item.getItemId()]);
             return true;
         });
         menu.show();
@@ -440,6 +694,10 @@ public class PlayerActivity extends AppCompatActivity {
                         + " position=" + player.getCurrentPosition()
                         + " buffered=" + player.getBufferedPosition()
                         + " duration=" + player.getDuration());
+
+                // The end of one video is where the queue takes over — screen 09, panel D.
+                if (state == Player.STATE_ENDED) onPlaybackEnded();
+                chrome.syncPlayIcon();
             }
 
             /**
@@ -452,7 +710,9 @@ public class PlayerActivity extends AppCompatActivity {
              */
             @Override
             public void onTracksChanged(Tracks tracks) {
+                boolean video = false;
                 for (Tracks.Group group : tracks.getGroups()) {
+                    if (group.getType() == C.TRACK_TYPE_VIDEO) video = true;
                     for (int i = 0; i < group.length; i++) {
                         Format format = group.getTrackFormat(i);
                         Log.i(TAG, "Track type=" + group.getType()
@@ -462,6 +722,11 @@ public class PlayerActivity extends AppCompatActivity {
                                 + " selected=" + group.isTrackSelected(i));
                     }
                 }
+
+                // Decided by what the file turned out to contain, not by its name or its type.
+                // A stream served as video/mp4 with nothing but sound in it is the case that
+                // caught us out in the download engine, and it would catch us out here too.
+                applyAudioMode(!video && !tracks.getGroups().isEmpty());
             }
 
             /** Says which of the two "not playing" cases this is: paused, or held back. */
@@ -507,8 +772,13 @@ public class PlayerActivity extends AppCompatActivity {
         // That is where a saved transport stream — what an HLS download falls back to when it
         // cannot be remuxed into MP4 — most often goes wrong.
         if (resumePosition > 0) player.seekTo(resumePosition);
+        player.setRepeatMode(looping ? Player.REPEAT_MODE_ONE : Player.REPEAT_MODE_OFF);
         player.setPlayWhenReady(true);
         player.prepare();
+
+        // The overlay drives itself from here: the play glyph, the timecodes and the seek bar
+        // all follow the player rather than being told by each control that touched it.
+        chrome.attach(player);
     }
 
     /**
@@ -607,7 +877,18 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void releasePlayer() {
         if (player == null) return;
+        // A countdown outliving the screen it was drawn on would advance a player that is no
+        // longer there.
+        if (upNext != null) upNext.stop();
+        dismissQueueSheet();
+
         resumePosition = Math.max(0, player.getCurrentPosition());
+        // Recorded on the way out rather than on open, so the library reflects how much was
+        // actually watched — opening a video and backing straight out is not watching it.
+        // Duration is read here because it is only known once the media has been prepared.
+        WatchedStore.setProgress(this, libraryUri, resumePosition, player.getDuration());
+
+        chrome.detach();
         player.release();
         player = null;
         playerView.setPlayer(null);

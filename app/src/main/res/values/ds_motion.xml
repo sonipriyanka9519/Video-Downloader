@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Durations, from designs/README: 200–250ms with standard easing, and no bounce anywhere.
+
+  Integers rather than a hardcoded number in four animation files, so the whole app's motion can be
+  slowed or quickened in one place — and so the four halves of a screen transition can never drift
+  apart from each other.
+-->
+<resources>
+
+    <!-- A screen arriving or leaving. -->
+    <integer name="ds_motion_screen">200</integer>
+
+</resources>

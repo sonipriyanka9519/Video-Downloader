@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The snackbar's slab: an ink block at the card radius.
+
+  Rounded, and inset from the screen edges by the margin its helper sets, so a message reads as
+  something laid over the app for a moment rather than a band welded to the bottom of it.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_snackbar_bg" />
+    <!--
+      Transparent in light, a line in dark. One drawable rather than a night copy of it, because
+      the only difference between the two is whether that edge is there.
+    -->
+    <stroke
+        android:width="@dimen/ds_stroke"
+        android:color="@color/ds_snackbar_line" />
+    <corners android:radius="@dimen/ds_radius_card" />
+</shape>

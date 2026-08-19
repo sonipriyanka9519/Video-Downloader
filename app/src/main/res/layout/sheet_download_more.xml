@@ -1,57 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  What can be done to one download.
+  What can be done to one download — screen 07's item sheet.
 
-  The file's own name at the top, because these four all act on a single file and the sheet is
-  raised from a list of them — without it, "Delete" is a question about which one.
+  It opens with the file itself: a small still, the real filename with its extension, and the same
+  metadata line the row carries. These actions all act on a single file and the sheet is raised
+  from a list of them, so without it "Delete" is a question about which one.
+
+  A plain surface header, not the coloured band it used to be — the picture is the only thing on
+  this sheet that should draw the eye first.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_default_sheet"
     android:orientation="vertical"
-    android:paddingTop="@dimen/_16sdp"
-    android:paddingBottom="@dimen/_12sdp">
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingBottom="@dimen/ds_space_3"
+    android:theme="@style/ThemeOverlay.Ds">
 
-    <TextView
-        android:id="@+id/moreName"
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_grabber" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="middle"
-        android:maxLines="1"
-        android:paddingHorizontal="@dimen/_18sdp"
-        android:textColor="@color/on_surface"
-        android:textSize="@dimen/_12ssp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingBottom="@dimen/ds_space_3">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/ds_thumb_sheet_width"
+            android:layout_height="@dimen/ds_thumb_sheet_height"
+            app:cardCornerRadius="@dimen/ds_radius_thumb"
+            app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:id="@+id/moreThumb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/ds_surface_alt"
+                android:contentDescription="@string/thumbnail"
+                android:scaleType="centerCrop" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_3"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!--
+              The filename, extension and all — not the title. On this sheet the next tap might
+              be Rename or Delete, and both are about the file on disk rather than the page it
+              came from.
+            -->
+            <TextView
+                android:id="@+id/moreName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                tools:text="Pandithurai (1992) Tamil romantic family drama.mp4" />
+
+            <TextView
+                android:id="@+id/moreMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                tools:text="1.2 MB • 720p • 0:30" />
+        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:background="@color/outline_variant" />
+        android:layout_height="@dimen/ds_stroke"
+        android:background="@color/ds_line" />
+
+    <TextView
+        android:id="@+id/morePlay"
+        style="@style/Widget.Ds.SheetAction"
+        android:drawableStart="@drawable/ic_play"
+        android:text="@string/play" />
 
     <TextView
         android:id="@+id/moreShare"
-        style="@style/Widget.Webview.SheetAction"
+        style="@style/Widget.Ds.SheetAction"
         android:drawableStart="@drawable/ic_share"
         android:text="@string/share" />
 
     <TextView
         android:id="@+id/moreRename"
-        style="@style/Widget.Webview.SheetAction"
+        style="@style/Widget.Ds.SheetAction"
         android:drawableStart="@drawable/ic_edit"
         android:text="@string/rename" />
 
     <TextView
+        android:id="@+id/moreCollection"
+        style="@style/Widget.Ds.SheetAction"
+        android:drawableStart="@drawable/ic_folder"
+        android:text="@string/collection_add_video" />
+
+    <!--
+      Offered for anything saved, whether or not a lock exists yet: setting one up happens in front
+      of the move rather than being something to go and do in Settings first. See PrivateAuth.
+    -->
+    <TextView
+        android:id="@+id/morePrivate"
+        style="@style/Widget.Ds.SheetAction"
+        android:drawableStart="@drawable/ic_lock"
+        android:text="@string/private_move_in"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/moreProperty"
-        style="@style/Widget.Webview.SheetAction"
+        style="@style/Widget.Ds.SheetAction"
         android:drawableStart="@drawable/ic_info"
         android:text="@string/property" />
 
+    <!--
+      The only red row, and always the last. Nothing else here cannot be undone by doing it
+      again, and putting the one that can at the end keeps it away from the thumb's first stop.
+    -->
     <TextView
         android:id="@+id/moreDelete"
-        style="@style/Widget.Webview.SheetAction"
+        style="@style/Widget.Ds.SheetAction.Destructive"
         android:drawableStart="@drawable/ic_delete"
         android:text="@string/delete" />
 </LinearLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Step 2: back here, and the link already offered - screen 15.
+
+  A small copy of the dialog that actually appears, down to its words, because that is what somebody
+  will be looking at a second after they return. The address in it is the site being explained, set
+  at bind time - a fixed one would name Instagram in the Facebook guide.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ds_bg_guide_panel"
+    android:padding="@dimen/ds_space_3">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/ds_bg_guide_sheet"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/ds_space_2">
+
+        <View
+            android:layout_width="@dimen/ds_guide_tile"
+            android:layout_height="@dimen/ds_guide_tile"
+            android:background="@drawable/ds_bg_guide_block" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/link_you_copied"
+                android:textColor="@color/ds_ink"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/artLinkSample"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/ds_ink_faint"
+                android:textSize="9sp"
+                tools:text="instagram.com/…" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:background="@drawable/ds_bg_guide_action"
+            android:paddingStart="@dimen/ds_space_2"
+            android:paddingTop="@dimen/ds_space_1"
+            android:paddingEnd="@dimen/ds_space_2"
+            android:paddingBottom="@dimen/ds_space_1"
+            android:text="@string/home_open"
+            android:textColor="@color/ds_on_accent"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/ds_guide_arrow_width"
+        android:layout_height="@dimen/ds_guide_arrow_height"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="@dimen/ds_space_4"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_guide_arrow" />
+</FrameLayout>

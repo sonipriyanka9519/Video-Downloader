@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  The detection sheet — screen 03.
+
+  The foot is the canvas's own 20dp and is the whole of what keeps the Download button clear of the
+  navigation bar: the dialog's window already stops just short of it, so adding the system inset in
+  here as well counted the same gap twice and left a band of empty sheet under the button.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="@dimen/_8sdp">
+    android:background="@drawable/ds_bg_sheet_top"
+    android:paddingTop="@dimen/_8sdp"
+    android:paddingBottom="@dimen/ds_space_5"
+    android:clipToOutline="true">
 
     <View
         android:layout_width="@dimen/_30sdp"
@@ -11,7 +22,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/_11sdp"
         android:alpha="0.4"
-        android:background="?attr/colorOutline" />
+        android:background="@color/ds_ink_faint" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,9 +39,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/videos_on_page"
-            android:textColor="@color/on_surface"
+            android:textColor="@color/ds_ink"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold" />
+
+        <!--
+          Select mode's counter, in the title row rather than in the panel below it — the design
+          baselines it against the title, where the pager's arrows sit the rest of the time. Only
+          one of the two is ever visible.
+        -->
+        <TextView
+            android:id="@+id/selectedCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ds_ink_soft"
+            android:textSize="13sp"
+            android:fontFeatureSettings="tnum"
+            android:visibility="gone"
+            tools:text="3 of 4 selected"
+            tools:visibility="visible" />
 
         <ImageButton
             android:id="@+id/btnPrev"
@@ -67,10 +94,33 @@
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:visibility="gone" />
 
+    <!--
+      Height is set in code, from the page in front of the viewer — see
+      MediaSheet.resizePagerToPage.
+
+      ViewPager2 cannot wrap its contents: its pages must be match_parent, so a short page has no
+      way to make the pager short. Left at a fixed height it would have to be sized for the
+      tallest page — two rows of qualities — and every video with fewer would show a band of
+      empty sheet beneath it.
+
+      The value here is only what it starts at, before the first measurement lands.
+    -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_308sdp"
+        android:layout_height="@dimen/_300sdp"
         android:layout_marginBottom="@dimen/_6sdp" />
+
+    <!--
+      Batch mode takes the pager's place inside the same sheet. Included here rather than opened
+      as a screen: the viewer is still choosing what to take from this page, and sending them
+      elsewhere to do it would lose the page they are standing on.
+    -->
+    <include
+        layout="@layout/view_select_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginBottom="@dimen/ds_space_2" />
 
 </LinearLayout>

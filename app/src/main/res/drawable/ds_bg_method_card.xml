@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A method card. Selected reads as an accent outline on the surface rather than a fill — the
+  card's own contents are what should be read, and a wash behind them competes.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ds_surface" />
+            <stroke android:width="@dimen/ds_stroke_selected" android:color="@color/ds_accent" />
+            <corners android:radius="@dimen/ds_radius_card" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ds_surface" />
+            <stroke android:width="@dimen/ds_stroke" android:color="@color/ds_line" />
+            <corners android:radius="@dimen/ds_radius_card" />
+        </shape>
+    </item>
+</selector>

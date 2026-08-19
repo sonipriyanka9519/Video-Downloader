@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Duration pill over a thumbnail. Fixed dark in both themes: it sits on imagery, not on a surface. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_media_chip" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

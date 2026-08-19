@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A section heading. Uppercased in the string, not by textAllCaps — a translation that should
+     not be shouted can opt out. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsSection"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/ds_screen_padding"
+    android:paddingTop="@dimen/ds_space_3"
+    android:paddingBottom="@dimen/ds_space_1"
+    android:textAppearance="@style/TextAppearance.Ds.Label" />

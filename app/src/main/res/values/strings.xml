@@ -12,13 +12,65 @@
     <!-- Kept: the download walkthrough steps through its pages with it. -->
     <string name="next">Next</string>
 
+    <!--
+      The walkthrough — screen 14. Four pages, one loop: open a site, play a video, tap the button,
+      pick a quality. Each page says the same thing twice on purpose — once as an instruction in the
+      heading, once as reassurance in the caption under the diagram — because the two answer
+      different questions: what do I do, and what is the app doing.
+    -->
+    <string name="walk_skip">Skip</string>
+    <string name="walk_next">Next</string>
+    <string name="walk_start">Start browsing</string>
+    <string name="walk_step">STEP %1$d OF %2$d</string>
+    <!-- Inside the diagram on page 3. A plain numeral, not a real count of anything. -->
+    <string name="walk_badge_count">2</string>
+
+    <string name="walk_open_title">Open a site</string>
+    <string name="walk_open_body">Tap any site on the home grid.</string>
+    <string name="walk_open_caption">Any of the tiles on your home screen.</string>
+
+    <string name="walk_play_title">Play any video</string>
+    <string name="walk_play_body">Start it playing — we detect it in the background.</string>
+    <string name="walk_play_caption">Press play. We watch the page for you — nothing to
+        copy.</string>
+
+    <string name="walk_button_title">Tap the red button</string>
+    <string name="walk_button_body">It appears with a count once a video is found.</string>
+    <string name="walk_button_caption">The number tells you how many videos we found.</string>
+
+    <string name="walk_quality_title">Pick a quality</string>
+    <string name="walk_quality_body">Choose a size, then download. That\'s the whole thing.</string>
+    <string name="walk_quality_caption">Bigger picture or smaller file — your call, every
+        time.</string>
+
     <!-- Browser -->
     <string name="search_or_url">Search or type a URL</string>
     <string name="go_back">Back</string>
     <string name="go_forward">Forward</string>
     <string name="reload">Reload</string>
     <string name="page_load_failed">Could not load this page</string>
+    <!-- Screen 02, panel D. States the likely cause rather than the error code. -->
+    <string name="page_error_title">Couldn\'t load this page</string>
+    <string name="page_error_body">Check your connection and try again.</string>
     <string name="open_downloads">Downloads</string>
+
+    <!--
+      Home, screen 01. The rows below the grid are conditional, so every string here has to read
+      correctly on its own — none of them can lean on the row above being present.
+    -->
+    <string name="home_sites">SITES</string>
+    <string name="home_edit">Edit</string>
+    <string name="home_done">Done</string>
+    <string name="home_recent_downloads">RECENT DOWNLOADS</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_downloading">Downloading…</string>
+    <string name="home_link_copied">Link copied — open it?</string>
+    <string name="home_open">Open</string>
+    <string name="home_dismiss_link">Dismiss copied link</string>
+    <string name="home_first_run_hint">Tap a site and play any video — we\'ll detect it for
+        download.</string>
+    <string name="home_how_it_works">How it works</string>
+    <string name="home_search_hint">Search or paste link</string>
 
     <!-- Home -->
     <string name="tab_home">Home</string>
@@ -45,25 +97,43 @@
       Becoming the phone's browser. Each benefit says what changes for the person reading it; a
       list of what the app would gain is not a reason for anyone else.
     -->
-    <string name="default_browser_title_lead">Set as</string>
-    <string name="default_browser_title_accent">Default Browser</string>
-    <string name="default_browser_subtitle">Experience faster browsing!</string>
-    <string name="default_browser_safe">Safe Browsing</string>
-    <string name="default_browser_safe_body">Auto scan websites to block threats every time</string>
-    <string name="default_browser_fast">6x Download Speed</string>
-    <string name="default_browser_fast_body">Enjoy fast downloading with just one tap</string>
-    <string name="default_browser_quick">Quick Access</string>
-    <string name="default_browser_quick_body">Instant access to popular websites</string>
     <string name="default_browser_set">Set as default</string>
+
+    <!--
+      Screen 17 panel E, rebuilt. The old copy sold three features - two of which the app does not
+      have and one an unmeasured speed claim. This says the single thing that actually changes.
+    -->
+    <string name="default_browser_title">Make this your browser?</string>
+    <string name="default_browser_body">Links you tap anywhere open here, so downloading never needs a copy-paste.</string>
+    <string name="default_browser_not_now">Not now</string>
     <!-- Only read aloud now: the way out is the cross in the corner, which needs a name, not a label. -->
-    <string name="default_browser_later">Later</string>
     <string name="default_browser_unavailable">This phone has no screen for choosing a default browser</string>
 
     <!-- Tabs -->
     <string name="open_tabs">Open tabs</string>
     <string name="new_tab">New tab</string>
     <string name="close_tab">Close tab</string>
-    <string name="close_all_tabs">Close all</string>
+    <string name="close_all_tabs">Close all tabs</string>
+    <string name="close_all">Close all</string>
+    <!-- Screen 05. Names the real count, so the consequence is not left to be guessed. -->
+    <plurals name="close_all_tabs_message">
+        <item quantity="one">%d tab will be closed. This cannot be undone.</item>
+        <item quantity="other">All %d tabs will be closed. This cannot be undone.</item>
+    </plurals>
+    <!-- "Tabs 4" — the count sits beside the word rather than being concatenated to it. -->
+    <string name="tabs_with_count">Tabs %1$d</string>
+    <string name="tab_closed">Tab closed</string>
+    <string name="undo">Undo</string>
+
+    <!--
+      Private tabs. The cards are numbered rather than titled — "Private 1", "Private 2" — so a
+      viewer can tell them apart without a page title or favicon being written to screen or disk.
+    -->
+    <string name="private_tabs">Private</string>
+    <string name="new_private_tab">New private tab</string>
+    <string name="private_tab_numbered">Private %1$d</string>
+    <string name="private_caption">Private tabs and their history vanish when closed</string>
+    <string name="close_all_private_tabs">Close all private tabs</string>
     <string name="close_tabs_view">Close tabs view</string>
     <string name="more_options">More options</string>
     <string name="recent">Related to recent searches</string>
@@ -73,20 +143,11 @@
     <string name="earlier">Earlier</string>
 
     <!--
-      How to download. Each step is split in two so the noun it turns on can be coloured, which is
-      what lets the line be taken in at a glance rather than read.
+      What the button offering the walkthrough is called. The four steps that used to live here went
+      with the MVP's single-page version of it — screen 14's four pages carry their own copy, under
+      walk_*, and one explanation of the app is the whole point of them.
     -->
     <string name="how_to_download">How to Download</string>
-    <string name="how_to_mark">?</string>
-    <string name="how_to_done">Got it</string>
-    <string name="how_step_1">Go to</string>
-    <string name="how_step_1_accent">website</string>
-    <string name="how_step_2">Play the</string>
-    <string name="how_step_2_accent">video</string>
-    <string name="how_step_3">Tap the</string>
-    <string name="how_step_3_accent">download button</string>
-    <string name="how_step_4">Choose a</string>
-    <string name="how_step_4_accent">quality</string>
 
     <!-- Guide screens -->
     <string name="guide_paste_hint">Paste URL</string>
@@ -97,6 +158,50 @@
     <string name="guide_open_site">Open %1$s</string>
 
     <!--
+      The per-site guide — screen 15, panel A. The primary button names what the tap will actually
+      do: opening the app it has, or fetching the one it has not.
+    -->
+    <string name="guide_title">How to download from %1$s</string>
+    <string name="guide_step_n">STEP %1$d</string>
+    <string name="guide_step_of">of %1$d</string>
+    <string name="guide_open_app">Open %1$s app</string>
+    <string name="guide_get_app">Get %1$s</string>
+    <string name="guide_got_it">Got it</string>
+
+    <!--
+      Words inside the guide drawings. They are strings rather than paint so they can be
+      translated, read aloud and corrected - the drawings themselves stay shapes.
+
+      The menu rows are the site's words, not ours: they have to match what somebody will actually
+      see in that app, which is why they are here to be adjusted per language rather than drawn.
+    -->
+    <string name="guide_art_share_to">Share to…</string>
+    <string name="guide_art_copy_link">Copy link</string>
+    <string name="guide_art_report">Report</string>
+    <!-- The address in the picture is the site being explained, filled in at bind time. -->
+    <string name="guide_art_link_sample">%1$s/…</string>
+    <string name="guide_art_detected">1 video detected</string>
+    <string name="guide_art_1080">1080p</string>
+    <string name="guide_art_720">720p</string>
+    <string name="guide_art_audio">Audio</string>
+
+    <!--
+      The three steps, shared by every site - screen 15, panel A.
+
+      One set rather than four, because the method is the same everywhere and only the name in the
+      first line changes. ^1 is filled with the site's name at bind time, and it is a template
+      rather than a format placeholder so the bold survives; see GuideStepAdapter.
+
+      Step 3 states the limit rather than letting it be discovered as a failure.
+    -->
+    <string name="guide_step_copy">In the <b>^1</b> app, tap <b>&#8942;</b> above the post and
+        choose <b>Copy link</b>.</string>
+    <string name="guide_step_return">Come back here &#8212; we\'ll offer the link the moment you
+        return.</string>
+    <string name="guide_step_download">Tap <b>Open</b>, then pick a quality. Private posts can\'t
+        be downloaded.</string>
+
+    <!--
       The steps, in text again rather than drawn into the screenshots. The name of whatever has to
       be tapped is bolded, which is what lets the line be scanned instead of read.
 
@@ -105,35 +210,128 @@
     -->
     <string name="guide_how_to">How to Download:</string>
 
-    <string name="guide_fb_step_1">Open \"<b>Facebook</b>\" and click \"<b>Share to</b>\"</string>
-    <string name="guide_fb_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
-    <string name="guide_fb_step_3">Open \"<b>Facebook</b>\" and click \"<b>Copy link</b>\"</string>
-    <string name="guide_fb_step_4">Paste the link above and click \"<b>Search</b>\"</string>
-
-    <string name="guide_ig_step_1">Open \"<b>Instagram</b>\" and click \"<b>Share to</b>\"</string>
-    <string name="guide_ig_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
-    <string name="guide_ig_step_3">Open \"<b>Instagram</b>\" and click \"<b>Copy link</b>\"</string>
-    <string name="guide_ig_step_4">Paste the link above and click \"<b>Search</b>\"</string>
-
     <!-- Placeholders until the wording for these two arrives. -->
-    <string name="guide_pin_step_1">Open \"<b>Pinterest</b>\" and click \"<b>Share</b>\"</string>
-    <string name="guide_pin_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
-    <string name="guide_pin_step_3">Open \"<b>Pinterest</b>\" and click \"<b>Copy link</b>\"</string>
-    <string name="guide_pin_step_4">Paste the link above and click \"<b>Search</b>\"</string>
-
-    <string name="guide_x_step_1">Open \"<b>X</b>\" and click \"<b>Share post</b>\"</string>
-    <string name="guide_x_step_2">Select \"<b>Video Downloader</b>\" from the share list</string>
-    <string name="guide_x_step_3">Open \"<b>X</b>\" and click \"<b>Copy link</b>\"</string>
-    <string name="guide_x_step_4">Paste the link above and click \"<b>Search</b>\"</string>
 
     <string name="guide_instagram">Instagram</string>
     <string name="guide_pinterest">Pinterest</string>
     <string name="guide_x">X</string>
     <string name="guide_facebook">Facebook</string>
+    <!--
+      Screen 04. Group headers, each naming what its rows are rather than what to do with them —
+      the two row types behave differently and the header is how that is signposted.
+    -->
+    <string name="this_page">THIS PAGE</string>
+    <string name="open_now">open now</string>
+    <!-- Joins two facts on one line. A placeholder pair so a translation can reorder them. -->
+    <string name="dot_separated">%1$s · %2$s</string>
+    <string name="recent_searches">RECENT SEARCHES</string>
+    <string name="recently_visited">RECENTLY VISITED</string>
+    <string name="from_your_history">FROM YOUR HISTORY</string>
+    <string name="searches_label">SEARCHES</string>
+    <string name="clear_history">Clear history</string>
+
+    <!--
+      The search screen's own clear, which empties the typed searches above it and nothing else.
+      Named for what it does: it used to read "Clear history" and take the browsing history with
+      it, which is a much larger thing than the list it sits under.
+    -->
+    <string name="clear_searches">Clear searches</string>
+    <string name="clear_searches_title">Clear recent searches?</string>
+    <string name="clear_searches_message">The searches you have typed are removed. Your browsing history and downloads are not.</string>
+    <!--
+      One pair for both places this is offered — the history sheet and screen 10's row. Same
+      action, so the same words.
+
+      It used to say recent searches would go too. They do not: SearchHistory.clear removes the
+      visited pages and leaves the query list alone. What it says now is what it does, and it
+      adds the reassurance the design asks for — on a downloader, "clear history" is a phrase
+      people hesitate over because they are afraid it means their files.
+    -->
+    <string name="clear_history_title">Clear browsing history?</string>
+    <string name="clear_history_message">Visited pages are removed. Your downloads are not
+        affected.</string>
+    <string name="remove_entry">Remove</string>
+
     <string name="use_search">Use this search</string>
     <string name="history">History</string>
     <string name="clear_all">Clear all</string>
-    <string name="no_history">Nothing here yet. Pages you visit will be listed.</string>
+
+    <!--
+      The history sheet — screen 12.
+
+      The day headings are uppercase in the string rather than by textAllCaps, so a language that
+      should not be shouted in can opt out. Only today's carries a date: "TODAY" alone is
+      unambiguous, and "EARLIER" covers many days and can name none of them.
+    -->
+    <!--
+      Storage — screen 13. Every figure is a real one read from the device, so the wording never
+      promises more precision than it has: "on this phone" rather than a partition name.
+    -->
+    <plurals name="storage_used_by">
+        <item quantity="one">%1$s used by %2$d video</item>
+        <item quantity="other">%1$s used by %2$d videos</item>
+    </plurals>
+    <string name="storage_free_of">%1$s free of %2$s on this phone</string>
+    <string name="storage_legend_videos">Videos %1$s</string>
+    <string name="storage_legend_other">Other %1$s</string>
+    <string name="storage_legend_free">Free %1$s</string>
+    <string name="storage_watched">Watched videos</string>
+    <plurals name="storage_watched_summary">
+        <item quantity="one">%1$d video you\'ve finished · %2$s</item>
+        <item quantity="other">%1$d videos you\'ve finished · %2$s</item>
+    </plurals>
+    <string name="storage_review">Review &amp; free up</string>
+    <string name="storage_nothing_title">Nothing to clear up</string>
+    <string name="storage_nothing_body">You haven\'t finished watching anything yet. We\'ll suggest
+        videos here once you do.</string>
+    <string name="storage_largest">LARGEST FILES</string>
+    <string name="storage_largest_empty">Nothing downloaded yet, so nothing is taking up
+        space.</string>
+    <!-- The banner over the pre-ticked selection this screen hands to the library. -->
+    <string name="storage_preselected">Everything you\'ve finished watching is pre-selected —
+        %1$s.</string>
+    <!--
+      Asking the system for permission to delete somebody else's file needs the launcher the library
+      has and this screen does not. Says where it can be done rather than just failing.
+    -->
+    <string name="storage_delete_elsewhere">Android needs to confirm this one. Open Downloads and
+        delete it from there.</string>
+
+    <string name="history_search_hint">Search history</string>
+    <string name="history_today">TODAY · %1$s</string>
+    <string name="history_yesterday">YESTERDAY</string>
+    <string name="history_earlier">EARLIER</string>
+    <plurals name="history_results">
+        <item quantity="one">%d RESULT</item>
+        <item quantity="other">%d RESULTS</item>
+    </plurals>
+    <!-- The repeat-visit chip. Multiplication sign, not the letter x. -->
+    <string name="history_visit_count">×%1$d</string>
+    <string name="history_empty_title">No history yet</string>
+    <string name="history_empty_body">Pages you visit will show up here so you can get back to
+        them.</string>
+    <!-- A search that found nothing must never read as the history having been lost. -->
+    <string name="history_no_matches">No matches</string>
+    <string name="history_no_matches_body">Nothing in your history matches that. Try part of a
+        page name or a site.</string>
+    <!--
+      Names the real count, and answers the fear before it is felt: on a downloader, "clear
+      history" is a phrase people hesitate over because they are afraid it means their files.
+    -->
+    <!--
+      Its own title, not the one the Settings row and the address bar share: this dialog is the only
+      one that also carries the retention offer, and "all" is the word that earns the extra step.
+    -->
+    <string name="clear_history_all_title">Clear all history?</string>
+    <plurals name="clear_history_body">
+        <item quantity="one">The 1 visited page is removed. Your downloads stay where they
+            are.</item>
+        <item quantity="other">All %d visited pages are removed. Your downloads stay where they
+            are.</item>
+    </plurals>
+    <string name="history_retention">Also clear history older than 30 days automatically</string>
+    <string name="setting_history_retention">Clear old history</string>
+    <string name="setting_history_retention_body">Removes anything older than 30 days</string>
     <string name="tabs">Tabs</string>
     <string name="tab_preview">Page preview</string>
     <plurals name="tabs_open">
@@ -151,10 +349,56 @@
     <string name="choose_quality">Choose quality</string>
     <string name="quality">Quality</string>
     <string name="selected">Selected</string>
-    <string name="queued_toast">Added to downloads</string>
+    <!--
+      Shown the moment a download starts, above the tab bar. It names the processing rather than
+      only the queueing: for HLS the slow part is the remux afterwards, and somebody who was
+      told "added" and then waits with nothing happening assumes it failed.
+    -->
+    <string name="queued_toast">Added to downloads · processing</string>
+    <string name="queued_waiting_wifi">Queued · waiting for Wi-Fi</string>
     <string name="format_not_supported">Streaming format not supported yet</string>
     <string name="unsupported">Unsupported</string>
     <string name="protected_content">Protected</string>
+    <!-- Screen 03: shown in place of the download button when every rung is locked. -->
+    <string name="protected_notice">This video is protected and can\'t be downloaded.</string>
+
+    <!-- Screen 03, panel C — batch download. -->
+    <!-- Says what it does in full: "Download all 5 videos", not a trailing ellipsis. -->
+    <plurals name="download_all">
+        <item quantity="one">Download all %d video</item>
+        <item quantity="other">Download all %d videos</item>
+    </plurals>
+    <string name="selected_of">%1$d of %2$d selected</string>
+    <string name="select_all_n">Select all %1$d</string>
+    <string name="download_n">Download %1$d</string>
+    <string name="download_n_size">Download %1$d • %2$s</string>
+    <string name="batch_unavailable">Not available at this quality</string>
+    <!-- Shown wherever "Always ask" left nothing preselected: on the button and on each row. -->
+    <string name="pick_a_quality">Choose a quality</string>
+    <!-- The row's own quality pill, which has a pill's worth of room and no more. -->
+    <string name="choose">Choose</string>
+    <string name="batch_best_720">Best ≤720p</string>
+    <string name="batch_best">Best</string>
+    <string name="batch_smallest">Smallest</string>
+    <string name="batch_audio">Audio</string>
+    <plurals name="queued_n">
+        <item quantity="one">%d video added · processing</item>
+        <item quantity="other">%d videos added · processing</item>
+    </plurals>
+    <!--
+      The same two messages for when "Download over Wi-Fi only" is on and the phone is on mobile
+      data. Nothing has failed, and nothing is going to move either, so the message says so.
+    -->
+    <plurals name="queued_n_waiting_wifi">
+        <item quantity="one">%d video queued · waiting for Wi-Fi</item>
+        <item quantity="other">%d videos queued · waiting for Wi-Fi</item>
+    </plurals>
+    <string name="view">View</string>
+    <!-- The metadata line under a detected video: duration · quality count · site. -->
+    <plurals name="quality_count">
+        <item quantity="one">%d quality</item>
+        <item quantity="other">%d qualities</item>
+    </plurals>
     <string name="status_muxing">Converting to MP4…</string>
     <plurals name="videos_found">
         <item quantity="one">%d video detected</item>
@@ -169,7 +413,84 @@
 
     <!-- Downloads -->
     <string name="downloads">Downloads</string>
-    <string name="no_downloads">Nothing downloaded yet</string>
+    <string name="no_downloads">No downloads yet</string>
+    <string name="no_downloads_body">Videos you download will appear here.</string>
+
+    <!-- Screen 06. Searching narrows the library in place; it never opens a screen. -->
+    <string name="search_downloads">Search downloads</string>
+    <string name="search_downloads_hint">Search downloads</string>
+    <string name="no_matches_for">No matches for “%1$s”</string>
+    <string name="no_matches_body">Try part of the file name, or clear the search to see
+        everything.</string>
+
+    <!-- The filter chip row. One choice at a time; a filter narrows, it does not branch. -->
+    <string name="filter_all">All</string>
+    <string name="filter_videos">Videos</string>
+    <string name="filter_audio">Audio</string>
+    <string name="filter_unwatched">Unwatched</string>
+
+    <!--
+      Collections — screen 08. Folders that are never mandatory: nothing here is phrased as a
+      step, because a video can be downloaded, watched and deleted without one ever existing.
+    -->
+    <string name="collections">Collections</string>
+    <string name="collections_add_title">Add to collection</string>
+    <string name="collections_empty">Collections are folders you make yourself. Nothing has to
+        go in one.</string>
+    <string name="collection_new">New collection</string>
+    <string name="collection_name_hint">Collection name</string>
+    <string name="create">Create</string>
+    <string name="collection_name_required">Give it a name</string>
+    <string name="collection_name_taken">There is already a collection with that name</string>
+    <string name="collection_add_choose">Choose a collection</string>
+    <string name="collection_add_to">Add to %1$s</string>
+    <plurals name="collection_add_to_many">
+        <item quantity="one">Add to %1$d collection</item>
+        <item quantity="other">Add to %1$d collections</item>
+    </plurals>
+    <string name="collection_added_one">Added to %1$s</string>
+    <plurals name="collection_added_many">
+        <item quantity="one">Added to %1$d collection</item>
+        <item quantity="other">Added to %1$d collections</item>
+    </plurals>
+    <string name="collection_add_video">Add to collection</string>
+    <!-- The same row once the video is filed somewhere: it manages membership, both ways. -->
+    <string name="collection_manage_video">Collections</string>
+    <string name="collection_removed_from">Removed from %1$s</string>
+    <!--
+      The sheet when the video is already filed: it is showing where it is, not only offering
+      somewhere to put it. Unticking a row takes it out of that collection and leaves the others.
+    -->
+    <string name="collections_in_title">In collections</string>
+    <string name="collections_updated">Collections updated</string>
+    <plurals name="collection_removed_many">
+        <item quantity="one">Removed from %1$d collection</item>
+        <item quantity="other">Removed from %1$d collections</item>
+    </plurals>
+    <string name="collection_clear_filter">Show all downloads</string>
+    <!--
+      Deleting a collection. The message is the whole point of the dialog: the word "delete" on
+      a folder of videos implies the videos go with it, and here they do not. It says so with
+      the real count rather than in the abstract.
+    -->
+    <string name="collection_delete_title">Delete “%1$s”?</string>
+    <plurals name="collection_delete_message">
+        <item quantity="one">The collection is removed. The 1 video stays in your
+            library.</item>
+        <item quantity="other">The collection is removed. The %1$d videos stay in your
+            library.</item>
+    </plurals>
+    <string name="collection_deleted">“%1$s” removed</string>
+    <string name="collection_empty_title">Nothing here yet</string>
+    <string name="collection_empty_body">Add a video from the ⋮ menu on any download, or select
+        several and use Collection.</string>
+    <plurals name="videos_count">
+        <item quantity="one">%1$d video</item>
+        <item quantity="other">%1$d videos</item>
+    </plurals>
+
+    <!-- Pinned above the day headings while anything is still arriving. -->
+    <string name="downloading_count">DOWNLOADING (%1$d)</string>
 
     <!--
       Day headings. "Today" and "Yesterday" carry their date too: the word is what people scan
@@ -179,8 +500,61 @@
     <string name="downloads_yesterday">Yesterday · %1$s</string>
     <string name="downloads_undated">Undated</string>
 
-    <!-- Whatever is still arriving, pinned above the days. -->
+    <!--
+      Whatever is still arriving, pinned above the days. Failures sit here too — they are
+      unfinished business, and filing one under "Today" beside the files that worked would let a
+      failed download pass for a saved one.
+    -->
     <string name="downloads_in_progress">Downloading</string>
+    <!--
+      Select mode — screen 07. A long press turns the library into a selection.
+
+      The close button is "Done" rather than "Cancel": leaving select mode undoes nothing, and
+      calling it cancel would suggest the ticking is about to be thrown away.
+    -->
+    <string name="select_done">Done selecting</string>
+    <string name="select_all">Select all</string>
+    <plurals name="selected_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <string name="select_none">Select videos</string>
+    <string name="collection">Collection</string>
+    <plurals name="delete_videos_title">
+        <item quantity="one">Delete this video?</item>
+        <item quantity="other">Delete %1$d videos?</item>
+    </plurals>
+    <string name="delete_videos_message">They\'ll be removed from your device.</string>
+    <plurals name="deleted_count">
+        <item quantity="one">%1$d video deleted</item>
+        <item quantity="other">%1$d videos deleted</item>
+    </plurals>
+    <!-- Only reached when the system had no way to ask about the rest — see MediaLibrary. -->
+    <string name="deleted_some">%1$d deleted · %2$d couldn\'t be removed</string>
+    <string name="share_videos">Share videos</string>
+
+    <!-- Rename keeps the extension, and says so under the field. -->
+    <string name="rename_extension_fixed">Extension can\'t be changed</string>
+    <!-- Commits the rename. Named for what it does, not "OK". -->
+    <string name="save">Save</string>
+    <!-- The fallback when a file has no type recorded, in Properties. -->
+    <string name="kind_video">Video</string>
+    <string name="kind_audio">Audio</string>
+
+    <!--
+      Stopping a transfer. Both buttons name what they do rather than saying yes and no: a
+      dialog headed "Cancel download?" with a "Cancel" button on it is a coin toss.
+    -->
+    <string name="cancel_download">Cancel download</string>
+    <string name="cancel_download_title">Cancel this download?</string>
+    <string name="cancel_download_message">“%1$s” will stop and what has been downloaded so far
+        will be discarded. You can start it again from the page.</string>
+    <string name="keep_downloading">Keep downloading</string>
+
+    <!-- Burned over the poster while a transfer runs. -->
+    <string name="percent">%1$d%%</string>
+    <!-- "12.4 MB of 24.1 MB". A placeholder each, so a translation can reorder them. -->
+    <string name="bytes_of_bytes">%1$s of %2$s</string>
 
     <!-- The two controls at the top right. -->
     <string name="sort_downloads">Sort by</string>
@@ -237,7 +611,12 @@
     <string name="download_complete">Download complete</string>
     <string name="download_failed">Download failed</string>
     <string name="status_queued">Queued</string>
+    <!-- Screen 10's Wi-Fi-only setting is holding this one. Naming the reason is what stops a
+         download that will not move for hours from reading as one that is stuck. -->
+    <string name="status_waiting_wifi">Waiting for Wi-Fi</string>
     <string name="status_paused">Paused</string>
+    <!-- Between the tap and the download actually stopping - see PendingPause. -->
+    <string name="status_pausing">Pausing\u2026</string>
     <string name="status_publishing">Saving to gallery…</string>
     <string name="status_cancelled">Cancelled</string>
     <plurals name="downloading_n">
@@ -248,10 +627,329 @@
     <!-- Notification channels -->
     <string name="channel_progress">Download progress</string>
     <string name="channel_done">Completed downloads</string>
+    <string name="channel_reminders">Unwatched reminders</string>
+
+    <!-- Screen 16 panel A - progress. "of" rather than a slash: the shade is read at a glance,
+         and 12.4 MB of 24.1 MB says which number is which without having to work it out. -->
+    <string name="notif_progress_of">%1$s of %2$s</string>
+    <string name="notif_progress_of_speed">%1$s of %2$s \u2022 %3$s</string>
+    <string name="notif_progress_speed">%1$s \u2022 %2$s</string>
+
+    <!-- Screen 16 panel A - completion. The title states the event and the body names the file,
+         because the shade groups by app and every one of these would otherwise start differently. -->
+    <string name="notif_done_body">%1$s \u2022 %2$s</string>
+    <string name="notif_watch_now">Watch now</string>
+
+    <!-- Screen 16 panel B - held and failed. -->
+    <string name="notif_waiting_wifi">Waiting for Wi\u2011Fi</string>
+    <string name="notif_waiting_wifi_body">%1$s resumes when you reconnect</string>
+    <string name="notif_use_mobile_data">Use mobile data</string>
+    <string name="notif_failed_title">Couldn\u2019t finish download</string>
+    <string name="notif_failed_body">%1$s \u2014 %2$s</string>
+    <string name="notif_dismiss">Dismiss</string>
+    <string name="notif_reopen_page">Reopen page</string>
+    <string name="notif_open_site">Open site</string>
+    <string name="notif_retry">Retry</string>
+
+    <!-- Screen 16 panel B - the summary three concurrent downloads collapse into. -->
+    <plurals name="notif_downloads_in_progress">
+        <item quantity="one">%d download in progress</item>
+        <item quantity="other">%d downloads in progress</item>
+    </plurals>
+    <string name="notif_pause_all">Pause all</string>
+    <string name="notif_open">Open</string>
+
+    <!-- Screen 16 panel A - the reminder, which only an opted-in viewer ever sees. -->
+    <plurals name="notif_unwatched_title">
+        <item quantity="one">%d video waiting for you</item>
+        <item quantity="other">%d videos waiting for you</item>
+    </plurals>
+    <string name="notif_unwatched_body">Downloaded but not watched yet</string>
+    <string name="notif_open_library">Open library</string>
+
+
+    <!-- Screen 16 - the reminder offer, shown in the library once three sit unwatched. -->
+    <string name="reminder_offer_title">Nudge you about unwatched videos?</string>
+    <string name="reminder_offer_body">%1$d are waiting. We\u2019d remind you at most twice a week, and you can stop any time.</string>
+    <string name="reminder_offer_yes">Remind me</string>
+    <string name="reminder_offer_no">No thanks</string>
     <string name="channel_push">Video updates</string>
 
     <!-- Used only when a pushed message carries a link but no wording of its own. -->
     <string name="push_default_title">A video for you</string>
+
+    <!--
+      The player — screen 09. Every control here has a gesture twin, so these labels are what a
+      screen reader gets rather than the only way to reach the action.
+    -->
+    <string name="pip">Picture in picture</string>
+    <string name="rewind_10">Back 10 seconds</string>
+    <string name="forward_10">Forward 10 seconds</string>
+    <string name="seek">Seek</string>
+    <string name="queue">Playing next</string>
+    <string name="speed_label">%1$sx</string>
+    <string name="seek_back_10">−10s</string>
+    <string name="seek_forward_10">+10s</string>
+    <string name="loop_video">Repeat</string>
+    <string name="loop_on">Repeating</string>
+    <string name="loop_off">Repeat off</string>
+    <string name="pip_unavailable">Picture in picture isn\'t available on this device</string>
+
+    <!--
+      The queue and the countdown — screen 09, panels C and D.
+
+      The scope line is the important one: a list of videos with no explanation of why those
+      videos is a list nobody trusts, and "next" only means something if you can see where the
+      queue came from.
+    -->
+    <string name="autoplay_next">AUTOPLAY NEXT</string>
+    <string name="queue_scope_all">Queue follows your downloads</string>
+    <string name="queue_scope_named">Queue follows the %1$s filter</string>
+    <string name="playing_now">Playing now</string>
+    <string name="up_next">UP NEXT</string>
+    <string name="playing_in">Playing in %1$ds</string>
+
+    <!--
+      Settings — screen 10.
+
+      Every row's subtitle carries either its current value or its consequence, which is what
+      lets this screen have no help text, no search and no nested pages. A row that hands off to
+      Android says so, so leaving the app is never a surprise.
+    -->
+    <string name="settings">Settings</string>
+    <string name="settings_downloads">DOWNLOADS</string>
+    <string name="settings_appearance">APPEARANCE</string>
+    <string name="settings_privacy">PRIVACY</string>
+    <string name="settings_notifications">NOTIFICATIONS</string>
+    <string name="settings_general">GENERAL</string>
+    <string name="settings_about">ABOUT</string>
+    <string name="opens_android_settings">Opens Android settings</string>
+    <string name="settings_unavailable">This phone has no screen for that</string>
+
+    <string name="setting_default_quality">Default quality</string>
+    <string name="setting_default_quality_body">What we pick when you tap Download without choosing.</string>
+    <string name="quality_always_ask">Always ask</string>
+    <string name="quality_best">Best available</string>
+    <string name="quality_up_to_720">Best up to 720p</string>
+    <string name="quality_smallest">Smallest</string>
+    <string name="quality_audio_only">Audio only</string>
+
+    <!--
+      Screen 17 panel A. Every option says what choosing it costs, because "Best available" and
+      "Smallest" are only meaningful next to each other and nobody should have to find out which
+      one filled their storage by filling it.
+    -->
+    <string name="quality_always_ask_body">Show the quality sheet every time</string>
+    <string name="quality_best_body">Largest files, sharpest picture</string>
+    <string name="quality_up_to_720_body">Good balance of size and quality</string>
+    <string name="quality_smallest_body">Saves data and storage</string>
+    <string name="quality_audio_only_body">M4A, when a video has a separate track</string>
+
+    <string name="setting_clear_cache">Clear cache</string>
+    <string name="setting_clear_cache_body">Frees space used by pages you have visited</string>
+    <string name="clear_cache_message">Cached pages and images will be removed. Your downloads and history are not affected.</string>
+    <string name="cache_cleared">Cache cleared</string>
+    <string name="setting_clear_cookies">Clear cookies</string>
+    <string name="setting_clear_cookies_body">Signs you out of every site</string>
+    <string name="clear_cookies_message">You will be signed out of every site in the browser. Sites that only show videos to signed-in viewers will need a login again before you can download from them.</string>
+    <string name="cookies_cleared">Cookies cleared</string>
+    <string name="setting_wifi_only">Download over Wi-Fi only</string>
+    <string name="setting_wifi_only_body">Queued downloads wait for Wi-Fi</string>
+    <string name="setting_parallel">Parallel downloads</string>
+    <!-- Screen 17 panel B. Says the quiet part: the slider does not make anything faster. -->
+    <string name="setting_parallel_body">More at once isn\u2019t faster \u2014 your connection is the limit.</string>
+    <plurals name="setting_parallel_value">
+        <item quantity="one">%1$d at a time</item>
+        <item quantity="other">%1$d at a time</item>
+    </plurals>
+    <string name="setting_location">Download location</string>
+    <string name="setting_location_value">Movies/Free Video Downloader</string>
+
+    <string name="setting_theme">Theme</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="setting_language">App language</string>
+    <string name="setting_language_value">%1$s (device)</string>
+
+    <string name="setting_clear_history">Clear browsing history</string>
+    <string name="clear">Clear</string>
+    <string name="history_cleared">Browsing history cleared</string>
+
+    <string name="setting_notify_complete">Download complete</string>
+    <string name="setting_notify_unwatched">Unwatched reminders</string>
+    <string name="setting_notify_unwatched_body">At most twice a week</string>
+
+    <string name="setting_default_browser">Set as default browser</string>
+    <string name="setting_storage">Storage used</string>
+    <plurals name="setting_storage_value">
+        <item quantity="one">%1$s in %2$d video</item>
+        <item quantity="other">%1$s in %2$d videos</item>
+    </plurals>
+    <string name="setting_storage_empty">Nothing downloaded yet</string>
+
+    <string name="setting_share_app">Share this app</string>
+
+    <!--
+      Screen 18 panel E - the launcher's long-press menu. Short labels are what the launcher shows
+      and it truncates hard, so they stay to two words; the long labels are for the wider surfaces
+      and for a screen reader.
+    -->
+    <string name="shortcut_paste">Paste link</string>
+    <string name="shortcut_paste_long">Paste a link to download</string>
+    <string name="shortcut_private">Private tab</string>
+    <string name="shortcut_private_long">Open a new private tab</string>
+    <string name="shortcut_downloads">Downloads</string>
+    <string name="shortcut_downloads_long">My downloads</string>
+    <string name="share_app_text">Save any video straight from your browser \u2014 here\u2019s the one I use: %1$s</string>
+
+    <!-- Screen 18 panel D - the four ways out of the share sheet. -->
+    <string name="share_via_messages">Messages</string>
+    <string name="share_via_email">Email</string>
+    <string name="share_via_more">More</string>
+    <string name="share_via_copy">Copy link</string>
+    <string name="share_no_messaging_app">No messaging app is set up on this phone</string>
+    <string name="setting_rate_app">Rate this app</string>
+
+    <!-- Screen 17 panel D - About. -->
+    <string name="about">About</string>
+    <string name="about_version">Version %1$s (%2$d)</string>
+    <string name="about_support">SUPPORT US</string>
+    <string name="about_legal">LEGAL</string>
+    <string name="about_rate_body">Takes ten seconds, helps a lot</string>
+    <string name="about_feedback">Send feedback</string>
+
+    <!--
+      Screen 18 panel B. The canvas wording named a count - "Three downloads in" - which was
+      true when this only fired on the third. It now fires on the first as well, so the count
+      is gone rather than shown wrong to somebody one download in.
+    -->
+    <string name="rate_title">Working out so far?</string>
+    <string name="rate_body">A rating helps other people find the app. It takes about ten seconds.</string>
+    <string name="rate_now">Rate on Play Store</string>
+    <string name="rate_not_now">Not now</string>
+    <!-- Each star is a control, so each one has to say what choosing it means. -->
+    <string name="rate_star_cd">%1$d of 5 stars</string>
+
+    <!-- One address, so About and the rate prompt cannot end up mailing different inboxes. -->
+    <string name="feedback_email" translatable="false">sonipriyanka9519@gmail.com</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_terms">Terms of use</string>
+    <string name="about_licences">Open-source licences</string>
+    <string name="about_disclaimer">Download only content you have the right to save. This app doesn\u2019t host or index any media.</string>
+    <!-- Subject line for the feedback mail, so a report arrives already labelled. -->
+    <string name="about_feedback_subject">%1$s feedback (%2$s)</string>
+    <string name="about_no_mail_app">No email app is set up on this phone</string>
+    <string name="store_unavailable">No app store on this phone</string>
+    <string name="setting_version">Version</string>
+    <string name="setting_version_value">%1$s (build %2$d)</string>
+
+    <!--
+      App lock — screen 11.
+
+      One credential for the private folder — and only for it. The app itself never asks: what is
+      worth locking is the handful of videos somebody marked private, not the list of files. A PIN
+      is always set, whichever method is chosen, because a fingerprint can fail and a lock with no
+      second way in is a lock that will eventually shut its owner out.
+    -->
+    <string name="setting_app_lock">App lock</string>
+    <string name="lock_state_on">On</string>
+    <string name="lock_state_off">Off</string>
+    <!-- The row's subtitle names what is locked, so "Off" cannot be read as the app being open. -->
+    <string name="lock_state_on_body">On · protects your private folder</string>
+    <string name="lock_state_off_body">Off · lock videos into a private folder</string>
+    <string name="lock_turned_off">Lock turned off</string>
+    <string name="lock_method_biometric">Fingerprint or face</string>
+    <string name="lock_method_biometric_body">Unlocks with whatever your phone already uses.</string>
+    <string name="lock_method_pin">4-digit PIN</string>
+    <string name="lock_method_pin_body">Set either way, so you are never locked out by a sensor
+        that will not read.</string>
+    <string name="lock_recommended">Recommended</string>
+    <string name="lock_step">Step %1$d of %2$d</string>
+
+    <string name="lock_create_pin">Create a PIN</string>
+    <string name="lock_create_pin_body">Four digits. You\'ll confirm it, then pick a recovery
+        question.</string>
+    <string name="lock_confirm_pin">Confirm your PIN</string>
+    <string name="lock_confirm_pin_body">Enter the same four digits again.</string>
+    <!-- One plain sentence. No lockout copy: four digits typed twice is a typo, not an attack. -->
+    <string name="lock_pin_mismatch">Those didn\'t match. Try again.</string>
+
+    <string name="lock_recovery_title">Pick a recovery question</string>
+    <string name="lock_recovery_body">If you forget the PIN, this is the only way back in. It
+        never unlocks by email.</string>
+    <string name="lock_recovery_pick">Recovery question</string>
+    <string name="lock_recovery_hint">Your answer</string>
+    <string name="lock_recovery_required">Enter an answer you will remember</string>
+    <string name="lock_turn_on">Turn on</string>
+
+    <string name="lock_unlock_title">Unlock</string>
+    <string name="lock_unlock_biometric">Touch the sensor, or enter your PIN below.</string>
+    <string name="lock_unlock_pin">Enter your PIN.</string>
+    <string name="lock_use_biometric">Use fingerprint</string>
+    <string name="lock_wrong_pin">Wrong PIN. Try again.</string>
+    <string name="lock_forgot_pin">Forgot PIN?</string>
+    <string name="lock_use_pin">Use PIN</string>
+    <string name="lock_recovery_unlock">Unlock</string>
+    <string name="lock_recovery_wrong">That is not the answer we have. Try again.</string>
+    <string name="lock_turn_off_title">Turn off the lock?</string>
+    <string name="lock_turn_off_message">Your PIN and recovery question are forgotten. Anything
+        still in the private folder is moved back to Downloads first.</string>
+    <string name="lock_turn_off">Turn off</string>
+
+    <!--
+      The private folder — screen 11, panels D and E.
+
+      "Moved" rather than "hidden" throughout, because that is what happens: the file leaves the
+      gallery and this app's own storage is where it goes. Anybody who is told it was hidden will
+      go looking for it in the gallery.
+    -->
+    <string name="private_folder">Private</string>
+    <string name="private_move_in">Move to private</string>
+    <string name="private_move_out">Move out of private</string>
+    <string name="private_moving">Moving…</string>
+    <string name="private_moved_in">“%1$s” moved to private</string>
+    <string name="private_moved_out">“%1$s” is back in your library</string>
+    <string name="private_move_failed">Couldn\'t move that one. It is where it was.</string>
+    <string name="private_folder_title">Private folder</string>
+    <string name="turn_on">Turn on</string>
+    <!--
+      Panel D's three promises. Each is a fact the viewer can check, not a reassurance: they are
+      what the app actually does with a private video, in the order somebody would ask.
+    -->
+    <string name="private_intro_gallery">Hidden from your phone\'s gallery</string>
+    <string name="private_intro_unlock">Only visible after you unlock</string>
+    <string name="private_intro_hidden">Never shown in Downloads or notifications</string>
+    <string name="private_intro_footnote">Protected by your fingerprint or a 4-digit PIN. The app
+        itself stays open — only this folder is locked.</string>
+    <!--
+      What the challenge says it is for. One per reason, because "Enter your PIN" with no cause
+      given is a prompt people answer without knowing what they agreed to.
+    -->
+    <string name="lock_reason_open">Unlock to open your private folder</string>
+    <string name="lock_reason_move">Unlock to move this to your private folder</string>
+    <string name="lock_reason_move_many">Unlock to move these to your private folder</string>
+    <string name="lock_reason_disable">Unlock to turn the lock off</string>
+    <string name="private_moved_in_n">%1$d videos moved to private</string>
+    <string name="private_move_none">Only finished downloads can be made private</string>
+    <string name="private_move_failed_n">%1$d of %2$d couldn\'t be moved. They are where they
+        were.</string>
+    <string name="private_empty_title">Nothing private yet</string>
+    <string name="private_empty_body">Videos moved here leave your gallery entirely — no
+        thumbnails, no notifications, no sharing.</string>
+
+    <!-- Keypad. Digits as strings so a locale that writes its own numerals can. -->
+    <string name="key_0">0</string>
+    <string name="key_1">1</string>
+    <string name="key_2">2</string>
+    <string name="key_3">3</string>
+    <string name="key_4">4</string>
+    <string name="key_5">5</string>
+    <string name="key_6">6</string>
+    <string name="key_7">7</string>
+    <string name="key_8">8</string>
+    <string name="key_9">9</string>
+    <string name="key_delete">Delete</string>
 
     <!-- Content descriptions -->
     <string name="thumbnail">Thumbnail</string>

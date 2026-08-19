@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The speed chip, and the gesture readout that mirrors it. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_player_chip" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

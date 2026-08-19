@@ -2,6 +2,7 @@ package com.ms.webview;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.webkit.URLUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -23,10 +25,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.ms.webview.data.DownloadEntity;
+import com.ms.webview.data.DownloadStatus;
 import com.ms.webview.push.PushLink;
 import com.ms.webview.ui.BrowserFragment;
 import com.ms.webview.ui.MainPagerAdapter;
+import com.ms.webview.ui.Snacks;
 
 /**
  * The shell: two tabs, and the window-level concerns that belong to neither of them.
@@ -41,9 +48,30 @@ public class MainActivity extends AppCompatActivity {
     /** Set by the download notification, so tapping it lands on the downloads list. */
     public static final String EXTRA_OPEN_DOWNLOADS = "open_downloads";
 
+    /**
+     * The launcher shortcuts — screen 18, panel E. Values must match res/xml/shortcuts.xml,
+     * which spells them out because a shortcut's intent is declared in XML rather than built here.
+     */
+    public static final String EXTRA_OPEN_SEARCH = "open_search";
+    public static final String EXTRA_OPEN_PRIVATE_TAB = "open_private_tab";
+
+
     private ViewPager2 pager;
     private BottomNavigationView bottomNav;
+    /** The two reasons the tab bar steps aside, held apart so neither undoes the other. */
+    private boolean keyboardUp;
+    private boolean selecting;
     private View navDivider;
+
+    /**
+     * Whether the browser is showing a private tab, remembered rather than asked for.
+     *
+     * <p>The window is re-initialised behind our backs more often than it looks: EdgeToEdge sets
+     * the status bar in onCreate, and a theme change runs onCreate again. Keeping the answer here
+     * means onResume can put the bar back without having to go and ask the browser, which may not
+     * be the tab in front and may not even exist yet.
+     */
+    private boolean privateChrome;
 
     private ActivityResultLauncher<String[]> permissions;
 
@@ -69,16 +97,27 @@ public class MainActivity extends AppCompatActivity {
             // height on top of the space the window had already surrendered, which is what
             // squashed the tab into a strip while typing.
             Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
-            setNavVisible(ime.bottom == 0);
+            keyboardUp = ime.bottom > 0;
+            applyNavVisibility();
             return insets;
         });
 
         App.get().repository().reconcileOnStartup();
 
         setUpTabs();
+        setUpDownloadBadge();
         setUpPermissions();
         applyRequestedTab(getIntent());
         applyIncomingLink(getIntent());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // The status bar is set on the window, not on a view, so nothing restores it for us. Put
+        // it back to whatever the browser last asked for - after a theme change, after returning
+        // from the player, after anything that ran onCreate again.
+        setPrivateChrome(privateChrome);
     }
 
     @Override
@@ -123,11 +162,47 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        BrowserFragment.askAboutDefaultBrowser();
+        // Nothing stands in front of this screen. The lock guards the private folder and the
+        // videos put into it — not the app, which has to open on the tab the viewer left it on
+        // for the same reason a gallery does. See AppLock.
+        //
+        // The default-browser offer used to be armed here, which meant every return from another
+        // app was a fresh chance to be asked. It is armed once per launch now — see App.onCreate.
+    }
+
+    /**
+     * Which page a tab shows, and which tab a page belongs to.
+     *
+     * <p>Two methods rather than one map, and both exhaustive: the pager and the bar each drive the
+     * other, so a page added to one and forgotten in the other leaves a tab that selects nothing.
+     */
+    private static int pageFor(int navItemId) {
+        if (navItemId == R.id.navDownloads) return MainPagerAdapter.PAGE_DOWNLOADS;
+        if (navItemId == R.id.navSettings) return MainPagerAdapter.PAGE_SETTINGS;
+        return MainPagerAdapter.PAGE_HOME;
+    }
+
+    private static int navItemFor(int page) {
+        if (page == MainPagerAdapter.PAGE_DOWNLOADS) return R.id.navDownloads;
+        if (page == MainPagerAdapter.PAGE_SETTINGS) return R.id.navSettings;
+        return R.id.navHome;
     }
 
     private void applyRequestedTab(@Nullable Intent intent) {
-        if (intent == null || !intent.getBooleanExtra(EXTRA_OPEN_DOWNLOADS, false)) return;
+        if (intent == null) return;
+
+        // Parked and then switched to, because on a cold start the fragment does not exist yet -
+        // the same reasoning as applyIncomingLink, and the browser collects them together.
+        boolean search = intent.getBooleanExtra(EXTRA_OPEN_SEARCH, false);
+        boolean privateTab = intent.getBooleanExtra(EXTRA_OPEN_PRIVATE_TAB, false);
+        if (search || privateTab) {
+            if (privateTab) BrowserFragment.openPrivateTabWhenReady();
+            if (search) BrowserFragment.openSearchWhenReady();
+            pager.setCurrentItem(MainPagerAdapter.PAGE_HOME, false);
+            return;
+        }
+
+        if (!intent.getBooleanExtra(EXTRA_OPEN_DOWNLOADS, false)) return;
         // No animation: this is where the user asked to arrive, not somewhere they slid to.
         pager.setCurrentItem(MainPagerAdapter.PAGE_DOWNLOADS, false);
     }
@@ -193,12 +268,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * The tab bar steps aside for the keyboard. Typing an address is a full-attention task and
-     * the bar is not reachable under a keyboard anyway, so leaving it there only costs two rows
-     * of the page.
+     * The library takes the bottom of the window while a selection is being made — screen 07.
+     *
+     * <p>Its action bar goes where the tab bar is, so Delete never ends up sitting beside Home.
+     * Kept as a separate flag rather than a direct call, or the next keyboard inset would put
+     * the tab bar back underneath the actions.
      */
-    private void setNavVisible(boolean visible) {
-        int state = visible ? View.VISIBLE : View.GONE;
+    public void setNavHiddenForSelection(boolean hidden) {
+        selecting = hidden;
+        applyNavVisibility();
+    }
+
+    /**
+     * The tab bar steps aside for the keyboard, and for a selection.
+     *
+     * <p>Typing an address is a full-attention task and the bar is not reachable under a
+     * keyboard anyway, so leaving it there only costs two rows of the page.
+     */
+    private void applyNavVisibility() {
+        int state = keyboardUp || selecting ? View.GONE : View.VISIBLE;
         if (bottomNav.getVisibility() == state) return;
         bottomNav.setVisibility(state);
         navDivider.setVisibility(state);
@@ -213,10 +301,9 @@ public class MainActivity extends AppCompatActivity {
         // pager underneath it would keep taking gestures meant for the page.
         pager.setUserInputEnabled(false);
 
+        // Set once here so the field is available to showDownloads below.
         bottomNav.setOnItemSelectedListener(item -> {
-            pager.setCurrentItem(item.getItemId() == R.id.navDownloads
-                    ? MainPagerAdapter.PAGE_DOWNLOADS
-                    : MainPagerAdapter.PAGE_HOME, true);
+            pager.setCurrentItem(pageFor(item.getItemId()), true);
             return true;
         });
 
@@ -226,8 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 // Set on the menu rather than through the listener, so a swipe does not loop
                 // back into setCurrentItem mid-animation.
                 bottomNav.getMenu()
-                        .findItem(position == MainPagerAdapter.PAGE_DOWNLOADS
-                                ? R.id.navDownloads : R.id.navHome)
+                        .findItem(navItemFor(position))
                         .setChecked(true);
             }
         });
@@ -276,5 +362,140 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             wanted.add(permission);
         }
+    }
+
+    /**
+     * A count on the Downloads tab while anything is arriving.
+     *
+     * <p>The badge is the whole of how a transfer announces itself once the sheet has closed —
+     * the design is explicit that detection and downloading never raise a toast or open anything
+     * — so it has to be live rather than set when the screen is opened.
+     *
+     * <p>Fed from the same repository the library reads, so the number on the tab and the rows
+     * under DOWNLOADING can never disagree.
+     */
+    private void setUpDownloadBadge() {
+        App.get().repository().observeAll().observe(this, downloads -> {
+            int active = 0;
+            if (downloads != null) {
+                for (DownloadEntity d : downloads) {
+                    if (d.status == DownloadStatus.RUNNING
+                            || d.status == DownloadStatus.QUEUED
+                            || d.status == DownloadStatus.PUBLISHING) {
+                        active++;
+                    }
+                }
+            }
+
+            BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.navDownloads);
+            badge.setVisible(active > 0);
+            badge.setNumber(active);
+            badge.setBackgroundColor(ContextCompat.getColor(this, R.color.ds_accent));
+            badge.setBadgeTextColor(ContextCompat.getColor(this, R.color.ds_on_accent));
+            // A pill rather than the circle a one-digit badge defaults to. One download and two
+            // downloads should be the same shape — a badge that changes form as the number grows
+            // reads as two different things rather than one count.
+            badge.setHorizontalPadding(getResources()
+                    .getDimensionPixelSize(R.dimen.ds_badge_padding));
+        });
+    }
+
+    /**
+     * Switches to the Downloads tab.
+     *
+     * <p>Set through the nav rather than the pager, so the selected item and the page agree —
+     * the listener above is what moves the pager, and driving the pager directly would leave the
+     * nav showing Home while Downloads is on screen.
+     */
+    public void showDownloads() {
+        if (bottomNav != null) bottomNav.setSelectedItemId(R.id.navDownloads);
+    }
+
+    /**
+     * A word about a download that has just started, above the tab bar.
+     *
+     * <p>A snackbar rather than a toast, and it belongs to the activity rather than to whatever
+     * raised it: the sheet that starts a download closes on the same tap, and a toast fired from
+     * a dying fragment has nowhere to sit. Anchored to the tab bar so it never covers it.
+     *
+     * <p>Five seconds. Long enough to notice while looking at the page rather than the message,
+     * and short enough not to sit over the first row of a list somebody is already scrolling.
+     *
+     * <p>Coloured by hand rather than by the theme. The snackbar is built against the activity,
+     * which is still on the MVP palette, so leaving it to inherit would give it the old surface
+     * in light and an unreadably dark one in night — the ds_snackbar_* tokens have both.
+     */
+    public void showDownloadNotice(CharSequence text) {
+        View root = findViewById(R.id.main);
+        if (root == null || text == null) return;
+
+        // Anchored to the tab bar, unless it has stepped aside — anchoring to something hidden
+        // would leave the message floating in the middle of the screen.
+        Snackbar bar = Snacks.make(root, text, Snacks.NOTICE_MS, bottomNav);
+
+        // Somewhere to go, since the message is about a thing now happening elsewhere. The
+        // snackbar dismisses itself on the tap, so this only has to change tab.
+        bar.setAction(R.string.view, v -> showDownloads());
+
+        Snacks.withTimer(bar, Snacks.NOTICE_MS);
+        bar.show();
+    }
+
+    /**
+     * Carries the private tab's grey up into the status bar.
+     *
+     * <p>The browser column tints itself, but the strip behind the clock belongs to this activity —
+     * it is padding on the root, and the root is the only view that owns the status-bar inset. Left
+     * alone it stayed the ordinary surface, so a private tab was grey everywhere except the one
+     * band across the very top, which reads as a rendering fault rather than as a deliberate mark.
+     *
+     * <p>Only the browser asks for this, and only while it is the tab in front: the downloads list
+     * and settings are not private, and a grey top over them would say they were. See
+     * BrowserFragment.showPrivateMark, which sets it, and its onPause, which takes it back.
+     */
+    public void setPrivateChrome(boolean secret) {
+        privateChrome = secret;
+        View root = findViewById(R.id.main);
+        if (root == null) return;
+        // Only the status strip is reached by this - the root is otherwise covered by the pager -
+        // and it takes the same grey as the address bar directly beneath it, so the two read as one
+        // band rather than as two greys meeting in a seam.
+        // ds_bg, the same colour the page below the toolbar is painted. The strip, the toolbar and
+        // the page are one continuous surface in the design; toolbar_surface is a shade lighter
+        // than ds_bg, so using it drew a visible band across the top of every screen.
+        root.setBackgroundResource(secret ? R.color.ds_private_bg : R.color.ds_bg);
+
+        // The tab bar is deliberately left alone, and so is the gesture bar below it. It belongs to
+        // the app rather than to the tab - Home, Downloads and Settings are reached from it and none
+        // of them is private - so tinting it said the whole app had changed state when only the page
+        // above it had.
+
+        // The status strip, which neither of the above can reach.
+        //
+        // Measured rather than reasoned about, because the first two attempts at this were wrong.
+        // On this platform the app content occupies y 80..1504 of a 1600px window: the strip behind
+        // the clock is outside the content view entirely, so no background set on R.id.main can
+        // paint it, and the pixel there reads back as colorBackground - the window background.
+        //
+        // setStatusBarColor is the older lever and still the working one below API 35. From 35 it
+        // is a documented no-op, which is why setting it alone left the strip stubbornly unchanged
+        // while the address bar directly beneath it turned grey. Both are set, so whichever the
+        // platform honours gives the same answer.
+        int bar = ContextCompat.getColor(this,
+                secret ? R.color.ds_private_bg : R.color.ds_bg);
+        getWindow().setStatusBarColor(bar);
+        getWindow().setBackgroundDrawable(new ColorDrawable(bar));
+    }
+
+    /**
+     * Opens a page in the browser tab — the Source link in Properties, screen 07.
+     *
+     * <p>The same route an incoming intent takes: queued for the browser and then switched to,
+     * because the fragment may not have a WebView yet when the tap happens.
+     */
+    public void openInBrowser(@Nullable String url) {
+        if (url == null || url.isEmpty()) return;
+        BrowserFragment.openWhenReady(url);
+        if (bottomNav != null) bottomNav.setSelectedItemId(R.id.navHome);
     }
 }

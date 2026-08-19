@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Back and forward in the toolbar.
+
+  Ink when there is history to move through, ink-faint when there is not. The button is disabled
+  rather than hidden, so the toolbar never reflows as history appears and disappears under the
+  viewer's finger — the design is explicit that the forward chevron goes faint and stays put.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/ds_ink_faint" android:state_enabled="false" />
+    <item android:color="@color/ds_ink" />
+</selector>

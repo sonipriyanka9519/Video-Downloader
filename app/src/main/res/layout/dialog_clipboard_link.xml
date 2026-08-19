@@ -1,68 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  What was copied, and the two things that can be done about it.
+  The link on the clipboard — screen 15, panel B.
 
-  The address is shown in full rather than shortened. It is the whole question — whether this is
-  the link you meant — and a middle-elided URL answers it worse than no URL at all.
+  Raised only after the address bar is tapped, which is already somebody saying "I want to go
+  somewhere". That timing is the whole design of it: reading the clipboard on a cold open would
+  make Android 14 raise its own paste-access toast for a question nobody asked.
+
+  The address is shown whole rather than shortened. It is the entire question — is this the link you
+  meant — and a middle-elided URL answers it worse than no URL at all.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/_18sdp"
-    android:paddingTop="@dimen/_20sdp"
-    android:paddingBottom="@dimen/_10sdp">
+    android:padding="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <!-- Whose link it is, where the app knows the site. A lettered tile otherwise — see
+         Shortcuts.iconForUrl, the same mark the history list uses. -->
+    <ImageView
+        android:id="@+id/clipDialogIcon"
+        android:layout_width="@dimen/ds_clip_mark"
+        android:layout_height="@dimen/ds_clip_mark"
+        android:background="@drawable/ds_bg_block_neutral"
+        android:contentDescription="@null"
+        android:padding="@dimen/ds_space_3"
+        android:src="@drawable/ic_globe"
+        app:tint="@color/ds_ink_soft" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
         android:gravity="center"
         android:text="@string/link_you_copied"
-        android:textColor="@color/on_surface"
-        android:textSize="@dimen/_15ssp"
-        android:textStyle="bold" />
+        android:textAppearance="@style/TextAppearance.Ds.Title" />
 
     <TextView
         android:id="@+id/clipDialogLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:background="@drawable/bg_clip_link"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_inset"
         android:gravity="center"
         android:maxLines="3"
-        android:paddingHorizontal="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_9sdp"
-        android:textColor="@color/clip_link_text"
         android:ellipsize="end"
-        android:textSize="@dimen/_11ssp" />
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:paddingVertical="@dimen/ds_space_2"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textSize="13sp"
+        tools:text="instagram.com/reel/C8xQ2mR…/?igsh=MXQ" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnClipOpen"
+        style="@style/Widget.Ds.Button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_18sdp"
-        android:background="@drawable/bg_pill_brand"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:paddingVertical="@dimen/_11sdp"
-        android:text="@string/open"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_13ssp"
-        android:textStyle="bold" />
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:text="@string/home_open" />
 
     <TextView
         android:id="@+id/btnClipCancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_height="@dimen/ds_touch_min"
+        android:layout_marginTop="@dimen/ds_space_2"
         android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
         android:gravity="center"
-        android:paddingVertical="@dimen/_11sdp"
-        android:text="@string/cancel"
-        android:textColor="@color/on_surface_variant"
-        android:textSize="@dimen/_12ssp" />
+        android:text="@android:string/cancel"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_ink_soft"
+        android:textSize="14sp" />
 </LinearLayout>

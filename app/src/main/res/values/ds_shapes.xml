@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Corner shapes, from designs/screens/00 Design Foundation. Declared once so a card and a
+  thumbnail inside it can never disagree about how round they are.
+-->
+<resources>
+
+    <style name="ShapeAppearance.Ds.Card" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/ds_radius_card</item>
+    </style>
+
+    <style name="ShapeAppearance.Ds.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/ds_radius_dialog</item>
+    </style>
+
+    <!-- Top corners only: a sheet is anchored to the bottom edge. -->
+    <style name="ShapeAppearance.Ds.Sheet" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/ds_radius_sheet</item>
+        <item name="cornerSizeTopRight">@dimen/ds_radius_sheet</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Ds.Thumbnail" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/ds_radius_thumb</item>
+    </style>
+
+    <style name="ShapeAppearance.Ds.Inset" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/ds_radius_inset</item>
+    </style>
+
+    <!-- Favicons and small square tiles. -->
+    <style name="ShapeAppearance.Ds.ChipSquare" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/ds_radius_chip_square</item>
+    </style>
+
+    <style name="ShapeAppearance.Ds.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+</resources>

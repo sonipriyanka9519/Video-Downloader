@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -33,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+
+import okhttp3.Call;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -66,6 +69,11 @@ public class HlsDownloader implements DownloadTask {
     private final AtomicInteger segmentsDone = new AtomicInteger();
     private final ConcurrentHashMap<String, byte[]> keyCache = new ConcurrentHashMap<>();
 
+    /**
+     * Every segment URL this download owns, so a stop can find its own calls and only its own.
+     */
+    private final Set<String> segmentUrls = ConcurrentHashMap.newKeySet();
+
     private volatile boolean pauseRequested;
     private volatile boolean cancelRequested;
     /**
@@ -90,11 +98,42 @@ public class HlsDownloader implements DownloadTask {
     @Override
     public void pause() {
         pauseRequested = true;
+        stopInFlight();
     }
 
     @Override
     public void cancel() {
         cancelRequested = true;
+        stopInFlight();
+    }
+
+    /**
+     * Cuts off the segment fetches already in the air.
+     *
+     * <p>Without this, pausing only stopped new segments being started: the workers already inside
+     * a fetch ran to completion, kept writing, and kept reporting progress. The row said Paused
+     * while its bar carried on moving, which is the app telling the viewer something untrue about
+     * their own download. {@link ProgressiveDownloader} and {@link DashDownloader} have always
+     * cancelled their calls here; this was the one that did not.
+     *
+     * <p>Cancelling mid-fetch cannot corrupt anything, and that is not luck - a segment is read
+     * whole into memory before a byte of it is written, and then written to a scratch name and
+     * renamed. A cancelled fetch therefore writes nothing at all, leaves {@code s.done} false, and
+     * resume simply asks for that segment again.
+     *
+     * <p>Matched by URL rather than by holding the calls, because segments are fetched through the
+     * shared HlsHttp helper, which does not hand them back. Only URLs belonging to this download
+     * are touched, so a cancel here can never reach into another download or into detection.
+     */
+    private void stopInFlight() {
+        try {
+            for (Call call : Http.client().dispatcher().runningCalls()) {
+                if (segmentUrls.contains(call.request().url().toString())) call.cancel();
+            }
+        } catch (Exception ignored) {
+            // Cancelling is best effort. A call that has already finished, or a dispatcher that
+            // has moved on, both mean the same thing here: there is nothing left to stop.
+        }
     }
 
     private boolean stopping() {
@@ -285,6 +324,7 @@ public class HlsDownloader implements DownloadTask {
     private void fetchSegments(DownloadEntity d, File workDir, List<SegmentEntity> segments) {
         List<SegmentEntity> pending = new ArrayList<>();
         for (SegmentEntity s : segments) {
+            segmentUrls.add(s.url);
             if (!s.done) pending.add(s);
         }
         if (pending.isEmpty()) return;

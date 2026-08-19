@@ -1,74 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  One tab in the switcher — screen 05.
+
+  A header strip inside the card rather than above it: favicon, title, close. The card is the
+  whole tab, so its own title belongs within its border.
+
+  The active tab is marked by a 2dp accent border, set in code — the stroke width is declared on
+  both states so the preview inside never shifts by a pixel as the selection moves.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tabCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_5sdp"
-    android:background="@drawable/bg_tab_card"
+    android:layout_margin="@dimen/ds_space_2"
     android:clickable="true"
-    android:clipToOutline="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical"
-    android:padding="@dimen/_2sdp">
+    app:cardBackgroundColor="@color/ds_surface"
+    app:cardCornerRadius="@dimen/ds_radius_card"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/ds_line"
+    app:strokeWidth="@dimen/ds_stroke">
 
-    <!-- Title bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/_7sdp"
-        android:paddingTop="@dimen/_5sdp"
-        android:paddingEnd="@dimen/_2sdp"
-        android:paddingBottom="@dimen/_5sdp">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/tabIcon"
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"
-            android:contentDescription="@string/tab_preview"
-            android:src="@drawable/ic_video"
-            app:tint="@color/on_surface_variant" />
-
-        <TextView
-            android:id="@+id/tabTitle"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_9ssp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/ds_space_2"
+            android:paddingEnd="@dimen/ds_space_1"
+            android:paddingVertical="@dimen/ds_space_1">
 
-        <ImageButton
-            android:id="@+id/tabClose"
-            style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_22sdp"
-            android:layout_height="@dimen/_22sdp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/close_tab"
-            android:padding="@dimen/_4sdp"
-            android:src="@drawable/ic_close"
-            app:tint="@color/on_surface_variant" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/tabIcon"
+                android:layout_width="@dimen/ds_icon_tiny"
+                android:layout_height="@dimen/ds_icon_tiny"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_globe" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_120sdp"
-        android:background="@drawable/bg_tab_preview"
-        android:clipToOutline="true">
+            <TextView
+                android:id="@+id/tabTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_2"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Ds.Caption"
+                android:textColor="@color/ds_ink"
+                android:textSize="12sp"
+                tools:text="Jersey outfit ideas" />
+
+            <!-- 28dp of glyph inside a 40dp target: small enough not to crowd a short title,
+                 big enough that closing a tab is not a game of accuracy. -->
+            <ImageButton
+                android:id="@+id/tabClose"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/ds_icon_button"
+                android:layout_height="@dimen/ds_icon_button"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/close_tab"
+                android:padding="@dimen/ds_space_3"
+                android:src="@drawable/ic_close"
+                app:tint="@color/ds_ink_soft" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/tabPreview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/surface_variant"
+            android:layout_height="@dimen/ds_tab_preview_height"
+            android:background="@color/ds_surface_alt"
             android:contentDescription="@string/tab_preview"
             android:scaleType="centerCrop" />
-
-    </FrameLayout>
-
-</LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 14 — the walkthrough.
+
+  Four pages teaching one loop: open a site, play a video, tap the button, pick a quality. Skip sits
+  top right on the first three and goes on the fourth, where the primary button already ends the
+  flow — a screen offering two ways out at once makes the reader choose between them.
+
+  The dots and the button live here rather than on each page: they describe where you are in the set,
+  which is not something a page can know about itself.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/walkRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_space_3">
+
+        <TextView
+            android:id="@+id/btnWalkSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/ds_space_3"
+            android:text="@string/walk_skip"
+            android:textAppearance="@style/TextAppearance.Ds.Button"
+            android:textColor="@color/ds_ink_soft"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/walkPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_space_6"
+        android:paddingBottom="@dimen/ds_space_6">
+
+        <!-- Filled in code: four views, one of which is a pill. -->
+        <LinearLayout
+            android:id="@+id/walkDots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnWalkNext"
+            style="@style/Widget.Ds.Button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_marginTop="@dimen/ds_space_4"
+            tools:text="Next" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,21 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A new name for one video. The extension is not shown, because it is not being changed. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  A new name for one video — screen 07.
+
+  The stem is editable and the extension is not. It is shown as a fixed chip beside the field
+  rather than hidden: leaving it out entirely makes people wonder whether they have to type it,
+  and typing it produces "clip.mp4.mp4". A field that can rename a file into something no player
+  will open is a field that will eventually do it.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/_6sdp"
-    android:paddingTop="@dimen/_6sdp">
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ds_dialog_content_padding"
+    android:paddingTop="@dimen/ds_space_2">
 
-    <EditText
-        android:id="@+id/renameInput"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:hint="@string/rename_hint"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColor="@color/on_surface"
-        android:textColorHint="@color/on_surface_variant"
-        android:textSize="@dimen/_12ssp" />
-</FrameLayout>
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/renameInput"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_touch_min"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:background="@drawable/ds_bg_name_field"
+            android:hint="@string/rename_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ds_space_3"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textColor="@color/ds_ink"
+            android:textColorHint="@color/ds_ink_faint" />
+
+        <!-- Read-only by construction: a TextView, not a disabled field. -->
+        <TextView
+            android:id="@+id/renameExtension"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:background="@drawable/ds_bg_pill"
+            android:paddingHorizontal="@dimen/ds_space_2"
+            android:paddingVertical="@dimen/ds_space_1"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textColor="@color/ds_ink_faint"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/renameHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:text="@string/rename_extension_fixed"
+        android:textAppearance="@style/TextAppearance.Ds.Caption"
+        android:visibility="gone" />
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The handful of measurements that are not the same in the dark.
+
+  Sizes never change between themes — a 96dp mark is 96dp whatever the ground. Opacities do: the same
+  4% wash that reads as texture over white is invisible over ink, so the splash's ornaments are lifted
+  to the strength the dark canvas draws them at.
+-->
+<resources>
+
+    <item name="ds_splash_ornament_alpha" format="float" type="dimen">0.07</item>
+
+</resources>

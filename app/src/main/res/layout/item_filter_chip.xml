@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A filter chip, inflated rather than constructed.
+
+  new Chip(context) takes the widget's own default style, not the chipStyle the theme names — so
+  chips built in code came out as stock Material chips with an outline and no selected fill,
+  while every chip declared in a layout looked right. Inflating with the style attached is the
+  only way to build one in code and still get the app's chip.
+-->
+<com.google.android.material.chip.Chip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.Ds.Chip.Filter"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />

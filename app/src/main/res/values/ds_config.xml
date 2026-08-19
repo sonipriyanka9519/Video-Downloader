@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Motion durations and the few per-theme values that are not colours.
+
+  Motion rules from the foundation: 200–250ms, standard easing, sheets slide up, screens slide
+  horizontally. No bounce, no parallax, no looping animation. The only continuous motion in the
+  app is a download progress bar, and the FAB pulses exactly once when its count changes.
+
+  Every animation must also honour Settings > Developer options > Animator duration scale and the
+  system reduced-motion setting; read them rather than assuming animation is wanted.
+-->
+<resources>
+
+    <integer name="ds_motion_short">200</integer>
+    <integer name="ds_motion_standard">250</integer>
+    <!-- The single FAB pulse. Longer than standard because it has to be noticed, once. -->
+    <integer name="ds_motion_pulse">300</integer>
+    <!-- Player controls auto-hide. -->
+    <integer name="ds_controls_hide_delay">3000</integer>
+    <!-- Snackbar dwell, per the foundation. -->
+    <integer name="ds_snackbar_duration">4000</integer>
+
+    <!-- Home grid: four columns of shortcuts. -->
+    <integer name="ds_shortcut_columns">4</integer>
+    <!-- Downloads grid and the tab switcher are both two across. -->
+    <integer name="ds_grid_columns">2</integer>
+
+    <!--
+      Scrim behind sheets and dialogs: 40% in light. A dark sheet over a dark page needs more
+      separation to read as a layer, so the night copy of this is 60%.
+    -->
+    <item name="ds_scrim_dim" type="dimen" format="float">0.4</item>
+
+    <!-- Light system bars in light theme; the night copy turns this off. -->
+    <bool name="ds_light_system_bars">true</bool>
+
+</resources>

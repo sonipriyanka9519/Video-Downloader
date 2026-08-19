@@ -1,8 +1,12 @@
 package com.ms.webview.core;
 
+import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -24,12 +28,47 @@ public final class Formats {
         return bytes(bytesPerSecond) + "/s";
     }
 
+    /**
+     * A playback rate as people write it: 0.5, 1, 1.25, 2 — never 1.00 or 2.0.
+     *
+     * <p>Here rather than at the two places that show it, so the chip in the player's chrome and
+     * the list its long-press opens can never spell the same rate differently.
+     *
+     * <p>Bare, without the "x". The suffix belongs to the string resource so a translation that
+     * writes it another way can.
+     */
+    public static String speedLabel(float rate) {
+        if (rate == Math.round(rate)) return String.valueOf(Math.round(rate));
+        String text = String.format(Locale.US, "%.2f", rate);
+        // 1.50 reads as a measurement; 1.5 reads as a speed.
+        while (text.endsWith("0")) text = text.substring(0, text.length() - 1);
+        return text;
+    }
+
     public static String duration(long ms) {
         if (ms <= 0) return "";
         long total = ms / 1000;
         long h = total / 3600, m = (total % 3600) / 60, s = total % 60;
         if (h > 0) return String.format(Locale.US, "%d:%02d:%02d", h, m, s);
         return String.format(Locale.US, "%d:%02d", m, s);
+    }
+
+    /**
+     * A time of day — "16:43", or "4:43 pm" where that is what the phone is set to.
+     *
+     * <p>The system's own pattern rather than a hardcoded one: whether the day runs to 24 or to
+     * twice 12 is a setting, and a history list printing 16:43 to somebody who reads clocks the
+     * other way is the app arguing with their phone.
+     */
+    public static String clock(Context context, long timestamp) {
+        if (timestamp <= 0) return "";
+        return DateFormat.getTimeFormat(context).format(new Date(timestamp));
+    }
+
+    /** A day without its year — "11 Aug". Used where the year is implied by being recent. */
+    public static String dayMonth(long timestamp) {
+        if (timestamp <= 0) return "";
+        return new SimpleDateFormat("d MMM", Locale.getDefault()).format(new Date(timestamp));
     }
 
     /** The rungs encoders actually target. Odd sizes near one of these are that one. */

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The inline name field on screen 08. Filled, with the accent underline that says this is the one
+  thing on the sheet currently taking typing.
+
+  Two layers, not a stroke: the accent block underneath shows only along the bottom edge, where
+  the filled layer above stops short of it.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ds_accent" />
+            <corners android:radius="@dimen/ds_radius_card" />
+        </shape>
+    </item>
+
+    <item android:bottom="@dimen/ds_stroke_active_tab">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ds_surface_alt" />
+            <corners android:radius="@dimen/ds_radius_card" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One collection, in either of the sheet's two modes.
+
+  The same row does both jobs — picking a collection to look at, and ticking one to file into —
+  because they are the same list and the same names. What changes is only whether the tick on the
+  right is there.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/ds_touch_min"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/ds_screen_padding"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <!--
+      The cover is the newest video in the collection — nothing to choose and nothing to
+      maintain, per the design. An empty collection has no newest anything, so it keeps the
+      folder glyph on its accent-soft ground and says what it is instead.
+    -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="@dimen/ds_icon_button"
+        android:layout_height="@dimen/ds_icon_button"
+        app:cardBackgroundColor="@color/ds_accent_soft"
+        app:cardCornerRadius="@dimen/ds_radius_inset"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false"
+        app:strokeWidth="0dp">
+
+        <ImageView
+            android:id="@+id/collectionCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/collectionFolder"
+            android:layout_width="@dimen/ds_icon"
+            android:layout_height="@dimen/ds_icon"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_folder"
+            app:tint="@color/ds_accent" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_4"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/collectionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Ds.Body" />
+
+        <TextView
+            android:id="@+id/collectionCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:textAppearance="@style/TextAppearance.Ds.Caption" />
+    </LinearLayout>
+
+    <!--
+      Only in add mode. Not focusable: the row is what you press, and a tick that also took taps
+      would give the same action two targets of very different sizes.
+    -->
+    <FrameLayout
+        android:id="@+id/collectionTick"
+        android:layout_width="@dimen/ds_tick"
+        android:layout_height="@dimen/ds_tick"
+        android:layout_marginStart="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_tick"
+        android:duplicateParentState="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/collectionCheck"
+            android:layout_width="@dimen/ds_icon_tiny"
+            android:layout_height="@dimen/ds_icon_tiny"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"
+            app:tint="@color/ds_on_accent" />
+    </FrameLayout>
+</LinearLayout>

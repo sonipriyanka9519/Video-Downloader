@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The pill that brightness and volume are drawn inside while a swipe is in progress. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#80000000" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Page 1's diagram: a grid of tiles with one of them being touched — screen 14, B1.
+
+  Four squares on a disc. It is not the home screen and is not meant to be recognised as it: the
+  design's rule is that no page may look like a live screen somebody should operate, so the tiles
+  carry no labels, no icons and no favicons. One is accent, and a hollow ring sits over it.
+
+  Drawn from views and shapes rather than shipped as an image, so it follows the theme and the
+  accent stays the accent in both.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/ds_walk_disc"
+    android:layout_height="@dimen/ds_walk_disc"
+    android:background="@drawable/ds_bg_walk_disc">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/walkTile"
+                android:layout_width="@dimen/ds_walk_tile"
+                android:layout_height="@dimen/ds_walk_tile"
+                android:background="@drawable/ds_bg_walk_tile_accent" />
+
+            <View
+                android:layout_width="@dimen/ds_walk_tile"
+                android:layout_height="@dimen/ds_walk_tile"
+                android:layout_marginStart="@dimen/ds_walk_tile_gap"
+                android:background="@drawable/ds_bg_walk_tile" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_walk_tile_gap"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="@dimen/ds_walk_tile"
+                android:layout_height="@dimen/ds_walk_tile"
+                android:background="@drawable/ds_bg_walk_tile" />
+
+            <View
+                android:layout_width="@dimen/ds_walk_tile"
+                android:layout_height="@dimen/ds_walk_tile"
+                android:layout_marginStart="@dimen/ds_walk_tile_gap"
+                android:background="@drawable/ds_bg_walk_tile" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+      The touch mark, over the accent tile. Half-transparent so it reads as a gesture passing over
+      the tile rather than as a second shape drawn on it.
+    -->
+    <View
+        android:layout_width="@dimen/ds_walk_tap"
+        android:layout_height="@dimen/ds_walk_tap"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/ds_walk_tile"
+        android:layout_marginBottom="@dimen/ds_walk_tile"
+        android:alpha="0.5"
+        android:background="@drawable/ds_bg_walk_ring_accent" />
+</FrameLayout>

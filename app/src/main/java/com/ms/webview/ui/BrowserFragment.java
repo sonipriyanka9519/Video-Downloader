@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -26,6 +30,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
+
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -40,6 +45,10 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.webkit.Profile;
+import androidx.webkit.ProfileStore;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -51,6 +60,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ms.webview.App;
+import com.ms.webview.MainActivity;
+import com.ms.webview.data.DownloadEntity;
+import com.ms.webview.data.DownloadStatus;
 import com.ms.webview.R;
 import com.ms.webview.core.Formats;
 import com.ms.webview.core.Http;
@@ -64,8 +76,10 @@ import com.ms.webview.detect.site.SitePolicies;
 import com.ms.webview.download.DownloadService;
 import com.ms.webview.ui.guide.GuideDialog;
 import com.ms.webview.ui.guide.GuideSite;
-import com.ms.webview.ui.guide.HowTo;
-import com.ms.webview.ui.guide.HowToActivity;
+import com.ms.webview.ui.guide.WalkthroughActivity;
+import com.ms.webview.ui.settings.SettingsActivity;
+import com.ms.webview.ui.settings.SettingsPrefs;
+import com.ms.webview.ui.home.RecentAdapter;
 import com.ms.webview.ui.home.SearchHistory;
 import com.ms.webview.ui.home.Shortcut;
 import com.ms.webview.ui.home.ShortcutAdapter;
@@ -89,6 +103,15 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BrowserFragment extends Fragment
         implements ShortcutAdapter.Listener, ShortcutPickerSheet.Host, TabSwitcherSheet.Host,
         HistorySheet.Host {
+
+    private static final String TAG = "BrowserFragment";
+
+    /**
+     * The WebView profile private tabs browse on. One shared by all of them — they are one
+     * session, so a site signed into in one private tab is signed into in the next — and deleted
+     * whole when the last of them closes.
+     */
+    private static final String PRIVATE_PROFILE = "private";
 
     private static final int GRID_COLUMNS = 4;
 
@@ -122,6 +145,29 @@ public class BrowserFragment extends Fragment
     public static void openWhenReady(String url) {
         PENDING_URL.set(url);
     }
+
+    /**
+     * What the launcher's shortcuts ask for — screen 18, panel E.
+     *
+     * <p>Parked rather than performed, for the same reason a shared link is: on a cold start this
+     * is decided before the pager has built the fragment, and a request handed to a fragment that
+     * does not exist is a request lost.
+     *
+     * <p>Paste link goes through the address screen rather than reading the clipboard here. That
+     * screen is the one place in the app that ever reads it, and going anywhere else would be the
+     * app helping itself to the clipboard on a launcher tap.
+     */
+    private static final AtomicBoolean PENDING_SEARCH = new AtomicBoolean();
+    private static final AtomicBoolean PENDING_PRIVATE = new AtomicBoolean();
+
+    public static void openSearchWhenReady() {
+        PENDING_SEARCH.set(true);
+    }
+
+    public static void openPrivateTabWhenReady() {
+        PENDING_PRIVATE.set(true);
+    }
+
 
     /**
      * Set when the app was entered by a shared link, by a link opened with it, or from a download
@@ -165,14 +211,39 @@ public class BrowserFragment extends Fragment
      */
     private static final long DEFAULT_BROWSER_QUIET_MS = 60_000L;
 
+
     /**
-     * How far the page behind the default-browser sheet is taken down.
+     * Pauses everything the page is playing, and marks what it was so leaving can be undone.
      *
-     * <p>Well past the 0.32 a dialog dims by, because this sheet covers only the lower half of the
-     * screen: at the usual amount the shortcut grid above it still reads as the live screen, and
-     * the eye has two things to choose between when only one of them can be touched.
+     * <p>Every frame this page can reach, not only the top one: site players are very often an
+     * iframe, and a script that paused only its own document left the sound playing from a screen
+     * the viewer had already left. Cross-origin frames throw on contentDocument and are skipped —
+     * there is no way to reach those, and WebView.onPause is all there is for them.
+     *
+     * <p>The mark is the point of the loop: returning should restart the one video that was running,
+     * not every element on the page. A feed with a dozen reels has one playing and eleven waiting.
      */
-    private static final float DEFAULT_BROWSER_SCRIM = 0.75f;
+    private static final String PAUSE_SCRIPT =
+            "(function(){var n=0;"
+                    + "function stop(d){try{"
+                    + "var m=d.querySelectorAll('video,audio');"
+                    + "for(var i=0;i<m.length;i++){var e=m[i];"
+                    + "if(!e.paused&&!e.ended){e.__vdResume=true;e.pause();n++;}"
+                    + "else{e.__vdResume=false;}}"
+                    + "var f=d.querySelectorAll('iframe');"
+                    + "for(var j=0;j<f.length;j++){try{if(f[j].contentDocument)"
+                    + "stop(f[j].contentDocument);}catch(x){}}"
+                    + "}catch(err){}}"
+                    + "stop(document);return n;})();";
+
+    /**
+     * How long to wait for that script before suspending the browser anyway.
+     *
+     * <p>Short, because it is running against the app being sent to the background: the script is
+     * a few lines over a handful of elements and answers immediately in every ordinary case. This
+     * only covers a page torn down mid-navigation, which would otherwise never answer at all.
+     */
+    private static final long PAUSE_SCRIPT_TIMEOUT_MS = 150L;
 
     /** Called by the activity as the app comes to the foreground. */
     public static void askAboutDefaultBrowser() {
@@ -190,11 +261,53 @@ public class BrowserFragment extends Fragment
     private View homePanel;
     private ImageView fab;
     private TextView fabBadge;
+    /**
+     * The address Home closed, so returning to the page can open it again.
+     *
+     * <p>Null whenever the page in front is live. See showHome, which is where the closing happens
+     * and where the reasoning for closing at all is set out.
+     */
+    @Nullable
+    private String closedForHome;
+
+    /** Tinted whole in a private tab, so the state is legible without reading anything. */
+    private View browserRoot;
+    private View browserToolbar;
+    private View addressPill;
+    /** The eye-off glyph in the address pill, which names what the colour is saying. */
+    private View addressPrivate;
+
     /** Button and badge together: what is dragged, and what receives the touches. */
     private View fabHolder;
     /** The offer of a walkthrough, on the grid and nowhere else. */
     @Nullable
-    private View howTo;
+    /**
+     * Home's conditional content — screen 01. Each appears only when it has something to say:
+     * the hint on a first run, the recent row once a download exists, the paste card only when
+     * a link has actually been offered.
+     */
+    private View firstRunHint;
+    private View recentSection;
+    private RecyclerView recentList;
+    private RecentAdapter recentAdapter;
+    private View pasteCard;
+    private TextView pasteText;
+    private TextView btnEditShortcuts;
+    /** The link the paste card is currently offering, or null when it is hidden. */
+    @Nullable
+    private String offeredLink;
+
+    /** Held so their enabled state can follow the page's history. See refreshHistoryButtons. */
+    private ImageButton btnBack;
+    private ImageButton btnForward;
+    /** The padlock in the address pill, and the refresh control that becomes an X while loading. */
+    private ImageView addressLock;
+    private ImageButton btnReload;
+    private View pageError;
+    /** True while a page is in flight, which is what turns refresh into a stop control. */
+    private boolean pageLoading;
+    /** The count the FAB last pulsed for, so it swells on a rise and stays still otherwise. */
+    private int pulsedAtCount;
 
     /**
      * The guide belonging to the site in front, or null on a site with none.
@@ -339,6 +452,11 @@ public class BrowserFragment extends Fragment
         homePanel = view.findViewById(R.id.homePanel);
         fab = view.findViewById(R.id.fabDownload);
         fabBadge = view.findViewById(R.id.fabBadge);
+        browserRoot = view.findViewById(R.id.browserRoot);
+        browserToolbar = view.findViewById(R.id.browserToolbar);
+        addressPill = view.findViewById(R.id.addressPill);
+        addressPrivate = view.findViewById(R.id.addressPrivate);
+
         fabHolder = view.findViewById(R.id.fabHolder);
         guideTip = view.findViewById(R.id.btnGuideTip);
         tabCount = view.findViewById(R.id.btnTabs);
@@ -359,6 +477,19 @@ public class BrowserFragment extends Fragment
         ImageButton back = view.findViewById(R.id.btnBack);
         ImageButton forward = view.findViewById(R.id.btnForward);
         ImageButton reload = view.findViewById(R.id.btnReload);
+
+        // Kept, so their enabled state can be refreshed as history changes. The tint is a
+        // selector on state_enabled, so setting enabled is all it takes to grey them.
+        btnBack = back;
+        btnForward = forward;
+        btnReload = reload;
+        addressLock = view.findViewById(R.id.addressLock);
+
+        pageError = view.findViewById(R.id.pageError);
+        view.findViewById(R.id.btnRetryPage).setOnClickListener(v -> {
+            hidePageError();
+            if (webView != null) webView.reload();
+        });
 
         // Every one of these drives the WebView, so every one of them has to put the WebView
         // back on screen. Without that, pressing back from the grid navigated the page while it
@@ -390,38 +521,215 @@ public class BrowserFragment extends Fragment
         reload.setOnClickListener(v -> {
             // Nothing to reload from the grid; it is not a page.
             if (!browsing || webView == null) return;
-            webView.reload();
+            // One control, two jobs, decided by what the page is doing: an X while it is still
+            // arriving, refresh once it has. A page that is loading slowly is exactly when
+            // somebody wants to stop it, and a refresh button then is the wrong offer.
+            if (pageLoading) {
+                webView.stopLoading();
+                pageLoading = false;
+                refreshReloadIcon();
+                pageProgress.setVisibility(View.GONE);
+            } else {
+                webView.reload();
+            }
         });
 
         // Pressed, not typed into. The bar shows where the browser is; where it is going is
         // decided on a screen of its own.
         addressBar.setOnClickListener(v -> openSearch());
 
-        howTo = view.findViewById(R.id.btnHowTo);
-        howTo.setOnClickListener(v -> openHowTo());
-        refreshHowTo();
-    }
-
-    /** Opens the walkthrough, from the button or from the overflow. */
-    private void openHowTo() {
-        startActivity(new Intent(requireContext(), HowToActivity.class));
+        setUpHomeContent(view);
     }
 
     /**
-     * Shows the walkthrough button under the shortcuts, until the walkthrough has been read.
+     * The conditional parts of Home: the first-run hint, the Recent Downloads row, and the
+     * paste-link card.
      *
-     * <p>Once, here, unlike on the downloads screen where it stays. It sits directly beneath the
-     * last row of shortcuts — in the space somebody is aiming at — and once the question has been
-     * answered a permanent row there is an obstacle, not an offer. It remains in the browser's
-     * overflow for anyone who wants it again.
-     *
-     * <p>Checked again whenever the grid comes back rather than only when the view is built,
-     * because the thing that changes the answer is the screen the viewer has just returned from.
+     * <p>None of them render a placeholder. The design is explicit that Home shows less rather
+     * than showing a skeleton — a row that has nothing in it is simply not there, which is what
+     * keeps a new install looking as light as the MVP.
      */
-    private void refreshHowTo() {
-        if (howTo == null || getContext() == null) return;
-        howTo.setVisibility(HowTo.isSeen(requireContext()) ? View.GONE : View.VISIBLE);
+    private void setUpHomeContent(View view) {
+        firstRunHint = view.findViewById(R.id.firstRunHint);
+        recentSection = view.findViewById(R.id.recentSection);
+        recentList = view.findViewById(R.id.recentList);
+        pasteCard = view.findViewById(R.id.pasteCard);
+        pasteText = view.findViewById(R.id.pasteText);
+        btnEditShortcuts = view.findViewById(R.id.btnEditShortcuts);
+
+        view.findViewById(R.id.btnHowItWorks).setOnClickListener(v -> openHowTo());
+        view.findViewById(R.id.btnSeeAllRecent).setOnClickListener(v -> showDownloadsTab());
+        btnEditShortcuts.setOnClickListener(v -> toggleEditMode());
+
+        view.findViewById(R.id.pasteOpen).setOnClickListener(v -> {
+            String link = offeredLink;
+            hidePasteCard();
+            if (!TextUtils.isEmpty(link)) {
+                ClipboardPrompt.markHandled(requireContext(), link);
+                load(link);
+            }
+        });
+        view.findViewById(R.id.pasteDismiss).setOnClickListener(v -> {
+            // Declined for good. markHandled is the same eight-link memory the dialog uses, so
+            // a link turned down here is not offered again anywhere else either.
+            if (!TextUtils.isEmpty(offeredLink)) {
+                ClipboardPrompt.markHandled(requireContext(), offeredLink);
+            }
+            hidePasteCard();
+        });
+
+        recentAdapter = new RecentAdapter(this::openDownload);
+        recentList.setAdapter(recentAdapter);
+
+        // One source for both surfaces, so Home and the Downloads tab can never disagree about
+        // what exists or what is still transferring.
+        App.get().repository().observeAll().observe(getViewLifecycleOwner(), this::onLibraryChanged);
     }
+
+    /**
+     * Home's two content states, decided by one question: has anything been downloaded?
+     *
+     * <p>They are mutually exclusive on purpose. The hint is the empty state for the recent row,
+     * so showing both would be showing an empty state above its own content.
+     */
+    private void onLibraryChanged(@Nullable List<DownloadEntity> all) {
+        if (recentAdapter == null || !isAdded()) return;
+
+        List<DownloadEntity> recent = new ArrayList<>();
+        if (all != null) {
+            for (DownloadEntity d : all) {
+                recent.add(d);
+                if (recent.size() >= RecentAdapter.MAX_ITEMS) break;
+            }
+        }
+        // Private items must never appear here. There is no private flag to filter on yet —
+        // the private folder is screen 11 — and this is the point that will need it.
+
+        boolean any = !recent.isEmpty();
+        recentAdapter.submit(recent);
+        recentSection.setVisibility(any ? View.VISIBLE : View.GONE);
+        firstRunHint.setVisibility(any ? View.GONE : View.VISIBLE);
+    }
+
+    /** Jiggle-remove mode: the badges appear and the tiles stop opening their sites. */
+    private void toggleEditMode() {
+        if (shortcutAdapter == null) return;
+        boolean editing = !shortcutAdapter.isEditing();
+        shortcutAdapter.setEditing(editing);
+        btnEditShortcuts.setText(editing ? R.string.home_done : R.string.home_edit);
+    }
+
+    /** Offers a copied link on Home as a single line. Never a dialog here. */
+    private void showPasteCard(String url) {
+        if (pasteCard == null || TextUtils.isEmpty(url)) return;
+        offeredLink = url;
+        pasteText.setText(getString(R.string.home_link_copied));
+        pasteCard.setVisibility(View.VISIBLE);
+    }
+
+    private void hidePasteCard() {
+        offeredLink = null;
+        if (pasteCard != null) pasteCard.setVisibility(View.GONE);
+    }
+
+    /**
+     * Writes an address into the pill as the design asks for it: the domain, and a padlock when
+     * the page came over https.
+     *
+     * <p>The domain rather than the whole URL. At this width a full address ellipsises into
+     * something unreadable, and the part that answers "where am I" is the host. The full URL is
+     * still what the search screen is handed when the pill is pressed, so nothing is lost.
+     */
+    private void showAddress(@Nullable String url) {
+        if (addressBar == null) return;
+        if (TextUtils.isEmpty(url)) {
+            addressBar.setText("");
+            if (addressLock != null) addressLock.setVisibility(View.GONE);
+            return;
+        }
+        String host = Formats.hostOf(url);
+        addressBar.setText(TextUtils.isEmpty(host) ? url : host);
+        if (addressLock != null) {
+            // Only for a page actually served securely. A padlock on everything says nothing.
+            boolean secure = url.regionMatches(true, 0, "https://", 0, 8);
+            addressLock.setVisibility(secure ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    /** Refresh, or an X while the page is still arriving. */
+    private void refreshReloadIcon() {
+        if (btnReload == null) return;
+        btnReload.setImageResource(pageLoading ? R.drawable.ic_close : R.drawable.ic_refresh);
+        btnReload.setContentDescription(getString(pageLoading ? R.string.cancel : R.string.reload));
+    }
+
+    /**
+     * The page that would not load, as a state rather than a toast.
+     *
+     * <p>Only for the main frame. A page is full of subresources that fail — a tracker blocked, an
+     * advert that times out — and none of them mean the page failed; reporting those would put an
+     * error screen over a page that is rendering perfectly well.
+     */
+    private void showPageError() {
+        if (pageError == null || !browsing) return;
+        pageError.setVisibility(View.VISIBLE);
+    }
+
+    private void hidePageError() {
+        if (pageError != null) pageError.setVisibility(View.GONE);
+    }
+
+    /**
+     * Greys the chevrons that have nowhere to go.
+     *
+     * <p>Disabled rather than hidden. A control that vanishes when its history empties makes the
+     * toolbar reflow under the viewer's finger, and the two chevrons keep moving as they browse;
+     * the design asks for the forward one to go faint and stay where it is.
+     *
+     * <p>On the grid neither has anywhere to go — the page behind it is reached with Back, not
+     * with the toolbar — so both go faint until a page is on screen.
+     */
+    private void refreshHistoryButtons() {
+        if (btnBack == null || btnForward == null) return;
+        boolean onPage = browsing && webView != null;
+        btnBack.setEnabled(onPage && webView.canGoBack());
+        btnForward.setEnabled(onPage && webView.canGoForward());
+    }
+
+    /** "See all" on the Recent row, and where a still-transferring card sends the viewer. */
+    private void showDownloadsTab() {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).showDownloads();
+        }
+    }
+
+    /**
+     * A card in the Recent row. A finished file opens in the player; one still arriving has
+     * nothing to play yet, so it goes to the library where its progress and its controls are.
+     */
+    private void openDownload(DownloadEntity d) {
+        if (d.status == DownloadStatus.COMPLETED && !TextUtils.isEmpty(d.outputUri)) {
+            PlayerActivity.open(requireContext(), d.outputUri, d.title);
+        } else {
+            showDownloadsTab();
+        }
+    }
+
+    /**
+     * Opens the walkthrough, from the button or from the overflow.
+     *
+     * <p>Screen 14 now, not the single page of steps this used to open. Four pages, and the same four
+     * every other route in the app leads to — the design is explicit that there is no second set of
+     * help content to keep in step with this one.
+     */
+    private void openHowTo() {
+        WalkthroughActivity.open(requireContext());
+    }
+
+    // The walkthrough button that used to sit under the shortcuts is gone. Screen 01 replaces it
+    // with the first-run hint card, which carries "How it works" and disappears the moment
+    // anything has been downloaded — see setUpHomeContent and onLibraryChanged. It remains in
+    // the browser's overflow for anyone who wants it again.
 
     /**
      * One step back, in the order the viewer would expect it.
@@ -471,10 +779,19 @@ public class BrowserFragment extends Fragment
 
     /** The browser's own overflow: a new tab, and everywhere it has been. */
     private void showBrowserMenu(View anchor) {
-        PopupMenu menu = new PopupMenu(requireContext(), anchor);
+        // Wrapped rather than plain: a popup reads its background off the theme, so this is the
+        // only way to give it the same corners as every other surface in the app.
+        PopupMenu menu = new PopupMenu(new ContextThemeWrapper(
+                requireContext(), R.style.ThemeOverlay_Ds_PopupMenu), anchor);
 
         menu.getMenu().add(R.string.new_tab).setOnMenuItemClickListener(item -> {
             newTab();
+            return true;
+        });
+        // The only way into private browsing from a standing start. The switcher's segment can
+        // only appear once one exists, so without this the mode would be unreachable.
+        menu.getMenu().add(R.string.new_private_tab).setOnMenuItemClickListener(item -> {
+            newPrivateTab();
             return true;
         });
         menu.getMenu().add(R.string.history).setOnMenuItemClickListener(item -> {
@@ -487,6 +804,12 @@ public class BrowserFragment extends Fragment
             openHowTo();
             return true;
         });
+        // Last, and the only way in — screen 10 is reached from here rather than from a
+        // permanent control, because it is opened once and then not again for weeks.
+        menu.getMenu().add(R.string.settings).setOnMenuItemClickListener(item -> {
+            SettingsActivity.open(requireContext());
+            return true;
+        });
 
         menu.show();
     }
@@ -495,7 +818,9 @@ public class BrowserFragment extends Fragment
     // ------------------------------------------------------------------ home grid
 
     private void setUpGrid() {
-        shortcutAdapter = new ShortcutAdapter(this, true);
+        // The rebuilt tile from screen 01. The Add sheet keeps the MVP tile until its own turn,
+        // which is why the adapter takes the layout rather than naming one.
+        shortcutAdapter = new ShortcutAdapter(this, true, false, R.layout.item_ds_shortcut);
         shortcutGrid.setLayoutManager(new GridLayoutManager(requireContext(), GRID_COLUMNS));
         shortcutGrid.setAdapter(shortcutAdapter);
         refreshShortcuts();
@@ -587,7 +912,7 @@ public class BrowserFragment extends Fragment
     public void onRemove(Shortcut shortcut) {
         // Nothing is lost by removing one — it goes back into the Add sheet — so this asks
         // rather than warns.
-        new MaterialAlertDialogBuilder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Ds_Dialog)
                 .setTitle(R.string.remove_shortcut_title)
                 .setMessage(getString(R.string.remove_shortcut_message, shortcut.label))
                 .setNegativeButton(android.R.string.cancel, null)
@@ -614,11 +939,22 @@ public class BrowserFragment extends Fragment
      */
     private void showHome() {
         browsing = false;
-        if (webView != null) webView.setVisibility(View.GONE);
+        if (webView != null) {
+            webView.setVisibility(View.GONE);
+            // The page is closed rather than merely hidden, by request. Hiding it left a video
+            // playing behind the grid; stopping it here means Home always means silence.
+            //
+            // What is remembered is the address, so coming back loads it again — see showBrowser.
+            // The cost is real and worth naming: scroll position, anything typed into the page and
+            // any state the page was holding go with it. That was the reason for hiding rather than
+            // closing, and it was traded away deliberately for a video that stops.
+            closedForHome = webView.getUrl();
+            webView.loadUrl("about:blank");
+        }
         // The panel, not the grid alone: the walkthrough button is part of the home screen and
         // hiding only the grid would leave it floating over whatever page comes next.
         homePanel.setVisibility(View.VISIBLE);
-        addressBar.setText("");
+        showAddress(null);
         // The bar measures a page load, and there is no page here. It was only ever cleared by
         // the load finishing, so leaving a still-loading page — which is exactly what backing
         // out of one is — stranded it above the shortcut grid, filling up for a page nobody was
@@ -626,7 +962,9 @@ public class BrowserFragment extends Fragment
         pageProgress.setVisibility(View.GONE);
         hideKeyboard();
         updateFab();
-        refreshHowTo();
+        refreshHistoryButtons();
+        // Home's own content needs no refresh here: the recent row and the first-run hint are
+        // driven by the library observer, which fires whenever what they show has changed.
     }
 
     /**
@@ -642,10 +980,21 @@ public class BrowserFragment extends Fragment
         homePanel.setVisibility(View.GONE);
         if (webView != null) {
             webView.setVisibility(View.VISIBLE);
+
+            // Reopened where Home closed it. Taken as it is read, so a second visit to the grid and
+            // back does not reload a page that is already there.
+            String reopen = closedForHome;
+            closedForHome = null;
+            if (!TextUtils.isEmpty(reopen)) {
+                load(reopen);
+                updateFab();
+                refreshHistoryButtons();
+                return;
+            }
             // The browser's own answer first: after a step back through history it is already
             // the page in view, while loadedUrl is only refreshed once the load finishes.
             String showing = webView.getUrl();
-            addressBar.setText(TextUtils.isEmpty(showing) ? loadedUrl : showing);
+            showAddress(TextUtils.isEmpty(showing) ? loadedUrl : showing);
             // Hidden on the way out, so it has to be asked for again on the way back. The
             // WebView knows where it got to; onProgressChanged only fires on the next step, and
             // a page that finished loading while the grid was up would never fire again at all.
@@ -654,6 +1003,7 @@ public class BrowserFragment extends Fragment
             pageProgress.setVisibility(progress >= 100 ? View.GONE : View.VISIBLE);
         }
         updateFab();
+        refreshHistoryButtons();
     }
 
     // -------------------------------------------------------------------- browser
@@ -670,12 +1020,16 @@ public class BrowserFragment extends Fragment
         if (tab.view != null) return tab.view;
 
         WebView created = new WebView(requireContext());
+        // In case they were left paused. Timers are a process-wide setting, so a browser built
+        // after this fragment was paused and destroyed would inherit a frozen clock and never run
+        // a line of the page's script — see onPause.
+        created.resumeTimers();
         created.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         created.setVisibility(View.GONE);
         // Wired to this tab's registry, not to whichever tab is in front at the time. A page goes
         // on loading and detecting in the background, and its findings must land in its own tab.
-        configureWebView(created, App.get().registryFor(tab.id));
+        configureWebView(created, App.get().registryFor(tab.id), tab.incognito);
 
         webContainer.addView(created);
         // The button shares this container and was declared before the page arrived, so a new
@@ -727,7 +1081,7 @@ public class BrowserFragment extends Fragment
         view.destroy();
     }
 
-    private void configureWebView(WebView webView, MediaRegistry registry) {
+    private void configureWebView(WebView webView, MediaRegistry registry, boolean incognito) {
         // A scanner and a sniffer of its own, both pointed at this tab's registry. They used to
         // be shared, which was correct while there was one page to describe; with a page per tab
         // a shared pair would post every tab's findings into whichever registry it held.
@@ -749,8 +1103,24 @@ public class BrowserFragment extends Fragment
         // populates currentSrc and never fires the network request we are listening for.
         s.setMediaPlaybackRequiresUserGesture(false);
 
-        CookieManager.getInstance().setAcceptCookie(true);
-        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        // A private tab keeps nothing on disk that it can avoid keeping. Form entries are not
+        // remembered, and pages are read from the network rather than served out of — or written
+        // into — the on-disk cache.
+        Profile profile = null;
+        if (incognito) {
+            s.setSaveFormData(false);
+            s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            profile = usePrivateProfile(webView);
+        }
+
+        // The profile's own jar where there is one, the app's where there is not. Asking
+        // CookieManager.getInstance() about a profiled browser addresses the wrong store: it is
+        // the default profile's manager, so third-party cookies would be permitted on the app's
+        // jar and left at their default on the one the tab is actually using.
+        CookieManager cookies = profile != null ? profile.getCookieManager()
+                : CookieManager.getInstance();
+        cookies.setAcceptCookie(true);
+        cookies.setAcceptThirdPartyCookies(webView, true);
 
         domScanner.install(webView);
 
@@ -774,8 +1144,12 @@ public class BrowserFragment extends Fragment
                                         WebResourceError error) {
                 // Subresource failures are routine and must not be reported as page failures.
                 if (!request.isForMainFrame() || !isAdded()) return;
-                Toast.makeText(requireContext(), R.string.page_load_failed,
-                        Toast.LENGTH_SHORT).show();
+                // A state rather than a toast: the message stays, names a likely cause and
+                // carries Retry, instead of vanishing and leaving a blank page behind it.
+                pageLoading = false;
+                refreshReloadIcon();
+                pageProgress.setVisibility(View.GONE);
+                showPageError();
             }
 
             @Override
@@ -784,8 +1158,12 @@ public class BrowserFragment extends Fragment
                 registry.startPage(url);
                 // Both only while the page is the thing on screen — see onProgressChanged. A
                 // page left mid-load carries on loading, and redirects land here as fresh starts.
+                pageLoading = true;
+                refreshReloadIcon();
+                // A new page starts clean: whatever failed last time is no longer on screen.
+                hidePageError();
                 if (browsing) {
-                    addressBar.setText(url);
+                    showAddress(url);
                     pageProgress.setVisibility(View.VISIBLE);
                 }
                 hideKeyboard();
@@ -796,7 +1174,10 @@ public class BrowserFragment extends Fragment
                 // What the browser last actually loaded. An address that turns up afterwards
                 // without passing through here was changed by the page's own routing.
                 loadedUrl = url;
+                pageLoading = false;
+                refreshReloadIcon();
                 pageProgress.setVisibility(View.GONE);
+                if (browsing) showAddress(url);
                 registry.updatePageUrl(url);
                 domScanner.scanNow(view);
                 // Some sites fetch everything before an injected hook can listen, so ask them
@@ -806,6 +1187,7 @@ public class BrowserFragment extends Fragment
                 // The guide waits for this: it explains what is on the page, so it is raised once
                 // there is a page to explain rather than over a blank one still loading.
                 showPendingGuide();
+                refreshHistoryButtons();
             }
 
             @Override
@@ -815,10 +1197,13 @@ public class BrowserFragment extends Fragment
                 // Only while the page is on screen. A feed rewrites its address on every scroll
                 // and goes on doing so after the grid is up, so this is the call that refilled a
                 // bar showHome had just cleared — and it names a page the user has left.
-                if (browsing) addressBar.setText(url);
+                if (browsing) showAddress(url);
                 domScanner.scanNow(view);
                 registry.resolvePage(url);
                 maybeReloadForRoute(url);
+                // An SPA route change is a history entry without a page load, so this is the
+                // only place the chevrons hear about it.
+                refreshHistoryButtons();
             }
         });
 
@@ -877,7 +1262,7 @@ public class BrowserFragment extends Fragment
             }
         });
 
-        webView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.surface));
+        webView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.ds_bg));
         webView.setDownloadListener(this::enqueueDirect);
 
     }
@@ -958,7 +1343,13 @@ public class BrowserFragment extends Fragment
         // What was typed, where it was a search rather than an address. Recorded here because
         // this is the one place that knows which of the two it was — normalise() has already
         // turned a search into a URL by the time anyone downstream sees it.
-        if (!URLUtil.isNetworkUrl(input.trim())) {
+        //
+        // Never from a private tab. What somebody searched for is the most revealing thing this
+        // screen handles — more so than the page it led to — and it would otherwise surface as a
+        // suggestion under RECENT SEARCHES the next time the address bar was touched, in any tab.
+        Tab typing = currentTab();
+        boolean incognito = typing != null && typing.incognito;
+        if (!incognito && !URLUtil.isNetworkUrl(input.trim())) {
             SearchHistory.recordQuery(requireContext(), input);
         }
 
@@ -1188,8 +1579,33 @@ public class BrowserFragment extends Fragment
         if (fabHolder != null) fabHolder.setVisibility(browsing ? View.VISIBLE : View.GONE);
         fab.setVisibility(browsing ? View.VISIBLE : View.GONE);
         fabBadge.setVisibility(ready ? View.VISIBLE : View.GONE);
-        fab.setBackgroundResource(ready ? R.drawable.fab_bg_active : R.drawable.fab_bg_idle);
+        fab.setBackgroundResource(ready ? R.drawable.ds_fab_bg : R.drawable.fab_bg_idle);
         if (ready) fabBadge.setText(readyCount > 9 ? "9+" : String.valueOf(readyCount));
+
+        // Detection is silent. The one thing that announces it is a single pulse when the count
+        // goes up — no toast, and never a sheet opening by itself over the page. Once, not
+        // repeating: a looping animation over somebody's video is the app talking during the
+        // film.
+        if (ready && readyCount > pulsedAtCount) pulseFab();
+        pulsedAtCount = ready ? readyCount : 0;
+    }
+
+    /** One 300ms swell. Skipped entirely when the system is set to reduce motion. */
+    private void pulseFab() {
+        if (fab == null || getContext() == null) return;
+        float scale = Settings.Global.getFloat(requireContext().getContentResolver(),
+                Settings.Global.ANIMATOR_DURATION_SCALE, 1f);
+        if (scale <= 0f) return;
+
+        fab.animate().cancel();
+        fab.setScaleX(1f);
+        fab.setScaleY(1f);
+        long half = getResources().getInteger(R.integer.ds_motion_pulse) / 2;
+        fab.animate().scaleX(1.12f).scaleY(1.12f).setDuration(half)
+                .withEndAction(() -> {
+                    if (fab != null) fab.animate().scaleX(1f).scaleY(1f).setDuration(half).start();
+                })
+                .start();
     }
 
     private void enqueueDirect(String url, String userAgent, String contentDisposition,
@@ -1207,8 +1623,13 @@ public class BrowserFragment extends Fragment
         String cookie = CookieManager.getInstance().getCookie(url);
         if (!TextUtils.isEmpty(cookie)) variant.headers.put("Cookie", cookie);
 
+        boolean waiting = SettingsPrefs.willWaitForWifi(requireContext());
         DownloadService.enqueue(requireContext(), item, variant);
-        Toast.makeText(requireContext(), R.string.queued_toast, Toast.LENGTH_SHORT).show();
+        // Above the tab bar, and owned by the activity — see MainActivity.showDownloadNotice.
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).showDownloadNotice(
+                    getString(waiting ? R.string.queued_waiting_wifi : R.string.queued_toast));
+        }
     }
 
     // ------------------------------------------------------------------------ back
@@ -1240,19 +1661,33 @@ public class BrowserFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+        // The private grey is given back whenever this tab steps aside, so coming back to it has
+        // to claim it again — otherwise returning from downloads left a private tab looking
+        // ordinary until something else happened to redraw the mark.
+        showPrivateMark();
         // A pager only resumes the page in view, which is exactly the condition we want.
         if (backCallback != null) backCallback.setEnabled(true);
         // Picked up where it was left, and only when a page is what is showing — a tab on the
         // grid has a browser behind it that should stay stopped until it is looked at again.
-        if (webView != null && browsing) webView.onResume();
+        if (webView != null) {
+            // Unconditionally, and before anything else decides not to. Timers are paused for the
+            // whole process, so a page that is not on screen must still lift them — otherwise the
+            // next page loaded after this fragment was paused would never run a line of script.
+            webView.resumeTimers();
+        }
+        if (webView != null && browsing) {
+            // Visible again first: it was hidden on the way out, and onResume on a GONE browser
+            // leaves a blank page behind the chrome.
+            webView.setVisibility(View.VISIBLE);
+            webView.onResume();
+            resumePlayback();
+        }
         openPendingLink();
+        openPendingShortcut();
 
-        // The default-browser offer needs no clipboard and so needs no window focus, and this is
-        // the one path that focus does not cover: the app opening onto the downloads tab leaves
-        // the question raised until the browser is looked at, and moving between pager tabs is
-        // not a focus change. Posted so the fragment has finished resuming before it is asked
-        // whether it has — that answer is also how it tells it is the tab in front.
-        if (getView() != null) getView().post(this::offerDefaultBrowser);
+        // The default-browser offer is not raised from here. It is armed once per launch and
+        // consumed by the window-focus watch, which is also what orders it ahead of the copied-link
+        // dialog — asking from here as well was a second chance at a question that gets one.
     }
 
     /**
@@ -1273,6 +1708,21 @@ public class BrowserFragment extends Fragment
         newTab();
         load(url);
     }
+
+    /**
+     * Carries out whichever shortcut was tapped — screen 18, panel E.
+     *
+     * <p>Taken rather than read, so each happens once. The private tab is opened before the address
+     * screen so that a viewer who somehow asked for both types into the private one.
+     */
+    private void openPendingShortcut() {
+        if (!isAdded() || webContainer == null) return;
+        if (PENDING_PRIVATE.getAndSet(false)) newPrivateTab();
+        // Raised through this fragment's own launcher, so the query comes back here and there is
+        // a screen behind it to come back to.
+        if (PENDING_SEARCH.getAndSet(false)) openSearch();
+    }
+
 
     // ---------------------------------------------------------- the default browser
 
@@ -1318,45 +1768,20 @@ public class BrowserFragment extends Fragment
      * in the same place.
      */
     private void showDefaultBrowserSheet() {
-        View content = LayoutInflater.from(requireContext())
-                .inflate(R.layout.sheet_default_browser, null, false);
-
-        defaultBrowserSheet = new BottomSheetDialog(requireContext());
-        defaultBrowserSheet.setContentView(content);
-
-        // Dimmed hard behind it, and deliberately harder than a sheet dims by default. The offer
-        // covers only the lower half of the screen, so a light scrim leaves the shortcut grid
-        // above it looking as live as ever — two things asking to be looked at, one of which
-        // cannot be touched. Taking the page well down settles which of them is in front.
-        Window window = defaultBrowserSheet.getWindow();
-        if (window != null) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            window.setDimAmount(DEFAULT_BROWSER_SCRIM);
-        }
-
-        // The sheet's own container is opaque and square. Left as it is, its corners sit behind
-        // the rounded ones this layout draws and the rounding is only visible as two white
-        // triangles — so the container gets out of the way and the layout provides the surface.
-        View container = defaultBrowserSheet
-                .findViewById(com.google.android.material.R.id.design_bottom_sheet);
-        if (container != null) container.setBackgroundColor(Color.TRANSPARENT);
-
-        content.findViewById(R.id.btnSetDefault).setOnClickListener(v -> {
-            dismissDefaultBrowserSheet();
-            requestDefaultBrowser();
-        });
-        content.findViewById(R.id.btnDefaultClose).setOnClickListener(v -> {
-            dismissDefaultBrowserSheet();
-            // Answered, so whatever was waiting behind it may now be asked.
-            offerClipboardLink(false);
-        });
-        // Cleared first, so the offer behind this one is not held back by a sheet on its way out.
-        defaultBrowserSheet.setOnCancelListener(d -> {
-            defaultBrowserSheet = null;
-            offerClipboardLink(false);
-        });
-
-        defaultBrowserSheet.show();
+        // The sheet itself is shared with the Settings row — see DefaultBrowserSheet. What is left
+        // here is only what the browser adds to it: the handle it dismisses by, and the offer that
+        // was queued behind this one.
+        defaultBrowserSheet = DefaultBrowserSheet.show(requireContext(),
+                () -> {
+                    defaultBrowserSheet = null;
+                    requestDefaultBrowser();
+                },
+                () -> {
+                    // Cleared first, so the offer behind this one is not held back by a sheet on
+                    // its way out. Answered, so it may now be asked.
+                    defaultBrowserSheet = null;
+                    offerClipboardLink(false);
+                });
     }
 
     /**
@@ -1416,8 +1841,13 @@ public class BrowserFragment extends Fragment
 
         String link = ClipboardPrompt.pending(requireContext());
         if (link == null) return;
+
+        // One shape, always: the dialog. A strip along the top of the page was tried and dropped —
+        // an offer that can be missed is an offer that gets missed, and the whole point of reading
+        // the clipboard at all is that somebody copied a link meaning to use it here.
         showClipboardDialog(link);
     }
+
 
     /**
      * Asks about one copied link.
@@ -1431,7 +1861,10 @@ public class BrowserFragment extends Fragment
                 .inflate(R.layout.dialog_clipboard_link, null, false);
         ((TextView) content.findViewById(R.id.clipDialogLink)).setText(link);
 
-        clipboardDialog = new MaterialAlertDialogBuilder(requireContext())
+        // The design's dialog theme, not the bare builder. Without it the card takes Material's own
+        // surface for the host activity — a tinted, slightly grey panel — where the canvas draws a
+        // plain white one. Every other dialog in the app already names this; this one was missed.
+        clipboardDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Ds_Dialog)
                 .setView(content)
                 .create();
 
@@ -1469,11 +1902,46 @@ public class BrowserFragment extends Fragment
     public void onPause() {
         super.onPause();
         if (backCallback != null) backCallback.setEnabled(false);
+        // The status bar goes back to the ordinary surface the moment this stops being the tab in
+        // front. The activity root is shared with downloads and settings, and neither of those is
+        // private — leaving it grey would mark them as something they are not.
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setPrivateChrome(false);
+        }
         // The page keeps running when this tab is not the one on screen — timers, scripts and,
         // audibly, any video that was playing. A pager only resumes the page in view, so this is
         // also what happens on the way to the downloads list: the browser goes quiet and comes
         // back where it was, rather than playing on from behind another screen.
-        if (webView != null) webView.onPause();
+        //
+        // The elements are paused by name, because WebView.onPause() is documented to stop "extra
+        // processing" and in practice does not reliably stop playback — press Home on a playing
+        // page and the sound carries on from a screen that is no longer there.
+        //
+        // The order is the whole of it, and getting it wrong is why this went on happening after it
+        // was supposedly fixed. evaluateJavascript is asynchronous: it queues the script and
+        // returns. Calling onPause() and pauseTimers() on the next line then suspended the very
+        // engine that had yet to run it, so the pause was queued and never executed. They now wait
+        // for the script to answer.
+        final WebView leaving = webView;
+        pauseMediaOf(leaving, () -> {
+            if (leaving == null) return;
+            leaving.onPause();
+            // And the page's clock. A player driven from JavaScript — hls.js fetching its next
+            // segment on a timer — is not stopped by pausing the elements alone.
+            //
+            // Process-wide, not per WebView, which is the trap: left paused it would freeze the
+            // next page this app ever loads. onResume lifts it unconditionally for that reason,
+            // whether or not there is a WebView to lift it for.
+            leaving.pauseTimers();
+            // And out of sight, which is the part that was missing. Switching tabs has always
+            // stopped a playing video and pressing Home has not, and this is the only difference
+            // between the two paths: hideCurrentBrowser sets the outgoing browser GONE. A hidden
+            // WebView suspends its own media; a visible one in a backgrounded activity does not.
+            leaving.setVisibility(View.GONE);
+        });
+        // Every other tab that still holds a browser, too. Only the one in front is ever resumed,
+        // so a video left playing in a tab behind this one has nothing that would stop it.
+        pauseOtherTabs();
         // Persist session cookies: Instagram and Facebook only serve media URLs to a logged-in
         // session, and the downloader replays those cookies out of band.
         CookieManager.getInstance().flush();
@@ -1483,15 +1951,198 @@ public class BrowserFragment extends Fragment
         saveTabs();
     }
 
+    /**
+     * Pauses one browser's media, then runs {@code then} — never before.
+     *
+     * <p>Takes the instance rather than reading the field, because the field moves. Switching tabs
+     * reassigns it as part of the same gesture that hides the outgoing browser, so a continuation
+     * that read {@code webView} would suspend the tab being <em>opened</em>.
+     */
+    private void pauseMediaOf(@Nullable WebView view, @Nullable Runnable then) {
+        if (view == null) {
+            if (then != null) then.run();
+            return;
+        }
+
+        // Run once, whichever arrives first. A page part-way through a navigation can be torn down
+        // without ever answering, and a browser left un-suspended because a callback went missing is
+        // the same bug in a different disguise.
+        final boolean[] ran = {false};
+        final Runnable once = () -> {
+            if (ran[0]) return;
+            ran[0] = true;
+            if (then != null) then.run();
+        };
+        view.postDelayed(once, PAUSE_SCRIPT_TIMEOUT_MS);
+        view.evaluateJavascript(PAUSE_SCRIPT, value -> {
+            // How many elements this actually reached. Zero while something is audibly playing
+            // means the player is inside a cross-origin frame, where nothing here can touch it
+            // and WebView.onPause is the only lever left. Logged rather than guessed at, because
+            // the two cases look identical from outside and need different answers.
+            Log.d(TAG, "paused " + value + " media element(s) before suspending");
+            if ("0".equals(value)) silenceUnreachablePlayer();
+            once.run();
+        });
+    }
+
+    /**
+     * Stops anything playing in a tab that is not the one on screen.
+     *
+     * <p>Each tab keeps its own browser so it can be shown again without refetching the page, and a
+     * browser that was never resumed was also never paused — a video started in one tab and left
+     * behind by a switch to another goes on playing, and pressing Home would not touch it.
+     *
+     * <p>No continuation here: these are already suspended as far as the viewer is concerned, so
+     * there is nothing to sequence against.
+     */
+    private void pauseOtherTabs() {
+        for (Tab tab : tabs) {
+            final WebView other = tab.view;
+            if (other == null || other == webView) continue;
+            pauseMediaOf(other, other::onPause);
+        }
+    }
+
+
+    /**
+     * Stops a player this app cannot reach, by taking the audio away from it.
+     *
+     * <p>Only ever called when the pause script reported it touched nothing <em>and</em> the
+     * detector says the page has a video playing. Together those mean one thing: the player is
+     * inside a cross-origin frame, where {@code contentDocument} throws and no script of ours can
+     * pause it. Vimeo and most embedded players are exactly this.
+     *
+     * <p>What is left is audio focus. Asking for it permanently tells every media session on the
+     * phone to stop, the WebView's included, and abandoning it immediately afterwards leaves the
+     * phone as it found it. A permanent gain rather than a transient one on purpose: a transient
+     * loss is the signal to pause <em>and resume later</em>, which is precisely what must not
+     * happen here.
+     *
+     * <p>The cost is real and worth stating: another app that was playing is told to stop as well.
+     * That is why this is the last resort and not the first — every page whose player can be
+     * reached from JavaScript is paused by name, and never reaches this.
+     */
+    private void silenceUnreachablePlayer() {
+        if (!isPlayingSomethingUnreachable()) return;
+
+        Context context = getContext();
+        if (context == null) return;
+        AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        if (audio == null) return;
+
+        // The legacy call on every version. Its replacement arrived in API 26 and this app runs
+        // from 24; the old one is still honoured throughout, and one path is one thing to be sure
+        // of rather than two.
+        int granted = audio.requestAudioFocus(
+                null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (granted == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            Log.d(TAG, "took audio focus to stop a cross-origin player");
+        }
+        // Given back at once. Holding it would keep every other app silent for as long as this one
+        // sat in the background, which is not ours to do.
+        audio.abandonAudioFocus(null);
+    }
+
+    /**
+     * Whether the page has a video the detector believes is playing.
+     *
+     * <p>The registry's own answer, the same one that puts NOW PLAYING on a card. Without this
+     * check, "the script paused nothing" would also be true of every page with no video at all,
+     * and pressing Home on one of those would stop somebody's music for no reason whatsoever.
+     */
+    private boolean isPlayingSomethingUnreachable() {
+        if (currentTabId == null) return false;
+
+        List<MediaItem> items = App.get().registryFor(currentTabId).live().getValue();
+        if (items == null) return false;
+        for (MediaItem item : items) {
+            if (item.current) return true;
+        }
+        return false;
+    }
+    /** Starts again exactly what {@link #pauseMediaOf} stopped, and nothing else. */
+    private void resumePlayback() {
+        if (webView == null) return;
+        webView.evaluateJavascript(
+                "(function(){"
+                        + "function go(d){try{"
+                        + "var m=d.querySelectorAll('video,audio');"
+                        + "for(var i=0;i<m.length;i++){var e=m[i];"
+                        + "if(e.__vdResume){e.__vdResume=false;"
+                        // A rejected play() is normal — the page may have reloaded, or the element
+                        // may no longer be allowed to start. Swallowed here so it cannot surface
+                        // as an unhandled rejection in the page's own console.
+                        + "var p=e.play();if(p&&p.catch){p.catch(function(){});}}}"
+                        + "var f=d.querySelectorAll('iframe');"
+                        + "for(var j=0;j<f.length;j++){try{if(f[j].contentDocument)"
+                        + "go(f[j].contentDocument);}catch(x){}}"
+                        + "}catch(err){}}"
+                        + "go(document);})();", null);
+    }
+
     // ----------------------------------------------------------------------- tabs
 
     /**
      * Records where the tab in front has got to. Called as pages load, so a tab always knows its
      * own address even though only one WebView exists to hold it.
      */
+    /**
+     * Marks the chrome when the tab in front is a private one.
+     *
+     * <p>The pill takes an accent-soft fill and an eye-off glyph appears in front of the address.
+     * Only the pill, not the whole screen: the page is still what is being looked at, and private
+     * browsing is a fact about the tab rather than a mood for the app.
+     */
+    private void showPrivateMark() {
+        if (browserRoot == null || browserToolbar == null || addressPrivate == null) return;
+        // Also reached from tab restoration at launch, which can run before this is attached.
+        if (!isAdded()) return;
+
+        Tab tab = currentTab();
+        boolean secret = tab != null && tab.incognito;
+
+        // The bar, not a badge on it. A private tab otherwise looks exactly like an ordinary one -
+        // same page, same chrome - and "am I still in the private tab" is a question that should be
+        // answerable at a glance rather than by remembering.
+        //
+        // The bar and nothing below it. Tinting the whole column was tried and was too much: the
+        // page is where somebody is reading, and recolouring it changed how every site looked
+        // without telling them anything the bar was not already saying.
+        //
+        // So the grey is confined to the chrome, and runs continuously from the status bar through
+        // the address bar - one band across the top, which is where a viewer looks to ask what
+        // kind of tab this is.
+        // The page colour, not the MVP toolbar_surface it used to carry. That was a shade lighter
+        // than the page beneath it, so the address bar sat on a visible band of its own.
+        browserToolbar.setBackgroundResource(secret ? R.color.ds_private_bg : R.color.ds_bg);
+        addressPrivate.setVisibility(secret ? View.VISIBLE : View.GONE);
+        // The pill with it: ds_surface_alt is a warm tint, and on the grey bar it read as a patch
+        // of some other screen rather than as part of this one.
+        if (addressPill != null) {
+            addressPill.setBackgroundResource(secret
+                    ? R.drawable.ds_bg_pill_private : R.drawable.ds_bg_pill);
+        }
+
+        // And the band behind the clock, which is not ours to paint and is the other half of the
+        // one continuous grey - see MainActivity.setPrivateChrome.
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setPrivateChrome(secret);
+        }
+    }
+
     private void noteTabPage(@Nullable String url, @Nullable String title) {
         Tab tab = currentTab();
         if (tab == null || TextUtils.isEmpty(url) || "about:blank".equals(url)) return;
+
+        // A private tab keeps its address in memory so Back and the switcher still work, but
+        // nothing about it is written down: no history entry, and no page title, which is the
+        // one thing a private card must never be able to show.
+        if (tab.incognito) {
+            tab.url = url;
+            updateTabCount();
+            return;
+        }
+
         tab.url = url;
         if (!TextUtils.isEmpty(title)) tab.title = title;
         SearchHistory.record(requireContext(), url, title);
@@ -1564,6 +2215,10 @@ public class BrowserFragment extends Fragment
      */
     private void useRegistryOf(Tab tab) {
         watchRegistry(tab == null ? null : App.get().registryFor(tab.id));
+        // Every route that changes which tab is in front comes through here — opening one, closing
+        // one, restoring the set at launch — so this is the one place the private mark has to be
+        // kept in step with.
+        showPrivateMark();
     }
 
     @Override
@@ -1634,8 +2289,15 @@ public class BrowserFragment extends Fragment
      */
     private void hideCurrentBrowser() {
         if (webView == null) return;
-        webView.setVisibility(View.GONE);
-        webView.onPause();
+
+        // Captured before anything else: the caller reassigns webView to the tab being opened, and
+        // this has to go on referring to the one being put away.
+        final WebView leaving = webView;
+        leaving.setVisibility(View.GONE);
+        // Elements first, browser second — the same ordering as onPause and for the same reason. A
+        // tab switched away from used to be suspended without its video ever being paused, so it
+        // went on playing from behind the tab in front of it.
+        pauseMediaOf(leaving, leaving::onPause);
     }
 
     /**
@@ -1661,6 +2323,10 @@ public class BrowserFragment extends Fragment
         destroyBrowser(tab);
         App.get().forgetTab(tab.id);
         tabs.remove(index);
+
+        // "Private tabs and their history vanish when closed" is a promise the switcher makes in
+        // writing, so it is kept the moment the last one goes rather than at some later tidy-up.
+        if (tab.incognito && !hasPrivateTabs()) clearPrivateData();
 
         if (tabs.isEmpty()) {
             newTab();
@@ -1707,10 +2373,89 @@ public class BrowserFragment extends Fragment
     /** A tab with no page: the shortcut grid, and nothing carried over from before. */
     @Override
     public void newTab() {
+        openNewTab(false);
+    }
+
+    /**
+     * The same, but private — screen 05.
+     *
+     * <p>The tab is marked at birth rather than converted later, because the mark is what every
+     * privacy decision downstream reads: whether history is written, whether a title is kept,
+     * whether a snapshot is taken, whether the tab is saved at all.
+     */
+    @Override
+    public void newPrivateTab() {
+        openNewTab(true);
+    }
+
+    @Override
+    public boolean hasPrivateTabs() {
+        for (Tab tab : tabs) {
+            if (tab.incognito) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Puts a private tab's browser on its own profile, so its cookies are not the app's cookies.
+     *
+     * <p>This is what makes private browsing mean anything. Without it every tab shares one
+     * process-wide {@code CookieManager}: signing into a site privately would sign you in
+     * everywhere, and the only way to undo it afterwards would be to clear the whole jar —
+     * throwing away the sessions of every ordinary tab along with it.
+     *
+     * <p>A profile owns its own cookies, storage and cache. Set before the browser loads
+     * anything, because that is the only moment it can be set at all.
+     *
+     * <p>Requires WebView 121 or newer. Where the feature is missing the tab is still private in
+     * every other respect — no history, no query, no title, no snapshot, nothing persisted — but
+     * its cookies are the shared ones. That is stated rather than papered over: clearing them to
+     * compensate would sign the viewer out of their ordinary tabs, which is a worse fault than
+     * the one it fixes.
+     */
+    @Nullable
+    private Profile usePrivateProfile(WebView webView) {
+        if (!WebViewFeature.isFeatureSupported(WebViewFeature.MULTI_PROFILE)) {
+            Log.i(TAG, "This WebView has no profile support; private tabs share the cookie jar");
+            return null;
+        }
+        try {
+            Profile profile = ProfileStore.getInstance().getOrCreateProfile(PRIVATE_PROFILE);
+            WebViewCompat.setProfile(webView, PRIVATE_PROFILE);
+            return profile;
+        } catch (Exception e) {
+            // A profile that cannot be set is not a reason to fail opening the tab.
+            Log.w(TAG, "Could not put this tab on the private profile", e);
+            return null;
+        }
+    }
+
+    /**
+     * Ends the private session by deleting its profile.
+     *
+     * <p>Called when the last private tab closes, and only then — deleting on every close would
+     * sign the viewer out of a site still open in another private tab.
+     *
+     * <p>Deleting the profile takes its cookies, its storage and its cache with it, and touches
+     * nothing belonging to ordinary tabs. Their logins survive, which is the whole point: a
+     * private session ending should not be indistinguishable from clearing the app's data.
+     */
+    private void clearPrivateData() {
+        if (!WebViewFeature.isFeatureSupported(WebViewFeature.MULTI_PROFILE)) return;
+        try {
+            // Every private browser has been destroyed by now; a profile still in use refuses.
+            ProfileStore.getInstance().deleteProfile(PRIVATE_PROFILE);
+        } catch (Exception e) {
+            Log.w(TAG, "Could not delete the private profile", e);
+        }
+    }
+
+    private void openNewTab(boolean incognito) {
         stashCurrentTab();
         hideCurrentBrowser();
 
         Tab tab = new Tab(TabStore.newId());
+        tab.incognito = incognito;
         tab.lastShownAt = System.currentTimeMillis();
         tabs.add(tab);
         currentTabId = tab.id;
@@ -1730,6 +2475,7 @@ public class BrowserFragment extends Fragment
     @Override
     public void closeAllTabs() {
         watchRegistry(null);
+        boolean hadPrivate = hasPrivateTabs();
         for (Tab tab : tabs) {
             TabStore.forget(requireContext(), tab);
             destroyBrowser(tab);
@@ -1738,6 +2484,9 @@ public class BrowserFragment extends Fragment
         tabs.clear();
         currentTabId = null;
         webView = null;
+        // Closing everything closes the private session too, and it ends the same way it would
+        // have one tab at a time — after the browsers are destroyed, so the profile is free.
+        if (hadPrivate) clearPrivateData();
         newTab();
     }
 

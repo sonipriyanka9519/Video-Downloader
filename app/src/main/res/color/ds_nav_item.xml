@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom nav: accent when active, ink-faint otherwise. Icon and label share this. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/ds_accent" android:state_checked="true" />
+    <item android:color="@color/ds_ink_faint" />
+</selector>

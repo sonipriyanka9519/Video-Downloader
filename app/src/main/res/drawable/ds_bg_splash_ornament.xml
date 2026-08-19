@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The top-left ornament: a large squircle hung off the corner. Its colour is the accent and its
+  opacity comes from the layout, so light and dark each get the strength the canvas draws.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent" />
+    <corners android:radius="@dimen/ds_radius_ornament" />
+</shape>

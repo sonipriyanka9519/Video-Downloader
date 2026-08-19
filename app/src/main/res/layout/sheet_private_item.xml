@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  What can be done to a private video — screen 11, panel E.
+
+  Three, and no more. Share and Add to collection are deliberately absent: both would carry a
+  private video, or its name, somewhere outside the folder, which is the one thing this screen
+  exists to prevent.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingBottom="@dimen/ds_space_3"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_grabber" />
+
+    <TextView
+        android:id="@+id/privateName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingBottom="@dimen/ds_space_3"
+        android:textAppearance="@style/TextAppearance.Ds.Body" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_stroke"
+        android:background="@color/ds_line" />
+
+    <TextView
+        android:id="@+id/privatePlay"
+        style="@style/Widget.Ds.SheetAction"
+        android:drawableStart="@drawable/ic_play"
+        android:text="@string/play" />
+
+    <TextView
+        android:id="@+id/privateMoveOut"
+        style="@style/Widget.Ds.SheetAction"
+        android:drawableStart="@drawable/ic_lock_open"
+        android:text="@string/private_move_out" />
+
+    <TextView
+        android:id="@+id/privateDelete"
+        style="@style/Widget.Ds.SheetAction.Destructive"
+        android:drawableStart="@drawable/ic_delete"
+        android:text="@string/delete" />
+</LinearLayout>

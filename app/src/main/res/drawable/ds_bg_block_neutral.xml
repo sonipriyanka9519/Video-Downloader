@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The squircle behind an empty-state glyph when the state is neutral rather than inviting.
+
+  Surface-alt, not accent-soft: "no history yet" is a fact about the app being new, not something
+  being offered. The accent block is for states that want a tap — see ds_bg_icon_block.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface_alt" />
+    <corners android:radius="@dimen/ds_radius_private_mark" />
+</shape>

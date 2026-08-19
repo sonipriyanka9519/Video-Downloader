@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  The opening: the mark, what the app is called, what it does, and how long is left.
+  The opening — screen 14, panel A.
 
-  White rather than a field of brand colour. The three ornaments carry the brand instead, faintly
-  enough to read as texture, which leaves the name as the only thing on the screen with any weight
-  to it — and the name is the one thing this screen exists to say.
+  Brand only: the mark, the name, the tagline. Two ornaments at 4% carry the colour without competing
+  with the name, which is the one thing this screen exists to say. Both run off the edge — a shape cut
+  by the screen reads as part of something larger, the same shape tucked fully inside reads as a
+  sticker.
+
+  Theme-aware now rather than forced light. The canvas draws this screen in both, and a white splash
+  in front of a dark app is a flash of the wrong colour before anything has been said.
+
+  The progress bar starts hidden. It is only ever seen on a slow start — see SplashActivity.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/splashRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/splash_surface">
+    android:background="@color/ds_bg"
+    android:theme="@style/ThemeOverlay.Ds">
 
-    <!--
-      Ornaments, each hung off its own corner and allowed to run past the edge. A shape cut by the
-      screen reads as part of something larger; the same shape tucked fully inside reads as a
-      sticker.
-    -->
-    <ImageView
-        android:layout_width="@dimen/_120sdp"
-        android:layout_height="@dimen/_150sdp"
+    <View
+        android:layout_width="@dimen/ds_splash_ornament_a"
+        android:layout_height="@dimen/ds_splash_ornament_a"
         android:layout_gravity="top|start"
-        android:layout_marginStart="@dimen/_minus20sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:contentDescription="@null"
-        android:src="@drawable/il_splash_burst" />
+        android:layout_marginStart="@dimen/ds_splash_ornament_offset"
+        android:layout_marginTop="@dimen/ds_splash_ornament_offset"
+        android:alpha="@dimen/ds_splash_ornament_alpha"
+        android:background="@drawable/ds_bg_splash_ornament" />
 
-    <ImageView
-        android:layout_width="@dimen/_130sdp"
-        android:layout_height="@dimen/_130sdp"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="@dimen/_minus30sdp"
-        android:layout_marginEnd="@dimen/_minus25sdp"
-        android:contentDescription="@null"
-        android:src="@drawable/il_splash_play" />
-
-    <ImageView
-        android:layout_width="@dimen/_150sdp"
-        android:layout_height="@dimen/_90sdp"
+    <View
+        android:layout_width="@dimen/ds_splash_ornament_b"
+        android:layout_height="@dimen/ds_splash_ornament_b"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/_minus30sdp"
-        android:layout_marginBottom="@dimen/_60sdp"
-        android:contentDescription="@null"
-        android:src="@drawable/il_splash_film" />
+        android:layout_marginEnd="@dimen/ds_splash_ornament_offset_b"
+        android:layout_marginBottom="@dimen/ds_splash_ornament_bottom"
+        android:alpha="@dimen/ds_splash_ornament_alpha"
+        android:background="@drawable/ds_bg_splash_orb" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,49 +45,54 @@
         android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/_24sdp">
+        android:paddingHorizontal="@dimen/ds_space_6">
 
         <ImageView
             android:id="@+id/splashLogo"
-            android:layout_width="@dimen/_66sdp"
-            android:layout_height="@dimen/_66sdp"
+            android:layout_width="@dimen/ds_splash_mark"
+            android:layout_height="@dimen/ds_splash_mark"
+            android:background="@drawable/ds_bg_splash_mark"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_splash_mark" />
+            android:padding="@dimen/ds_space_5"
+            android:src="@drawable/ic_download"
+            app:tint="@color/ds_on_accent" />
 
         <TextView
             android:id="@+id/splashName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:gravity="center"
             android:text="@string/splash_title"
-            android:textColor="@color/splash_title"
-            android:textSize="@dimen/_21ssp"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.Ds.TitleXl" />
 
         <TextView
             android:id="@+id/splashTagline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/ds_space_3"
             android:text="@string/splash_subtitle"
-            android:textColor="@color/splash_subtitle"
-            android:textSize="@dimen/_11ssp" />
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textSize="13sp" />
     </LinearLayout>
 
     <!--
-      Horizontal and determinate. A spinner says work is happening and cannot say how much; this
-      is driven by the length of the opening itself, so it says the one true thing available —
-      how much of this screen is left.
+      3dp, determinate, and hidden until a start is slow enough to need explaining. A spinner would
+      say work is happening without saying how much; this says how much of the wait is left, which is
+      the only measurable thing here.
     -->
     <ProgressBar
         android:id="@+id/splashProgress"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="@dimen/_140sdp"
-        android:layout_height="@dimen/_7sdp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="@dimen/_30sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_splash_bar"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="@dimen/ds_splash_bar_inset"
+        android:layout_marginBottom="@dimen/ds_splash_bar_bottom"
         android:max="100"
         android:progress="0"
-        android:progressDrawable="@drawable/bg_splash_progress" />
+        android:progressDrawable="@drawable/ds_bg_splash_progress"
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
 </FrameLayout>

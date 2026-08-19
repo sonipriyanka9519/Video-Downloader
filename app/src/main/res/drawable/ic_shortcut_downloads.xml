@@ -1,0 +1,21 @@
+<!--
+  
+video_library - the launcher's My downloads shortcut, screen 18 panel E.
+
+  A dedicated copy rather than the app's own icon, for two reasons. The launcher inflates this
+  in its own process against its own theme, so a ?attr tint resolves to nothing and the icon
+  simply does not appear — which is exactly what ic_video did here. And the three of them are
+  one set: reusing icons that are separately free to change would let the menu drift apart.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="@color/ds_accent">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="
+M4,6H2v14c0,1.1 0.9,2 2,2h14v-2H4V6zM20,2H8C6.9,2 6,2.9 6,4v12c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2V4C22,2.9 21.1,2 20,2zM12,14.5v-9l6,4.5L12,14.5z
+" />
+</vector>

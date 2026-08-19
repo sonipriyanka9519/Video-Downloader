@@ -127,7 +127,18 @@ public final class TabStore {
 
     public static void save(Context context, List<Tab> tabs, @Nullable String currentId) {
         JSONArray array = new JSONArray();
+        List<Tab> persisted = new ArrayList<>();
+        String persistedCurrent = currentId;
+
         for (Tab tab : tabs) {
+            // A private tab is never written down — not its address, not its title, not its
+            // history, not its preview. This is the single point where that is enforced, so
+            // there is one place to check rather than a rule spread across the caller.
+            if (tab.incognito) {
+                if (tab.id.equals(persistedCurrent)) persistedCurrent = null;
+                continue;
+            }
+            persisted.add(tab);
             try {
                 JSONObject o = new JSONObject();
                 o.put("id", tab.id);
@@ -141,11 +152,13 @@ public final class TabStore {
         }
         prefs(context).edit()
                 .putString(KEY_TABS, array.toString())
-                .putString(KEY_CURRENT, currentId == null ? "" : currentId)
+                .putString(KEY_CURRENT, persistedCurrent == null ? "" : persistedCurrent)
                 .apply();
 
-        for (Tab tab : tabs) saveState(context, tab);
-        deleteOrphans(context, tabs);
+        for (Tab tab : persisted) saveState(context, tab);
+        // Orphan sweeping is given the persisted list on purpose: a private tab has no files to
+        // keep, so anything on disk under its id is something that should not exist.
+        deleteOrphans(context, persisted);
     }
 
     // ---------------------------------------------------------------------- history
@@ -165,7 +178,10 @@ public final class TabStore {
      */
     public static void saveState(Context context, Tab tab) {
         File file = new File(stateDir(context), tab.id + ".bin");
-        if (tab.state == null) {
+        // A private tab's back history is the record of where somebody went privately. Guarded
+        // here as well as in save(), because callers reach this directly and a privacy rule that
+        // only holds on one path is not a rule.
+        if (tab.incognito || tab.state == null) {
             file.delete();
             return;
         }
@@ -248,6 +264,9 @@ public final class TabStore {
      *                of it says nothing.
      */
     public static String capture(Context context, View source, Tab tab, boolean topOnly) {
+        // A snapshot of a private page is a picture of it on disk. The switcher draws these
+        // cards without one — see TabAdapter — so there is nothing to take and nothing to keep.
+        if (tab.incognito) return "";
         if (source == null || source.getWidth() <= 0 || source.getHeight() <= 0) {
             return tab.previewPath;
         }

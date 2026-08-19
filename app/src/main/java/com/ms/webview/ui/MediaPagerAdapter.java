@@ -1,26 +1,26 @@
 package com.ms.webview.ui;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.color.MaterialColors;
 import com.ms.webview.R;
 import com.ms.webview.core.Formats;
 import com.ms.webview.detect.MediaItem;
+import com.ms.webview.detect.MediaKind;
 import com.ms.webview.detect.MediaVariant;
 
 import java.util.ArrayList;
@@ -31,10 +31,24 @@ import java.util.Map;
 /** One full page per detected video, swiped horizontally. */
 public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.PageHolder> {
 
-    private static final int MAX_QUALITY_COLUMNS = 3;
+    /** Rungs to a row. Three fits a 360dp screen without any card being squeezed. */
+    private static final int QUALITY_COLUMNS = 3;
+
 
     public interface OnDownload {
         void download(MediaItem item, MediaVariant variant);
+    }
+
+    /** Raised by the "Download all N…" button, which only appears on a page with several. */
+    public interface OnDownloadAll {
+        void downloadAll();
+    }
+
+    @Nullable
+    private OnDownloadAll downloadAll;
+
+    public void setOnDownloadAll(@Nullable OnDownloadAll listener) {
+        this.downloadAll = listener;
     }
 
     private final List<MediaItem> items = new ArrayList<>();
@@ -47,9 +61,25 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
      */
     private final Map<String, String> signatures = new HashMap<>();
     private final OnDownload callback;
+    /**
+     * Which rung is ticked before anybody taps one — screen 10's default-quality setting, mapped
+     * through {@link BatchQuality} so it resolves against each video's own ladder rather than
+     * against a number that may not exist on it.
+     *
+     * <p>Null means "Always ask": no rung is ticked and the download button waits. Read once when
+     * the sheet opens, not per bind, so changing the setting mid-sheet cannot move the tick out
+     * from under a finger.
+     */
+    @Nullable
+    private BatchQuality preselect = BatchQuality.BEST_UNDER_720;
 
     public MediaPagerAdapter(OnDownload callback) {
         this.callback = callback;
+    }
+
+    /** @param choice null for "Always ask" — nothing preselected. */
+    public void setPreselect(@Nullable BatchQuality choice) {
+        this.preselect = choice;
     }
 
     /**
@@ -143,14 +173,43 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
         return position >= 0 && position < items.size() ? items.get(position).groupKey : null;
     }
 
-    /** The variant the user picked, or the best downloadable one. */
+    /**
+     * The variant the user picked, or the one the default-quality setting asks for.
+     *
+     * <p>Three layers, in order: this session's tap on a rung, then screen 10's setting resolved
+     * against this video's own ladder, then nothing. "Nothing" is only reachable under "Always
+     * ask", and it is deliberate — see {@link #preselect}.
+     */
     @Nullable
     public MediaVariant selectedFor(MediaItem item) {
         String url = selection.get(item.groupKey);
         if (url != null) {
-            MediaVariant chosen = item.variantFor(url);
-            if (chosen != null) return chosen;
+            // Looked for in the ladder the grid is actually showing, not in every variant the
+            // engine holds. variantFor searches all of them, including ones qualities() leaves out
+            // — an unlabelled duplicate, or a stream dropped once a real file turned up. A pick
+            // resolved to one of those ticks no card on screen and downloads something the viewer
+            // never saw, which reads as the tap having done nothing.
+            for (MediaVariant rung : item.qualities()) {
+                if (rung.url.equals(url)) return rung;
+            }
+            // The ladder changed under the pick — a probe finished, a better file arrived. Dropped
+            // rather than kept, so the next line can choose something that exists.
+            selection.remove(item.groupKey);
         }
+        if (preselect == null) {
+            // "Always ask" of a video with one rung is not a question — the same rule the batch
+            // list follows. Anything with a real ladder waits to be asked.
+            List<MediaVariant> rungs = new ArrayList<>();
+            for (MediaVariant v : item.qualities()) {
+                if (v.kind.downloadable()) rungs.add(v);
+            }
+            return rungs.size() == 1 ? rungs.get(0) : null;
+        }
+
+        MediaVariant wanted = preselect.resolve(item);
+        if (wanted != null) return wanted;
+        // The setting could not be answered — audio-only asked of a silent video. Fall back to
+        // the best there is rather than leaving the card looking unsupported.
         MediaVariant best = item.bestDownloadable();
         if (best != null) return best;
         List<MediaVariant> all = item.variants();
@@ -185,6 +244,23 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
 
         bindQualities(h, item, selected);
 
+        // When every rung is locked the button is not disabled, it is gone: the shield notice
+        // bindQualities raised has already said why, and a dead button beneath it would be the
+        // same message twice, once uselessly.
+        boolean allLocked = h.protectedNotice != null
+                && h.protectedNotice.getVisibility() == View.VISIBLE;
+        h.download.setVisibility(allLocked ? View.GONE : View.VISIBLE);
+
+        // Only worth offering when there is genuinely more than one thing to take, and never
+        // beside a protected video that cannot join a batch anyway.
+        boolean batchable = items.size() > 1 && downloadAll != null && !allLocked;
+        h.downloadAll.setVisibility(batchable ? View.VISIBLE : View.GONE);
+        if (batchable) {
+            h.downloadAll.setText(h.itemView.getResources()
+                    .getQuantityString(R.plurals.download_all, items.size(), items.size()));
+            h.downloadAll.setOnClickListener(v -> downloadAll.downloadAll());
+        }
+
         boolean downloadable = !item.drmProtected && selected != null && selected.kind.downloadable();
         h.download.setEnabled(downloadable);
         h.download.setText(downloadLabel(h, item, selected, downloadable));
@@ -204,27 +280,27 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
      * everything else keeps the wide one.
      */
     private static void sizePreview(PageHolder h, MediaItem item) {
-        boolean portrait = item.portrait();
-
-        // Scalable units, same as the layouts, so the preview keeps its proportions on a tablet.
-        int height = h.itemView.getResources().getDimensionPixelSize(
-                portrait ? com.intuit.sdp.R.dimen._126sdp : com.intuit.sdp.R.dimen._96sdp);
-        int width = portrait
-                ? Math.round(height * 9f / 16f)
-                : ViewGroup.LayoutParams.MATCH_PARENT;
-
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) h.thumbCard.getLayoutParams();
-        if (params.height != height || params.width != width) {
-            params.height = height;
-            params.width = width;
-            params.gravity = Gravity.CENTER_HORIZONTAL;
-            h.thumbCard.setLayoutParams(params);
-        }
+        // The frame itself never changes — same width, same height, portrait or landscape. It is
+        // declared in the layout and nothing here touches it.
+        //
+        // Only how the picture sits inside it is decided here. A wide clip fills the frame and
+        // is cropped at the edges, which costs nothing. A portrait reel cropped to a wide frame
+        // would lose almost all of itself, so it is fitted inside instead — the whole video,
+        // letterboxed, in a frame the same size as every other.
+        h.thumb.setScaleType(item.portrait()
+                ? ImageView.ScaleType.FIT_CENTER
+                : ImageView.ScaleType.CENTER_CROP);
     }
 
     private String downloadLabel(PageHolder h, MediaItem item, MediaVariant selected,
                                  boolean downloadable) {
         if (item.drmProtected) return h.itemView.getContext().getString(R.string.protected_content);
+        // Nothing chosen yet under "Always ask" is not the same as nothing to choose. The button
+        // says which it is, so a viewer who set that preference is told what it is waiting for
+        // rather than being shown a video labelled unsupported.
+        if (selected == null && item.bestDownloadable() != null) {
+            return h.itemView.getContext().getString(R.string.pick_a_quality);
+        }
         if (!downloadable) return h.itemView.getContext().getString(R.string.unsupported);
 
         String base = h.itemView.getContext().getString(R.string.download);
@@ -240,60 +316,81 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
         if (item.drmProtected || variants.isEmpty()) {
             h.qualities.setVisibility(View.GONE);
             h.qualityLabel.setVisibility(View.GONE);
+            // Protected is a state to explain, not an empty space. The notice replaces the
+            // ladder and, in bindDownload, the button as well.
+            if (h.protectedNotice != null) {
+                h.protectedNotice.setVisibility(item.drmProtected ? View.VISIBLE : View.GONE);
+            }
             return;
         }
         h.qualities.setVisibility(View.VISIBLE);
         h.qualityLabel.setVisibility(View.VISIBLE);
 
         Context context = h.itemView.getContext();
-        int total = variants.size();
-        // Three across, or fewer when there are fewer — a lone quality then fills the row
-        // instead of sitting in a third of it.
-        int columns = Math.min(MAX_QUALITY_COLUMNS, total);
-        int rows = (total + columns - 1) / columns;
-        h.qualities.setColumnCount(columns);
-
-        int gap = context.getResources().getDimensionPixelSize(com.intuit.sdp.R.dimen._5sdp);
         LayoutInflater inflater = LayoutInflater.from(context);
+        boolean anyOpenable = false;
+        // Counted separately from the loop, so a rung the grid skips cannot leave a hole.
+        int index = 0;
 
-        for (int i = 0; i < total; i++) {
-            MediaVariant variant = variants.get(i);
+        for (MediaVariant variant : variants) {
             View card = inflater.inflate(R.layout.item_quality, h.qualities, false);
 
             TextView name = card.findViewById(R.id.qualityName);
             TextView meta = card.findViewById(R.id.qualityMeta);
+            // The card, not the root. The root is a frame that only exists to let the tick
+            // overhang the corner; the card inside it is clickable, so it is the card that
+            // receives the tap — a listener on the frame never fires, which is what stopped
+            // quality switching from working at all.
+            MaterialCardView tappable = card.findViewById(R.id.qualityCard);
+
+            boolean openable = variant.kind.downloadable();
+            anyOpenable |= openable;
+
             name.setText(variant.qualityName());
             String detail = variant.qualityMeta(item.durationMs);
             meta.setText(detail);
+            // A size still being probed leaves the line out rather than blocking the rung —
+            // the card stays tappable while the number is on its way.
             meta.setVisibility(detail.isEmpty() ? View.GONE : View.VISIBLE);
 
             boolean chosen = variant == selected;
             card.findViewById(R.id.qualityCheck)
                     .setVisibility(chosen ? View.VISIBLE : View.GONE);
-            styleCard((MaterialCardView) card, chosen, variant.kind.downloadable());
+            styleCard(tappable, chosen, openable);
 
-            int row = i / columns;
-            int indexInRow = i % columns;
-            // A short final row is centred rather than left-hanging, so five qualities read as
-            // a block instead of three-then-two-stuck-to-the-left.
-            int itemsInRow = (row == rows - 1) ? total - row * columns : columns;
-            int column = ((columns - itemsInRow) / 2) + indexInRow;
+            if (openable) {
+                tappable.setOnClickListener(v -> {
+                    selection.put(item.groupKey, variant.url);
+                    // By group key, not by the holder's position. A holder that has just been
+                    // rebound reports NO_POSITION for a frame, and a change notification sent to
+                    // -1 is a notification nobody receives — the tick then stays where it was and
+                    // the tap looks ignored.
+                    int at = indexOf(item.groupKey);
+                    if (at >= 0) notifyItemChanged(at);
+                });
+            } else {
+                // Not merely unstyled — genuinely inert, so a locked rung cannot be selected
+                // by a determined tap.
+                tappable.setOnClickListener(null);
+                tappable.setClickable(false);
+            }
 
+            // Three to a row, filling the width equally. A short final row is left-aligned
+            // under the one above rather than centred: the rungs descend in quality from the
+            // top left, and centring the remainder breaks that reading order.
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = GridLayout.spec(column, 1, 1f);
-            params.rowSpec = GridLayout.spec(row);
-            params.setMargins(gap / 2, gap / 2, gap / 2, gap / 2);
+            params.columnSpec = GridLayout.spec(index % QUALITY_COLUMNS, 1, 1f);
+            params.rowSpec = GridLayout.spec(index / QUALITY_COLUMNS);
             card.setLayoutParams(params);
+            index++;
 
-            if (variant.kind.downloadable()) {
-                card.setOnClickListener(v -> {
-                    selection.put(item.groupKey, variant.url);
-                    notifyItemChanged(h.getBindingAdapterPosition());
-                });
-            }
             h.qualities.addView(card);
+        }
+
+        if (h.protectedNotice != null) {
+            h.protectedNotice.setVisibility(anyOpenable ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -303,21 +400,25 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
      * because growing it nudges the card's contents by a pixel as you tap along the row.
      */
     private static void styleCard(MaterialCardView card, boolean selected, boolean enabled) {
-        // colorPrimary is declared by appcompat; Material reuses it rather than redeclaring it,
-        // so it is not in com.google.android.material.R.attr the way the others below are.
-        int primary = MaterialColors.getColor(card, androidx.appcompat.R.attr.colorPrimary);
-        int outline = MaterialColors.getColor(card,
-                com.google.android.material.R.attr.colorOutlineVariant);
-        int container = MaterialColors.getColor(card,
-                com.google.android.material.R.attr.colorPrimaryContainer);
-        int surface = MaterialColors.getColor(card,
-                com.google.android.material.R.attr.colorSurface);
+        Context context = card.getContext();
+        int accent = ContextCompat.getColor(context, R.color.ds_accent);
+        int accentSoft = ContextCompat.getColor(context, R.color.ds_accent_soft);
+        int surfaceAlt = ContextCompat.getColor(context, R.color.ds_surface_alt);
 
-        card.setStrokeWidth(Math.round(card.getResources().getDisplayMetrics().density));
-        card.setStrokeColor(selected ? primary : outline);
-        card.setCardBackgroundColor(selected ? container : surface);
+        // Selected reads three ways — a fill, a border and the corner tick — because the design
+        // requires selection to be legible without relying on any single one of them.
+        //
+        // An unselected rung carries no border at all, only the surface-alt fill. The stroke
+        // width is set on both so the card's contents never shift by a pixel as the selection
+        // moves along the row.
+        float density = context.getResources().getDisplayMetrics().density;
+        card.setStrokeWidth(Math.round(1.5f * density));
+        card.setStrokeColor(selected ? accent : Color.TRANSPARENT);
+        card.setCardBackgroundColor(selected ? accentSoft : surfaceAlt);
         card.setEnabled(enabled);
-        card.setAlpha(enabled ? 1f : 0.45f);
+        // Locked rungs stay readable rather than fading to nothing: the viewer still needs to
+        // know which resolutions exist, only that none of them can be had.
+        card.setAlpha(enabled ? 1f : 0.55f);
     }
 
     @Override
@@ -334,7 +435,10 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
         final TextView badgePlaying;
         final TextView badgeDuration;
         final TextView qualityLabel;
+        /** A row now, not a grid — the rungs read as a ladder along one line. */
         final GridLayout qualities;
+        final View protectedNotice;
+        final TextView downloadAll;
         final MaterialButton download;
 
         PageHolder(@NonNull View v) {
@@ -348,6 +452,8 @@ public class MediaPagerAdapter extends RecyclerView.Adapter<MediaPagerAdapter.Pa
             badgeDuration = v.findViewById(R.id.badgeDuration);
             qualityLabel = v.findViewById(R.id.qualityLabel);
             qualities = v.findViewById(R.id.qualities);
+            protectedNotice = v.findViewById(R.id.protectedNotice);
+            downloadAll = v.findViewById(R.id.btnDownloadAll);
             download = v.findViewById(R.id.btnDownload);
         }
     }

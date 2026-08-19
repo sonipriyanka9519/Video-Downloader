@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The accent-soft square a collection's folder glyph sits in, on screen 08. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent_soft" />
+    <corners android:radius="@dimen/ds_radius_inset" />
+</shape>

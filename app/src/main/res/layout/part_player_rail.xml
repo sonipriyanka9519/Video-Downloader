@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The brightness and volume readout — screen 09, panel E.
+
+  One layout used twice, mirrored by where it is placed rather than by having two of it: the two
+  gestures are the same gesture on opposite halves of the screen, and they should look it.
+
+  A rail rather than a number. Nobody sets brightness to a value; they push it until it looks
+  right, and a filling column says how far along that push has got without asking them to read.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/ds_player_rail_width"
+    android:layout_height="@dimen/ds_player_rail_height"
+    android:background="@drawable/ds_player_rail"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingVertical="@dimen/ds_space_2"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <!--
+      Two weighted views rather than a rotated ProgressBar: rotation is drawn, not measured, so a
+      rotated bar keeps the footprint of its unrotated self and lays the column out sideways.
+      Weights fill upwards for free, and the empty part is simply the track showing through.
+    -->
+    <FrameLayout
+        android:layout_width="@dimen/ds_player_rail_track"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/ds_player_rail_track">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:id="@+id/railEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4" />
+
+            <View
+                android:id="@+id/railFill"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:background="@drawable/ds_player_rail_fill" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/railIcon"
+        android:layout_width="@dimen/ds_icon_tiny"
+        android:layout_height="@dimen/ds_icon_tiny"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_brightness"
+        app:tint="@color/ds_player_ink" />
+</LinearLayout>

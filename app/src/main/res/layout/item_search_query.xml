@@ -8,8 +8,8 @@
     android:focusable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/_12sdp"
-    android:paddingEnd="@dimen/_4sdp"
+    android:paddingStart="@dimen/ds_screen_padding"
+    android:paddingEnd="@dimen/ds_space_1"
     android:paddingVertical="@dimen/_9sdp">
 
     <ImageView
@@ -17,7 +17,7 @@
         android:layout_height="@dimen/_17sdp"
         android:contentDescription="@null"
         android:src="@drawable/ic_search"
-        app:tint="@color/on_surface_variant" />
+        app:tint="@color/ds_ink_soft" />
 
     <TextView
         android:id="@+id/queryText"
@@ -27,8 +27,8 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/on_surface"
-        android:textSize="@dimen/_11ssp" />
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textSize="14sp" />
 
     <!-- Puts the search in the box rather than running it, so it can be finished off. -->
     <ImageButton
@@ -38,7 +38,7 @@
         android:layout_height="@dimen/_28sdp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/use_search"
-        android:padding="@dimen/_5sdp"
+        android:padding="@dimen/ds_space_3"
         android:src="@drawable/ic_arrow_insert"
-        app:tint="@color/on_surface_variant" />
+        app:tint="@color/ds_ink_soft" />
 </LinearLayout>

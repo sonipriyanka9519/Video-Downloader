@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One settings row — screen 10.
+
+  56dp minimum rather than fixed: the subtitle carries either the row's current value or its
+  consequence, and some of those are long enough to wrap on a narrow screen. A fixed height would
+  clip the very sentence that stops the row needing explaining elsewhere.
+
+  Three trailing possibilities and never more than one: a chevron for a row that opens something,
+  a switch for a row that is on or off, and nothing at all for a row that simply acts.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/ds_settings_row_height"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/ds_screen_padding"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <ImageView
+        android:id="@+id/settingIcon"
+        android:layout_width="@dimen/ds_icon"
+        android:layout_height="@dimen/ds_icon"
+        android:contentDescription="@null"
+        app:tint="@color/ds_ink_soft"
+        tools:src="@drawable/ic_folder" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_4"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settingTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            tools:text="Default quality" />
+
+        <!-- The row's current value, or what it will do. Gone when the title says it all. -->
+        <TextView
+            android:id="@+id/settingSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:fontFeatureSettings="tnum"
+            android:textAppearance="@style/TextAppearance.Ds.Caption"
+            tools:text="Always ask" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/settingChevron"
+        android:layout_width="@dimen/ds_icon_small"
+        android:layout_height="@dimen/ds_icon_small"
+        android:layout_marginStart="@dimen/ds_space_2"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_chevron_right"
+        android:visibility="gone"
+        app:tint="@color/ds_ink_faint"
+        tools:visibility="visible" />
+
+    <!-- Not focusable: the row is the target, so the switch never becomes a second smaller one. -->
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/settingSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_2"
+        android:clickable="false"
+        android:focusable="false"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>

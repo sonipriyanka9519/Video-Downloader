@@ -1,231 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  The offer to become the phone's browser.
+  Screen 17, panel E — the default-browser prompt.
 
-  Three reasons rather than none, because the request is otherwise unanswerable: "make this your
-  default" tells a viewer what to do and nothing about why. Each row is one sentence about what
-  changes for them, not about what the app gains.
+  Rebuilt from the MVP's version, which sold three features: Safe Browsing, "6x Download Speed" and
+  Quick Access. Two of those describe things the app does not do and the third is a performance
+  claim nobody measured — the kind of copy Play's misrepresentation policy acts on, and a poor trade
+  for a prompt that only has to explain one thing.
 
-  Raised from the bottom of the screen rather than the middle of it: a sheet is something the app
-  is offering, which can be pushed back down, and a dialog is something in the way.
-
-  A frame rather than a plain column, only so the way out can sit in the corner of the heading
-  instead of taking a row of its own beneath the button.
+  What it explains is the one real consequence: links open here instead of somewhere else. One
+  sentence, one button, and a way out that does not look like a mistake.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_default_sheet">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/_16sdp"
-        android:paddingTop="@dimen/_22sdp"
-        android:paddingBottom="@dimen/_18sdp">
-
-        <!-- Two views rather than one styled string: the accent falls on "Default Browser", which
-             is the part of the sentence being asked about. -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_browser_title_lead"
-                android:textColor="@color/on_surface"
-                android:textSize="@dimen/_16ssp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:text="@string/default_browser_title_accent"
-                android:textColor="@color/default_accent"
-                android:textSize="@dimen/_16ssp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:gravity="center"
-            android:text="@string/default_browser_subtitle"
-            android:textColor="@color/on_surface_variant"
-            android:textSize="@dimen/_11ssp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:background="@drawable/bg_default_card"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_14sdp"
-            android:paddingVertical="@dimen/_16sdp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:background="@drawable/bg_tile_safe"
-                    android:contentDescription="@null"
-                    android:padding="@dimen/_7sdp"
-                    android:src="@drawable/ic_shield_check"
-                    app:tint="@color/white" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_browser_safe"
-                        android:textColor="@color/on_surface"
-                        android:textSize="@dimen/_12ssp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:text="@string/default_browser_safe_body"
-                        android:textColor="@color/on_surface_variant"
-                        android:textSize="@dimen/_9ssp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:background="@drawable/bg_tile_fast"
-                    android:contentDescription="@null"
-                    android:padding="@dimen/_7sdp"
-                    android:src="@drawable/ic_download"
-                    app:tint="@color/white" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_browser_fast"
-                        android:textColor="@color/on_surface"
-                        android:textSize="@dimen/_12ssp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:text="@string/default_browser_fast_body"
-                        android:textColor="@color/on_surface_variant"
-                        android:textSize="@dimen/_9ssp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:background="@drawable/bg_tile_quick"
-                    android:contentDescription="@null"
-                    android:padding="@dimen/_7sdp"
-                    android:src="@drawable/ic_globe"
-                    app:tint="@color/white" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_browser_quick"
-                        android:textColor="@color/on_surface"
-                        android:textSize="@dimen/_12ssp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:text="@string/default_browser_quick_body"
-                        android:textColor="@color/on_surface_variant"
-                        android:textSize="@dimen/_9ssp" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/btnSetDefault"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:background="@drawable/bg_default_action"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingVertical="@dimen/_12sdp"
-            android:text="@string/default_browser_set"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp"
-            android:textStyle="bold" />
-    </LinearLayout>
+    android:background="@drawable/ds_bg_sheet_top"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ds_space_6"
+    android:paddingTop="@dimen/ds_space_3"
+    android:paddingBottom="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
 
     <!--
-      The way out, in the corner rather than as a row of its own under the button. The sheet can
-      also be swiped down or backed out of; all three mean the same thing and end in the same
-      place, so none of them needs a label.
+      The mark, on the accent-soft tile the app uses wherever an icon has to carry a heading. Not
+      the launcher icon: this is a question about browsing, and the globe says which of the app's
+      two halves is being asked about.
     -->
-    <ImageButton
+    <ImageView
+        android:layout_width="@dimen/ds_icon_block"
+        android:layout_height="@dimen/ds_icon_block"
+        android:layout_marginTop="@dimen/ds_space_5"
+        android:background="@drawable/ds_bg_block_accent"
+        android:contentDescription="@null"
+        android:padding="@dimen/ds_space_4"
+        android:src="@drawable/ic_globe"
+        app:tint="@color/ds_accent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_5"
+        android:gravity="center_horizontal"
+        android:text="@string/default_browser_title"
+        android:textAppearance="@style/TextAppearance.Ds.Title"
+        android:textColor="@color/ds_ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:gravity="center_horizontal"
+        android:text="@string/default_browser_body"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSetDefault"
+        style="@style/Widget.Ds.Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginTop="@dimen/ds_space_5"
+        android:text="@string/default_browser_set" />
+
+    <!--
+      "Not now", not "Cancel". Declining is a perfectly ordinary answer and the app will ask again
+      later; cancel would suggest something is being abandoned.
+    -->
+    <TextView
         android:id="@+id/btnDefaultClose"
-        android:layout_width="@dimen/_24sdp"
-        android:layout_height="@dimen/_24sdp"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:background="@drawable/bg_default_close"
-        android:contentDescription="@string/default_browser_later"
-        android:padding="@dimen/_5sdp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_close"
-        app:tint="@color/white" />
-</FrameLayout>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_touch_min"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/default_browser_not_now"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_ink_soft" />
+</LinearLayout>

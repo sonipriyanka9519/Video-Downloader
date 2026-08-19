@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One cell of the SITES grid: a 56dp rounded-square mark with its name beneath.
+
+  The whole cell is the touch target, not just the tile — 56dp of icon plus the label clears the
+  48dp floor comfortably and gives the thumb the obvious thing to aim at.
+
+  In edit mode a remove badge appears at the top-left of the tile. It is drawn inside the same
+  frame rather than added to the parent, so the grid never reflows when edit mode toggles.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:paddingHorizontal="@dimen/ds_space_1"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shortcutIcon"
+            android:layout_width="@dimen/ds_shortcut_tile"
+            android:layout_height="@dimen/ds_shortcut_tile"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            app:shapeAppearance="@style/ShapeAppearance.Ds.Card"
+            tools:src="@drawable/brand_instagram" />
+
+        <TextView
+            android:id="@+id/shortcutLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Ds.Caption"
+            android:textColor="@color/ds_ink"
+            android:textSize="12sp"
+            tools:text="Instagram" />
+    </LinearLayout>
+
+    <!-- Edit mode only. Sits over the tile's top-left corner. -->
+    <ImageView
+        android:id="@+id/shortcutRemove"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="@dimen/ds_space_1"
+        android:background="@drawable/ds_bg_remove_badge"
+        android:contentDescription="@string/remove"
+        android:padding="3dp"
+        android:src="@drawable/ic_close"
+        android:translationX="-24dp"
+        android:visibility="gone"
+        app:tint="@color/ds_surface"
+        tools:visibility="visible" />
+</FrameLayout>

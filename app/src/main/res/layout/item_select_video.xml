@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One row of the batch checklist — screen 03, panel C.
+
+  Deliberately smaller than the library's row: a 72x40 thumbnail and a single line of title. The
+  viewer has already seen these videos in the pager and is now only deciding which of them to
+  take, so the row answers "which one" and nothing more.
+
+  The metadata line shows the quality the shared chip row resolved to for this video, not a
+  ladder of its own — one decision covers the whole set.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/ds_touch_min"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/ds_screen_padding"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/selectThumb"
+        android:layout_width="@dimen/ds_thumb_select_width"
+        android:layout_height="@dimen/ds_thumb_select_height"
+        android:background="@drawable/ds_bg_thumb"
+        android:contentDescription="@string/thumbnail"
+        android:scaleType="centerCrop"
+        app:shapeAppearance="@style/ShapeAppearance.Ds.Thumbnail" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_3"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/selectTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textSize="14sp"
+            tools:text="Warm-up drills, full session" />
+
+        <TextView
+            android:id="@+id/selectMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            tools:text="720p · 24.1 MB" />
+    </LinearLayout>
+
+    <!--
+      This video's own quality, and its own control.
+
+      One shared chip row above cannot be the whole answer: four videos on a page are not
+      necessarily wanted at the same size, and under "Always ask" there is deliberately no shared
+      choice at all. So the rung is a pill on the row — it shows what this one will be taken at and
+      changes only this one.
+
+      Its own target, separate from the row's tick, because they are different decisions: whether to
+      take this video, and at what size.
+    -->
+    <TextView
+        android:id="@+id/selectQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_2"
+        android:background="@drawable/ds_bg_pill"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_expand_more_small"
+        android:drawablePadding="@dimen/ds_space_1"
+        android:drawableTint="@color/ds_ink_soft"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/ds_chip_height"
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:textAppearance="@style/TextAppearance.Ds.Chip"
+        android:textColor="@color/ds_ink"
+        tools:text="720p" />
+
+    <!--
+      Checkbox rather than a whole-row toggle only in looks: the row itself is what carries the
+      click, so the target is the full width rather than a 22dp square.
+    -->
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/selectCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_2"
+        android:clickable="false"
+        android:focusable="false"
+        app:buttonTint="@color/ds_checkbox" />
+</LinearLayout>

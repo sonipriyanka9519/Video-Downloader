@@ -1,57 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  The shortcut picker — raised by Edit on Home's shortcut grid.
+
+  Migrated off the MVP palette. It was still drawing on @color/surface with on_surface text and the
+  old handle while the grid behind it had been rebuilt on the ds_ tokens, so opening it changed the
+  type and the greys of the very tiles it was offering.
+
+  The tiles themselves are item_ds_shortcut now, the same as Home — see ShortcutAdapter.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/surface"
+    android:background="@drawable/ds_bg_sheet_top"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/_15sdp">
+    android:paddingBottom="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
 
     <View
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_4sdp"
+        android:layout_width="@dimen/ds_handle_width"
+        android:layout_height="@dimen/ds_handle_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/ds_handle_margin_top"
         android:background="@drawable/bg_sheet_handle" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:paddingHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/ds_space_4"
         android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
         android:text="@string/add_shortcut_title"
-        android:textColor="@color/on_surface"
-        android:textSize="@dimen/_13ssp"
-        android:textStyle="bold" />
+        android:textAppearance="@style/TextAppearance.Ds.Title"
+        android:textColor="@color/ds_ink" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_marginBottom="@dimen/_6sdp"
-        android:paddingHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/ds_space_1"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
         android:text="@string/add_shortcut_hint"
-        android:textColor="@color/on_surface_variant"
-        android:textSize="@dimen/_9ssp" />
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pickerGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/_8sdp"
-        android:paddingVertical="@dimen/_4sdp" />
+        android:paddingHorizontal="@dimen/ds_space_2"
+        android:paddingVertical="@dimen/ds_space_1" />
 
+    <!--
+      Nothing left to add, which is a success rather than a failure — every site the picker knows
+      about is already on the grid. Worded that way, and given the same room a list would have had
+      so the sheet does not collapse to a strip.
+    -->
     <TextView
         android:id="@+id/pickerEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingHorizontal="@dimen/_22sdp"
-        android:paddingVertical="@dimen/_26sdp"
+        android:paddingHorizontal="@dimen/ds_space_6"
+        android:paddingVertical="@dimen/ds_space_6"
         android:text="@string/all_shortcuts_added"
-        android:textColor="@color/on_surface_variant"
-        android:textSize="@dimen/_10ssp"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft"
         android:visibility="gone" />
-
 </LinearLayout>

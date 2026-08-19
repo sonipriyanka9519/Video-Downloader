@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The step in front: a pill rather than a larger dot, the same treatment the walkthrough and the
+  chip row use for "this is the one you are on".
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

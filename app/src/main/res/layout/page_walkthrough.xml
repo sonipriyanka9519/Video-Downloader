@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One walkthrough page — screen 14, panels B1–B4.
+
+  The same frame four times: a step chip, one heading, one sentence, a diagram, and one caption
+  under it. Nothing else, and nothing in it is tappable — the only control on the screen is the
+  button in the footer, which belongs to the activity rather than to any page.
+
+  The diagram is added in code, because it is the one thing that differs and each is its own layout.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ds_space_6">
+
+    <TextView
+        android:id="@+id/walkStep"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/ds_walk_step_chip"
+        android:background="@drawable/ds_bg_pill_accent"
+        android:gravity="center"
+        android:letterSpacing="0.04"
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:textColor="@color/ds_accent"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="STEP 1 OF 4" />
+
+    <TextView
+        android:id="@+id/walkTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:textAppearance="@style/TextAppearance.Ds.TitleXl"
+        tools:text="Open a site" />
+
+    <TextView
+        android:id="@+id/walkBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:maxWidth="@dimen/ds_walk_text"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft"
+        tools:text="Tap any site on the home grid." />
+
+    <!--
+      Centred in whatever room is left, so a short screen takes the space from around the diagram
+      rather than from the words or the button.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/walkArt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/walkCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_5"
+            android:gravity="center"
+            android:maxWidth="@dimen/ds_walk_caption"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            tools:text="Any of the tiles on your home screen." />
+    </LinearLayout>
+</LinearLayout>

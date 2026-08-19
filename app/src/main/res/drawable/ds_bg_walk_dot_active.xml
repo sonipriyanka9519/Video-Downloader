@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The page in front: a pill, the same treatment a selected chip gets. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

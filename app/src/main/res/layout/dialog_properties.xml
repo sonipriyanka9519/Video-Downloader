@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Everything known about one file — screen 07.
+
+  Two columns rather than the run of "Label\nValue\n\n" this used to be. Values line up, so a
+  size can be compared with a size and a date read without hunting for where it starts.
+
+  Scrolls, because the open question in the design is real: a long filename and a long path on a
+  small screen will not fit, and a dialog that clips its last row is worse than one that moves.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/ds_dialog_content_padding"
+    android:paddingTop="@dimen/ds_space_2"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:id="@+id/propertyRows"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</androidx.core.widget.NestedScrollView>

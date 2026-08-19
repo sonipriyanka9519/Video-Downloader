@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The private folder — screen 11, panels D and E.
+
+  Signposted rather than merely different: an ink wash behind the header and a lock glyph in it,
+  so there is never a moment of wondering which library you are looking at. That matters more
+  here than anywhere else in the app — moving a video the wrong way is the mistake this screen
+  has to make impossible to blunder into.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/privateRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:background="@color/ds_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_screen_padding">
+
+        <ImageButton
+            android:id="@+id/btnPrivateBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <ImageView
+            android:layout_width="@dimen/ds_icon_small"
+            android:layout_height="@dimen/ds_icon_small"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_lock"
+            app:tint="@color/ds_ink" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:text="@string/private_folder"
+            android:textAppearance="@style/TextAppearance.Ds.Title" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/privateList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/ds_space_2"
+            android:paddingBottom="@dimen/ds_space_4" />
+
+        <!--
+          Panel D. Not a one-off intro that is dismissed and gone: an empty private folder looks
+          exactly like a broken one, and this is the only place that can say what the folder is
+          for. It goes when there is something in it and comes back if there is not.
+        -->
+        <LinearLayout
+            android:id="@+id/privateEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_space_8"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <!--
+              Neutral. There is nothing to press on this screen — a video is made private from the
+              library, not from here — so the mark reports rather than invites, which is the accent
+              pair's job. The canvas has no drawing for this state; it follows the rule the others
+              set. See ds_bg_block_accent.
+            -->
+            <ImageView
+                android:layout_width="@dimen/ds_empty_block"
+                android:layout_height="@dimen/ds_empty_block"
+                android:background="@drawable/ds_bg_block_neutral"
+                android:contentDescription="@null"
+                android:padding="@dimen/ds_empty_block_pad"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/ds_ink_faint" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:gravity="center"
+                android:text="@string/private_empty_title"
+                android:textAppearance="@style/TextAppearance.Ds.Heading" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:gravity="center"
+                android:maxWidth="@dimen/ds_empty_max_width"
+                android:text="@string/private_empty_body"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

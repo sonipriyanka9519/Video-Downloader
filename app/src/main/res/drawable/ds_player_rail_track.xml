@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The unfilled column behind brightness and volume. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#40FFFFFF" />
+    <corners android:radius="@dimen/ds_player_rail_track" />
+</shape>

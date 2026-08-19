@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 18, panel E - the launcher's long-press menu.
+
+  Three, in the order the design puts them, and that order is the argument: Paste link is what
+  somebody arriving with a copied address wants and it saves them opening the app to find the
+  address bar; New private tab is worth a shortcut precisely because reaching it otherwise means
+  passing through the ordinary tab switcher; My downloads is the library.
+
+  Static rather than dynamic. All three are always available and none of them depends on what is
+  in the app, so publishing them at install time is both simpler and faster than maintaining a
+  dynamic set - and a shortcut that is sometimes missing is worse than one that is always there.
+-->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_paste"
+        android:shortcutId="paste_link"
+        android:shortcutLongLabel="@string/shortcut_paste_long"
+        android:shortcutShortLabel="@string/shortcut_paste">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.ms.webview.MainActivity"
+            android:targetPackage="com.ms.webview">
+            <extra
+                android:name="open_search"
+                android:value="true" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_private"
+        android:shortcutId="private_tab"
+        android:shortcutLongLabel="@string/shortcut_private_long"
+        android:shortcutShortLabel="@string/shortcut_private">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.ms.webview.MainActivity"
+            android:targetPackage="com.ms.webview">
+            <extra
+                android:name="open_private_tab"
+                android:value="true" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_downloads"
+        android:shortcutId="downloads"
+        android:shortcutLongLabel="@string/shortcut_downloads_long"
+        android:shortcutShortLabel="@string/shortcut_downloads">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.ms.webview.MainActivity"
+            android:targetPackage="com.ms.webview">
+            <extra
+                android:name="open_downloads"
+                android:value="true" />
+        </intent>
+    </shortcut>
+</shortcuts>

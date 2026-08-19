@@ -50,6 +50,9 @@ dependencies {
     implementation libs.ssp
     implementation libs.lifecycle.livedata
 
+    // App lock, screen 11: the system biometric sheet, so the app never sees a fingerprint
+    implementation libs.biometric
+
     // Browser + detection
     implementation libs.webkit
     implementation libs.okhttp

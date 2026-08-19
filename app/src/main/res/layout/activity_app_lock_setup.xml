@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Setting the lock up — screen 11, panels A, B and F.
+
+  Four states in one screen rather than four screens: choose a method, enter a PIN, confirm it,
+  answer a recovery question. Back walks them in reverse, which is what makes a mistyped PIN a
+  step back rather than a restart.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lockSetupRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_screen_padding">
+
+        <ImageButton
+            android:id="@+id/btnLockBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <!-- The title on the method step, the step counter on the rest. One view, because only
+             one of the two is ever true. -->
+        <TextView
+            android:id="@+id/lockHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:layout_weight="1"
+            android:fontFeatureSettings="tnum"
+            android:textAppearance="@style/TextAppearance.Ds.TitleXl"
+            tools:text="App lock" />
+    </LinearLayout>
+
+    <!-- ─────────────────────────────── A · choose a method ─────────────────────────────── -->
+
+    <LinearLayout
+        android:id="@+id/methodStep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingTop="@dimen/ds_space_2">
+
+        <!--
+          Preselected and badged, because it is the one that costs nothing to use every time.
+          A PIN is set up either way — the card below says so rather than pretending this is a
+          choice between two exclusive things, because a fingerprint can fail.
+        -->
+        <LinearLayout
+            android:id="@+id/methodBiometric"
+            style="@style/Widget.Ds.MethodCard"
+            android:contentDescription="@string/lock_method_biometric">
+
+            <FrameLayout
+                android:layout_width="@dimen/ds_method_icon"
+                android:layout_height="@dimen/ds_method_icon"
+                android:background="@drawable/ds_bg_folder_tile">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_icon"
+                    android:layout_height="@dimen/ds_icon"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_fingerprint"
+                    app:tint="@color/ds_accent" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_4"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lock_method_biometric"
+                        android:textAppearance="@style/TextAppearance.Ds.Heading"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/biometricBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/ds_space_2"
+                        android:background="@drawable/ds_bg_pill_accent"
+                        android:paddingHorizontal="@dimen/ds_space_2"
+                        android:paddingVertical="@dimen/ds_space_1"
+                        android:text="@string/lock_recommended"
+                        android:textColor="@color/ds_accent"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/biometricBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_1"
+                    android:text="@string/lock_method_biometric_body"
+                    android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/methodPin"
+            style="@style/Widget.Ds.MethodCard"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:contentDescription="@string/lock_method_pin">
+
+            <FrameLayout
+                android:layout_width="@dimen/ds_method_icon"
+                android:layout_height="@dimen/ds_method_icon"
+                android:background="@drawable/ds_bg_inset">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_icon"
+                    android:layout_height="@dimen/ds_icon"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_dialpad"
+                    app:tint="@color/ds_ink_soft" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_4"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lock_method_pin"
+                    android:textAppearance="@style/TextAppearance.Ds.Heading"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_1"
+                    android:text="@string/lock_method_pin_body"
+                    android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ──────────────────────────── B · the PIN, and F · mismatch ──────────────────────── -->
+
+    <LinearLayout
+        android:id="@+id/pinStep"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_screen_padding"
+            android:paddingTop="@dimen/ds_space_6">
+
+            <TextView
+                android:id="@+id/pinTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Ds.TitleXl"
+                tools:text="Create a PIN" />
+
+            <TextView
+                android:id="@+id/pinBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:gravity="center"
+                android:maxWidth="@dimen/ds_empty_max_width"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                tools:text="Four digits. You'll confirm it, then pick a recovery question." />
+
+            <include
+                android:id="@+id/pinDots"
+                layout="@layout/part_pin_dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_4" />
+
+            <!-- One plain sentence, in error, and only after a mismatch. -->
+            <TextView
+                android:id="@+id/pinError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                android:textColor="@color/ds_error"
+                android:visibility="invisible"
+                tools:text="Those didn't match. Try again."
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include
+            layout="@layout/part_pin_pad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/ds_keypad_bottom" />
+    </LinearLayout>
+
+    <!-- ─────────────────────────── step 3 · the way back in ─────────────────────────── -->
+
+    <LinearLayout
+        android:id="@+id/recoveryStep"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingTop="@dimen/ds_space_6"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lock_recovery_title"
+            android:textAppearance="@style/TextAppearance.Ds.TitleXl" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:text="@string/lock_recovery_body"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+
+        <!-- Chosen from a list rather than typed: a question somebody writes themselves is one
+             they answer differently a year later. -->
+        <TextView
+            android:id="@+id/recoveryQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_settings_row_height"
+            android:layout_marginTop="@dimen/ds_space_5"
+            android:background="@drawable/ds_bg_inset"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/ds_space_4"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            tools:text="What was your first pet's name?" />
+
+        <EditText
+            android:id="@+id/recoveryAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_touch_min"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:autofillHints=""
+            android:background="@drawable/ds_bg_name_field"
+            android:hint="@string/lock_recovery_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ds_space_3"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textColor="@color/ds_ink"
+            android:textColorHint="@color/ds_ink_faint" />
+
+        <TextView
+            android:id="@+id/recoveryError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textColor="@color/ds_error"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLockFinish"
+            style="@style/Widget.Ds.Button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_marginBottom="@dimen/ds_space_6"
+            android:text="@string/lock_turn_on" />
+    </LinearLayout>
+</LinearLayout>

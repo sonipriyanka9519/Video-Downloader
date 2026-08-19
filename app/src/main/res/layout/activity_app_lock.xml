@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The challenge — screen 11, panel C.
+
+  Dark whatever theme the app is in, like the player, and for the same reason: it is not part of the
+  app's furniture, it is what stands in front of one action. Three ways past — the sensor, the PIN,
+  and the recovery question — and back, which cancels whatever was being asked about.
+
+  No back arrow all the same: the gesture is enough. A visible way out beside a keypad reads as the
+  suggestion that the keypad is optional.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lockRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_lock_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds.Lock">
+
+    <!--
+      The heading area gives way; the keypad never does.
+
+      Everything above the keys sits in a scrolling column that takes whatever height is left over,
+      so a short screen, a large font scale or a three-button navigation bar all shorten the heading
+      instead of pushing the bottom row of keys off the bottom of the screen — which is what used to
+      happen, and it took the 0 with it.
+
+      fillViewport so the column still fills the space and stays centred when there is room to spare;
+      on any normal phone nothing scrolls at all.
+    -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_space_8"
+        android:paddingTop="@dimen/ds_lock_top">
+
+        <FrameLayout
+            android:layout_width="@dimen/ds_lock_mark"
+            android:layout_height="@dimen/ds_lock_mark"
+            android:background="@drawable/ds_bg_lock_mark">
+
+            <ImageView
+                android:layout_width="@dimen/ds_lock_mark_glyph"
+                android:layout_height="@dimen/ds_lock_mark_glyph"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_download"
+                app:tint="@color/ds_lock_bg" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:gravity="center"
+            android:text="@string/lock_unlock_title"
+            android:textColor="@color/ds_lock_ink"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lockSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:gravity="center"
+            android:maxWidth="@dimen/ds_lock_text"
+            android:textColor="@color/ds_lock_ink_dim"
+            android:textSize="13sp"
+            tools:text="Touch the sensor, or enter your PIN below." />
+
+        <!-- Only when the phone has one and the viewer asked for it. -->
+        <ImageView
+            android:id="@+id/btnBiometric"
+            android:layout_width="@dimen/ds_lock_sensor"
+            android:layout_height="@dimen/ds_lock_sensor"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:background="@drawable/ds_bg_lock_sensor"
+            android:contentDescription="@string/lock_use_biometric"
+            android:padding="@dimen/ds_space_4"
+            android:src="@drawable/ic_fingerprint"
+            app:tint="@color/ds_lock_accent" />
+
+        <include
+            android:id="@+id/pinDots"
+            layout="@layout/part_pin_dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4" />
+
+        <TextView
+            android:id="@+id/lockError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:gravity="center"
+            android:textColor="?attr/colorError"
+            android:textSize="13sp"
+            android:visibility="invisible"
+            tools:text="Wrong PIN. Try again."
+            tools:visibility="visible" />
+
+        <!-- The only route back in, and it never unlocks by email. -->
+        <TextView
+            android:id="@+id/btnForgotPin"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ds_touch_min"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/ds_space_4"
+            android:text="@string/lock_forgot_pin"
+            android:textColor="@color/ds_lock_accent"
+            android:textSize="13.5sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed. Its own height, always, whatever is above it. -->
+    <include
+        layout="@layout/part_pin_pad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_keypad_bottom" />
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Leaving: the reverse of arriving, and deliberately the same numbers. A close that is quicker or
+  shallower than the open leaves the impression of being pushed out of a screen rather than of
+  stepping back from it.
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/fast_out_slow_in">
+
+    <scale
+        android:duration="@integer/ds_motion_screen"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:pivotX="50%p"
+        android:pivotY="50%p"
+        android:toXScale="0.92"
+        android:toYScale="0.92" />
+
+    <alpha
+        android:duration="@integer/ds_motion_screen"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0" />
+</set>

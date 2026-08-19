@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One option in a choice sheet.
+
+  A real RadioButton rather than a drawn circle, so the state is announced to a screen reader
+  and the tick follows the platform. Not clickable itself — the row is the target, and a 20dp
+  circle beside a full-width one would be the harder way to do the same thing.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/ds_action_row_height"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/ds_space_5"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <RadioButton
+        android:id="@+id/choiceRadio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_3"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/choiceLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            tools:text="Always ask" />
+
+        <!--
+          What choosing this costs. Gone rather than empty when an option has nothing to add, so
+          the theme sheet keeps its single-line rows and only the quality sheet grows.
+        -->
+        <TextView
+            android:id="@+id/choiceOptionBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textColor="@color/ds_ink_soft"
+            android:visibility="gone"
+            tools:text="Show the quality sheet every time"
+            tools:visibility="visible" />
+    </LinearLayout>
+</LinearLayout>

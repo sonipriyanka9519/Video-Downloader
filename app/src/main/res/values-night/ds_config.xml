@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only the two values that differ in dark. Everything else is inherited from values/. -->
+<resources>
+
+    <!-- Heavier scrim: a dark sheet over a dark page needs more separation to read as a layer. -->
+    <item name="ds_scrim_dim" type="dimen" format="float">0.6</item>
+
+    <bool name="ds_light_system_bars">false</bool>
+
+</resources>

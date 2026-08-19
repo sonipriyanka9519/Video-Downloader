@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 13 — Storage.
+
+  Three questions in the order somebody asks them: how much am I using, what can I safely delete,
+  and what is biggest. Nothing here deletes anything — the one action hands off to the library's
+  select mode with the answer pre-ticked, so there is exactly one place in the app where files go.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/storageRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_screen_padding">
+
+        <ImageButton
+            android:id="@+id/btnStorageBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:layout_weight="1"
+            android:text="@string/setting_storage"
+            android:textAppearance="@style/TextAppearance.Ds.TitleXl" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_screen_padding"
+            android:paddingTop="@dimen/ds_space_2"
+            android:paddingBottom="@dimen/ds_space_6">
+
+            <!-- What is being used, and against what. -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Ds.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_screen_padding">
+
+                    <TextView
+                        android:id="@+id/storageUsed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFeatureSettings="tnum"
+                        android:textAppearance="@style/TextAppearance.Ds.Title"
+                        tools:text="1.2 GB used by 43 videos" />
+
+                    <TextView
+                        android:id="@+id/storageFree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_1"
+                        android:fontFeatureSettings="tnum"
+                        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                        android:textSize="12.5sp"
+                        tools:text="12 GB free of 51 GB on this phone" />
+
+                    <!--
+                      The app's slice shown honestly against the whole device. The track is the free
+                      segment — see ds_bg_storage_bar — so only the two filled parts are views and
+                      the three figures in the legend cannot add up to something the bar denies.
+
+                      Widths are weights, set in code from real byte counts.
+                    -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/ds_storage_bar"
+                        android:layout_marginTop="@dimen/ds_space_3"
+                        android:background="@drawable/ds_bg_storage_bar"
+                        android:clipToOutline="true"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:id="@+id/barVideos"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/ds_accent"
+                            android:minWidth="@dimen/ds_storage_bar_min" />
+
+                        <View
+                            android:layout_width="@dimen/ds_storage_bar_gap"
+                            android:layout_height="match_parent"
+                            android:background="@color/ds_surface" />
+
+                        <View
+                            android:id="@+id/barOther"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="30"
+                            android:background="@color/ds_ink_faint" />
+
+                        <View
+                            android:layout_width="@dimen/ds_storage_bar_gap"
+                            android:layout_height="match_parent"
+                            android:background="@color/ds_surface" />
+
+                        <!-- Nothing drawn: this is the hole the track shows through. -->
+                        <View
+                            android:id="@+id/barFree"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="10" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_3"
+                        android:orientation="horizontal">
+
+                        <!-- layout_width and layout_height are required on an include that
+                             overrides any layout attribute; without them the margin is dropped. -->
+                        <include
+                            android:id="@+id/legendVideos"
+                            layout="@layout/part_storage_legend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <include
+                            android:id="@+id/legendOther"
+                            layout="@layout/part_storage_legend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_4" />
+
+                        <include
+                            android:id="@+id/legendFree"
+                            layout="@layout/part_storage_legend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_4" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!--
+              One suggestion, not a scoreboard: the videos already finished, with what removing them
+              would return. Replaced by a plain notice when there is nothing safe to suggest — the
+              card never disappears, because a screen that shortens as it runs out of advice reads
+              as broken.
+            -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/watchedCard"
+                style="@style/Widget.Ds.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_4">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_screen_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/ds_storage_tile"
+                            android:layout_height="@dimen/ds_storage_tile"
+                            android:background="@drawable/ds_bg_tile_accent"
+                            android:contentDescription="@null"
+                            android:padding="@dimen/ds_space_2"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="@color/ds_accent" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_3"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/storage_watched"
+                                android:textAppearance="@style/TextAppearance.Ds.Heading"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/watchedSummary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/ds_space_1"
+                                android:fontFeatureSettings="tnum"
+                                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                                android:textSize="12.5sp"
+                                tools:text="18 videos you've finished · 640 MB" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Secondary, deliberately: it hands off to a screen where the deleting is
+                         confirmed, so it is not itself the destructive step. -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnReviewWatched"
+                        style="@style/Widget.Ds.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/ds_button_height_mid"
+                        android:layout_marginTop="@dimen/ds_space_3"
+                        android:minHeight="@dimen/ds_button_height_mid"
+                        android:text="@string/storage_review" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Panel C. Nothing finished yet, so there is nothing to suggest and the card says so
+                 rather than the screen going quiet. -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/nothingCard"
+                style="@style/Widget.Ds.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_4"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/ds_screen_padding"
+                    android:paddingVertical="@dimen/ds_space_5">
+
+                    <ImageView
+                        android:layout_width="@dimen/ds_empty_icon_block"
+                        android:layout_height="@dimen/ds_empty_icon_block"
+                        android:background="@drawable/ds_bg_block_neutral"
+                        android:contentDescription="@null"
+                        android:padding="@dimen/ds_space_4"
+                        android:src="@drawable/ic_check_circle"
+                        app:tint="@color/ds_success" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_2"
+                        android:gravity="center"
+                        android:text="@string/storage_nothing_title"
+                        android:textAppearance="@style/TextAppearance.Ds.Heading"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_2"
+                        android:gravity="center"
+                        android:maxWidth="@dimen/ds_storage_notice_width"
+                        android:text="@string/storage_nothing_body"
+                        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/largestLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_5"
+                android:paddingBottom="@dimen/ds_space_1"
+                android:text="@string/storage_largest"
+                android:textAppearance="@style/TextAppearance.Ds.Label" />
+
+            <!-- Built in code: a handful of rows, and each one needs its own live entity for the
+                 overflow to act on. -->
+            <LinearLayout
+                android:id="@+id/largestList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/largestEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ds_space_4"
+                android:text="@string/storage_largest_empty"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

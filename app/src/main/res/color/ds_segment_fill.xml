@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A segment's fill. The raised one is a surface pill; the other is transparent so the track
+  behind it shows through, which is what makes only one of them look lifted.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/ds_surface" android:state_selected="true" />
+    <item android:color="@android:color/transparent" />
+</selector>

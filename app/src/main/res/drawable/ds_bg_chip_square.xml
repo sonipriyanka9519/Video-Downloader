@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Favicon and small square tile backing: 6dp corners, surface-alt. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface_alt" />
+    <corners android:radius="@dimen/ds_radius_chip_square" />
+</shape>

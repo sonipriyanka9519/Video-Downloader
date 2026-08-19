@@ -26,6 +26,18 @@ public class Tab {
     public String previewPath = "";
 
     /**
+     * A private tab — screen 05, and the privacy invariants in CLAUDE.md.
+     *
+     * <p>Not merely a label. A private tab writes nothing that outlives it: no history entry, no
+     * search suggestion, no page title, no preview on disk, and no row in the saved tab list. It
+     * exists for as long as it is open and leaves nothing behind when it closes.
+     *
+     * <p>Deliberately not persisted, and the field is transient for that reason as much as any
+     * other — a private tab that survived a restart would be a private tab written to storage.
+     */
+    public transient boolean incognito;
+
+    /**
      * The WebView's back/forward history, held only for as long as the app is running.
      *
      * <p>Not written to disk with the rest, and deliberately: a saved history is a bundle of

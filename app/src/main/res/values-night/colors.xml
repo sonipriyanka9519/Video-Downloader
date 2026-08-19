@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The MVP palette, in dark.
+
+  A bridge, not a destination. Screens rebuilt against designs/ use the ds_ tokens and get dark
+  from values-night/ds_colors.xml; the screens still waiting their turn use the names below, and
+  without a night copy of them they would render light text on a light surface the moment the
+  system goes dark.
+
+  So every name here exists purely so an un-migrated screen stays readable. As each screen is
+  rebuilt its entries stop being reached, and when the last one is done this file goes with it.
+
+  Values are taken from the design's dark palette rather than invented, so the two sets agree
+  where they meet — a legacy surface beside a ds_ surface should not be two different greys.
+-->
+<resources>
+
+    <!-- Brand. Lightened to the design's dark accent: the light crimson fails contrast on ink. -->
+    <color name="brand_crimson">#E05F5C</color>
+    <color name="brand_crimson_dark">#C24A47</color>
+
+    <!-- Material roles -->
+    <color name="primary">#E05F5C</color>
+    <color name="on_primary">#171212</color>
+    <color name="primary_container">#3E2422</color>
+    <color name="on_primary_container">#F0E8E5</color>
+
+    <color name="secondary">#B3A6A1</color>
+    <color name="on_secondary">#171212</color>
+    <color name="secondary_container">#2A2322</color>
+    <color name="on_secondary_container">#F0E8E5</color>
+
+    <color name="surface">#171212</color>
+    <color name="on_surface">#F0E8E5</color>
+    <color name="surface_variant">#2A2322</color>
+    <color name="on_surface_variant">#B3A6A1</color>
+    <color name="surface_container">#201A19</color>
+
+    <color name="outline">#362D2B</color>
+    <color name="outline_variant">#362D2B</color>
+
+    <!-- Chrome -->
+    <color name="toolbar_surface">#171212</color>
+    <color name="toolbar_pill">#2A2322</color>
+    <color name="toolbar_icon">#B3A6A1</color>
+    <color name="toolbar_text">#F0E8E5</color>
+    <color name="toolbar_hint">#7D716C</color>
+
+    <color name="nav_surface">#201A19</color>
+    <color name="nav_inactive">#7D716C</color>
+    <color name="divider">#362D2B</color>
+
+    <!-- Controls -->
+    <color name="segment_track">#2A2322</color>
+    <color name="segment_active">#201A19</color>
+    <color name="segment_inactive_text">#B3A6A1</color>
+
+    <!-- Sheets and dialogs. The scrim is heavier in dark, for the same reason as ds_scrim. -->
+    <color name="scrim_dark">#99000000</color>
+    <color name="default_card">#201A19</color>
+    <color name="clip_link_surface">#2A2322</color>
+    <color name="clip_link_text">#F0E8E5</color>
+
+    <!--
+      The opening. Dark from the first frame, so the system splash and the activity behind it
+      still look like one screen — a white splash handing over to a dark app is a flash.
+    -->
+    <color name="splash_surface">#171212</color>
+    <color name="splash_ornament">#201A19</color>
+    <color name="splash_title">#F0E8E5</color>
+    <color name="splash_subtitle">#B3A6A1</color>
+    <color name="splash_track">#2A2322</color>
+
+    <!-- Guides. The paste field is an inset here rather than a pale card on white. -->
+    <color name="guide_input_surface">#2A2322</color>
+
+</resources>

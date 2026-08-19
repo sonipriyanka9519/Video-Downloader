@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A keypad key: a 64dp disc, per screen 11.
+
+  Themed rather than fixed, because the same keypad is used on two screens with opposite
+  grounds — the setup screen follows the app, the lock screen is dark whatever the app is doing.
+  The colour comes from whichever overlay the layout carries.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="?attr/colorSurfaceVariant" />
+</shape>

@@ -129,6 +129,42 @@ public class DownloadRepository {
     }
 
     /**
+     * Removes several rows and their files, asking the viewer at most once.
+     *
+     * <p>Not a loop over {@link #delete}: files the app no longer owns each need the system's
+     * consent, and one at a time means a stack of dialogs. {@link MediaLibrary#deleteAll} puts
+     * every refused file into a single request.
+     *
+     * <p>The rows go regardless. A row is this app's record of a file; if the file survives
+     * because consent was declined, the next library refresh finds it again and puts it back.
+     */
+    public MediaLibrary.BatchResult deleteAll(@Nullable List<DownloadEntity> items) {
+        MediaLibrary.BatchResult empty = new MediaLibrary.BatchResult();
+        if (items == null || items.isEmpty()) return empty;
+
+        List<String> uris = new ArrayList<>();
+        for (DownloadEntity d : items) {
+            if (d == null) continue;
+            if (!d.fromLibrary) {
+                store.delete(d.id);
+                final String temp = d.tempPath;
+                final long id = d.id;
+                io.execute(() -> {
+                    if (!TextUtils.isEmpty(temp)) DownloadService.deleteTree(new File(temp));
+                    new DownloadThumbnails(context).delete(id);
+                });
+            }
+            if (!TextUtils.isEmpty(d.outputUri)) uris.add(d.outputUri);
+        }
+
+        // Synchronous, for the same reason a single delete is: a confirmation comes back as an
+        // IntentSender the caller has to launch from the tap still in progress.
+        MediaLibrary.BatchResult result = library.deleteAll(uris);
+        refreshLibrary();
+        return result;
+    }
+
+    /**
      * Gives a finished video a new name.
      *
      * <p>Synchronous for the same reason a delete is: a write the system wants confirmed hands

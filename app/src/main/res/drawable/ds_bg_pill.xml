@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The address pill. Full-round, surface-alt, no border: it is an inset, not a card. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface_alt" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

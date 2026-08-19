@@ -33,11 +33,25 @@ public final class SearchHistory {
     private static final String KEY_ENTRIES = "entries";
     private static final String KEY_QUERIES = "queries";
 
+    /** Screen 12's retention answer, asked once inside the first Clear all. */
+    private static final String KEY_AUTO_CLEAR = "auto_clear";
+    private static final String KEY_RETENTION_ASKED = "retention_asked";
+
     /**
-     * How many visits are remembered. Long enough to cover a few days of use, short enough that
-     * the list is read and written on every page load without anyone noticing.
+     * How many visits are remembered.
+     *
+     * <p>Raised from 60 when history got a screen of its own: a list somebody scrolls through
+     * looking for a page from last week is worth more than a list of the last hour. Still a cap
+     * rather than no cap, because this is read and rewritten on every page load — retention is
+     * what is meant to bound it, and this is only the backstop.
      */
-    private static final int MAX_ENTRIES = 60;
+    private static final int MAX_ENTRIES = 300;
+
+    /** Typed searches, which are a suggestion list and stay short. */
+    private static final int MAX_QUERIES = 60;
+
+    /** What "older than 30 days" means, in milliseconds. */
+    private static final long RETENTION_MS = 30L * 24 * 60 * 60 * 1000;
 
     /** One visit. */
     public static class Entry {
@@ -45,11 +59,25 @@ public final class SearchHistory {
         public final String title;
         /** When it was last visited, so the list can be broken up by day. */
         public final long visitedAt;
+        /**
+         * How many times this page has been visited — the {@code ×4} chip on screen 12.
+         *
+         * <p>Never two rows for one address: a repeat visit moves the row to the front and raises
+         * this instead. The design describes that as consecutive visits collapsing, and with one
+         * row per address the result is the same thing said once — the count is every visit rather
+         * than only a run of them, which is the more useful of the two answers anyway.
+         */
+        public final int visits;
 
         public Entry(String url, String title, long visitedAt) {
+            this(url, title, visitedAt, 1);
+        }
+
+        public Entry(String url, String title, long visitedAt, int visits) {
             this.url = url;
             this.title = title;
             this.visitedAt = visitedAt;
+            this.visits = Math.max(1, visits);
         }
 
         /** What to show on the first line: the page's name, or its address when it has none. */
@@ -74,7 +102,10 @@ public final class SearchHistory {
                 if (TextUtils.isEmpty(url)) continue;
                 // Entries written before visits were timestamped have none; they group under
                 // whatever day zero falls on, which is honest — we do not know when they were.
-                entries.add(new Entry(url, o.optString("title", ""), o.optLong("time", 0)));
+                // Same for the count: a row written before counting existed has been there once
+                // as far as anyone can tell.
+                entries.add(new Entry(url, o.optString("title", ""), o.optLong("time", 0),
+                        o.optInt("n", 1)));
             }
         } catch (Exception e) {
             Log.w(TAG, "history unreadable, starting fresh", e);
@@ -95,17 +126,77 @@ public final class SearchHistory {
 
         List<Entry> entries = all(context);
         String keptTitle = title;
+        int visits = 0;
         for (int i = entries.size() - 1; i >= 0; i--) {
             if (!url.equals(entries.get(i).url)) continue;
             // Keep the name we had if this visit arrived without one.
             if (TextUtils.isEmpty(keptTitle)) keptTitle = entries.get(i).title;
+            // And carry the count forward — this is the same page being visited again, which is
+            // what the ×N chip on screen 12 is counting.
+            visits = Math.max(visits, entries.get(i).visits);
             entries.remove(i);
         }
 
         entries.add(0, new Entry(url, keptTitle == null ? "" : keptTitle,
-                System.currentTimeMillis()));
+                System.currentTimeMillis(), visits + 1));
+        // Old visits go here rather than on a timer: this is the one moment the list is already
+        // being rewritten, so enforcing retention costs nothing extra.
+        if (autoClearOld(context)) dropOlderThan(entries, System.currentTimeMillis() - RETENTION_MS);
         while (entries.size() > MAX_ENTRIES) entries.remove(entries.size() - 1);
         write(context, entries);
+    }
+
+    /** How many pages are remembered — the number the Clear all confirm names. */
+    public static int count(Context context) {
+        return all(context).size();
+    }
+
+    // ------------------------------------------------------------------- retention
+
+    /**
+     * Whether anything older than 30 days is dropped as it ages out — screen 12's one decision.
+     *
+     * <p>Off by default: history keeps everything until somebody says otherwise. The question is
+     * asked once, pre-ticked, inside the first Clear all, and the answer then lives in Settings.
+     */
+    public static boolean autoClearOld(Context context) {
+        return prefs(context).getBoolean(KEY_AUTO_CLEAR, false);
+    }
+
+    public static void setAutoClearOld(Context context, boolean value) {
+        prefs(context).edit().putBoolean(KEY_AUTO_CLEAR, value).apply();
+        // Applied at once rather than at the next page load: a switch that will do something
+        // eventually is indistinguishable from one that did nothing.
+        if (value) pruneOld(context);
+    }
+
+    /** Whether the retention question has been put yet, so it is only ever asked once. */
+    public static boolean retentionAsked(Context context) {
+        return prefs(context).getBoolean(KEY_RETENTION_ASKED, false);
+    }
+
+    public static void markRetentionAsked(Context context) {
+        prefs(context).edit().putBoolean(KEY_RETENTION_ASKED, true).apply();
+    }
+
+    /** Drops anything past the retention window, when the viewer asked for that. */
+    public static void pruneOld(Context context) {
+        if (!autoClearOld(context)) return;
+
+        List<Entry> entries = all(context);
+        int before = entries.size();
+        dropOlderThan(entries, System.currentTimeMillis() - RETENTION_MS);
+        // Only written when something actually went, so opening the sheet is not a write.
+        if (entries.size() != before) write(context, entries);
+    }
+
+    private static void dropOlderThan(List<Entry> entries, long cutoff) {
+        for (int i = entries.size() - 1; i >= 0; i--) {
+            // A visit with no timestamp is left alone. It is old, but "we do not know when" is not
+            // grounds for deleting somebody's history.
+            long at = entries.get(i).visitedAt;
+            if (at > 0 && at < cutoff) entries.remove(i);
+        }
     }
 
     public static void remove(Context context, String url) {
@@ -116,8 +207,26 @@ public final class SearchHistory {
         write(context, entries);
     }
 
+    /**
+     * Forgets every visit. Typed searches are a separate list and are left alone - see
+     * {@link #clearQueries}, and the note on the keys for why the two are kept apart.
+     *
+     * <p>This is what screen 12's Clear all means: that screen shows visits, so that is what it
+     * clears. A caller that means "forget everything" calls both.
+     */
     public static void clear(Context context) {
         prefs(context).edit().remove(KEY_ENTRIES).apply();
+    }
+
+    /**
+     * Forgets what was typed and searched for.
+     *
+     * <p>This had no caller and no way to be reached, which is why Clear recent searches cleared
+     * everything except the recent searches it was named after: it dropped the visits and left the
+     * queries, and the list on screen came straight back.
+     */
+    public static void clearQueries(Context context) {
+        prefs(context).edit().remove(KEY_QUERIES).apply();
     }
 
     // ------------------------------------------------------------------- searches
@@ -158,7 +267,7 @@ public final class SearchHistory {
             if (query.equalsIgnoreCase(queries.get(i))) queries.remove(i);
         }
         queries.add(0, query);
-        while (queries.size() > MAX_ENTRIES) queries.remove(queries.size() - 1);
+        while (queries.size() > MAX_QUERIES) queries.remove(queries.size() - 1);
 
         JSONArray array = new JSONArray();
         for (String q : queries) array.put(q);
@@ -183,6 +292,7 @@ public final class SearchHistory {
                 o.put("url", entry.url);
                 o.put("title", entry.title);
                 o.put("time", entry.visitedAt);
+                o.put("n", entry.visits);
                 array.put(o);
             } catch (Exception ignored) {
                 // One unwritable row is not worth losing the rest of the list over.

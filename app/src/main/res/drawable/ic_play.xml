@@ -1,7 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Play, outlined, 24dp.
+
+  Drawn as a stroked triangle rather than a solid one so it carries the same line weight as the
+  outlined glyphs it sits with. A filled wedge next to five hollow icons is the one that catches
+  the eye, and nothing about playing deserves that emphasis over the rest of the list.
+
+  Round joins, so the corners match the rounded set.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp" android:height="24dp"
-    android:viewportWidth="24" android:viewportHeight="24"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
     android:tint="?attr/colorControlNormal">
-    <path android:fillColor="@android:color/white"
-        android:pathData="M8,5v14l11,-7z"/>
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M8.5,5.8 L18.2,12 8.5,18.2 Z"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>

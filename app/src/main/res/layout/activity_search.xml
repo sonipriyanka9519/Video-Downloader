@@ -4,41 +4,42 @@
     android:id="@+id/searchRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:orientation="vertical">
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
 
     <!-- The one editable field in the app. The browser's own bar only ever displays. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_toolbar"
+        android:background="@color/ds_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/_3sdp"
-        android:paddingVertical="@dimen/_4sdp">
+        android:paddingHorizontal="@dimen/ds_space_1"
+        android:paddingVertical="@dimen/ds_space_2">
 
-        <!-- Same metrics as the browser's toolbar, so the field lands exactly where the bar was
-             rather than a few pixels above or below it. -->
         <ImageButton
             android:id="@+id/btnSearchBack"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_27sdp"
-            android:layout_height="@dimen/_27sdp"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
             android:src="@drawable/ic_back"
-            app:tint="@color/toolbar_icon" />
+            app:tint="@color/ds_ink" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginHorizontal="@dimen/_2sdp"
+            android:layout_height="@dimen/ds_field_height"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:layout_marginEnd="@dimen/ds_space_2"
             android:layout_weight="1"
-            android:background="@drawable/bg_url_pill"
+            android:background="@drawable/ds_bg_pill"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/_11sdp"
-            android:paddingEnd="@dimen/_2sdp">
+            android:paddingStart="@dimen/ds_space_4"
+            android:paddingEnd="@dimen/ds_space_1">
 
             <EditText
                 android:id="@+id/searchInput"
@@ -48,26 +49,28 @@
                 android:autofillHints=""
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:hint="@string/search_or_url"
+                android:hint="@string/home_search_hint"
                 android:imeOptions="actionGo"
                 android:inputType="textUri"
                 android:maxLines="1"
                 android:selectAllOnFocus="true"
-                android:textColor="@color/toolbar_text"
-                android:textColorHint="@color/toolbar_hint"
-                android:textSize="@dimen/_10ssp" />
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                android:textColor="@color/ds_ink"
+                android:textColorHint="@color/ds_ink_faint"
+                android:textSize="15sp" />
 
+            <!-- Appears only with text in the field: an X on an empty field clears nothing. -->
             <ImageButton
                 android:id="@+id/btnSearchClear"
                 style="?attr/borderlessButtonStyle"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
+                android:layout_width="@dimen/ds_touch_min"
+                android:layout_height="@dimen/ds_touch_min"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/clear_all"
-                android:padding="@dimen/_4sdp"
+                android:padding="@dimen/ds_space_3"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
-                app:tint="@color/toolbar_icon" />
+                app:tint="@color/ds_ink_soft" />
         </LinearLayout>
     </LinearLayout>
 
@@ -81,26 +84,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_6sdp"
-            android:paddingTop="@dimen/_6sdp">
+            android:paddingHorizontal="@dimen/ds_screen_padding"
+            android:paddingTop="@dimen/ds_space_2">
 
-            <!-- The page the browser is on, and the three things worth doing to its address. -->
+            <!--
+              THIS PAGE — where the browser is standing right now, offered as somewhere to
+              return to rather than as something already chosen. Only present when the search
+              screen was opened from a page.
+            -->
+            <TextView
+                android:id="@+id/pageLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/ds_space_1"
+                android:text="@string/this_page"
+                android:textAppearance="@style/TextAppearance.Ds.Label"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/pageCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_omni_row"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/_12sdp"
-                android:paddingEnd="@dimen/_4sdp"
-                android:paddingVertical="@dimen/_6sdp"
                 android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/pageIcon"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/ds_icon"
+                    android:layout_height="@dimen/ds_icon"
                     android:contentDescription="@string/current_page"
                     android:src="@drawable/ic_globe" />
 
@@ -108,13 +120,15 @@
                     android:id="@+id/pageOpen"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/ds_space_3"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
+                    android:minHeight="@dimen/ds_touch_min"
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:paddingVertical="@dimen/_4sdp">
+                    android:paddingVertical="@dimen/ds_space_2">
 
                     <TextView
                         android:id="@+id/pageTitle"
@@ -122,8 +136,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/on_surface"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textAppearance="@style/TextAppearance.Ds.Body" />
 
                     <TextView
                         android:id="@+id/pageUrl"
@@ -131,51 +144,57 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/on_surface_variant"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textAppearance="@style/TextAppearance.Ds.BodySm" />
                 </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/pageShare"
                     style="?attr/borderlessButtonStyle"
-                    android:layout_width="@dimen/_28sdp"
-                    android:layout_height="@dimen/_28sdp"
+                    android:layout_width="@dimen/ds_touch_min"
+                    android:layout_height="@dimen/ds_touch_min"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/share_link_via"
-                    android:padding="@dimen/_4sdp"
+                    android:padding="@dimen/ds_space_3"
                     android:src="@drawable/ic_share"
-                    app:tint="@color/on_surface_variant" />
+                    app:tint="@color/ds_ink_soft" />
 
                 <ImageButton
                     android:id="@+id/pageCopy"
                     style="?attr/borderlessButtonStyle"
-                    android:layout_width="@dimen/_28sdp"
-                    android:layout_height="@dimen/_28sdp"
+                    android:layout_width="@dimen/ds_touch_min"
+                    android:layout_height="@dimen/ds_touch_min"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/copy_link"
-                    android:padding="@dimen/_4sdp"
+                    android:padding="@dimen/ds_space_3"
                     android:src="@drawable/ic_copy"
-                    app:tint="@color/on_surface_variant" />
+                    app:tint="@color/ds_ink_soft" />
 
                 <ImageButton
                     android:id="@+id/pageEdit"
                     style="?attr/borderlessButtonStyle"
-                    android:layout_width="@dimen/_28sdp"
-                    android:layout_height="@dimen/_28sdp"
+                    android:layout_width="@dimen/ds_touch_min"
+                    android:layout_height="@dimen/ds_touch_min"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/edit_link"
-                    android:padding="@dimen/_4sdp"
+                    android:padding="@dimen/ds_space_3"
                     android:src="@drawable/ic_edit"
-                    app:tint="@color/on_surface_variant" />
+                    app:tint="@color/ds_ink_soft" />
             </LinearLayout>
 
-            <!-- What is on the clipboard: one line, until the eye is pressed. -->
+            <!--
+              What is on the clipboard, offered rather than acted on. Read only because the
+              viewer reached for the address bar — an act that already means "I want to go
+              somewhere" — never on cold open, where the system's own paste toast would land on
+              a prompt nobody asked for. See designs/screens/15.
+
+              One line, middle-ellipsised, until the eye is pressed.
+            -->
             <LinearLayout
                 android:id="@+id/clipCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/bg_omni_row"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:background="@drawable/ds_bg_inset"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -187,22 +206,23 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    android:minHeight="@dimen/ds_touch_min"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/_12sdp"
-                    android:paddingEnd="@dimen/_6sdp"
-                    android:paddingVertical="@dimen/_9sdp">
+                    android:paddingStart="@dimen/ds_space_3"
+                    android:paddingEnd="@dimen/ds_space_1"
+                    android:paddingVertical="@dimen/ds_space_2">
 
                     <ImageView
                         android:id="@+id/clipIcon"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
+                        android:layout_width="@dimen/ds_icon"
+                        android:layout_height="@dimen/ds_icon"
                         android:contentDescription="@string/link_you_copied"
                         android:src="@drawable/ic_globe" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/ds_space_3"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -211,30 +231,34 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/link_you_copied"
-                            android:textColor="@color/on_surface"
-                            android:textSize="@dimen/_11ssp" />
+                            android:textAppearance="@style/TextAppearance.Ds.Body"
+                            android:textSize="14sp" />
 
+                        <!--
+                          Middle-ellipsised, so both ends of the address survive: a share link
+                          is identified by its host at one end and its id at the other, and
+                          cutting the tail off leaves every link from one site looking alike.
+                        -->
                         <TextView
                             android:id="@+id/clipUrl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
+                            android:ellipsize="middle"
                             android:maxLines="1"
-                            android:textColor="@color/on_surface_variant"
-                            android:textSize="@dimen/_9ssp"
+                            android:textAppearance="@style/TextAppearance.Ds.BodySm"
                             android:visibility="gone" />
                     </LinearLayout>
 
                     <ImageButton
                         android:id="@+id/clipReveal"
                         style="?attr/borderlessButtonStyle"
-                        android:layout_width="@dimen/_26sdp"
-                        android:layout_height="@dimen/_26sdp"
+                        android:layout_width="@dimen/ds_touch_min"
+                        android:layout_height="@dimen/ds_touch_min"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/show_link"
-                        android:padding="@dimen/_3sdp"
+                        android:padding="@dimen/ds_space_3"
                         android:src="@drawable/ic_eye"
-                        app:tint="@color/on_surface_variant" />
+                        app:tint="@color/ds_ink_soft" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -242,14 +266,10 @@
                 android:id="@+id/historyLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:paddingStart="@dimen/_12sdp"
-                android:paddingEnd="@dimen/_4sdp"
-                android:paddingBottom="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/ds_space_5"
+                android:paddingBottom="@dimen/ds_space_1"
                 android:text="@string/recent"
-                android:textColor="@color/on_surface_variant"
-                android:textSize="@dimen/_10ssp"
-                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.Ds.Label"
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -257,7 +277,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:paddingBottom="@dimen/_12sdp" />
+                android:paddingBottom="@dimen/ds_space_3" />
+
+            <!--
+              Sits under the list rather than in a menu: on the empty field this whole screen is
+              history, so the way to clear it belongs at the end of what it clears. Behind a
+              confirm, because it cannot be undone.
+            -->
+            <TextView
+                android:id="@+id/btnClearHistory"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ds_touch_min"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:text="@string/clear_searches"
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                android:textColor="@color/ds_ink_soft"
+                android:textSize="14sp"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The panel every guide illustration is drawn on — screen 15.
+
+  A flat neutral field rather than a screenshot. The design's rule for illustrations holds here as
+  it does in the walkthrough: nothing in the picture should look like a live control, or somebody
+  will tap it and conclude the app is broken.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface_alt" />
+    <corners android:radius="@dimen/ds_radius_card" />
+</shape>

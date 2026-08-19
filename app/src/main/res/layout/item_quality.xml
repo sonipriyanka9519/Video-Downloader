@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  One rung of the quality ladder — screen 03.
+
+  Sized by its column rather than by itself: the grid gives each of the three an equal share of
+  the width, so a row of rungs lines up and a short final row sits under the one above it.
+
+  The tick straddles the card's top-right corner: half on the tile, half on the sheet behind it.
+  Centred text never reaches that corner, so the tile reserves no room for it and stays exactly as
+  compact whether it is selected or not.
+
+  How it is done matters, because the obvious way does not work. The frame's top and end padding is
+  the room the tick hangs into, but a FrameLayout applies its padding to every child, so gravity
+  alone put the tick inside the padded box, which is to say fully inside the card. The negative
+  margins take it back out by half its own width, landing its centre exactly on the corner.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="@dimen/_9sdp"
-    app:cardElevation="0dp"
-    app:strokeWidth="@dimen/_1sdp">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingTop="@dimen/ds_rung_tick_out"
+    android:paddingEnd="@dimen/ds_rung_tick_out">
 
-    <FrameLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/qualityCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/ds_surface_alt"
+        app:cardCornerRadius="@dimen/ds_radius_card"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
 
-        <!--
-          Text is centred and the tick sits in the top corner, where centred text never reaches —
-          so no padding has to be reserved for it and the tile stays compact.
-        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_6sdp"
-            android:paddingTop="@dimen/_7sdp"
-            android:paddingBottom="@dimen/_7sdp">
+            android:paddingHorizontal="@dimen/ds_space_2"
+            android:paddingVertical="@dimen/ds_rung_padding_v">
 
             <TextView
                 android:id="@+id/qualityName"
@@ -33,30 +49,36 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/on_surface"
-                android:textSize="@dimen/_11ssp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                android:textColor="@color/ds_ink"
+                android:textStyle="bold"
+                tools:text="720p" />
 
             <TextView
                 android:id="@+id/qualityMeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_1sdp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/on_surface_variant"
-                android:textSize="@dimen/_8ssp" />
+                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                tools:text="24.1 MB" />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-        <ImageView
-            android:id="@+id/qualityCheck"
-            android:layout_width="@dimen/_11sdp"
-            android:layout_height="@dimen/_11sdp"
-            android:layout_gravity="top|end"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:contentDescription="@string/selected"
-            android:src="@drawable/ic_check_circle"
-            android:visibility="gone" />
-    </FrameLayout>
-</com.google.android.material.card.MaterialCardView>
+    <ImageView
+        android:id="@+id/qualityCheck"
+        android:layout_width="@dimen/ds_rung_tick"
+        android:layout_height="@dimen/ds_rung_tick"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="@dimen/ds_rung_tick_out_neg"
+        android:layout_marginEnd="@dimen/ds_rung_tick_out_neg"
+        android:background="@drawable/ds_bg_check_badge"
+        android:contentDescription="@string/selected"
+        android:elevation="@dimen/ds_rung_tick_z"
+        android:outlineProvider="none"
+        android:padding="@dimen/ds_rung_tick_padding"
+        android:src="@drawable/ic_check"
+        android:visibility="gone"
+        app:tint="@color/ds_on_accent"
+        tools:visibility="visible" />
+</FrameLayout>

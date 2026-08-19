@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One card in the Recent Downloads row: a 148x83 thumbnail with the title beneath.
+
+  A finished item shows its duration in the corner chip. One still transferring shows an accent
+  progress bar flush to the thumbnail's bottom edge and reads "Downloading…" as its subtitle —
+  the same card, two states, so a running download does not need a row of its own.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/ds_card_thumb_width"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/ds_space_3"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="@dimen/ds_card_thumb_width"
+        android:layout_height="@dimen/ds_card_thumb_height">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/recentThumb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ds_bg_thumb"
+            android:contentDescription="@string/thumbnail"
+            android:scaleType="centerCrop"
+            app:shapeAppearance="@style/ShapeAppearance.Ds.Card" />
+
+        <!-- Finished: the running time. -->
+        <TextView
+            android:id="@+id/recentDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="@dimen/ds_space_2"
+            android:background="@drawable/ds_bg_duration_chip"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="1dp"
+            android:textAppearance="@style/TextAppearance.Ds.Caption"
+            android:textColor="@color/ds_on_media"
+            tools:text="0:43" />
+
+        <!-- In flight: the only continuous motion the design allows. -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/recentProgress"
+            style="@style/Widget.Ds.Progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            app:trackCornerRadius="0dp"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/recentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+        android:textColor="@color/ds_ink"
+        tools:text="Jersey outfit ideas" />
+
+    <TextView
+        android:id="@+id/recentSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/home_downloading"
+        android:textAppearance="@style/TextAppearance.Ds.Caption"
+        android:textColor="@color/ds_accent"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>

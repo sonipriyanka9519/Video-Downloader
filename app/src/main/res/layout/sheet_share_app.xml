@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 18, panel D — share this app.
+
+  The message is shown before it is sent, which is the whole point of this sheet existing rather
+  than going straight to the system chooser: what gets sent has this app's name on it and lands in
+  somebody else's inbox, so the person sending it should have read it first.
+
+  Four ways out, and the fourth is not a share target at all. Copy link is here because the most
+  common answer to "how do I send this to someone" is "somewhere you have not thought of", and a
+  link on the clipboard works in all of them.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ds_bg_sheet_top"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ds_space_5"
+    android:paddingTop="@dimen/ds_space_5"
+    android:paddingBottom="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/setting_share_app"
+        android:textAppearance="@style/TextAppearance.Ds.Title"
+        android:textColor="@color/ds_ink" />
+
+    <!--
+      The message itself, in the inset the app uses for anything quoted back to the viewer. Three
+      lines at most: it is there to be recognised, not proof-read.
+    -->
+    <TextView
+        android:id="@+id/shareMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_inset"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:padding="@dimen/ds_space_3"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/shareMessages"
+            style="@style/Widget.Ds.ShareTarget"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/ds_icon"
+                android:layout_height="@dimen/ds_icon"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_chat"
+                app:tint="@color/ds_accent" />
+
+            <TextView
+                style="@style/Widget.Ds.ShareTarget.Label"
+                android:text="@string/share_via_messages" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/shareEmail"
+            style="@style/Widget.Ds.ShareTarget"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/ds_icon"
+                android:layout_height="@dimen/ds_icon"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_mail"
+                app:tint="@color/ds_accent" />
+
+            <TextView
+                style="@style/Widget.Ds.ShareTarget.Label"
+                android:text="@string/share_via_email" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/shareMore"
+            style="@style/Widget.Ds.ShareTarget"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/ds_icon"
+                android:layout_height="@dimen/ds_icon"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_share"
+                app:tint="@color/ds_accent" />
+
+            <TextView
+                style="@style/Widget.Ds.ShareTarget.Label"
+                android:text="@string/share_via_more" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/shareCopy"
+            style="@style/Widget.Ds.ShareTarget"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/ds_icon"
+                android:layout_height="@dimen/ds_icon"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_copy"
+                app:tint="@color/ds_accent" />
+
+            <TextView
+                style="@style/Widget.Ds.ShareTarget.Label"
+                android:text="@string/share_via_copy" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

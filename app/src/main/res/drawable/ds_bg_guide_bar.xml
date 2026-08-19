@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A line of text, abstracted: guides never put real words inside their pictures. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_guide_line" />
+    <corners android:radius="@dimen/ds_radius_progress" />
+</shape>

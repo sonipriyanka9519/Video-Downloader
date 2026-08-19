@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The accent rail down the left of whatever is playing now. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_player_accent" />
+    <corners android:radius="@dimen/ds_radius_progress" />
+</shape>

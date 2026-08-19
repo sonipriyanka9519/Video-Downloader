@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The browser overflow's background.
+
+  A PopupMenu draws on the platform's popup background, which is a near-square card with the
+  system's own corner - so the one menu in the browser looked like it came from a different app
+  than every sheet and dialog around it. Dialog radius, because that is what this is.
+
+  Inset on all sides: a popup background is drawn to the window's bounds, and without the inset
+  the shadow has nowhere to fall and the corners get clipped square again.
+-->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:inset="@dimen/ds_space_1">
+    <shape android:shape="rectangle">
+        <solid android:color="@color/ds_surface" />
+        <corners android:radius="@dimen/ds_radius_dialog" />
+    </shape>
+</inset>

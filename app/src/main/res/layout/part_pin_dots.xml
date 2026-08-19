@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Four dots — how much of the PIN has been entered, and nothing else.
+
+  Never the digits themselves, not even briefly. A PIN entered over someone's shoulder is the
+  threat this screen exists for, and a digit shown for half a second is a digit shown.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/pinDot1"
+        style="@style/Widget.Ds.PinDot"
+        tools:activated="true" />
+
+    <View
+        android:id="@+id/pinDot2"
+        style="@style/Widget.Ds.PinDot"
+        tools:activated="true" />
+
+    <View
+        android:id="@+id/pinDot3"
+        style="@style/Widget.Ds.PinDot" />
+
+    <View
+        android:id="@+id/pinDot4"
+        style="@style/Widget.Ds.PinDot" />
+</LinearLayout>

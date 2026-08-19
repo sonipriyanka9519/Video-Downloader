@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 10 — Settings, as a fragment.
+
+  The same list in two places: a tab in the bottom navigation, and the screen the browser's overflow
+  opens. Extracting it is what makes that possible without a second copy of sixteen rows to keep in
+  step — see SettingsFragment.
+
+  The back arrow is the one thing that differs between the two hosts, so it is hidden rather than
+  built twice: a tab has nothing to go back to.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:id="@+id/settingsHeader"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_screen_padding">
+
+        <ImageButton
+            android:id="@+id/btnSettingsBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:layout_weight="1"
+            android:text="@string/settings"
+            android:textAppearance="@style/TextAppearance.Ds.TitleXl" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/settingsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/ds_space_6" />
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

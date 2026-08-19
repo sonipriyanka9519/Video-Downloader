@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The one accent arrow a guide illustration is allowed — screen 15.
+
+  Curved and hand-drawn in feel rather than a straight technical pointer: it is annotation over a
+  picture, in the register of somebody circling the thing to tap.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="40dp"
+    android:viewportWidth="60"
+    android:viewportHeight="40"
+    android:tint="@color/ds_accent">
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M4,36 C4,14 26,8 50,12"
+        android:strokeColor="@android:color/white"
+        android:strokeLineCap="round"
+        android:strokeWidth="3" />
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M50,12 L41,6 M50,12 L41,20"
+        android:strokeColor="@android:color/white"
+        android:strokeLineCap="round"
+        android:strokeWidth="3" />
+</vector>

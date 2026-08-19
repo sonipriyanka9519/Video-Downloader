@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The small accent-soft tile behind a card's leading glyph — screen 13's watched card.
+
+  Smaller and tighter-cornered than the empty-state block: this one sits inside a card beside two
+  lines of text, where a 96dp mark would be the card's subject rather than its label.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent_soft" />
+    <corners android:radius="@dimen/ds_radius_tile" />
+</shape>

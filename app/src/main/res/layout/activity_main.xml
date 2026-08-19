@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
+    android:background="@color/ds_bg"
     android:orientation="vertical">
 
     <androidx.viewpager2.widget.ViewPager2
@@ -13,11 +13,15 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <!--
+      Kept as a spacer rather than a rule. The bar below is a rounded card now and its own edge is
+      what separates it from the page; a line drawn across the top of it would cut the corners off.
+      The view stays because MainActivity hides it with the bar - see applyNavVisibility.
+    -->
     <View
         android:id="@+id/navDivider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:background="@color/divider" />
+        android:layout_height="@dimen/_1sdp" />
 
     <!--
       Flat: no pill behind the chosen icon, no shadow under the bar, and the label always showing.
@@ -29,7 +33,7 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
+        android:background="@drawable/ds_bg_bottom_nav"
         android:minHeight="@dimen/_50sdp"
         app:elevation="0dp"
         app:itemActiveIndicatorStyle="@style/BottomNavIndicator"

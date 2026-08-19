@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One fact about a file: its label in the faint ink at a fixed width, its value beside it.
+
+  The label column is fixed rather than wrapping so every value starts at the same x — that is
+  the whole reason this is a two-column list and not a paragraph.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/ds_space_1">
+
+    <TextView
+        android:id="@+id/propertyLabel"
+        android:layout_width="@dimen/ds_property_label_width"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+        android:textColor="@color/ds_ink_faint"
+        tools:text="Duration" />
+
+    <TextView
+        android:id="@+id/propertyValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_3"
+        android:layout_weight="1"
+        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+        android:textColor="@color/ds_ink"
+        tools:text="0:30" />
+</LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Accent when on. Off it is the same grey the sheet's dividers use, so it reads as inert. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/ds_player_accent" android:state_checked="true" />
+    <item android:color="@color/ds_player_line" />
+</selector>

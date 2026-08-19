@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 01 — Home, the browser start page.
+
+  Everything below the shortcut grid is conditional. A new install sees the grid and one hint
+  card and nothing else, which is close to identical to the MVP; rows appear only once they have
+  content, and never as skeletons. Home renders instantly or shows less.
+
+  Scrolls as one column rather than nesting scrollers: the grid and the recent row are both
+  fixed-height and measured by their content, so a NestedScrollView owns the vertical axis and
+  the horizontal row owns its own.
+
+  No detection FAB here — there is nothing on Home to detect.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/ds_space_6">
+
+        <!--
+          Paste-link helper. One line, never a dialog on Home, dismissed for good once closed.
+          The clipboard is read when the user reaches the address bar, not on cold open — see
+          the clipboard decision in designs/screens/15.
+        -->
+        <LinearLayout
+            android:id="@+id/pasteCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ds_screen_padding"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:background="@drawable/ds_bg_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/ds_space_3"
+            android:paddingVertical="@dimen/ds_space_2"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/pasteIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ds_bg_chip_square"
+                android:contentDescription="@null"
+                android:padding="3dp"
+                android:src="@drawable/ic_link"
+                app:tint="@color/ds_ink_soft" />
+
+            <TextView
+                android:id="@+id/pasteText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_2"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/home_link_copied"
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                android:textSize="13.5sp" />
+
+            <TextView
+                android:id="@+id/pasteOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:minWidth="@dimen/ds_touch_min"
+                android:minHeight="@dimen/ds_touch_min"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/ds_space_2"
+                android:text="@string/home_open"
+                android:textAppearance="@style/TextAppearance.Ds.Button"
+                android:textColor="@color/ds_accent"
+                android:textSize="13.5sp" />
+
+            <ImageButton
+                android:id="@+id/pasteDismiss"
+                android:layout_width="@dimen/ds_touch_min"
+                android:layout_height="@dimen/ds_touch_min"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/home_dismiss_link"
+                android:src="@drawable/ic_close"
+                app:tint="@color/ds_ink_faint" />
+        </LinearLayout>
+
+        <!-- SITES — label and the edit toggle. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/ds_screen_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/home_sites"
+                android:textAppearance="@style/TextAppearance.Ds.Label" />
+
+            <TextView
+                android:id="@+id/btnEditShortcuts"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ds_touch_min"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:minWidth="@dimen/ds_touch_min"
+                android:paddingHorizontal="@dimen/ds_space_1"
+                android:text="@string/home_edit"
+                android:textAppearance="@style/TextAppearance.Ds.Label"
+                android:textAllCaps="false"
+                android:letterSpacing="0" />
+        </LinearLayout>
+
+        <!-- Four columns of 56dp tiles; the last cell is always Add. -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shortcutGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:paddingHorizontal="@dimen/ds_space_2"
+            tools:itemCount="8"
+            tools:listitem="@layout/item_ds_shortcut" />
+
+        <!--
+          Recent Downloads. The only content row on Home, and it appears only when a download
+          exists. A transfer still running lives here too, with an accent bar and "Downloading…",
+          so Home reflects live state without inventing a second badge story.
+
+          Private items are never in this row.
+        -->
+        <LinearLayout
+            android:id="@+id/recentSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_section_gap"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/ds_screen_padding">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/home_recent_downloads"
+                    android:textAppearance="@style/TextAppearance.Ds.Label" />
+
+                <TextView
+                    android:id="@+id/btnSeeAllRecent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/ds_touch_min"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:minWidth="@dimen/ds_touch_min"
+                    android:paddingHorizontal="@dimen/ds_space_1"
+                    android:text="@string/home_see_all"
+                    android:textAppearance="@style/TextAppearance.Ds.Label"
+                    android:textAllCaps="false"
+                    android:textColor="@color/ds_accent"
+                    android:letterSpacing="0" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recentList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/ds_screen_padding"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_ds_recent" />
+        </LinearLayout>
+
+        <!--
+          First run only. One hint, one action, and it disappears for good once anything has
+          been downloaded — the row above replaces it.
+        -->
+        <LinearLayout
+            android:id="@+id/firstRunHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ds_screen_padding"
+            android:layout_marginTop="@dimen/ds_section_gap"
+            android:background="@drawable/ds_bg_card"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_space_4"
+            android:paddingVertical="@dimen/ds_space_5"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="@dimen/ds_empty_icon_block"
+                android:layout_height="@dimen/ds_empty_icon_block"
+                android:background="@drawable/ds_bg_icon_block"
+                android:contentDescription="@null"
+                android:padding="@dimen/ds_space_4"
+                android:src="@drawable/ic_touch_app"
+                app:tint="@color/ds_accent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:maxWidth="@dimen/ds_empty_max_width"
+                android:gravity="center"
+                android:text="@string/home_first_run_hint"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+
+            <TextView
+                android:id="@+id/btnHowItWorks"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ds_touch_min"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/ds_space_2"
+                android:text="@string/home_how_it_works"
+                android:textAppearance="@style/TextAppearance.Ds.Button"
+                android:textColor="@color/ds_accent"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The Add tile, drawn to the same 48dp disc as the brand marks so the grid stays even. -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="48dp"
-    android:height="48dp"
-    android:viewportWidth="48"
-    android:viewportHeight="48">
+<!--
+  The Add tile in the shortcut grid.
 
-    <path
-        android:fillColor="@color/surface_variant"
-        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+  An outline rather than a fill, and dashed rather than solid, because it is the one cell in the
+  grid that is not a site. A filled disc the same size as the brand marks read as another shortcut
+  whose icon had failed to load; an empty dashed ring reads as a slot waiting for one.
 
-    <path
-        android:fillColor="@color/on_surface_variant"
-        android:pathData="M21.8,14h4.4v7.8h7.8v4.4h-7.8v7.8h-4.4v-7.8h-7.8v-4.4h7.8z" />
-</vector>
+  A layer-list rather than a vector: a dashed stroke is a shape drawable feature, and drawing the
+  dashes by hand in path data would fix them at one size.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="@dimen/ds_hairline"
+                android:color="@color/ds_ink_faint"
+                android:dashGap="@dimen/ds_add_tile_dash"
+                android:dashWidth="@dimen/ds_add_tile_dash" />
+            <size
+                android:width="@dimen/ds_shortcut_tile"
+                android:height="@dimen/ds_shortcut_tile" />
+        </shape>
+    </item>
+
+    <!-- Inset so the plus sits inside the ring rather than touching it. -->
+    <item
+        android:drawable="@drawable/ic_add_tile_plus"
+        android:gravity="center" />
+</layer-list>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Design-system tokens, dark. Same names, same roles, different values — see values/ds_colors.xml.
+
+  Note this is a warm dark, not a neutral one: the greys carry the same red cast as the light
+  palette so the accent sits in them rather than on them.
+-->
+<resources>
+
+    <!-- Surfaces -->
+    <color name="ds_bg">#171212</color>
+    <color name="ds_surface">#201A19</color>
+    <color name="ds_surface_alt">#2A2322</color>
+    <color name="ds_line">#362D2B</color>
+
+    <!-- Text and icons -->
+    <color name="ds_ink">#F0E8E5</color>
+    <color name="ds_ink_soft">#B3A6A1</color>
+    <color name="ds_ink_faint">#7D716C</color>
+
+    <!-- Brand -->
+    <color name="ds_accent">#E05F5C</color>
+    <color name="ds_accent_soft">#3E2422</color>
+    <!--
+      Ink, not white. The dark accent is light enough that white text on it fails contrast —
+      this is the one token whose dark value is not simply a lighter or darker twin.
+    -->
+    <color name="ds_on_accent">#171212</color>
+
+    <!-- Status -->
+    <color name="ds_success">#5CBB86</color>
+    <color name="ds_warning">#D9A64C</color>
+    <color name="ds_error">#E57373</color>
+
+    <!--
+      No ds_fab_* overrides here, on purpose. The detection button looks the same in both themes —
+      grey while it has found nothing, accent once it has, with the count reversed white out of the
+      accent — so the light values stand for dark too and there is nothing to keep in step.
+    -->
+
+    <!--
+      Snackbar. Nothing to invert to in dark, so the Design Foundation gives it a lifted surface
+      and a line instead: at the ordinary surface colour it was the same ink as the cards behind
+      it and read as nothing at all.
+    -->
+    <color name="ds_snackbar_bg">#2A2322</color>
+    <color name="ds_snackbar_line">#362D2B</color>
+    <color name="ds_snackbar_ink">#F0E8E5</color>
+    <color name="ds_snackbar_action">#E05F5C</color>
+
+    <!-- Scrims and washes. The scrim is heavier in dark: 60% against 40%, because a dark sheet
+         over a dark page needs more separation to read as a layer. -->
+    <color name="ds_scrim">#99000000</color>
+    <color name="ds_private_wash">#14F0E8E5</color>
+    <color name="ds_on_media">#FFFFFF</color>
+    <color name="ds_media_chip">#B3000000</color>
+    <!-- Over a poster, so a percent burned onto it stays legible whatever the image is. -->
+    <color name="ds_thumb_scrim">#73000000</color>
+    <color name="ds_watched_track">#73FFFFFF</color>
+
+    <!--
+      The player's chrome, which is always on black whatever theme the app is in (screen 09).
+      The accent is pinned to the light red rather than following the theme: on video the dark
+      theme's lighter accent loses its bite, and the surface behind it never changes anyway.
+    -->
+    <color name="ds_player_accent">#D93A3A</color>
+    <color name="ds_player_ink">#FFFFFF</color>
+    <color name="ds_player_ink_dim">#B3FFFFFF</color>
+    <color name="ds_player_track">#4DFFFFFF</color>
+    <color name="ds_player_chip">#26FFFFFF</color>
+    <color name="ds_player_disc">#73000000</color>
+    <color name="ds_player_gesture">#1FFFFFFF</color>
+    <color name="ds_player_halo">#40D93A3A</color>
+    <color name="ds_player_ink_faint">#80FFFFFF</color>
+    <color name="ds_player_line">#33FFFFFF</color>
+    <color name="ds_player_sheet">#201A19</color>
+    <color name="ds_player_row">#2A2322</color>
+    <color name="ds_player_queue_thumb">#362D2B</color>
+    <color name="ds_player_countdown_scrim">#99000000</color>
+    <color name="ds_player_audio_art">#3E2422</color>
+
+    <!--
+      The lock screen, screen 11 panel C. Dark whatever theme the app is in: it is not part of
+      the app's furniture, it is what stands in front of it.
+    -->
+    <color name="ds_lock_bg">#171212</color>
+    <color name="ds_lock_ink">#F0E8E5</color>
+    <color name="ds_lock_ink_dim">#B3A6A1</color>
+    <color name="ds_lock_accent">#E05F5C</color>
+    <color name="ds_lock_sensor">#2A2322</color>
+    <color name="ds_lock_line">#362D2B</color>
+    <!-- Error on near-black. The light theme's #C62828 does not carry on this ground. -->
+    <color name="ds_lock_error">#E57373</color>
+
+    <!--
+      Guide illustrations — screen 15. Two neutrals a step above the panel they sit on, so a block
+      of stand-in content reads as content and a stand-in line reads as text, without either
+      pretending to be a screenshot.
+    -->
+    <color name="ds_guide_block">#2A2322</color>
+    <color name="ds_guide_line">#3E3634</color>
+
+    <!--
+      Private browsing, as a ground rather than a badge - a grey the ordinary theme never uses, so a
+      private tab is recognisable without reading anything. Light gets a grey a shade darker than its
+      background, dark gets one a shade lighter: either way the page stays the brightest thing on
+      screen and only the chrome around it changes.
+    -->
+    <color name="ds_private_bg">#4A403D</color>
+    <color name="ds_private_inset">#564A47</color>
+
+</resources>

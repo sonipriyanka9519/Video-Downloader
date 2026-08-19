@@ -7,6 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.ms.webview.data.DownloadRepository;
+import com.ms.webview.ui.BrowserFragment;
+import com.ms.webview.ui.notify.UnwatchedReminder;
+import com.ms.webview.ui.settings.SettingsPrefs;
 import com.ms.webview.detect.MediaRegistry;
 
 import java.util.HashMap;
@@ -43,7 +46,18 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        // Before anything is laid out. AppCompat's night mode is process-wide state, and an
+        // activity that starts before it is set inflates in the wrong theme and then has to be
+        // recreated out of it — which the viewer sees as the app flashing on launch.
+        SettingsPrefs.applyStoredTheme(this);
         repository = new DownloadRepository(this);
+        // Re-laid on every launch because the reminder's alarm is inexact and therefore does not
+        // survive a reboot. Cheap, idempotent, and a no-op for the viewer who never turned it on.
+        UnwatchedReminder.schedule(this);
+        // Once per launch of the app, and nowhere else. This runs exactly once per process, which
+        // is the definition of "when the app is opened" — onStart would have re-armed it on every
+        // return from another app, and that is how a one-off question becomes a nag.
+        BrowserFragment.askAboutDefaultBrowser();
         logPushToken();
     }
 

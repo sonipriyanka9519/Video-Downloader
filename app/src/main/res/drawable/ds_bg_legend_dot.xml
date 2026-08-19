@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A legend swatch — screen 13. A rounded square rather than a circle, matching the bar it explains:
+  a dot beside a squared-off segment reads as a different kind of thing.
+
+  Tinted per legend row in code, so one drawable serves all three.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_ink_faint" />
+    <corners android:radius="@dimen/ds_radius_legend_dot" />
+</shape>

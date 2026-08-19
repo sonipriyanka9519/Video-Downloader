@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A sheet's surface, rounded at the top two corners only.
+
+  Rounded at the top because that is the edge the sheet arrives over; square at the bottom because
+  the bottom of a sheet is the bottom of the screen, and a corner there leaves a sliver of the page
+  showing under it.
+
+  For a sheet whose own root paints its background. Material's container is square, so a layout that
+  fills itself with a flat colour loses the rounding the design gives it — this is the same fill with
+  the corners kept.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface" />
+
+    <corners
+        android:topLeftRadius="@dimen/ds_radius_sheet"
+        android:topRightRadius="@dimen/ds_radius_sheet" />
+</shape>

@@ -2,16 +2,15 @@ package com.ms.webview.ui;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Process;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.SystemBarStyle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
@@ -20,22 +19,40 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.ms.webview.MainActivity;
 import com.ms.webview.R;
+import com.ms.webview.ui.guide.HowTo;
+import com.ms.webview.ui.guide.WalkthroughActivity;
 
 /**
- * The opening.
+ * The opening — screen 14, panel A.
  *
- * <p>The system splash still runs first — it is what covers the gap between the icon being tapped
- * and this window existing, and dropping it would put a blank frame in front of the mark. This
- * activity picks up the same white and holds it while the animation plays, so the handover
- * between the two is not visible as a change of screen.
+ * <p>The system splash still runs first: it is what covers the gap between the icon being tapped and
+ * this window existing, and dropping it would put a blank frame in front of the mark. This activity
+ * picks up the same ground and holds it while the entrance plays, so the handover between the two is
+ * not visible as a change of screen.
  *
- * <p>The wait is the length of that animation and nothing more. A splash that lingers past its
- * own transition is just a delay with a logo on it.
+ * <p><b>The wait is as short as the entrance and no longer.</b> A splash that lingers past its own
+ * animation is a delay with a logo on it.
+ *
+ * <p>The design asks for a progress bar only when loading passes 600ms, capped at 1.5s. What is
+ * measured here is the part that can be: how long the <em>process</em> took to reach this first
+ * frame. Everything the app loads at startup — the database, the detection registry — happens before
+ * this window exists, so by the time anything is drawn there is nothing left to wait for. A launch
+ * that took longer than {@link #SLOW_MS} to get here was slow, and the bar says so for the length of
+ * the hold; a launch that was quick never draws it at all.
+ *
+ * <p>Deliberately <em>not</em> stretched towards the 1.5s cap. The cap is a ceiling on how long
+ * somebody may be kept here, not a target, and adding delay on the phones that were already slow is
+ * the opposite of what the rule is for.
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private static final long HOLD_MS = 1150L;
-    private static final long FADE_MS = 520L;
+    /** The entrance, and the whole of how long this screen is up. Well inside the 1.5s ceiling. */
+    private static final long HOLD_MS = 600L;
+
+    /** A launch slower than this had something to wait for, and gets told so. */
+    private static final long SLOW_MS = 600L;
+
+    private static final long FADE_MS = 380L;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable advance = this::openNext;
@@ -45,26 +62,23 @@ public class SplashActivity extends AppCompatActivity {
         SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
-        // Forced light rather than left to follow the device. The default adapts the status-bar
-        // icons to the system's dark-mode setting, and this screen is white whatever that setting
-        // says — on a phone in dark mode the icons would come out white on white.
-        EdgeToEdge.enable(this,
-                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
-                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT));
+        // Left to follow the theme rather than forced light, which is what it used to be. The canvas
+        // draws this screen in both, and the ground here is the app's own — a white opening in front
+        // of a dark app is a flash of the wrong colour before anything has been said.
         setContentView(R.layout.activity_splash);
 
         keepClearOfNavigation();
         animateIn();
-        runProgress();
+        if (startWasSlow()) showProgress();
         handler.postDelayed(advance, HOLD_MS);
     }
 
     /**
-     * Holds the screen's contents clear of the gesture bar.
+     * Holds the contents clear of the gesture bar.
      *
-     * <p>Bottom only. The top is left alone deliberately: the ornaments are meant to run under the
-     * status bar, and nothing up there sits close enough to be clipped. At the bottom the progress
-     * bar does — on a gesture-navigation phone it landed behind the home pill.
+     * <p>Bottom only. The ornaments are meant to run under the status bar and nothing up there sits
+     * close enough to be clipped; at the bottom the progress bar does — on a gesture-navigation phone
+     * it landed behind the home pill.
      */
     private void keepClearOfNavigation() {
         View root = findViewById(R.id.splashRoot);
@@ -76,15 +90,30 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     * Fills the bar over exactly the time this screen is on show.
+     * Whether getting this far took long enough to be worth explaining.
      *
-     * <p>Tied to the wait rather than to any work, because there is no work — the app is already
-     * running by the time this is drawn. A bar that crept along and then jumped to full when the
-     * screen changed would be pretending to measure something; this one measures the only thing
-     * there is to measure, which is how much of the opening is left.
+     * <p>Measured from the process starting, not from this activity being created: the work that makes
+     * a cold start slow — the database opening, the app's own setup — all runs before any of this is
+     * drawn, so the only place the delay shows up is in how late this frame is.
      */
-    private void runProgress() {
+    private boolean startWasSlow() {
+        long sinceProcessStart =
+                SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime();
+        return sinceProcessStart > SLOW_MS;
+    }
+
+    /**
+     * Reveals the bar and fills it over exactly the time this screen has left.
+     *
+     * <p>It measures the only thing there is to measure — how much of the opening remains. A bar that
+     * crept along and then jumped to full as the screen changed would be pretending to measure the
+     * loading, which by this point has already happened.
+     */
+    private void showProgress() {
         ProgressBar bar = findViewById(R.id.splashProgress);
+        bar.setVisibility(View.VISIBLE);
+        bar.setAlpha(0f);
+        bar.animate().alpha(1f).setDuration(FADE_MS).start();
 
         ValueAnimator fill = ValueAnimator.ofInt(0, 100);
         fill.setDuration(HOLD_MS);
@@ -107,16 +136,15 @@ public class SplashActivity extends AppCompatActivity {
                 .setInterpolator(new DecelerateInterpolator())
                 .start();
 
-        // The words follow the mark rather than arriving with it, which is what makes the
-        // sequence read as one movement instead of a fade.
-        rise(name, 120L);
-        rise(tagline, 200L);
+        // The words follow the mark rather than arriving with it, which is what makes the sequence
+        // read as one movement instead of a fade. Both land inside the hold.
+        rise(name, 90L);
+        rise(tagline, 150L);
     }
 
     private void rise(View view, long delay) {
         view.setAlpha(0f);
-        view.setTranslationY(getResources()
-                .getDimensionPixelSize(com.intuit.sdp.R.dimen._12sdp));
+        view.setTranslationY(getResources().getDimensionPixelSize(R.dimen.ds_space_3));
         view.animate()
                 .alpha(1f).translationY(0f)
                 .setStartDelay(delay)
@@ -126,16 +154,18 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     * On to the app, carrying anything the launch arrived with.
+     * On to the walkthrough on a first launch, or straight to the app.
      *
-     * <p>The extras matter for one case in particular. A notification Firebase displays itself
-     * opens the launcher activity — this one — with the message's payload in its extras, so the
-     * link to the video is here and nowhere else. Passing the whole bundle on rather than picking
-     * the link out of it keeps this screen ignorant of what a push contains, which is the right
-     * amount for an opening animation to know.
+     * <p>The extras travel either way, and they matter for one case in particular: a notification
+     * Firebase displays itself opens the launcher activity — this one — with the message's payload in
+     * its extras, so the link to the video is here and nowhere else. Passing the whole bundle on
+     * rather than picking the link out of it keeps this screen ignorant of what a push contains,
+     * which is the right amount for an opening animation to know.
      */
     private void openNext() {
-        Intent next = new Intent(this, MainActivity.class);
+        Intent next = HowTo.isSeen(this)
+                ? new Intent(this, MainActivity.class)
+                : WalkthroughActivity.firstRun(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             next.putExtras(getIntent().getExtras());
         }
@@ -147,7 +177,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        handler.removeCallbacks(advance);
+        handler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 }

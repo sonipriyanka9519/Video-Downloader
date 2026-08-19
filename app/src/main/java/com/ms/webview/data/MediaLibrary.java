@@ -228,6 +228,88 @@ public class MediaLibrary {
         }
     }
 
+    /**
+     * What a delete of several files at once came to.
+     *
+     * <p>Split three ways because the three outcomes need different answers: what is gone needs
+     * forgetting, what the system will ask about is not gone yet but might be in a moment, and
+     * what failed outright is worth saying out loud.
+     */
+    public static class BatchResult {
+        public final List<String> deleted = new ArrayList<>();
+        /** Covered by {@link #confirmation} — gone once the viewer agrees, still there if not. */
+        public final List<String> pending = new ArrayList<>();
+        public final List<String> failed = new ArrayList<>();
+        /** One request for every pending file, so the viewer is asked once and not per file. */
+        @Nullable
+        public IntentSender confirmation;
+    }
+
+    /**
+     * Deletes many files, asking the viewer at most once.
+     *
+     * <p>The reason this is not a loop over {@link #delete} in the caller: a file the app no
+     * longer owns — anything saved by a previous install — needs the system's consent, and
+     * asking per file means a stack of identical dialogs that nobody can get to the end of.
+     * {@code createDeleteRequest} takes a list, so one dialog names every file at once and the
+     * system carries the whole delete out on approval.
+     *
+     * <p>Files that delete silently are deleted here and now; only the refused ones go into the
+     * request. Making the viewer confirm files that needed no confirming would be asking a
+     * question that has already been answered.
+     *
+     * <p>Before Android 11 there is no batch form — consent there comes out of one
+     * {@link SecurityException} at a time — so those are reported as failures for the caller to
+     * offer individually rather than silently dropped.
+     */
+    public BatchResult deleteAll(@Nullable List<String> uriStrings) {
+        BatchResult result = new BatchResult();
+        if (uriStrings == null || uriStrings.isEmpty()) return result;
+
+        List<Uri> refused = new ArrayList<>();
+        for (String uriString : uriStrings) {
+            if (TextUtils.isEmpty(uriString)) continue;
+
+            if (!uriString.startsWith("content://")) {
+                if (new File(uriString).delete()) result.deleted.add(uriString);
+                else result.failed.add(uriString);
+                continue;
+            }
+
+            Uri uri = Uri.parse(uriString);
+            try {
+                if (context.getContentResolver().delete(uri, null, null) > 0) {
+                    result.deleted.add(uriString);
+                } else {
+                    result.failed.add(uriString);
+                }
+            } catch (SecurityException notOurs) {
+                refused.add(uri);
+                result.pending.add(uriString);
+            } catch (Exception e) {
+                Log.w(TAG, "Delete failed: " + e.getMessage());
+                result.failed.add(uriString);
+            }
+        }
+
+        if (refused.isEmpty()) return result;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                result.confirmation = MediaStore.createDeleteRequest(
+                        context.getContentResolver(), refused).getIntentSender();
+                return result;
+            } catch (Exception e) {
+                Log.w(TAG, "No batch delete confirmation available: " + e.getMessage());
+            }
+        }
+        // No way to ask for the group: hand them back as failures rather than leaving the
+        // caller to believe they went.
+        result.failed.addAll(result.pending);
+        result.pending.clear();
+        return result;
+    }
+
     public WriteResult delete(@Nullable String uriString) {
         if (TextUtils.isEmpty(uriString)) return new WriteResult(false, null);
 

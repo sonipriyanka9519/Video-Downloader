@@ -29,6 +29,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ms.webview.R;
 import com.ms.webview.core.Formats;
 import com.ms.webview.ui.home.SearchHistory;
@@ -146,10 +147,12 @@ public class SearchActivity extends AppCompatActivity
         clipValue = findViewById(R.id.clipUrl);
         clipReveal = findViewById(R.id.clipReveal);
 
+        findViewById(R.id.btnClearHistory).setOnClickListener(v -> confirmClearHistory());
         historyLabel = findViewById(R.id.historyLabel);
 
         suggestions = findViewById(R.id.searchSuggestions);
         suggestions.setLayoutManager(new LinearLayoutManager(this));
+        Keyboards.hideOnScroll(suggestions);
         queryAdapter = new SearchQueryAdapter(this);
         historyAdapter = new SearchHistoryAdapter(this, this);
 
@@ -186,18 +189,24 @@ public class SearchActivity extends AppCompatActivity
     // ------------------------------------------------------------- the current page
 
     private void bindCurrentPage() {
+        View pageLabel = findViewById(R.id.pageLabel);
         if (TextUtils.isEmpty(currentUrl)) {
             pageCard.setVisibility(View.GONE);
+            pageLabel.setVisibility(View.GONE);
             return;
         }
 
         pageTitleView.setText(TextUtils.isEmpty(currentTitle)
                 ? Formats.hostOf(currentUrl) : currentTitle);
-        pageUrlView.setText(currentUrl);
+        // The domain and what it is, rather than the whole address. The address is already in
+        // the field above, selected — repeating it here says nothing the viewer cannot see.
+        pageUrlView.setText(getString(R.string.dot_separated,
+                Formats.hostOf(currentUrl), getString(R.string.open_now)));
 
         int brand = Shortcuts.iconForUrl(currentUrl);
         pageIcon.setImageResource(brand != 0 ? brand : R.drawable.ic_globe);
         pageCard.setVisibility(View.VISIBLE);
+        pageLabel.setVisibility(View.VISIBLE);
 
         // Tapping the page you are already on means "never mind" — so it closes without asking
         // the browser to do anything.
@@ -316,8 +325,15 @@ public class SearchActivity extends AppCompatActivity
             List<String> queries = SearchHistory.queries(this);
             suggestions.setAdapter(queryAdapter);
             queryAdapter.submit(queries);
-            historyLabel.setText(R.string.recent);
+            historyLabel.setText(R.string.recent_searches);
             historyLabel.setVisibility(queries.isEmpty() ? View.GONE : View.VISIBLE);
+            // Offered only where there is something to clear, and only on the empty field —
+            // this screen is entirely history at that moment, so the way to clear it belongs
+            // at the end of what it clears.
+            // Only when there are searches to clear. It used to appear whenever there was any
+            // history at all, which was right while it cleared that too — now it would be a button
+            // that visibly does nothing.
+            showClearHistory(!queries.isEmpty());
             return;
         }
 
@@ -330,8 +346,32 @@ public class SearchActivity extends AppCompatActivity
 
         suggestions.setAdapter(historyAdapter);
         historyAdapter.submit(matching);
-        historyLabel.setText(R.string.from_history);
+        historyLabel.setText(R.string.from_your_history);
         historyLabel.setVisibility(matching.isEmpty() ? View.GONE : View.VISIBLE);
+        // Mid-typing the list is a filtered view, not the whole record — clearing everything
+        // from behind a filter is how people delete more than they meant to.
+        showClearHistory(false);
+    }
+
+    private void showClearHistory(boolean show) {
+        View row = findViewById(R.id.btnClearHistory);
+        row.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    /** Behind a confirm that states the consequence, because nothing here can be undone. */
+    private void confirmClearHistory() {
+        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_Ds_Dialog)
+                .setTitle(R.string.clear_searches_title)
+                .setMessage(R.string.clear_searches_message)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.clear_searches, (d, which) -> {
+                    // The typed searches only. This sits under RECENT SEARCHES and clears the list
+                    // above it — taking the browsing history with it was a far bigger act than the
+                    // button was standing next to, and there is a screen of its own for that.
+                    SearchHistory.clearQueries(this);
+                    showSuggestionsFor(input.getText().toString());
+                })
+                .show();
     }
 
     private static boolean contains(@Nullable String haystack, String lowercaseNeedle) {

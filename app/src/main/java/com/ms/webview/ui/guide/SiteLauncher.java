@@ -9,6 +9,8 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,38 @@ public final class SiteLauncher {
     public static void open(Context context, String url, String appPackage, String chooserTitle) {
         if (openInApp(context, url, appPackage)) return;
         openInBrowser(context, url, chooserTitle);
+    }
+
+    /**
+     * Whether the site's own app is on the phone at all.
+     *
+     * <p>Asked so a button can say which of the two things it is about to do. "Open Instagram app"
+     * on a phone without Instagram is a promise the tap cannot keep — see the guide's primary
+     * button, which reads "Get Instagram" instead and goes to the store.
+     */
+    public static boolean isAppInstalled(@NonNull Context context, @NonNull String appPackage) {
+        try {
+            context.getPackageManager().getPackageInfo(appPackage, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException absent) {
+            // Not an error and not worth logging: most phones do not have most of these.
+            return false;
+        }
+    }
+
+    /**
+     * The store listing for an app that is not installed.
+     *
+     * <p>market: first, which lands in whichever store app the phone has; the https address as a
+     * fallback, because a device with no store still has a browser. The same two-step the About
+     * screen's "Rate this app" uses.
+     */
+    public static void openStore(@NonNull Context context, @NonNull String appPackage) {
+        Intent store = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=" + appPackage));
+        if (launch(context, store)) return;
+        launch(context, new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=" + appPackage)));
     }
 
     /**

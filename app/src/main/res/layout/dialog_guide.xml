@@ -1,85 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  The guide, raised over the site it is about.
+  The per-site guide — screen 15, panel A.
 
-  No paste box and no "open the site" button, unlike the full screen this is drawn from: both were
-  ways of getting to the site, and by the time this appears the viewer is already on it. What is
-  left is the part that was always the point — the four pictures.
+  Raised over the site it is about, because the explanation is about what to do on the page: sending
+  someone to a separate screen first meant reading the instructions, dismissing them, and only then
+  seeing the thing they described.
+
+  It exists only where in-browser detection is unreliable and the native app is the reliable path,
+  which is why the primary button leaves for that app rather than doing anything here.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/_14sdp"
-    android:paddingTop="@dimen/_12sdp"
-    android:paddingBottom="@dimen/_14sdp">
+    android:padding="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
 
-    <!--
-      No mark and no site name. The dialog opens over the site itself, so both were answering a
-      question nobody was asking — what is left is what it is for, said once.
-    -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/guideTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/guide_how_to"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_13ssp"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.Ds.Title"
+            tools:text="How to download from Instagram" />
 
         <ImageButton
             android:id="@+id/btnGuideDialogClose"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_26sdp"
+            android:layout_width="@dimen/ds_icon_button"
+            android:layout_height="@dimen/ds_icon_button"
+            android:layout_marginTop="@dimen/ds_guide_close_lift"
+            android:layout_marginEnd="@dimen/ds_guide_close_lift"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/close_tabs_view"
-            android:padding="@dimen/_4sdp"
+            android:padding="@dimen/ds_space_2"
             android:src="@drawable/ic_close"
-            app:tint="@color/on_surface_variant" />
+            app:tint="@color/ds_ink_soft" />
+    </LinearLayout>
+
+    <!-- Which step, and how many there are. The count sits outside the pill so the pill stays the
+         same width from one step to the next and nothing shifts as you swipe. -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/guideStepChip"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ds_guide_chip"
+            android:background="@drawable/ds_bg_pill_accent"
+            android:gravity="center"
+            android:letterSpacing="0.03"
+            android:paddingHorizontal="@dimen/ds_space_3"
+            android:textColor="@color/ds_accent"
+            android:textSize="11.5sp"
+            android:textStyle="bold"
+            tools:text="STEP 1" />
+
+        <TextView
+            android:id="@+id/guideStepCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:fontFeatureSettings="tnum"
+            android:textColor="@color/ds_ink_faint"
+            android:textSize="12.5sp"
+            tools:text="of 4" />
     </LinearLayout>
 
     <!--
-      A fixed height, because the pages inside are a fixed height: a dialog that resized itself as
-      you swiped would jump under your thumb.
+      A fixed height, because the pages inside are: a dialog that resized itself as you swiped would
+      jump under your thumb.
     -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/guideDialogPager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_265sdp"
-        android:layout_marginTop="@dimen/_6sdp" />
+        android:layout_height="@dimen/ds_guide_page"
+        android:layout_marginTop="@dimen/ds_space_3" />
 
     <LinearLayout
         android:id="@+id/guideDialogDots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/ds_space_3"
         android:orientation="horizontal" />
 
     <!--
-      The way out to the site's own app, which is where the first method has to happen: a share
-      sheet exists in a real app, not in a WebView. Never this app's browser — see SiteLauncher.
+      The way out to the site's own app, which is where the copying has to happen: a share sheet
+      exists in a real app, not in a WebView. Primary because it is the reliable path — and it says
+      "Get" instead when the app is not installed, rather than promising to open something that is
+      not there. Never this app's browser; see SiteLauncher.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGuideDialogOpen"
+        style="@style/Widget.Ds.Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_guide_button"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:minHeight="@dimen/ds_guide_button"
+        app:icon="@drawable/ic_open_in_browser"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/ds_space_2"
+        app:iconTint="@color/ds_on_accent"
+        tools:text="Open Instagram app" />
+
+    <!--
+      The way out, under the primary action. There was a "Don't show again" checkbox beside it and
+      it was removed by request: the guide is raised by tapping a site's own shortcut, which is a
+      deliberate act, and the cross and Got it are enough to be finished with it.
     -->
     <TextView
-        android:id="@+id/btnGuideDialogOpen"
+        android:id="@+id/btnGuideGotIt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:background="@drawable/bg_guide_open"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:layout_height="@dimen/ds_touch_min"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center"
-        android:paddingVertical="@dimen/_11sdp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_12ssp"
-        android:textStyle="bold" />
+        android:text="@string/guide_got_it"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_ink_soft"
+        android:textSize="14sp" />
 </LinearLayout>

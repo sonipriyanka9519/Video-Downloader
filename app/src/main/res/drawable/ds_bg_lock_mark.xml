@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app's mark on the lock screen: accent, squircle, glyph knocked out in the background. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_lock_accent" />
+    <corners android:radius="@dimen/ds_radius_sheet" />
+</shape>

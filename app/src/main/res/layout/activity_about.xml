@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 17, panel D — About.
+
+  A screen rather than a sheet, unlike everything else screen 17 opens. The rest of that screen is
+  radio choices that resolve in a tap; this is a page somebody arrives at to read, and two of its
+  rows leave the app entirely.
+
+  The chrome is the settings chrome, deliberately down to the same header height and back arrow —
+  arriving here should feel like going one level deeper into Settings, not like landing somewhere
+  else. The rows themselves are item_settings_row, so a row here and a row there can never drift.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/aboutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_screen_padding">
+
+        <ImageButton
+            android:id="@+id/btnAboutBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:text="@string/about"
+            android:textAppearance="@style/TextAppearance.Ds.Title"
+            android:textColor="@color/ds_ink" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/ds_space_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--
+              The mark, the name and the build. Centred and given room, because this is the one
+              place in the app that answers "what is this and which version am I on" — the question
+              every support conversation opens with.
+            -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/ds_space_4"
+                android:paddingBottom="@dimen/ds_space_5">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_about_mark"
+                    android:layout_height="@dimen/ds_about_mark"
+                    android:background="@drawable/ds_bg_about_mark"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/ds_space_3"
+                    android:src="@drawable/ic_download"
+                    app:tint="@color/ds_on_accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_3"
+                    android:text="@string/app_name"
+                    android:textAppearance="@style/TextAppearance.Ds.Title"
+                    android:textColor="@color/ds_ink" />
+
+                <TextView
+                    android:id="@+id/aboutVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_1"
+                    android:textAppearance="@style/TextAppearance.Ds.Body"
+                    android:textColor="@color/ds_ink_soft" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/aboutList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!--
+              The one line of law worth putting in front of somebody rather than behind a link.
+              It is also what keeps this app describable as a downloader rather than a pirate tool,
+              which is the difference between shipping and not.
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/ds_screen_padding"
+                android:layout_marginTop="@dimen/ds_space_5"
+                android:text="@string/about_disclaimer"
+                android:textAppearance="@style/TextAppearance.Ds.Caption"
+                android:textColor="@color/ds_ink_faint" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

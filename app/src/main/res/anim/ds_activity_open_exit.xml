@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The screen being covered. It holds still and dims rather than sliding out: two windows moving in
+  different directions at once is more motion than an open needs, and the one arriving is what the
+  eye should be following.
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/fast_out_slow_in">
+
+    <alpha
+        android:duration="@integer/ds_motion_screen"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.85" />
+</set>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Page 2's diagram: a play button in the middle of two rings — screen 14, B2.
+
+  The rings are the page being watched, not a real player's chrome. There is no scrubber, no
+  timecode and no frame behind it, for the same reason as page 1: nothing here should look
+  operable.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/ds_walk_disc_mid"
+    android:layout_height="@dimen/ds_walk_disc_mid"
+    android:background="@drawable/ds_bg_walk_disc">
+
+    <View
+        android:layout_width="@dimen/ds_walk_ring"
+        android:layout_height="@dimen/ds_walk_ring"
+        android:layout_gravity="center"
+        android:background="@drawable/ds_bg_walk_ring" />
+
+    <ImageView
+        android:layout_width="@dimen/ds_walk_play"
+        android:layout_height="@dimen/ds_walk_play"
+        android:layout_gravity="center"
+        android:background="@drawable/ds_bg_walk_disc_accent"
+        android:contentDescription="@null"
+        android:padding="@dimen/ds_space_4"
+        android:src="@drawable/ic_play"
+        app:tint="@color/ds_on_accent" />
+</FrameLayout>

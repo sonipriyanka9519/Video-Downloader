@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  What plays after this one — screen 09, panel C.
+
+  Its own dark surface rather than the app's sheet: it is raised over video, in a screen that is
+  black whatever theme the app is in, and a light sheet sliding up over a film would be the one
+  thing on this screen that broke the immersion.
+
+  Autoplay is pinned at the top with a line saying where the queue came from. That caption is the
+  point — a list of videos with no explanation of why those videos is a list nobody trusts.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ds_player_sheet"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingBottom="@dimen/ds_space_4">
+
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_player_grabber" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingBottom="@dimen/ds_space_3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.08"
+                android:text="@string/autoplay_next"
+                android:textColor="@color/ds_player_ink_dim"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Where the queue came from, in the viewer's own terms. -->
+            <TextView
+                android:id="@+id/queueScope"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ds_player_ink_faint"
+                android:textSize="12sp"
+                tools:text="Queue follows the Workout filter" />
+        </LinearLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/queueAutoplay"
+            style="@style/Widget.Ds.PlayerSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_3"
+            android:contentDescription="@string/autoplay_next" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_stroke"
+        android:background="@color/ds_player_line" />
+
+    <!--
+      Wrapping, with the sheet opened at a peek height in code. A queue is often the whole
+      library, and left to its own devices the sheet would arrive at full screen — which has
+      stopped being a sheet and become a second screen with a video behind it. Dragging it up is
+      still there for somebody who wants the whole list.
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/queueList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/ds_space_1"
+        android:scrollbars="none" />
+</LinearLayout>

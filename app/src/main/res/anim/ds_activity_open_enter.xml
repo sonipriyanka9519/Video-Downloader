@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A screen arriving: it grows the last little way into place while fading in.
+
+  From 92%, not from nothing. A window that starts at zero reads as a thing being conjured and takes
+  the eye with it; starting close to full size reads as the screen stepping forward, which is what
+  opening something is. Anchored at the centre because there is no one control it came from — a
+  settings row, a card and a menu item all lead here.
+
+  200ms, standard easing, per the design's motion rules. Nothing bounces.
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/fast_out_slow_in">
+
+    <scale
+        android:duration="@integer/ds_motion_screen"
+        android:fromXScale="0.92"
+        android:fromYScale="0.92"
+        android:pivotX="50%p"
+        android:pivotY="50%p"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+
+    <alpha
+        android:duration="@integer/ds_motion_screen"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0" />
+</set>

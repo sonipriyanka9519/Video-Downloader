@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- An outline ring: the ripple around the play diagram. Hollow, so the disc behind shows through. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@android:color/transparent" />
+    <stroke
+        android:width="@dimen/ds_stroke_thick"
+        android:color="@color/ds_line" />
+</shape>

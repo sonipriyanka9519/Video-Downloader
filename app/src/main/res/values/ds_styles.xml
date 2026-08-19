@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The component inventory from designs/screens/00 Design Foundation.
+
+  These exist so a screen is assembled from named parts rather than from attributes copied
+  between layouts. If a screen needs something not here, add it here first.
+-->
+<resources>
+
+    <!-- ─────────────────────────────── Buttons ─────────────────────────────── -->
+
+    <!--
+      Primary. Full width, 52dp, accent, radius 12. One per screen or sheet, maximum — the
+      design is explicit that a second red button competing with it is never right.
+    -->
+    <style name="Widget.Ds.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/ds_button_height</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/ds_radius_card</item>
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Button</item>
+        <item name="backgroundTint">@color/ds_accent</item>
+        <item name="android:textColor">@color/ds_on_accent</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/ds_on_accent</item>
+    </style>
+
+    <!-- Secondary: same shape, surface-alt fill, ink text. -->
+    <style name="Widget.Ds.Button.Secondary">
+        <item name="backgroundTint">@color/ds_surface_alt</item>
+        <item name="android:textColor">@color/ds_ink</item>
+        <item name="rippleColor">@color/ds_ink_faint</item>
+    </style>
+
+    <!-- The shorter button an empty state carries. -->
+    <style name="Widget.Ds.Button.Compact">
+        <item name="android:minHeight">@dimen/ds_button_height_compact</item>
+        <item name="android:paddingStart">@dimen/ds_space_5</item>
+        <item name="android:paddingEnd">@dimen/ds_space_5</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Text button: "Download all 4…", "See all", "Skip". Never a filled second action. -->
+    <style name="Widget.Ds.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Button</item>
+        <item name="android:textColor">@color/ds_accent</item>
+        <item name="rippleColor">@color/ds_accent</item>
+        <!--
+          MaterialButton reserves 6dp above and below itself by default, which on a dialog's
+          button bar lands on top of the padding the bar already has and opens a gap between the
+          message and the buttons wide enough to read as a missing element. The touch target is
+          unaffected: minHeight still carries it.
+        -->
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minHeight">@dimen/ds_button_height_compact</item>
+    </style>
+
+    <!-- Destructive text button. Only ever beside a Cancel, never alone. -->
+    <style name="Widget.Ds.Button.Text.Destructive">
+        <item name="android:textColor">@color/ds_error</item>
+        <item name="rippleColor">@color/ds_error</item>
+    </style>
+
+    <!--
+      Icon-only controls. Drawn at 40dp but tappable at 48 — the difference is padding, so the
+      target never shrinks below the accessibility floor to suit the visual.
+    -->
+    <style name="Widget.Ds.IconButton" parent="Widget.Material3.Button.IconButton">
+        <item name="android:layout_width">@dimen/ds_touch_min</item>
+        <item name="android:layout_height">@dimen/ds_touch_min</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconSize">@dimen/ds_icon</item>
+        <item name="iconTint">@color/ds_ink_soft</item>
+    </style>
+
+    <!--
+      One segment of a segmented control. Sits inside a surface-alt track and lifts into a
+      surface pill when selected — fill, text and icon all follow state_selected, so setting
+      the state on the button is the whole of switching segments.
+    -->
+    <style name="Widget.Ds.Segment" parent="Widget.Material3.Button.TextButton">
+        <item name="android:layout_height">@dimen/ds_button_height_compact</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingStart">@dimen/ds_space_2</item>
+        <item name="android:paddingEnd">@dimen/ds_space_2</item>
+        <item name="cornerRadius">@dimen/ds_radius_pill</item>
+        <item name="backgroundTint">@color/ds_segment_fill</item>
+        <item name="android:textColor">@color/ds_segment_text</item>
+        <item name="iconTint">@color/ds_segment_text</item>
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Chip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/ds_ink_faint</item>
+    </style>
+
+    <!-- ─────────────────────────────── Chips ─────────────────────────────── -->
+
+    <!--
+      Filter chips: 32dp, surface-alt, pill. Selected fills accent-soft with accent text —
+      two signals, because the design requires selection to read as fill plus control state and
+      never as the control alone.
+    -->
+    <style name="Widget.Ds.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Chip</item>
+        <item name="chipMinHeight">@dimen/ds_chip_height</item>
+        <item name="chipCornerRadius">@dimen/ds_radius_pill</item>
+        <item name="chipBackgroundColor">@color/ds_chip_background</item>
+        <item name="android:textColor">@color/ds_chip_text</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipIconTint">@color/ds_chip_text</item>
+        <item name="checkedIconVisible">false</item>
+        <!--
+          Kept on: it grows each chip's box to 48dp while still drawing a 32dp pill, which is what
+          holds the touch target at the accessibility floor. The 8dp of invisible box above and
+          below is why two lines of chips sit so far apart, and the row's negative line spacing is
+          what takes that back — see chipSpacingVertical in fragment_downloads.
+        -->
+        <item name="ensureMinTouchTargetSize">true</item>
+    </style>
+
+    <!-- ─────────────────────────────── Surfaces ─────────────────────────────── -->
+
+    <!--
+      Cards carry a 1dp line instead of a shadow — flatter and calmer, and the reason only
+      sheets and dialogs get elevation.
+    -->
+    <style name="Widget.Ds.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/ds_surface</item>
+        <item name="strokeColor">@color/ds_line</item>
+        <item name="strokeWidth">@dimen/ds_stroke</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/ds_radius_card</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Ds.Card</item>
+    </style>
+
+    <!-- A thumbnail is a card with tighter corners and no border of its own. -->
+    <style name="Widget.Ds.Thumbnail" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/ds_surface_alt</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/ds_radius_thumb</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Ds.Thumbnail</item>
+    </style>
+
+    <style name="ThemeOverlay.Ds.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Ds.BottomSheet</item>
+        <item name="android:backgroundDimAmount">@dimen/ds_scrim_dim</item>
+    </style>
+
+    <style name="Widget.Ds.BottomSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@color/ds_surface</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Ds.Sheet</item>
+        <item name="behavior_draggable">true</item>
+    </style>
+
+    <!--
+      A dialog's whole world, not three of its widgets.
+
+      This used to name the title style and the two buttons and leave everything else to inherit
+      from the host activity — which is still the MVP theme. Anything the overlay did not
+      mention resolved against that instead: the radio in the sort dialog took its tint from the
+      old palette, and so would a checkbox, a ripple or a link. Setting the colour roles here
+      means every part of every dialog resolves to the design's palette whether it has a named
+      style or not.
+    -->
+    <style name="ThemeOverlay.Ds.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Widget.Ds.Dialog</item>
+        <item name="android:backgroundDimAmount">@dimen/ds_scrim_dim</item>
+
+        <item name="colorPrimary">@color/ds_accent</item>
+        <item name="colorOnPrimary">@color/ds_on_accent</item>
+        <item name="colorSecondary">@color/ds_accent</item>
+        <item name="colorSurface">@color/ds_surface</item>
+        <item name="colorOnSurface">@color/ds_ink</item>
+        <item name="colorSurfaceVariant">@color/ds_surface_alt</item>
+        <item name="colorOnSurfaceVariant">@color/ds_ink_soft</item>
+        <item name="colorOutline">@color/ds_line</item>
+        <item name="colorError">@color/ds_error</item>
+        <!-- What tints a radio, a checkbox and a switch. Named separately because the framework
+             reads these rather than the Material roles above. -->
+        <item name="colorAccent">@color/ds_accent</item>
+        <item name="colorControlActivated">@color/ds_accent</item>
+        <item name="colorControlNormal">@color/ds_ink_soft</item>
+        <item name="android:textColorPrimary">@color/ds_ink</item>
+        <item name="android:textColorSecondary">@color/ds_ink_soft</item>
+        <item name="elevationOverlayEnabled">false</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Ds.Button.Text</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Ds.Button.Text</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.Ds.Button.Text</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/Widget.Ds.Dialog.Title</item>
+    </style>
+
+    <style name="Widget.Ds.Dialog" parent="MaterialAlertDialog.Material3">
+        <item name="backgroundTint">@color/ds_surface</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Ds.Dialog</item>
+        <!--
+          The gap screen 07 draws around a dialog: 24dp of the page still showing at each side,
+          so the card reads as something laid over the screen rather than a panel spanning it.
+          Vertical inset is smaller — a tall Properties dialog needs the height more than the air.
+        -->
+        <item name="backgroundInsetStart">@dimen/ds_dialog_inset</item>
+        <item name="backgroundInsetEnd">@dimen/ds_dialog_inset</item>
+        <item name="backgroundInsetTop">@dimen/ds_space_4</item>
+        <item name="backgroundInsetBottom">@dimen/ds_space_4</item>
+    </style>
+
+    <style name="Widget.Ds.Dialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Title</item>
+    </style>
+
+    <!-- ─────────────────────────────── Feedback ─────────────────────────────── -->
+
+    <!--
+      Snackbar: ink background, one action word in accent, four seconds. Used for anything
+      reversible — a confirm dialog is only for the genuinely destructive.
+    -->
+    <style name="Widget.Ds.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="backgroundTint">@color/ds_snackbar_bg</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Ds.Card</item>
+        <item name="android:layout_margin">@dimen/ds_space_3</item>
+    </style>
+
+    <style name="Widget.Ds.Snackbar.Text" parent="Widget.Material3.Snackbar.TextView">
+        <item name="android:textColor">@color/ds_snackbar_ink</item>
+        <item name="android:textSize">13.5sp</item>
+    </style>
+
+    <style name="Widget.Ds.Snackbar.Action" parent="Widget.Material3.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/ds_snackbar_action</item>
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Button</item>
+        <item name="android:textSize">13.5sp</item>
+    </style>
+
+    <!--
+      The thin bar under a downloading row, and the only continuous motion the app allows.
+      2dp corners so a part-filled bar does not end in a hard square.
+    -->
+    <style name="Widget.Ds.Progress" parent="Widget.Material3.LinearProgressIndicator">
+        <item name="trackThickness">@dimen/ds_progress_thin</item>
+        <item name="trackCornerRadius">@dimen/ds_radius_progress</item>
+        <item name="indicatorColor">@color/ds_accent</item>
+        <item name="trackColor">@color/ds_surface_alt</item>
+    </style>
+
+    <!-- ─────────────────────────────── Navigation ─────────────────────────────── -->
+
+    <!--
+      Two tabs, 56dp, top hairline. No active-indicator pill: on a two-tab bar it is a large
+      shape asserting what the icon colour has already said.
+    -->
+    <style name="Widget.Ds.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">@color/ds_surface</item>
+        <item name="android:minHeight">@dimen/ds_bottom_nav_height</item>
+        <item name="itemIconTint">@color/ds_nav_item</item>
+        <item name="itemTextColor">@color/ds_nav_item</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.Ds.BottomNav.Indicator</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.Ds.Caption</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.Ds.Caption</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Widget.Ds.BottomNav.Indicator"
+        parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+        <item name="android:width">0dp</item>
+        <item name="android:height">0dp</item>
+    </style>
+
+    <!-- Detection FAB: 56dp circle, accent, white glyph, its own shadow. -->
+    <style name="Widget.Ds.Fab" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/ds_accent</item>
+        <item name="tint">@color/ds_on_accent</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Ds.Pill</item>
+        <item name="elevation">6dp</item>
+        <item name="hoveredFocusedTranslationZ">6dp</item>
+        <item name="pressedTranslationZ">6dp</item>
+    </style>
+
+    <!--
+      One row of a bottom sheet's action list — screen 07's item sheet.
+
+      56dp tall, glyph then label, the label at body size. The whole row is the target: an icon
+      and a word that mean one thing should not be two places to press.
+    -->
+    <style name="Widget.Ds.SheetAction" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/ds_action_row_height</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">@dimen/ds_space_4</item>
+        <item name="android:drawableTint">@color/ds_ink</item>
+        <item name="android:paddingHorizontal">@dimen/ds_sheet_action_padding</item>
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Body</item>
+        <item name="android:textColor">@color/ds_ink</item>
+    </style>
+
+    <!-- Delete, and only delete. Glyph and label both, so the warning is not carried by one. -->
+    <style name="Widget.Ds.SheetAction.Destructive">
+        <item name="android:drawableTint">@color/ds_error</item>
+        <item name="android:textColor">@color/ds_error</item>
+    </style>
+
+    <!--
+      The lock screen's own palette — screen 11, panel C.
+
+      Dark whatever theme the app is in, so it cannot take the app's roles. Carried on the
+      layout root, which is what lets the keypad and the dots be shared with the setup screen and
+      still come out right on both: they read the roles, and the root decides what the roles are.
+    -->
+    <style name="ThemeOverlay.Ds.Lock" parent="">
+        <item name="colorPrimary">@color/ds_lock_accent</item>
+        <item name="colorOnSurface">@color/ds_lock_ink</item>
+        <item name="colorSurface">@color/ds_lock_bg</item>
+        <item name="colorSurfaceVariant">@color/ds_lock_sensor</item>
+        <item name="colorOnSurfaceVariant">@color/ds_lock_ink_dim</item>
+        <item name="colorOutline">@color/ds_lock_line</item>
+        <item name="colorError">@color/ds_lock_error</item>
+        <item name="colorControlHighlight">@color/ds_lock_line</item>
+        <item name="android:textColorPrimary">@color/ds_lock_ink</item>
+        <item name="android:textColorSecondary">@color/ds_lock_ink_dim</item>
+    </style>
+
+    <!-- The PIN keypad — screen 11. -->
+    <!-- One of the two ways in, on screen 11 panel A. -->
+    <style name="Widget.Ds.MethodCard" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/ds_bg_method_card</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:padding">@dimen/ds_space_4</item>
+    </style>
+
+    <style name="Widget.Ds.PinRow" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!--
+      Four separate margins rather than layout_marginHorizontal and layout_marginVertical: those two
+      attributes arrived in API 26 and are ignored below it, which on API 24 would leave the keys
+      touching each other with no margin at all.
+    -->
+    <style name="Widget.Ds.PinKey" parent="">
+        <item name="android:layout_width">@dimen/ds_keypad_key</item>
+        <item name="android:layout_height">@dimen/ds_keypad_key</item>
+        <item name="android:layout_marginStart">@dimen/ds_keypad_gap_h</item>
+        <item name="android:layout_marginEnd">@dimen/ds_keypad_gap_h</item>
+        <item name="android:layout_marginTop">@dimen/ds_keypad_gap_v</item>
+        <item name="android:layout_marginBottom">@dimen/ds_keypad_gap_v</item>
+        <item name="android:background">@drawable/ds_pin_key</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Widget.Ds.PinDot" parent="">
+        <item name="android:layout_width">@dimen/ds_pin_dot</item>
+        <item name="android:layout_height">@dimen/ds_pin_dot</item>
+        <!-- Start and end rather than the shorthand: layout_marginHorizontal is API 26 and
+             this app runs from 24, where it is ignored and the dots would touch. -->
+        <item name="android:layout_marginStart">@dimen/ds_space_2</item>
+        <item name="android:layout_marginEnd">@dimen/ds_space_2</item>
+        <item name="android:background">@drawable/ds_pin_dot</item>
+    </style>
+
+    <!--
+      Autoplay, on the queue sheet. Coloured by hand for the same reason the rest of the player
+      is: the sheet is dark whatever theme the app is in, so it cannot take the theme's roles.
+    -->
+    <style name="Widget.Ds.PlayerSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbTint">@color/ds_player_switch_thumb</item>
+        <item name="trackTint">@color/ds_player_switch_track</item>
+        <item name="trackDecorationTint">@android:color/transparent</item>
+    </style>
+
+    <!--
+      An icon control in the player's chrome — screen 09.
+
+      Borderless and white, on video rather than on a surface, which is why it takes the fixed
+      ds_player_* ink instead of the theme's: the ground behind it is the same black whatever
+      theme the app is in.
+    -->
+    <style name="Widget.Ds.PlayerIcon" parent="">
+        <item name="android:layout_width">@dimen/ds_touch_min</item>
+        <item name="android:layout_height">@dimen/ds_touch_min</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">@dimen/ds_space_3</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="tint">@color/ds_player_ink</item>
+    </style>
+
+    <!--
+      The seek bar, and the only accent in the player — played portion red, the remainder white
+      at 30%, a 14dp thumb that grows under a finger. The halo is what "grows" means: Material
+      draws it on touch, so the thumb itself never has to change size.
+    -->
+    <style name="Widget.Ds.PlayerSeek" parent="Widget.Material3.Slider">
+        <item name="trackHeight">@dimen/ds_player_seek_track</item>
+        <item name="trackColorActive">@color/ds_player_accent</item>
+        <item name="trackColorInactive">@color/ds_player_track</item>
+        <item name="thumbColor">@color/ds_player_accent</item>
+        <item name="haloColor">@color/ds_player_halo</item>
+        <item name="labelBehavior">gone</item>
+
+        <!--
+          Everything below undoes a Material 3 default that this bar must not have.
+
+          The expressive slider draws a tall pill for a thumb, breaks the track with a gap either
+          side of it, and parks a dot at the far end. That is a fine control for a settings row
+          and the wrong one over video: the design asks for a round 14dp thumb on one unbroken
+          line, and the end dot in particular reads as a chapter marker that is not there.
+
+          thumbWidth and thumbHeight equal makes it a circle; thumbRadius alone is deprecated and
+          no longer decides the shape.
+        -->
+        <item name="thumbWidth">@dimen/ds_player_seek_thumb</item>
+        <item name="thumbHeight">@dimen/ds_player_seek_thumb</item>
+        <item name="thumbTrackGapSize">0dp</item>
+        <item name="trackStopIndicatorSize">0dp</item>
+        <item name="trackInsideCornerSize">0dp</item>
+        <item name="thumbElevation">0dp</item>
+    </style>
+
+    <!--
+      One action on the library's select bar — screen 07.
+
+      Shaped like a nav item on purpose, because it takes a nav item's place: the same height,
+      the same stacked glyph and label, so the row that appears is the row that left. What
+      differs is what they mean, and the colour of Delete is the only thing that says so.
+    -->
+    <style name="Widget.Ds.SelectAction" parent="">
+        <item name="android:layout_width">0dp</item>
+        <!--
+          A fixed 56dp rather than match_parent: the bar itself wraps so it can grow by the
+          gesture inset underneath, and a child matching a parent that is sized by its children
+          would leave the actions to fill the inset instead of sitting above it.
+        -->
+        <item name="android:layout_height">@dimen/ds_bottom_nav_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!--
+      The glyph and the label inside one, both with no parent of their own.
+
+      Deliberately not children of the style above, despite the name: inheriting it would hand an
+      ImageView `clickable="true"` and a background of its own, and the row would stop being one
+      target. The dot here reads as "belongs with", not "is a kind of".
+    -->
+    <style name="Widget.Ds.SelectAction.Icon" parent="">
+        <item name="android:layout_width">@dimen/ds_icon</item>
+        <item name="android:layout_height">@dimen/ds_icon</item>
+        <item name="android:contentDescription">@null</item>
+        <item name="tint">@color/ds_ink</item>
+    </style>
+
+    <style name="Widget.Ds.SelectAction.Label" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/ds_space_1</item>
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Caption</item>
+        <item name="android:textColor">@color/ds_ink_soft</item>
+    </style>
+
+    <!--
+      Text inside a guide drawing - screen 15. Small, because it is a picture of an interface rather
+      than an interface: big enough to read, never big enough to be mistaken for a control here.
+    -->
+    <style name="Widget.Ds.GuideMenuRow" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">@dimen/ds_space_2</item>
+        <item name="android:paddingEnd">@dimen/ds_space_2</item>
+        <item name="android:paddingTop">@dimen/ds_space_1</item>
+        <item name="android:paddingBottom">@dimen/ds_space_1</item>
+        <item name="android:textColor">@color/ds_ink_soft</item>
+        <item name="android:textSize">9.5sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!-- One quality rung in the last drawing. Equal thirds, so the row reads as a set of three. -->
+    <style name="Widget.Ds.GuideRung" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/ds_bg_guide_block</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/ds_space_1</item>
+        <item name="android:paddingBottom">@dimen/ds_space_1</item>
+        <item name="android:textColor">@color/ds_ink</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <!--
+      Screen 18 panel D - one of the four ways out of the share sheet.
+
+      A column rather than a row, and four across rather than a list, because they are alternatives
+      of equal weight: a list would rank them and there is no ranking to make.
+    -->
+    <style name="Widget.Ds.ShareTarget" parent="">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:paddingTop">@dimen/ds_space_3</item>
+        <item name="android:paddingBottom">@dimen/ds_space_3</item>
+    </style>
+
+    <style name="Widget.Ds.ShareTarget.Label" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/ds_space_2</item>
+        <item name="android:textAppearance">@style/TextAppearance.Ds.Caption</item>
+        <item name="android:textColor">@color/ds_ink</item>
+    </style>
+
+    <!--
+      Screen 02's browser overflow. Applied by wrapping the context the PopupMenu is built with,
+      because a popup takes its background from the theme rather than from anything settable on
+      the menu itself.
+    -->
+    <style name="ThemeOverlay.Ds.PopupMenu" parent="ThemeOverlay.Material3">
+        <item name="android:popupBackground">@drawable/ds_bg_popup</item>
+        <item name="android:textColorPrimary">@color/ds_ink</item>
+    </style>
+
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The drag handle at the top of a sheet. 32×4 with fully rounded ends, per the foundation. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_ink_faint" />
+    <corners android:radius="@dimen/ds_radius_progress" />
+</shape>

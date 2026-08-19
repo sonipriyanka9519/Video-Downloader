@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  The mark's glyph, on the 108dp canvas an adaptive icon is drawn on.
+  The launcher icon's foreground - ic_download, over ic_launcher_background's accent.
 
-  Kept inside the middle 66dp — the safe zone. Everything outside that can be cropped by the
-  launcher's mask or eaten by the parallax it applies when the icon is dragged, so artwork that
-  strays out of it is artwork that may or may not be there depending on the phone.
-
-  Doubles as the monochrome layer, which is why it is a single solid silhouette: a themed icon is
-  drawn from this shape's alpha alone, and any colour in it would simply be discarded.
+  The glyph had been drawn too large and the icon read as having no padding at all. It is sized
+  from activity_splash now rather than guessed, so the launcher, the system splash and the opening
+  screen show the mark at the same proportion.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -15,11 +12,20 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M48,30h12v24h8l-14,16 -14,-16h8z" />
-
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M38,76h32v6h-32z" />
+    <!--
+      ic_download, sized to the same proportion activity_splash uses: a 96dp disc with 20dp of
+      padding, so the glyph is 56 of 96. Scaled to 41.6 of the ~72dp the launcher mask actually
+      shows, and translated so its centre lands on 54.
+    -->
+    <group
+        android:scaleX="0.065"
+        android:scaleY="0.065"
+        android:translateX="22.8"
+        android:translateY="22.8">
+        <path
+            android:fillColor="@color/ds_on_accent"
+            android:pathData="
+M480,640L280,440L336,382L440,486L440,160L520,160L520,486L624,382L680,440L480,640ZM240,800Q207,800 183.5,776.5Q160,753 160,720L160,600L240,600L240,720Q240,720 240,720Q240,720 240,720L720,720Q720,720 720,720Q720,720 720,720L720,600L800,600L800,720Q800,753 776.5,776.5Q753,800 720,800L240,800Z
+" />
+    </group>
 </vector>

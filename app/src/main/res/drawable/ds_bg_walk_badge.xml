@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The count badge on the detection button: surface fill, accent outline, like the real one. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@color/ds_surface" />
+    <stroke
+        android:width="@dimen/ds_stroke_heavy"
+        android:color="@color/ds_accent" />
+</shape>

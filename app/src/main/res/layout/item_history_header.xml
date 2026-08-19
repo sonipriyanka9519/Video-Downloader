@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  A group header in the suggestion list — FROM YOUR HISTORY, SEARCHES, RECENTLY VISITED.
+
+  It is doing more than labelling. The two row types beneath it behave differently: a history row
+  goes somewhere, a search row only fills the field. The header is what tells the viewer which
+  kind of row they are about to touch, so it is set apart rather than blended in.
+-->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/headerLabel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/_12sdp"
-    android:paddingTop="@dimen/_12sdp"
-    android:paddingEnd="@dimen/_12sdp"
-    android:paddingBottom="@dimen/_4sdp"
-    android:textColor="@color/on_surface_variant"
-    android:textSize="@dimen/_10ssp" />
+    android:paddingStart="@dimen/ds_screen_padding"
+    android:paddingTop="@dimen/ds_space_5"
+    android:paddingEnd="@dimen/ds_screen_padding"
+    android:paddingBottom="@dimen/ds_space_1"
+    android:textAppearance="@style/TextAppearance.Ds.Label" />

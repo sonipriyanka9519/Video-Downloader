@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A choice, as a sheet — screen 10, panel C.
+
+  A sheet rather than a screen, and it applies on tap rather than on an OK. Choosing a default
+  quality is one decision with five answers; sending somebody to a page and asking them to
+  confirm it would be two more steps than the decision is worth.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingBottom="@dimen/ds_space_4"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_grabber" />
+
+    <TextView
+        android:id="@+id/choiceTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ds_space_5"
+        android:textAppearance="@style/TextAppearance.Ds.Heading"
+        tools:text="Default quality" />
+
+    <!-- What the choice actually governs. Gone when the title is self-evident. -->
+    <TextView
+        android:id="@+id/choiceBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_1"
+        android:paddingHorizontal="@dimen/ds_space_5"
+        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+        tools:text="Applied to every download unless you change it in the sheet." />
+
+    <LinearLayout
+        android:id="@+id/choiceList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:orientation="vertical" />
+</LinearLayout>

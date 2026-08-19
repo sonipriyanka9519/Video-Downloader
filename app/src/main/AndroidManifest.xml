@@ -60,6 +60,18 @@
         android:usesCleartextTraffic="true">
 
         <!--
+          uiMode is deliberately absent from every configChanges below.
+
+          Handling it ourselves stopped the browser reloading when the system flipped to dark,
+          but that is the same mechanism that reloads the theme: an activity that says it will
+          cope with a uiMode change is not recreated, so every colour on screen stays as it was
+          until the app is restarted. Letting the system recreate is the only thing that
+          re-reads values-night, and the browser survives it — each tab's history is stashed in
+          onPause and put back with WebView.restoreState, so a page comes back where it was
+          rather than starting over.
+        -->
+
+        <!--
           The launcher entry. noHistory keeps it off the back stack, so returning from the app's
           first screen leaves the app rather than replaying the opening.
         -->
@@ -76,6 +88,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--
+              Screen 18, panel E. On this activity and not MainActivity: the system reads the
+              shortcut list only from the activity that answers MAIN/LAUNCHER, which is this one.
+              Declared on MainActivity it was silently ignored - no error, no shortcuts.
+            -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
         <!-- Portrait: the browser and the downloads list have nothing to gain from landscape. -->
@@ -119,14 +140,79 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
             </intent-filter>
+        
         </activity>
 
         <!--
-          How to download anything at all, as opposed to how to get a video out of one particular
-          site. Offered by a button in the browser that disappears once this has been opened.
+          Settings — screen 10. Portrait like the rest of the app's own screens; the player is
+          the only one where landscape is the point.
+        -->
+        <!--
+          App lock — screen 11. Two screens: setting it up, and standing in front of the app.
+
+          The lock screen excludes itself from recents, so the app behind it is not readable as a
+          thumbnail in the task switcher — which would defeat the whole point of it.
+        -->
+        <!--
+          The private folder. excludeFromRecents for the same reason the lock screen has it: a
+          task-switcher thumbnail of this list would show exactly what it exists to hide.
         -->
         <activity
-            android:name=".ui.guide.HowToActivity"
+            android:name=".ui.lock.PrivateFolderActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ui.lock.AppLockSetupActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ui.lock.AppLockActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!--
+          Screen 14's walkthrough. Shown once on first run, straight after the splash, and reachable
+          afterwards from Settings, the downloads empty state and the browser's overflow.
+        -->
+        <activity
+            android:name=".ui.guide.WalkthroughActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:theme="@style/Theme.Webview" />
+
+        <!-- Screen 13. Reached from the Settings row and from nowhere else. -->
+        <activity
+            android:name=".ui.storage.StorageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:theme="@style/Theme.Webview" />
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Webview"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Screen 17, panel D. -->
+        <activity
+            android:name=".ui.settings.AboutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:parentActivityName=".MainActivity"
@@ -136,47 +222,8 @@
 
         <!-- How to get a video out of one site, shown in place of opening it blind. One per
              site, so each can say exactly what that site's own screens say. -->
-        <activity
-            android:name=".ui.guide.FacebookGuideActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Webview"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity" />
 
-        <activity
-            android:name=".ui.guide.InstagramGuideActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Webview"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity" />
-
-        <activity
-            android:name=".ui.guide.PinterestGuideActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Webview"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity" />
-
-        <activity
-            android:name=".ui.guide.XGuideActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Webview"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity" />
-
-        <!--
+<!--
           Typing an address. adjustResize so the suggestion list shrinks for the keyboard rather
           than sliding out from under it.
         -->
@@ -235,6 +282,19 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="video_updates" />
+
+<!--
+          Screen 16. Both are internal only - not exported, no intent filter - because the only
+          things that ever send to them are this app's own notification actions and its own alarm.
+          An exported receiver here would let any app on the phone pause someone's downloads.
+        -->
+        <receiver
+            android:name=".ui.notify.NotificationActions"
+            android:exported="false" />
+
+        <receiver
+            android:name=".ui.notify.UnwatchedReminder"
+            android:exported="false" />
 
     </application>
 

@@ -1,75 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  One step: its number, what to do, and a picture of the screen it happens on.
+  One step of a per-site guide - screen 15, panel A.
 
-  Centred on both axes, so the block sits in the middle of the page rather than hanging from the
-  top of it — whatever space is left over is shared above and below instead of piling up beneath
-  the picture.
+  A number, the instruction, and a drawing of the screen it happens on. The drawing is added in
+  code, because it is the one part that differs from step to step and each is its own layout.
 
   match_parent on both axes, and it has to be: ViewPager2 refuses a page that does not fill it and
   throws the moment the page is attached.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingHorizontal="@dimen/_14sdp">
+    android:orientation="vertical">
 
-    <!-- The number beside the line it belongs to, the pair of them centred as one. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/stepNumber"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="@dimen/_18sdp"
-            android:background="@drawable/bg_guide_number"
+            android:layout_width="@dimen/ds_guide_number"
+            android:layout_height="@dimen/ds_guide_number"
+            android:background="@drawable/ds_bg_walk_disc_accent"
             android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_9ssp"
-            android:textStyle="bold" />
+            android:textColor="@color/ds_on_accent"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:text="1" />
 
-        <!--
-          wrap_content rather than weighted, so a short line sits beside its number in the middle
-          of the screen instead of being stretched across it. It still wraps: what it wraps
-          against is the width left over beside the number.
-        -->
         <TextView
             android:id="@+id/stepTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:gravity="center"
-            android:lineSpacingExtra="@dimen/_2sdp"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_11ssp" />
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textSize="14.5sp"
+            tools:text="Open Instagram and tap Copy link" />
     </LinearLayout>
 
     <!--
-      A fixed box, the same on every page. Sized rather than measured from the picture, because a
-      picture a little taller than the last one would move the dots and the button under it — and
-      a step that shifts the furniture as you swipe reads as four screens rather than one.
-
-      centerCrop rather than fitCenter, and that is what makes the corners visible at all. The
-      rounding is a shape the view is drawn through, so it falls on the view's edges — with the
-      picture merely fitted inside the box, those edges were empty space beside it and the
-      screenshot kept its own square corners. Filling the box puts the rounding on the picture.
-
-      The cost is that a screenshot whose proportions differ from the box loses a little off its
-      edges. Matching your screenshots to this box's shape is what avoids that; the height here is
-      the one number to change.
+      A fixed box, the same on every page. Sized rather than measured from what is inside it,
+      because a drawing a little taller than the last would move the dots and the button under it,
+      and a step that shifts the furniture as you swipe reads as four screens rather than one.
     -->
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/stepImage"
+    <FrameLayout
+        android:id="@+id/stepArt"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Webview.GuideStep" />
+        android:layout_height="@dimen/ds_guide_art_height"
+        android:layout_marginTop="@dimen/ds_space_3" />
 </LinearLayout>

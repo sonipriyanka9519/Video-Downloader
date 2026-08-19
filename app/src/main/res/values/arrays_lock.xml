@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Recovery questions — screen 11, step 3.
+
+  Chosen from a list rather than written, because a question somebody phrases themselves is one
+  they phrase differently a year later. Each of these has an answer that does not change and that
+  the owner will not have to think about — no favourite anything, no "first job".
+-->
+<resources>
+    <string-array name="lock_recovery_questions">
+        <item>What was your first pet\'s name?</item>
+        <item>What street did you grow up on?</item>
+        <item>What is your mother\'s maiden name?</item>
+        <item>What was the make of your first phone?</item>
+        <item>What town were you born in?</item>
+    </string-array>
+</resources>

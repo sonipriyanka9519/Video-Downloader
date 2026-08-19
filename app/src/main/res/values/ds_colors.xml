@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Design-system tokens, light. From designs/screens/00 Design Foundation.
+
+  Prefixed ds_ deliberately. The MVP's palette in colors.xml is still in use by every screen not
+  yet rebuilt, and half these names — surface, error — already exist there meaning something
+  else. Two sets coexist until the last screen is migrated, and the prefix is what keeps a
+  half-migrated layout from silently picking up the wrong one.
+
+  Every value here has a counterpart in values-night. Reference these by name and dark mode
+  resolves itself; never write a hex into a layout or a drawable.
+-->
+<resources>
+
+    <!-- Surfaces -->
+    <color name="ds_bg">#FAF7F6</color>
+    <color name="ds_surface">#FFFFFF</color>
+    <color name="ds_surface_alt">#F2ECEA</color>
+    <color name="ds_line">#E7DDDA</color>
+
+    <!-- Text and icons -->
+    <color name="ds_ink">#211B1A</color>
+    <color name="ds_ink_soft">#6B605D</color>
+    <color name="ds_ink_faint">#9C8F8A</color>
+
+    <!-- Brand -->
+    <color name="ds_accent">#D93A3A</color>
+    <color name="ds_accent_soft">#FBE3E1</color>
+    <!--
+      What sits on top of accent. White here; in dark the accent lightens enough that white
+      fails contrast, so the night copy of this is ink rather than white. Always use the token,
+      never @android:color/white, or the dark theme loses the distinction.
+    -->
+    <color name="ds_on_accent">#FFFFFF</color>
+
+    <!-- Status. Error is a near-neighbour of accent by design and is only ever read in
+         context: always beside an error icon, never on a primary button. -->
+    <color name="ds_success">#2E7D4F</color>
+    <color name="ds_warning">#B07818</color>
+    <color name="ds_error">#C62828</color>
+
+    <!--
+      Snackbar. Inverted in light — an ink slab with light text — which is what keeps a
+      transient message from reading as another card on the page. In dark there is nothing to
+      invert to, so it becomes a surface with the ordinary ink on it.
+    -->
+    <color name="ds_snackbar_bg">#211B1A</color>
+    <!--
+      The detection button, and the count on it.
+
+      In light it is the design's accent disc with a white glyph, and the count reverses out of
+      it: a white pip with red digits. In dark the disc goes pale — a red button on a dark page
+      is a smudge, and the same red is already doing other work on that ground — so the pair
+      swaps and the count becomes the red one. Whichever way round, the badge is the inverse of
+      the disc it sits on, which is what keeps the number readable.
+    -->
+    <color name="ds_fab">#D93A3A</color>
+    <color name="ds_on_fab">#FFFFFF</color>
+    <color name="ds_fab_count">#FFFFFF</color>
+    <color name="ds_on_fab_count">#D93A3A</color>
+
+    <!-- No border in light: an ink slab on a pale page separates itself. -->
+    <color name="ds_snackbar_line">#00000000</color>
+    <color name="ds_snackbar_ink">#F0E8E5</color>
+    <color name="ds_snackbar_action">#E05F5C</color>
+
+    <!-- Scrims and washes -->
+    <color name="ds_scrim">#66000000</color>
+    <!-- The ink wash behind private mode, so the mode is unmistakable mid-scroll. -->
+    <color name="ds_private_wash">#0F211B1A</color>
+    <!-- Duration pills and the player's control scrim, which sit on imagery in both themes. -->
+    <color name="ds_on_media">#FFFFFF</color>
+    <color name="ds_media_chip">#B3000000</color>
+    <!-- Over a poster, so a percent burned onto it stays legible whatever the image is. -->
+    <color name="ds_thumb_scrim">#73000000</color>
+    <!-- The unfilled part of the watched bar. Also on imagery, so it does not flip with theme. -->
+    <color name="ds_watched_track">#73FFFFFF</color>
+
+    <!--
+      The player's chrome, which is always on black whatever theme the app is in (screen 09).
+      The accent is pinned to the light red rather than following the theme: on video the dark
+      theme's lighter accent loses its bite, and the surface behind it never changes anyway.
+    -->
+    <color name="ds_player_accent">#D93A3A</color>
+    <color name="ds_player_ink">#FFFFFF</color>
+    <color name="ds_player_ink_dim">#B3FFFFFF</color>
+    <color name="ds_player_track">#4DFFFFFF</color>
+    <color name="ds_player_chip">#26FFFFFF</color>
+    <color name="ds_player_disc">#73000000</color>
+    <color name="ds_player_gesture">#1FFFFFFF</color>
+    <color name="ds_player_halo">#40D93A3A</color>
+    <color name="ds_player_ink_faint">#80FFFFFF</color>
+    <color name="ds_player_line">#33FFFFFF</color>
+    <color name="ds_player_sheet">#201A19</color>
+    <color name="ds_player_row">#2A2322</color>
+    <color name="ds_player_queue_thumb">#362D2B</color>
+    <color name="ds_player_countdown_scrim">#99000000</color>
+    <color name="ds_player_audio_art">#3E2422</color>
+
+    <!--
+      The lock screen, screen 11 panel C. Dark whatever theme the app is in: it is not part of
+      the app's furniture, it is what stands in front of it.
+    -->
+    <color name="ds_lock_bg">#171212</color>
+    <color name="ds_lock_ink">#F0E8E5</color>
+    <color name="ds_lock_ink_dim">#B3A6A1</color>
+    <color name="ds_lock_accent">#E05F5C</color>
+    <color name="ds_lock_sensor">#2A2322</color>
+    <color name="ds_lock_line">#362D2B</color>
+    <!-- Error on near-black. The light theme's #C62828 does not carry on this ground. -->
+    <color name="ds_lock_error">#E57373</color>
+
+    <!--
+      Guide illustrations — screen 15. Two neutrals a step above the panel they sit on, so a block
+      of stand-in content reads as content and a stand-in line reads as text, without either
+      pretending to be a screenshot.
+    -->
+    <color name="ds_guide_block">#E7DDDA</color>
+    <color name="ds_guide_line">#CFC3BF</color>
+
+    <!--
+      Private browsing, as a ground rather than a badge - a grey the ordinary theme never uses, so a
+      private tab is recognisable without reading anything. Light gets a grey a shade darker than its
+      background, dark gets one a shade lighter: either way the page stays the brightest thing on
+      screen and only the chrome around it changes.
+    -->
+    <color name="ds_private_bg">#D8D0CC</color>
+    <color name="ds_private_inset">#CBC1BC</color>
+
+</resources>

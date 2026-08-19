@@ -21,35 +21,31 @@ public enum GuideSite {
 
     FACEBOOK("facebook", R.string.guide_facebook, R.drawable.brand_facebook,
             "https://www.facebook.com", "com.facebook.katana", new GuideStep[]{
-            new GuideStep(R.string.guide_fb_step_1, R.drawable.img_fb_share_1),
-            new GuideStep(R.string.guide_fb_step_2, R.drawable.img_fb_share_2),
-            new GuideStep(R.string.guide_fb_step_3, R.drawable.img_fb_copy_1),
-            new GuideStep(R.string.guide_fb_step_4, R.drawable.img_fb_copy_2),
+            new GuideStep(R.string.guide_step_copy, R.layout.art_guide_copy_link),
+            new GuideStep(R.string.guide_step_return, R.layout.art_guide_return),
+            new GuideStep(R.string.guide_step_download, R.layout.art_guide_download),
     }),
 
     INSTAGRAM("instagram", R.string.guide_instagram, R.drawable.brand_instagram,
             "https://www.instagram.com", "com.instagram.android", new GuideStep[]{
-            new GuideStep(R.string.guide_ig_step_1, R.drawable.img_ig_share_1),
-            new GuideStep(R.string.guide_ig_step_2, R.drawable.img_ig_share_2),
-            new GuideStep(R.string.guide_ig_step_3, R.drawable.img_ig_copy_1),
-            new GuideStep(R.string.guide_ig_step_4, R.drawable.img_ig_copy_2),
+            new GuideStep(R.string.guide_step_copy, R.layout.art_guide_copy_link),
+            new GuideStep(R.string.guide_step_return, R.layout.art_guide_return),
+            new GuideStep(R.string.guide_step_download, R.layout.art_guide_download),
     }),
 
     PINTEREST("pinterest", R.string.guide_pinterest, R.drawable.brand_pinterest,
             "https://www.pinterest.com", "com.pinterest", new GuideStep[]{
-            new GuideStep(R.string.guide_pin_step_1, R.drawable.img_pin_share_1),
-            new GuideStep(R.string.guide_pin_step_2, R.drawable.img_pin_share_2),
-            new GuideStep(R.string.guide_pin_step_3, R.drawable.img_pin_copy_1),
-            new GuideStep(R.string.guide_pin_step_4, R.drawable.img_pin_copy_2),
+            new GuideStep(R.string.guide_step_copy, R.layout.art_guide_copy_link),
+            new GuideStep(R.string.guide_step_return, R.layout.art_guide_return),
+            new GuideStep(R.string.guide_step_download, R.layout.art_guide_download),
     }),
 
     // Still the old package name: the app was renamed, its identifier was not.
     X("x", R.string.guide_x, R.drawable.brand_x,
             "https://x.com", "com.twitter.android", new GuideStep[]{
-            new GuideStep(R.string.guide_x_step_1, R.drawable.img_x_share_1),
-            new GuideStep(R.string.guide_x_step_2, R.drawable.img_x_share_2),
-            new GuideStep(R.string.guide_x_step_3, R.drawable.img_x_copy_1),
-            new GuideStep(R.string.guide_x_step_4, R.drawable.img_x_copy_2),
+            new GuideStep(R.string.guide_step_copy, R.layout.art_guide_copy_link),
+            new GuideStep(R.string.guide_step_return, R.layout.art_guide_return),
+            new GuideStep(R.string.guide_step_download, R.layout.art_guide_download),
     });
 
     /** The shortcut this belongs to, as {@code Shortcuts} names it. */

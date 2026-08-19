@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  What the private folder is, before it is turned on — screen 11, panel D.
+
+  Three promises and a button. It exists because "private folder" is a phrase every app uses and
+  almost none of them explain: the viewer is about to move a video somewhere, and they are owed the
+  three facts that decide whether that is what they want — it leaves the gallery, it needs the
+  credential, and it stops appearing in the app's own surfaces.
+
+  Shown when there is no lock yet, which is the only time it is needed. Once one is set, the same
+  tap goes straight to the challenge.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ds_space_5"
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingBottom="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_grabber" />
+
+    <FrameLayout
+        android:layout_width="@dimen/ds_private_mark"
+        android:layout_height="@dimen/ds_private_mark"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_private_mark">
+
+        <ImageView
+            android:layout_width="@dimen/ds_private_mark_glyph"
+            android:layout_height="@dimen/ds_private_mark_glyph"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_shield"
+            app:tint="@color/ds_accent" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/private_folder_title"
+        android:textAppearance="@style/TextAppearance.Ds.Title" />
+
+    <!-- Three rows, written out rather than looped: they are three different sentences and this is
+         the file anyone would look in to change one of them. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/ds_private_bullet"
+            android:layout_height="@dimen/ds_private_bullet"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/ds_success" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_3"
+            android:layout_weight="1"
+            android:text="@string/private_intro_gallery"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Ds.Body" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/ds_private_bullet"
+            android:layout_height="@dimen/ds_private_bullet"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/ds_success" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_3"
+            android:layout_weight="1"
+            android:text="@string/private_intro_unlock"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Ds.Body" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/ds_private_bullet"
+            android:layout_height="@dimen/ds_private_bullet"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/ds_success" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_3"
+            android:layout_weight="1"
+            android:text="@string/private_intro_hidden"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Ds.Body" />
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPrivateTurnOn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginTop="@dimen/ds_space_6"
+        android:backgroundTint="@color/ds_accent"
+        android:text="@string/turn_on"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_on_accent"
+        app:cornerRadius="@dimen/ds_radius_card" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:gravity="center"
+        android:text="@string/private_intro_footnote"
+        android:textSize="12.5sp"
+        android:textAppearance="@style/TextAppearance.Ds.Caption" />
+</LinearLayout>

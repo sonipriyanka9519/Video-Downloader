@@ -1,60 +1,493 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  One list of everything downloaded, under the day each belongs to.
+  Screen 06 — the library.
 
-  There were two tabs here, in progress and finished, and the split cost more than it explained: a
-  download that completed while you watched it left the page you were on for the one you were not.
-  The two controls at the top right are what replaced them — one decides how much room a video
-  gets, the other which states are worth showing.
+  One list holds both zones: transfers still running under a DOWNLOADING heading, finished files
+  under day headers. No sub-tabs — a download that completed while you watched it would otherwise
+  leave the page you were on for the one you were not.
+
+  Search, sort, layout and filters live in the header and one chip row. The floating "How to
+  Download" pill is gone from here; its entry is in the empty state and the overflow now, because
+  a permanent row above the nav bar covers the last thing in the list forever.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/downloadsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
 
+    <!-- The resting header: title and the three controls. -->
     <LinearLayout
+        android:id="@+id/downloadsHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ds_toolbar_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/_14sdp"
-        android:paddingTop="@dimen/_5sdp"
-        android:paddingEnd="@dimen/_8sdp">
+        android:paddingStart="@dimen/ds_screen_padding"
+        android:paddingEnd="@dimen/ds_space_2">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/downloads"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.Ds.TitleXl" />
+
+        <ImageButton
+            android:id="@+id/btnDownloadSearch"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/search_downloads"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_search"
+            app:tint="@color/ds_ink" />
 
         <ImageButton
             android:id="@+id/btnDownloadSort"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/sort_downloads"
-            android:padding="@dimen/_5sdp"
+            android:padding="@dimen/ds_space_3"
             android:src="@drawable/ic_sort"
-            app:tint="@color/toolbar_icon" />
+            app:tint="@color/ds_ink" />
 
-        <!-- Shows the layout it switches to, not the one already on screen. -->
+        <!--
+          Shows the layout it switches to, not the one already on screen.
+
+          Identical to the search and sort beside it, down to the background: no resting fill,
+          just the press ripple. A shape drawable was set here as a resting pill and painted
+          solid #FF00FF on device — not a colour in the palette — while these two, which take
+          their background from the theme attribute, drew correctly on the same screen. Whatever
+          the shape drawable was tripping under this style, the control does not need it: a
+          filled disc that is always there reads as a selection nobody made.
+        -->
         <ImageButton
             android:id="@+id/btnDownloadLayout"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/switch_layout"
-            android:padding="@dimen/_5sdp"
+            android:padding="@dimen/ds_space_3"
             android:src="@drawable/ic_view_grid"
-            app:tint="@color/toolbar_icon" />
+            app:tint="@color/ds_ink" />
+    </LinearLayout>
+
+    <!--
+      The header morphs rather than pushing a screen. Searching a list is looking at the same
+      list through a narrower window, and sending the viewer somewhere else to do it loses their
+      place in it.
+    -->
+    <LinearLayout
+        android:id="@+id/downloadsSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_space_2"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/btnSearchClose"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <!-- The field is a pill, like every other input in the app, rather than bare text on
+             the background — a caret with nothing around it does not read as somewhere to type. -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_address_pill_height"
+            android:layout_weight="1"
+            android:background="@drawable/ds_bg_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/ds_space_3"
+            android:paddingEnd="@dimen/ds_space_1">
+
+            <ImageView
+                android:layout_width="@dimen/ds_icon_small"
+                android:layout_height="@dimen/ds_icon_small"
+                android:layout_marginEnd="@dimen/ds_space_2"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_search"
+                app:tint="@color/ds_ink_faint" />
+
+            <EditText
+                android:id="@+id/downloadsSearchInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:hint="@string/search_downloads_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                android:textColor="@color/ds_ink"
+                android:textColorHint="@color/ds_ink_faint"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/btnSearchClear"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="@dimen/ds_icon_button"
+                android:layout_height="@dimen/ds_icon_button"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/clear_all"
+                android:padding="@dimen/ds_space_2"
+                android:src="@drawable/ic_close"
+                android:visibility="gone"
+                app:tint="@color/ds_ink_soft" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+      A collection, open — screen 08, panel D.
+
+      The fourth state of this bar, and the one that is a place rather than a mode: the name is
+      the title, the count and size under it say how much is in here, and Back leaves for the
+      whole library. The chip row goes with it — inside one collection, "All" would be a lie.
+    -->
+    <LinearLayout
+        android:id="@+id/downloadsCollectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_space_1"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/btnCollectionBack"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ds_ink" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_1"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/collectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Ds.Title"
+                tools:text="Workout" />
+
+            <TextView
+                android:id="@+id/collectionSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFeatureSettings="tnum"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                tools:text="12 videos · 214 MB" />
+        </LinearLayout>
+
+        <!-- Rename and delete live here, per the design: they are about the collection, and the
+             collection is what this header names. -->
+        <ImageButton
+            android:id="@+id/btnCollectionMore"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/more_options"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_more_vert"
+            app:tint="@color/ds_ink" />
+    </LinearLayout>
+
+    <!--
+      Select mode's header — screen 07. The third state this bar can be in, and like the search
+      field it replaces the title rather than stacking under it: the count is the title while a
+      selection is being made, and two headings would leave it unclear which one the actions
+      below belong to.
+    -->
+    <LinearLayout
+        android:id="@+id/downloadsSelectBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_1"
+        android:paddingEnd="@dimen/ds_screen_padding"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/btnSelectClose"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/select_done"
+            android:padding="@dimen/ds_space_3"
+            android:src="@drawable/ic_close"
+            app:tint="@color/ds_ink" />
+
+        <TextView
+            android:id="@+id/selectCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:fontFeatureSettings="tnum"
+            android:textAppearance="@style/TextAppearance.Ds.Heading"
+            tools:text="3 selected" />
+
+        <!--
+          Text, not an icon. "Select all" is the one action here whose effect is not guessable
+          from a glyph, and it is read once and then not looked at again.
+        -->
+        <TextView
+            android:id="@+id/btnSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/ds_space_2"
+            android:text="@string/select_all"
+            android:textAppearance="@style/TextAppearance.Ds.Button"
+            android:textColor="@color/ds_accent" />
+    </LinearLayout>
+
+    <!--
+      Why these rows arrived already ticked — screen 13, panel B.
+
+      Only ever shown for the handoff from the storage screen. A selection somebody made themselves
+      needs no explaining, but eighteen rows ticked by an app that was asked to free up space does:
+      without this line it reads as the app having decided something on its own.
+    -->
+    <LinearLayout
+        android:id="@+id/watchedBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginBottom="@dimen/ds_space_2"
+        android:background="@drawable/ds_bg_notice_accent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:paddingVertical="@dimen/ds_space_3"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/ds_icon_small"
+            android:layout_height="@dimen/ds_icon_small"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/ds_accent" />
+
+        <TextView
+            android:id="@+id/watchedBannerText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textColor="@color/ds_ink"
+            android:textSize="12.5sp"
+            tools:text="Everything you've finished watching is pre-selected — 640 MB." />
+    </LinearLayout>
+
+    <!--
+      Chips instead of sub-navigation. A filter narrows the list you are already looking at;
+      a tab would claim these are different lists.
+    -->
+    <LinearLayout
+        android:id="@+id/downloadFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingBottom="@dimen/ds_space_2">
+
+        <!--
+          Two parts, not one group. The four filters are one choice between them, so they share a
+          ChipGroup and its single selection. Collections opens a sheet rather than filtering by
+          itself, so it sits outside the group where the group's exclusivity cannot reach it.
+
+          There is no chip for the collection currently open: opening one replaces this whole row
+          with the header above, which says the same thing with room for a count and a menu.
+        -->
+        <!--
+          One group, wrapping onto a second row when the chips do not fit.
+
+          It used to be a row inside a horizontal scroller, which hid whichever chips ran off the
+          right-hand edge behind a gesture nobody is told about. Wrapping shows all of them at once
+          and costs one line of height when it is needed and none when it is not.
+
+          Private and Collections sit inside the group so they wrap with the rest; neither is
+          checkable, so the group's single selection passes over them. The filters themselves are
+          inserted before them at bind time — see DownloadsFragment.setUpFilters.
+        -->
+        <com.ms.webview.ui.downloads.CenteredChipGroup
+            android:id="@+id/filterChips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="@dimen/ds_space_2"
+            app:chipSpacingVertical="@dimen/ds_chip_row_gap"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <!--
+              The private folder — screen 11. A chip because that is where the design puts it, but
+              it opens a screen rather than filtering: private videos are somewhere else, not a
+              subset of here.
+
+              Always on the row, lock or no lock. It used to appear only once a lock existed, which
+              made the folder findable only by somebody who already knew to go looking in Settings
+              for it. With no PIN set the chip leads to setting one up instead.
+            -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPrivate"
+                style="@style/Widget.Ds.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_2"
+                android:checkable="false"
+                android:text="@string/private_folder"
+                app:chipIcon="@drawable/ic_lock"
+                app:chipIconTint="@color/ds_ink_soft"
+                app:chipIconVisible="true" />
+
+            <!-- Opens the sheet rather than filtering by itself, which is what the chevron says. -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCollections"
+                style="@style/Widget.Ds.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_2"
+                android:checkable="false"
+                android:text="@string/collections"
+                app:closeIcon="@drawable/ic_expand_more"
+                app:closeIconTint="@color/ds_ink_soft"
+                app:closeIconVisible="true" />
+        </com.ms.webview.ui.downloads.CenteredChipGroup>
+    </LinearLayout>
+
+    <!--
+      Screen 16, panel D - the reminder offer.
+
+      Above the list rather than inside it: it is about the library as a whole, not about any row,
+      and a card that scrolls away with the videos is a card nobody answers. Shown once three
+      videos sit unwatched and never again after either button - see DownloadsFragment.
+
+      This is the only way reminders ever get turned on from a standing start. The notification is
+      never sent unasked, so the asking has to happen somewhere the viewer already is.
+    -->
+    <LinearLayout
+        android:id="@+id/reminderOffer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ds_space_2"
+        android:layout_marginBottom="@dimen/ds_space_2"
+        android:background="@drawable/ds_bg_card"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_space_3"
+        android:paddingVertical="@dimen/ds_space_3"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/ds_icon"
+                android:layout_height="@dimen/ds_icon"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_notifications"
+                app:tint="@color/ds_accent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_2"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder_offer_title"
+                    android:textColor="@color/ds_ink"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/reminderOfferBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_1"
+                    android:textColor="@color/ds_ink_soft"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_3"
+            android:orientation="horizontal">
+
+            <!-- The same pair the clipboard dialog uses: one filled action, one plain refusal. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reminderOfferYes"
+                style="@style/Widget.Ds.Button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/ds_button_height_mid"
+                android:layout_weight="1"
+                android:text="@string/reminder_offer_yes" />
+
+            <TextView
+                android:id="@+id/reminderOfferNo"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ds_button_height_mid"
+                android:layout_marginStart="@dimen/ds_space_2"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:minWidth="@dimen/ds_touch_min"
+                android:paddingHorizontal="@dimen/ds_space_3"
+                android:text="@string/reminder_offer_no"
+                android:textAppearance="@style/TextAppearance.Ds.Button"
+                android:textColor="@color/ds_ink_soft"
+                android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
@@ -67,37 +500,155 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingHorizontal="@dimen/_6sdp"
-            android:paddingBottom="@dimen/_12sdp" />
+            android:paddingHorizontal="@dimen/ds_space_2"
+            android:paddingBottom="@dimen/ds_space_4" />
 
         <!--
           Centred rather than pinned to the top: with nothing in the list there is nothing for it
           to sit above, and a line of text alone against the top of a blank screen reads as a
           heading for something that failed to load.
+
+          One block serves both empty states — an empty library and a search that matched
+          nothing — because they differ only in wording and in whether an action makes sense.
         -->
-        <TextView
+        <LinearLayout
             android:id="@+id/downloadEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingHorizontal="@dimen/_28sdp"
-            android:textAlignment="center"
-            android:textColor="@color/on_surface_variant"
-            android:textSize="@dimen/_11ssp"
-            android:visibility="gone" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_space_8"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <!--
+              96dp, as the canvas draws it. Its fill and its tint are set in code, not here: an
+              empty library is an invitation and wears the accent, a search that matched nothing is
+              a fact and wears the neutral fill. See DownloadsFragment.bindEmptyState.
+            -->
+            <ImageView
+                android:id="@+id/emptyIcon"
+                android:layout_width="@dimen/ds_empty_block"
+                android:layout_height="@dimen/ds_empty_block"
+                android:background="@drawable/ds_bg_block_accent"
+                android:contentDescription="@null"
+                android:padding="@dimen/ds_empty_block_pad"
+                android:src="@drawable/ic_inbox"
+                app:tint="@color/ds_accent" />
+
+            <TextView
+                android:id="@+id/emptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:gravity="center"
+                android:text="@string/no_downloads"
+                android:textAppearance="@style/TextAppearance.Ds.Heading" />
+
+            <TextView
+                android:id="@+id/emptyBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:gravity="center"
+                android:maxWidth="@dimen/ds_empty_max_width"
+                android:text="@string/no_downloads_body"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+
+            <!--
+              The walkthrough's entry, and the only place on this screen it appears. Hidden when
+              the list is empty because of a search rather than because nothing is downloaded —
+              a search that found nothing is not a moment to teach downloading.
+            -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEmptyHowTo"
+                style="@style/Widget.Ds.Button.Compact"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ds_button_height_compact"
+                android:layout_marginTop="@dimen/ds_space_4"
+                android:text="@string/how_to_download" />
+        </LinearLayout>
     </FrameLayout>
 
     <!--
-      Under the list rather than over it. This screen is where somebody looks when a download did
-      not appear, so the walkthrough is worth offering here too — but the list is the answer they
-      came for, and the offer takes its room from the bottom of the screen, not from the list.
+      Select mode's actions — screen 07. Takes the tab bar's place rather than sitting above it,
+      which is the point: Delete must never end up adjacent to Home, one thumb-width from a
+      control somebody presses without looking.
+
+      Delete is the only one in error red, and it is last, so the destructive action is the one
+      furthest from where a thumb rests.
     -->
-    <include
-        layout="@layout/view_how_to"
+    <LinearLayout
+        android:id="@+id/selectActions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginBottom="@dimen/_10sdp" />
+        android:background="@color/ds_surface"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/actionShare"
+            style="@style/Widget.Ds.SelectAction"
+            android:contentDescription="@string/share">
+
+            <ImageView
+                style="@style/Widget.Ds.SelectAction.Icon"
+                android:src="@drawable/ic_share" />
+
+            <TextView
+                style="@style/Widget.Ds.SelectAction.Label"
+                android:text="@string/share" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/actionCollection"
+            style="@style/Widget.Ds.SelectAction"
+            android:contentDescription="@string/collections">
+
+            <ImageView
+                style="@style/Widget.Ds.SelectAction.Icon"
+                android:src="@drawable/ic_folder" />
+
+            <TextView
+                style="@style/Widget.Ds.SelectAction.Label"
+                android:text="@string/collection" />
+        </LinearLayout>
+
+        <!--
+          Screen 11. Between filing and deleting, because that is what it is: another way of putting
+          videos somewhere, and nothing is destroyed by it.
+        -->
+        <LinearLayout
+            android:id="@+id/actionPrivate"
+            style="@style/Widget.Ds.SelectAction"
+            android:contentDescription="@string/private_move_in">
+
+            <ImageView
+                style="@style/Widget.Ds.SelectAction.Icon"
+                android:src="@drawable/ic_lock" />
+
+            <TextView
+                style="@style/Widget.Ds.SelectAction.Label"
+                android:text="@string/private_folder" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/actionDelete"
+            style="@style/Widget.Ds.SelectAction"
+            android:contentDescription="@string/delete">
+
+            <ImageView
+                style="@style/Widget.Ds.SelectAction.Icon"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/ds_error" />
+
+            <TextView
+                style="@style/Widget.Ds.SelectAction.Label"
+                android:text="@string/delete"
+                android:textColor="@color/ds_error" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

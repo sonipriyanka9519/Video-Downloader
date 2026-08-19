@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One entry of the storage bar's legend — screen 13.
+
+  Included three times rather than written out three times, because the only difference between them
+  is a colour and a label, both of which are set in code from the same numbers that size the bar.
+  Two lists of three that had to be kept in step by hand is exactly how a legend ends up describing
+  a bar it no longer matches.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/legendDot"
+        android:layout_width="@dimen/ds_legend_dot"
+        android:layout_height="@dimen/ds_legend_dot"
+        android:background="@drawable/ds_bg_legend_dot" />
+
+    <TextView
+        android:id="@+id/legendLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_2"
+        android:fontFeatureSettings="tnum"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textSize="12.5sp"
+        tools:text="Videos 1.2 GB" />
+</LinearLayout>

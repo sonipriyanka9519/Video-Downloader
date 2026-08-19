@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The same chevron at 16dp, for use as a compound drawable beside 13sp text.
+
+  A layer-list because that is the only way to give a vector a size when it is drawn by a TextView:
+  a compound drawable is laid out at its intrinsic size, and 24dp of chevron beside a two-character
+  label reads as a button with a decoration rather than a label with a hint.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/ds_icon_tiny"
+        android:height="@dimen/ds_icon_tiny"
+        android:drawable="@drawable/ic_expand_more"
+        android:gravity="center" />
+</layer-list>

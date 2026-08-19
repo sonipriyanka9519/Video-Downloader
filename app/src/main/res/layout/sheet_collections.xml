@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 08 — Collections. One sheet doing two jobs.
+
+  Raised from the chip it filters: tap a name and the sheet closes onto a narrowed library.
+  Raised from a video it files: every row grows a tick and a button appears at the foot. They are
+  the same list of names either way, which is why they are not two sheets.
+
+  Creating is inline. A folder is not worth a screen of its own, and a dialog on top of a sheet
+  is two things to dismiss to get back to where you were.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_2"
+    android:paddingBottom="@dimen/ds_space_4"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_grabber" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingBottom="@dimen/ds_space_2">
+
+        <TextView
+            android:id="@+id/collectionsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/collections"
+            android:textAppearance="@style/TextAppearance.Ds.Heading" />
+
+        <!-- How many videos are about to be filed. Add mode only — in filter mode there is
+             nothing in hand and the number would be about nothing. -->
+        <TextView
+            android:id="@+id/collectionsSubject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:visibility="gone"
+            tools:text="3 videos"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <!--
+      Scrolls on its own so the create row and the button below it stay reachable however many
+      collections there are.
+
+      Weighted while still wrapping: with few collections the sheet is only as tall as they are,
+      and once there are more than fit, this is the one part that gives up height rather than
+      the create row being pushed off the bottom.
+    -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/collectionsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
+
+    <!--
+      Says what a collection is for before there is one to look at. Shown only when the list is
+      genuinely empty, where a divider and a create row on their own would read as a broken list.
+    -->
+    <TextView
+        android:id="@+id/collectionsEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingVertical="@dimen/ds_space_3"
+        android:text="@string/collections_empty"
+        android:textAppearance="@style/TextAppearance.Ds.BodySm"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_stroke"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginVertical="@dimen/ds_space_2"
+        android:background="@color/ds_line" />
+
+    <!-- The resting state of creating: a row, until it is pressed. -->
+    <LinearLayout
+        android:id="@+id/collectionNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/ds_touch_min"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingVertical="@dimen/ds_space_2">
+
+        <ImageView
+            android:layout_width="@dimen/ds_icon_button"
+            android:layout_height="@dimen/ds_icon_button"
+            android:contentDescription="@null"
+            android:padding="@dimen/ds_space_2"
+            android:src="@drawable/ic_add"
+            app:tint="@color/ds_accent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_4"
+            android:layout_weight="1"
+            android:text="@string/collection_new"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textColor="@color/ds_accent" />
+    </LinearLayout>
+
+    <!-- The same row, once pressed. Replaces it rather than sitting under it, so the sheet does
+         not jump by a whole row's height at the moment somebody starts typing. -->
+    <LinearLayout
+        android:id="@+id/collectionCreateRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <EditText
+            android:id="@+id/collectionNameInput"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_touch_min"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:background="@drawable/ds_bg_name_field"
+            android:hint="@string/collection_name_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences"
+            android:maxLength="40"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ds_space_3"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textColor="@color/ds_ink"
+            android:textColorHint="@color/ds_ink_faint" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCollectionCreate"
+            style="@style/Widget.Ds.Button.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ds_button_height_compact"
+            android:layout_marginStart="@dimen/ds_space_3"
+            android:text="@string/create" />
+    </LinearLayout>
+
+    <!-- Add mode only. Filter mode commits on the tap that chose the name. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCollectionAdd"
+        style="@style/Widget.Ds.Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:visibility="gone"
+        tools:text="Add to Workout"
+        tools:visibility="visible" />
+</LinearLayout>

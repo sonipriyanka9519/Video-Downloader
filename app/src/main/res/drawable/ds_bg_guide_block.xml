@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A stand-in for content inside a guide illustration: a post, a picture, a paragraph. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_guide_block" />
+    <corners android:radius="@dimen/ds_radius_thumb" />
+</shape>

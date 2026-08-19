@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One of the largest files — screen 13.
+
+  The size is the reason the row is here, so it is the one thing set in semibold and it sits in its
+  own column where four of them line up and can be compared. The overflow is the library's own, so a
+  single fix is one tap away without this screen inventing a way to delete anything.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/ds_touch_min"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/largeThumb"
+        android:layout_width="@dimen/ds_thumb_large_width"
+        android:layout_height="@dimen/ds_thumb_large_height"
+        android:background="@drawable/ds_bg_thumb"
+        android:contentDescription="@string/thumbnail"
+        android:scaleType="centerCrop"
+        app:shapeAppearance="@style/ShapeAppearance.Ds.Thumbnail" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_3"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/largeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Ds.Body"
+            android:textSize="14.5sp"
+            tools:text="Episode 4 — full stream" />
+
+        <TextView
+            android:id="@+id/largeMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textSize="12.5sp"
+            tools:text="1080p • 22:14" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/largeSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_2"
+        android:fontFeatureSettings="tnum"
+        android:textAppearance="@style/TextAppearance.Ds.Heading"
+        android:textSize="13.5sp"
+        tools:text="218 MB" />
+
+    <ImageButton
+        android:id="@+id/largeMore"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="@dimen/ds_touch_min"
+        android:layout_height="@dimen/ds_touch_min"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/more_options"
+        android:padding="@dimen/ds_space_3"
+        android:src="@drawable/ic_more_vert"
+        app:tint="@color/ds_ink_soft" />
+</LinearLayout>

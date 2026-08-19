@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The tab bar's surface.
+
+  A card with rounded top corners rather than a band across the bottom of the window. The page
+  behind it is ds_bg and this is ds_surface, so the bar reads as something laid over the content
+  rather than as the last row of it - the same relationship every other raised surface in the app
+  has with the page under it.
+
+  Only the top corners are rounded. The bottom two are against the edge of the screen, and
+  rounding them would leave two slivers of page showing beneath the gesture area.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface" />
+</shape>

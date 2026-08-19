@@ -52,16 +52,10 @@
     <color name="default_action_end">#CE1F26</color>
 
     <!--
-      How to download: a pale pill in the browser, and a dark walkthrough behind it. The
-      walkthrough is dark on purpose — the step pictures are screenshots of light screens, and a
-      light page around them would leave nothing to tell picture from page.
+      The MVP walkthrough's palette went with it. It was dark on purpose, because its step pictures
+      were screenshots of light screens — screen 14 draws its diagrams instead, from the design
+      tokens, which is why nothing here replaced these.
     -->
-    <color name="how_to_surface">#EDF0FA</color>
-    <color name="how_scrim">#2C2C2E</color>
-    <color name="how_step_accent">#F5A623</color>
-    <color name="how_dot_idle">#59FFFFFF</color>
-    <color name="how_next_start">#F2762B</color>
-    <color name="how_next_end">#E01E63</color>
 
     <!-- The download button before anything has been found. -->
     <color name="fab_idle">#9E9AA0</color>
@@ -91,14 +85,15 @@
       The splash: white, with the brand kept to the mark and the bar. The ornaments are barely
       there on purpose — they are texture behind the name, not pictures to look at.
     -->
-    <color name="splash_surface">#FFFFFF</color>
+    <!--
+      ds_bg, so the opening and the screen it hands over to are one colour. It was #FFFFFF, a
+      shade lighter than every page in the app, which showed as a flash at the handover.
+    -->
+    <color name="splash_surface">#FAF7F6</color>
     <color name="splash_ornament">#FDECEC</color>
     <color name="splash_title">#1B1B1F</color>
     <color name="splash_subtitle">#6E6E76</color>
     <color name="splash_track">#E7E9F3</color>
     <color name="splash_track_fill">#E5262F</color>
-    <color name="splash_mark_start">#FF8A3D</color>
-    <color name="splash_mark_mid">#F0323F</color>
-    <color name="splash_mark_end">#E5177B</color>
 
 </resources>

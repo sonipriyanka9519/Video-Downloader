@@ -1,92 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  The tab switcher — screen 05. Switch, open and close tabs, and nothing else.
+
+  One primary action, at the bottom where the thumb is: New tab. Everything else is an icon or a
+  row. It used to be a pill in the top bar, which put the action people come here for in the
+  hardest corner to reach and left the bottom of the screen empty.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:orientation="vertical">
+    android:background="@color/ds_bg"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Ds">
 
     <!-- Dismiss on the left, the count in the middle, the bulk actions on the right — the
          arrangement every tab switcher uses, so it needs no learning. -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ds_toolbar_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/_8sdp"
-        android:paddingVertical="@dimen/_8sdp">
+        android:paddingHorizontal="@dimen/ds_space_2">
 
         <ImageButton
             android:id="@+id/btnCloseSwitcher"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_28sdp"
-            android:layout_height="@dimen/_28sdp"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/close_tabs_view"
+            android:padding="@dimen/ds_space_3"
             android:src="@drawable/ic_close"
-            app:tint="@color/on_surface" />
+            app:tint="@color/ds_ink" />
 
         <TextView
             android:id="@+id/tabsTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/ds_space_2"
             android:layout_weight="1"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_14ssp"
-            android:textStyle="bold" />
-
-        <!-- Named as well as drawn: it is the action people come here for. -->
-        <LinearLayout
-            android:id="@+id/btnNewTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_pill_brand"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/_9sdp"
-            android:paddingEnd="@dimen/_12sdp"
-            android:paddingVertical="@dimen/_6sdp">
-
-            <ImageView
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_add"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:text="@string/new_tab"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:textAppearance="@style/TextAppearance.Ds.Title"
+            tools:text="Tabs 4" />
 
         <!-- Everything else, including the one action that cannot be undone. -->
         <ImageButton
             android:id="@+id/btnTabsMenu"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_28sdp"
-            android:layout_height="@dimen/_28sdp"
-            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_width="@dimen/ds_touch_min"
+            android:layout_height="@dimen/ds_touch_min"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/more_options"
-            android:padding="@dimen/_4sdp"
+            android:padding="@dimen/ds_space_3"
             android:src="@drawable/ic_more_vert"
-            app:tint="@color/on_surface" />
+            app:tint="@color/ds_ink" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tabGrid"
+    <!--
+      Absent until a private tab has been opened this session. A new user never sees it, which is
+      the design's point: the switcher is for switching tabs, and a mode nobody has asked for
+      should not be advertised at the top of it.
+    -->
+    <LinearLayout
+        android:id="@+id/tabSegments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_segment_track"
+        android:orientation="horizontal"
+        android:padding="@dimen/ds_space_1"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!--
+          MaterialButtons rather than a MaterialButtonToggleGroup. The group merges the corners
+          of adjacent buttons and insists on drawing strokes, which produces two joined
+          rectangles — not a pill floating inside a track. Selection here is one boolean the
+          sheet already holds, so the group's own state machine bought nothing.
+
+          The glyph uses iconGravity="textStart", which keeps it beside the word: a compound
+          drawable on a centred view is pinned to the view's edge instead, leaving the icon
+          stranded at the far left of the segment.
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/segmentTabs"
+            style="@style/Widget.Ds.Segment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/tabs" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/segmentPrivate"
+            style="@style/Widget.Ds.Segment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/private_tabs"
+            app:icon="@drawable/ic_eye_off"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/ds_space_1"
+            app:iconSize="@dimen/ds_icon_small" />
+    </LinearLayout>
+
+    <!--
+      The grid and, under it, the caption that only the private segment carries. The wash sits on
+      this container rather than on the grid, so it reaches the edges of the screen and the mode
+      is unmistakable even mid-scroll.
+    -->
+    <LinearLayout
+        android:id="@+id/tabGridHolder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/_5sdp"
-        android:paddingBottom="@dimen/_12sdp" />
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tabGrid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/ds_space_2"
+            android:paddingBottom="@dimen/ds_space_2" />
+
+        <TextView
+            android:id="@+id/privateCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/ds_screen_padding"
+            android:paddingBottom="@dimen/ds_space_2"
+            android:text="@string/private_caption"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!--
+      The one primary action, full width and under the thumb. Sits outside the grid so it stays
+      put while the tabs scroll behind it.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNewTab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginTop="@dimen/ds_space_1"
+        android:layout_marginBottom="@dimen/ds_space_4"
+        android:backgroundTint="@color/ds_accent"
+        android:text="@string/new_tab"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_on_accent"
+        app:cornerRadius="@dimen/ds_radius_card"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="textStart"
+        app:iconTint="@color/ds_on_accent" />
 </LinearLayout>

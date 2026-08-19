@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The storage bar's track — screen 13.
+
+  Line-coloured, because the track is not empty space behind the bar: it <em>is</em> the free
+  segment. Two filled segments sit on top of it and whatever they leave uncovered is what is free,
+  so the third figure in the legend needs no view of its own and can never disagree with the bar.
+
+  Rounded and clipped, so the accent segment's square left edge takes the bar's corner.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_line" />
+    <corners android:radius="@dimen/ds_radius_thumb" />
+</shape>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One digit of the PIN, as a dot.
+
+  Three states, because they mean three different things: empty, entered, and wrong. The wrong
+  state is an outline in error rather than a filled red circle — the design turns the dots to
+  outlines on a mismatch, which reads as "these are no longer counted" rather than as four new
+  digits that happen to be red.
+
+  Theme attributes for the same reason the keys use them: two screens, opposite grounds.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_active="true">
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" />
+            <stroke android:width="@dimen/ds_stroke_selected" android:color="?attr/colorError" />
+        </shape>
+    </item>
+
+    <item android:state_activated="true">
+        <shape android:shape="oval">
+            <solid android:color="?attr/colorPrimary" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?attr/colorOutline" />
+        </shape>
+    </item>
+</selector>

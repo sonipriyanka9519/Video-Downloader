@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Batch download — screen 03, panel C.
+
+  Replaces the pager inside the same sheet rather than opening a screen of its own: the viewer is
+  still choosing what to download from this page, and pushing them somewhere else to do it would
+  lose the page they are standing on.
+
+  One shared quality row governs the whole set. That is the point of the panel — four videos and
+  one decision, rather than four pagers and four decisions.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/selectMode"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <!--
+      Select-all is a checkbox row, not a text button: it reads as the header of the checklist
+      below it and shows its own state, so "all four are ticked" is visible rather than implied by
+      a button having gone quiet. The size on the right is the whole set's, not the selection's —
+      it answers "how much is on this page", and the selection's own total is on the button.
+    -->
+    <LinearLayout
+        android:id="@+id/rowSelectAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/ds_touch_min"
+        android:orientation="horizontal">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            app:buttonTint="@color/ds_checkbox" />
+
+        <TextView
+            android:id="@+id/btnSelectAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.Ds.Button"
+            android:textColor="@color/ds_ink"
+            android:textSize="14sp"
+            tools:text="Select all 4" />
+
+        <TextView
+            android:id="@+id/batchTotalSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:fontFeatureSettings="tnum"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            tools:text="96.0 MB" />
+    </LinearLayout>
+
+    <!--
+      One choice for every video. Named by intent rather than by number, because the set has no
+      single ladder — "Best ≤720p" means something for all four, "720p" would not.
+    -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/batchQuality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:singleSelection="true" />
+    </HorizontalScrollView>
+
+    <!--
+      Bled out to the sheet's edges — the rows carry the padding themselves. The row of the video
+      playing on the page is tinted, and a tint that stopped 16dp short of the edge would read as a
+      card rather than as a highlighted row.
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/selectList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding_bleed"
+        android:maxHeight="280dp"
+        android:nestedScrollingEnabled="true"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_select_video" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDownloadSelected"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginTop="@dimen/ds_space_3"
+        android:backgroundTint="@color/ds_accent"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_on_accent"
+        app:cornerRadius="@dimen/ds_radius_card"
+        tools:text="Download 3 • 45.7 MB" />
+
+    <TextView
+        android:id="@+id/btnCancelSelect"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_touch_min"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_ink_soft" />
+</LinearLayout>

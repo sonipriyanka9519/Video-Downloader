@@ -1,11 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-      Light only, on purpose. A browser renders somebody else's pages, and a dark chrome around
-      a light page reads as broken; committing to one scheme also means every surface colour
-      below is the one that actually ships.
+      DayNight, following the system.
+
+      It was light-only, on the grounds that dark chrome around somebody else's light page reads
+      as broken. The page keeps its own colours either way — forceDarkAllowed is off below — so
+      what that argument actually bought was a light app at midnight, which the design set
+      rejects: every screen is drawn in both themes.
+
+      Every colour named below has a night twin in values-night/colors.xml, so screens still
+      wearing the MVP palette follow along rather than turning into light text on a dark surface.
     -->
-    <style name="Base.Theme.Webview" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Base.Theme.Webview" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
         <item name="colorPrimaryContainer">@color/primary_container</item>
@@ -27,34 +33,49 @@
 
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!--
+          Dark icons on a light app, light icons on a dark one. Driven by a bool with a night
+          copy rather than a hardcoded true, which is what left the clock and battery invisible
+          the first time the app went dark.
+        -->
+        <item name="android:windowLightStatusBar">@bool/ds_light_system_bars</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">
+            @bool/ds_light_system_bars
+        </item>
         <!-- Pages are rendered as their authors intended, not force-inverted. -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+        <!-- Every screen opens the same way — see Animation.Ds.Activity. -->
+        <item name="android:windowAnimationStyle">@style/Animation.Ds.Activity</item>
+    </style>
+
+    <!--
+      How a screen arrives: it grows the last 8% into place and fades in, while the one it
+      covers holds still and dims. Set on the theme rather than called at each startActivity,
+      so every screen in the app opens the same way and nothing has to remember to ask.
+
+      The system's own animator scale is respected automatically: Android multiplies these
+      durations by it, so somebody who has turned animations off gets none of this.
+    -->
+    <style name="Animation.Ds.Activity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/ds_activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/ds_activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/ds_activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/ds_activity_close_exit</item>
     </style>
 
     <style name="Theme.Webview" parent="Base.Theme.Webview" />
 
     <!--
-      The search screen, which should not read as a screen at all.
+      The search screen.
 
-      <p>It replaces the address bar with a version of itself that can be typed into, so the two
-      are the same thing at different moments. A slide in from the side says otherwise: it says
-      the viewer has gone somewhere, and then going back says they have returned, when all they
-      did was start and stop typing. Removing the animation leaves the field where the bar was.
+      It used to open with no animation at all, on the argument that it replaces the address bar
+      with a version of itself that can be typed into — the same thing at two moments, so nothing
+      should look like travel. That was reversed by request: it now arrives like every other
+      screen, growing the last of the way in. Inheriting rather than naming an animation of its
+      own is what keeps it that way without a second thing to remember.
     -->
-    <style name="Theme.Webview.Search" parent="Theme.Webview">
-        <item name="android:windowAnimationStyle">@style/Animation.Webview.None</item>
-    </style>
-
-    <style name="Animation.Webview.None" parent="@android:style/Animation">
-        <item name="android:activityOpenEnterAnimation">@null</item>
-        <item name="android:activityOpenExitAnimation">@null</item>
-        <item name="android:activityCloseEnterAnimation">@null</item>
-        <item name="android:activityCloseExitAnimation">@null</item>
-        <item name="android:taskOpenEnterAnimation">@null</item>
-        <item name="android:taskOpenExitAnimation">@null</item>
-        <item name="android:taskCloseEnterAnimation">@null</item>
-        <item name="android:taskCloseExitAnimation">@null</item>
-    </style>
+    <style name="Theme.Webview.Search" parent="Theme.Webview" />
 
     <!--
       Shown by the system from the moment the icon is tapped until the first frame is drawn.
@@ -76,9 +97,11 @@
     -->
     <style name="Theme.Webview.SplashContent" parent="Theme.Webview">
         <item name="android:windowBackground">@color/splash_surface</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <!-- API 27+; simply ignored below that, where the bar is dark anyway. -->
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <!--
+          Inherited from the base theme now. It used to force light bars, which was right while
+          the opening was always white and wrong the moment splash_surface gained a night value:
+          dark icons on a dark splash are no icons at all.
+        -->
     </style>
 
     <!--

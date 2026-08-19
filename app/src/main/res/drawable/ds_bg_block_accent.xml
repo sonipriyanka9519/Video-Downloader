@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The squircle behind an empty-state glyph when the state is an invitation.
+
+  Accent-soft, because "nothing downloaded yet" is the start of something rather than a dead end —
+  it sits above a button that tells you how. The neutral fill is for states that only report a
+  fact: see ds_bg_block_neutral.
+
+  96dp with 24dp corners is the empty-state mark across the canvases. The smaller 64/16 pair
+  (ds_bg_icon_block) is the inline hint block on Home, which is a different thing at a different
+  size.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent_soft" />
+    <corners android:radius="@dimen/ds_radius_private_mark" />
+</shape>

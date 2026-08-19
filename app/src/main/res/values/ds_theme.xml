@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      The v2 theme. Every rebuilt screen adopts this; screens still on the MVP layout keep
+      Theme.Webview until their turn comes.
+
+      Added alongside rather than replacing, on purpose. Switching the whole app in one step
+      would restyle twenty screens that have not been redesigned yet — the README's build order
+      puts the theme layer first precisely so screens can move across one at a time, and a
+      half-migrated app has to keep working in the meantime.
+
+      DayNight, so dark mode arrives with the resource qualifier rather than a second theme.
+      Material's own attributes are mapped onto the tokens here, once, which is what lets a
+      MaterialButton or a BottomSheetDialog look right without being styled at every call site.
+    -->
+    <style name="Base.Theme.Ds" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Brand -->
+        <item name="colorPrimary">@color/ds_accent</item>
+        <item name="colorOnPrimary">@color/ds_on_accent</item>
+        <item name="colorPrimaryContainer">@color/ds_accent_soft</item>
+        <item name="colorOnPrimaryContainer">@color/ds_ink</item>
+
+        <!-- Surfaces. The design separates the screen behind (bg) from the cards on it
+             (surface); Material's colorSurface is the card, colorBackground the screen. -->
+        <item name="android:colorBackground">@color/ds_bg</item>
+        <item name="colorSurface">@color/ds_surface</item>
+        <item name="colorOnSurface">@color/ds_ink</item>
+        <item name="colorSurfaceVariant">@color/ds_surface_alt</item>
+        <item name="colorOnSurfaceVariant">@color/ds_ink_soft</item>
+        <item name="colorSurfaceContainerLow">@color/ds_surface</item>
+        <item name="colorSurfaceContainer">@color/ds_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/ds_surface</item>
+
+        <item name="colorOutline">@color/ds_line</item>
+        <item name="colorOutlineVariant">@color/ds_line</item>
+
+        <item name="colorError">@color/ds_error</item>
+        <item name="colorOnError">@color/ds_on_accent</item>
+
+        <!--
+          Material 3 tints elevated surfaces towards the primary colour. The design is flat —
+          cards carry a 1dp line instead of a shadow — and that tint turns every raised surface
+          faintly pink. Off everywhere.
+        -->
+        <item name="elevationOverlayEnabled">false</item>
+
+        <!-- Type -->
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Ds.TitleXl</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Ds.Title</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Ds.Heading</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Ds.Body</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Ds.BodySm</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Ds.Button</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Ds.Caption</item>
+
+        <!-- Shape -->
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Ds.Thumbnail</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Ds.Card</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Ds.Dialog</item>
+
+        <!-- Components -->
+        <item name="materialButtonStyle">@style/Widget.Ds.Button</item>
+        <item name="chipStyle">@style/Widget.Ds.Chip.Filter</item>
+        <item name="materialCardViewStyle">@style/Widget.Ds.Card</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Ds.BottomSheet</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Ds.Dialog</item>
+        <item name="snackbarStyle">@style/Widget.Ds.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.Ds.Snackbar.Text</item>
+        <item name="snackbarButtonStyle">@style/Widget.Ds.Snackbar.Action</item>
+
+        <!-- System bars: transparent, with the icon polarity following the theme. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">@bool/ds_light_system_bars</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">
+            @bool/ds_light_system_bars
+        </item>
+        <item name="android:backgroundDimAmount">@dimen/ds_scrim_dim</item>
+
+        <!--
+          Web pages keep their author's colours in both themes. Only the chrome around the page
+          switches — a force-inverted page is a broken page, and this app renders other people's
+          sites for a living.
+        -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="Theme.Ds" parent="Base.Theme.Ds" />
+
+    <!--
+      The same mapping as an overlay, for applying to one view subtree rather than a whole
+      activity.
+
+      This is what lets a screen migrate on its own. MainActivity hosts both Home and Downloads,
+      so switching its theme would restyle Downloads too — which has not been rebuilt yet. Put
+      this on the rebuilt subtree with android:theme and only that subtree moves; the activity
+      keeps Theme.Webview until the last screen inside it has crossed over.
+
+      Window flags are deliberately absent: an overlay cannot set them, and status-bar polarity
+      belongs to the activity.
+    -->
+    <style name="ThemeOverlay.Ds" parent="">
+        <item name="colorPrimary">@color/ds_accent</item>
+        <item name="colorOnPrimary">@color/ds_on_accent</item>
+        <item name="colorPrimaryContainer">@color/ds_accent_soft</item>
+        <item name="colorOnPrimaryContainer">@color/ds_ink</item>
+
+        <item name="android:colorBackground">@color/ds_bg</item>
+        <item name="colorSurface">@color/ds_surface</item>
+        <item name="colorOnSurface">@color/ds_ink</item>
+        <item name="colorSurfaceVariant">@color/ds_surface_alt</item>
+        <item name="colorOnSurfaceVariant">@color/ds_ink_soft</item>
+        <item name="colorOutline">@color/ds_line</item>
+        <item name="colorOutlineVariant">@color/ds_line</item>
+        <item name="colorError">@color/ds_error</item>
+
+        <item name="elevationOverlayEnabled">false</item>
+
+        <item name="materialButtonStyle">@style/Widget.Ds.Button</item>
+        <item name="chipStyle">@style/Widget.Ds.Chip.Filter</item>
+        <item name="materialCardViewStyle">@style/Widget.Ds.Card</item>
+    </style>
+
+</resources>

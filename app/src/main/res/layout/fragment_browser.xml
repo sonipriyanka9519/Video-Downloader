@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--
+      The toolbar is tinted in a private tab, and the status bar above it with it - see
+      BrowserFragment.showPrivateMark. A badge on the address bar alone was tried and was too
+      quiet; tinting the page as well was tried and was too much, because it changed how every
+      site looked to say something the bar was already saying.
+    -->
     <LinearLayout
+        android:id="@+id/browserRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/browserToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_toolbar"
@@ -26,7 +34,7 @@
                 android:layout_height="@dimen/_27sdp"
                 android:contentDescription="@string/home"
                 android:src="@drawable/ic_home"
-                app:tint="@color/toolbar_icon" />
+                app:tint="@color/ds_ink" />
 
             <ImageButton
                 android:id="@+id/btnBack"
@@ -35,7 +43,7 @@
                 android:layout_height="@dimen/_27sdp"
                 android:contentDescription="@string/go_back"
                 android:src="@drawable/ic_chevron_left"
-                app:tint="@color/toolbar_icon" />
+                app:tint="@color/ds_toolbar_nav" />
 
             <ImageButton
                 android:id="@+id/btnForward"
@@ -44,24 +52,55 @@
                 android:layout_height="@dimen/_27sdp"
                 android:contentDescription="@string/go_forward"
                 android:src="@drawable/ic_chevron_right"
-                app:tint="@color/toolbar_icon" />
+                app:tint="@color/ds_toolbar_nav" />
 
             <LinearLayout
+                android:id="@+id/addressPill"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginHorizontal="@dimen/_2sdp"
+                android:layout_height="@dimen/ds_address_pill_height"
+                android:layout_marginHorizontal="@dimen/ds_space_1"
                 android:layout_weight="1"
-                android:background="@drawable/bg_url_pill"
+                android:background="@drawable/ds_bg_pill"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/_11sdp"
-                android:paddingEnd="@dimen/_2sdp">
+                android:paddingStart="@dimen/ds_space_3"
+                android:paddingEnd="@dimen/ds_space_2">
+
+                <!-- Only in a private tab, and before the address rather than after it: it says
+                     what kind of page this is, which is read before the page itself. -->
+                <ImageView
+                    android:id="@+id/addressPrivate"
+                    android:layout_width="@dimen/ds_icon_tiny"
+                    android:layout_height="@dimen/ds_icon_tiny"
+                    android:layout_marginEnd="7dp"
+                    android:contentDescription="@string/private_tabs"
+                    android:src="@drawable/ic_eye_off"
+                    android:visibility="gone"
+                    app:tint="@color/ds_accent" />
+
+                <!--
+                  Shown only when the page is served over https, and never on the grid. A padlock
+                  that appears on everything says nothing; one that appears on most things and
+                  quietly vanishes on the rest is worse. See BrowserFragment.showAddress.
+                -->
+                <ImageView
+                    android:id="@+id/addressLock"
+                    android:layout_width="@dimen/ds_icon_tiny"
+                    android:layout_height="@dimen/ds_icon_tiny"
+                    android:layout_marginEnd="7dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_lock"
+                    android:visibility="gone"
+                    app:tint="@color/ds_ink_soft" />
 
                 <!--
                   Reads only. Typing happens in SearchActivity, which this opens: a bar that both
                   displays where you are and accepts what you are typing has to be one or the
                   other at any moment, and the moment it becomes the second it stops answering
                   the first question.
+
+                  Shows the domain rather than the whole address — the rest is noise at this
+                  width, and the full URL is what the search screen is handed when it opens.
                 -->
                 <TextView
                     android:id="@+id/addressBar"
@@ -72,56 +111,64 @@
                     android:ellipsize="end"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:hint="@string/search_or_url"
+                    android:hint="@string/home_search_hint"
                     android:maxLines="1"
-                    android:textColor="@color/toolbar_text"
-                    android:textColorHint="@color/toolbar_hint"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textAppearance="@style/TextAppearance.Ds.Body"
+                    android:textColor="@color/ds_ink"
+                    android:textColorHint="@color/ds_ink_faint"
+                    android:textSize="14sp" />
 
+                <!-- Refresh, and an X while the page is still arriving. -->
                 <ImageButton
                     android:id="@+id/btnReload"
                     style="?attr/borderlessButtonStyle"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_width="@dimen/ds_icon_button"
+                    android:layout_height="@dimen/ds_icon_button"
                     android:contentDescription="@string/reload"
+                    android:padding="@dimen/ds_space_2"
                     android:src="@drawable/ic_refresh"
-                    app:tint="@color/toolbar_icon" />
+                    app:tint="@color/ds_ink_soft" />
             </LinearLayout>
 
             <!-- How many tabs are open, and the way into them. -->
             <TextView
                 android:id="@+id/btnTabs"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:background="@drawable/bg_tab_count"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="@dimen/ds_space_1"
+                android:layout_marginEnd="@dimen/ds_space_1"
+                android:background="@drawable/ds_bg_tab_counter"
                 android:clickable="true"
                 android:contentDescription="@string/open_tabs"
                 android:focusable="true"
                 android:gravity="center"
-                android:textColor="@color/toolbar_icon"
-                android:textSize="@dimen/_9ssp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.Ds.Chip"
+                android:textColor="@color/ds_ink"
+                android:textSize="13sp" />
 
             <ImageButton
                 android:id="@+id/btnBrowserMenu"
                 style="?attr/borderlessButtonStyle"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
+                android:layout_width="@dimen/ds_icon_button"
+                android:layout_height="@dimen/ds_icon_button"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/more_options"
-                android:padding="@dimen/_2sdp"
+                android:padding="@dimen/ds_space_2"
                 android:src="@drawable/ic_more_vert"
-                app:tint="@color/toolbar_icon" />
+                app:tint="@color/ds_ink" />
         </LinearLayout>
 
+        <!--
+          3dp, accent, flush under the toolbar and square-ended — it is an edge of the chrome
+          rather than a control, so it carries no corner radius of its own.
+        -->
         <ProgressBar
             android:id="@+id/pageProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
+            android:layout_height="@dimen/ds_progress_thin"
             android:max="100"
+            android:progressDrawable="@drawable/ds_page_progress"
             android:visibility="gone" />
 
         <!--
@@ -149,28 +196,13 @@
               somebody is deciding where to go. It also goes for good once the walkthrough has
               been read — see BrowserFragment.refreshHowTo.
             -->
-            <LinearLayout
+            <include
                 android:id="@+id/homePanel"
+                layout="@layout/view_home"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/shortcutGrid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_14sdp"
-                    android:paddingBottom="@dimen/_10sdp" />
-
-                <include
-                    layout="@layout/view_how_to"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_4sdp" />
-            </LinearLayout>
+            <include layout="@layout/view_page_error" />
 
             <!--
               Inside the page area rather than over the whole window, so it can be dragged
@@ -212,30 +244,31 @@
 
                     <ImageView
                         android:id="@+id/fabDownload"
-                        android:layout_width="@dimen/_43sdp"
-                        android:layout_height="@dimen/_43sdp"
+                        android:layout_width="@dimen/ds_fab_size"
+                        android:layout_height="@dimen/ds_fab_size"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/_5sdp"
-                        android:background="@drawable/fab_bg_idle"
+                        android:background="@drawable/ds_fab_bg"
                         android:clickable="true"
                         android:contentDescription="@string/download"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:scaleType="center"
                         android:src="@drawable/ic_download"
-                        app:tint="@color/white" />
+                        app:tint="@color/ds_on_fab" />
 
                     <TextView
                         android:id="@+id/fabBadge"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_16sdp"
+                        android:layout_height="@dimen/ds_fab_badge"
                         android:layout_gravity="top|end"
-                        android:background="@drawable/bg_fab_badge"
+                        android:background="@drawable/ds_fab_badge"
                         android:gravity="center"
-                        android:minWidth="@dimen/_16sdp"
-                        android:paddingHorizontal="@dimen/_4sdp"
-                        android:textColor="@color/brand_crimson"
-                        android:textSize="@dimen/_8ssp"
+                        android:minWidth="@dimen/ds_fab_badge"
+                        android:paddingHorizontal="@dimen/ds_space_1"
+                        android:textAppearance="@style/TextAppearance.Ds.Caption"
+                        android:textColor="@color/ds_on_fab_count"
+                        android:textSize="11sp"
                         android:textStyle="bold"
                         android:visibility="gone" />
                 </FrameLayout>

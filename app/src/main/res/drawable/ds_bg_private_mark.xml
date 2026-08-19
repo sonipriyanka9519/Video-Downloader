@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The soft-accent squircle behind the shield on the private-folder intro — screen 11, panel D.
+
+  Soft accent rather than accent: the glyph is the accent here, and a solid red tile with a red
+  shield on it would be one shape, not two.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent_soft" />
+    <corners android:radius="@dimen/ds_radius_private_mark" />
+</shape>

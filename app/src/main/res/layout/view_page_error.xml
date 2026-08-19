@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Screen 02, panel D — the page that would not load.
+
+  A state of the browser area rather than a toast. A toast says what happened and then takes the
+  message away, leaving a blank page and no way forward; this stays, names the likely cause, and
+  puts the one useful action under the thumb.
+
+  Drawn over the WebView rather than replacing it, so the failed page is still in history and
+  Retry has something to reload.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pageError"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ds_space_8"
+    android:theme="@style/ThemeOverlay.Ds"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <!--
+      Neutral, not accent. A page that would not load is a fact being reported, and the canvas draws
+      it in the grey pair for that reason — a red mark here would make a bad connection look like a
+      fault in the app. The Retry button below is where the way forward is.
+    -->
+    <ImageView
+        android:layout_width="@dimen/ds_empty_block"
+        android:layout_height="@dimen/ds_empty_block"
+        android:background="@drawable/ds_bg_block_neutral"
+        android:contentDescription="@null"
+        android:padding="@dimen/ds_empty_block_pad"
+        android:src="@drawable/ic_link_off"
+        app:tint="@color/ds_ink_faint" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:text="@string/page_error_title"
+        android:textAppearance="@style/TextAppearance.Ds.Title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:gravity="center"
+        android:maxWidth="250dp"
+        android:text="@string/page_error_body"
+        android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRetryPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginTop="@dimen/ds_space_5"
+        android:maxWidth="220dp"
+        android:text="@string/retry" />
+</LinearLayout>

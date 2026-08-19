@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A day heading in the history list — TODAY · AUG 14, YESTERDAY, EARLIER — and, while searching,
+  the result count that takes their place.
+
+  Uppercased in the string rather than by textAllCaps, so a language that should not be shouted in
+  can opt out of it. Tabular figures because the searching state prints a number here that changes
+  as the query does.
+-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sectionLabel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFeatureSettings="tnum"
+    android:paddingStart="@dimen/ds_screen_padding"
+    android:paddingTop="@dimen/ds_space_3"
+    android:paddingEnd="@dimen/ds_screen_padding"
+    android:paddingBottom="@dimen/ds_space_1"
+    android:textAppearance="@style/TextAppearance.Ds.Label"
+    tools:text="TODAY · AUG 14" />

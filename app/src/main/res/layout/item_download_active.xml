@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A transfer still running, from screen 06's DOWNLOADING zone.
+
+  Its own shape rather than the finished row's, because it answers a different question. A
+  finished row is asked "what is this" and leads with a picture and a name; this one is asked
+  "how is it going", so the percent is burned over the thumbnail, the bar sits directly under the
+  title where the eye already is, and the line beneath it is how much of how much, and how fast.
+
+  No ⋮. Nothing on this row can be shared, renamed or filed yet — the one action it has is the
+  one thing you might want, which is to stop it or start it again.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/ds_screen_padding"
+    android:paddingVertical="@dimen/ds_space_2">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="@dimen/ds_active_thumb_width"
+        android:layout_height="@dimen/ds_active_thumb_height"
+        app:cardCornerRadius="@dimen/ds_radius_thumb"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false"
+        app:strokeWidth="0dp">
+
+        <ImageView
+            android:id="@+id/thumb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ds_surface_alt"
+            android:contentDescription="@string/thumbnail"
+            android:scaleType="centerCrop" />
+
+        <!--
+          The scrim is not decoration: the percent has to be legible over whatever poster the
+          site gave us, and a white number on an unknown image is only readable by luck.
+        -->
+        <View
+            android:id="@+id/thumbScrim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ds_thumb_scrim" />
+
+        <TextView
+            android:id="@+id/percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFeatureSettings="tnum"
+            android:textColor="@color/ds_on_media"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="52%" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_3"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Only on a failure, where the line below it is a remedy rather than a rate. -->
+            <ImageView
+                android:id="@+id/errorIcon"
+                android:layout_width="@dimen/ds_icon_tiny"
+                android:layout_height="@dimen/ds_icon_tiny"
+                android:layout_marginEnd="@dimen/ds_space_1"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_error"
+                android:visibility="gone"
+                app:tint="@color/ds_error" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Ds.Body"
+                tools:text="Warm-up drills, full session" />
+        </LinearLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_1"
+            android:layout_marginBottom="@dimen/ds_space_1"
+            app:indicatorColor="@color/ds_accent"
+            app:trackColor="@color/ds_surface_alt"
+            app:trackCornerRadius="@dimen/ds_radius_progress"
+            app:trackThickness="@dimen/ds_progress_thickness" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            tools:text="12.4 MB of 24.1 MB • 2.1 MB/s" />
+    </LinearLayout>
+
+    <!-- Pause, resume or retry — whichever this transfer's state makes true. -->
+    <ImageButton
+        android:id="@+id/btnPrimary"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="@dimen/ds_touch_min"
+        android:layout_height="@dimen/ds_touch_min"
+        android:layout_marginStart="@dimen/ds_space_1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/pause"
+        android:padding="@dimen/ds_space_3"
+        android:src="@drawable/ic_pause"
+        app:tint="@color/ds_ink" />
+
+    <!--
+      Stop it altogether, which is a different decision from pausing it and needs its own
+      control — a pause that turned into a cancel on a long press would be a trap.
+
+      Drawn in the muted ink rather than the error red: cancelling is the viewer's own choice,
+      not something going wrong, and a red button beside a running transfer reads as an alarm.
+    -->
+    <ImageButton
+        android:id="@+id/btnCancel"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="@dimen/ds_touch_min"
+        android:layout_height="@dimen/ds_touch_min"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/cancel_download"
+        android:padding="@dimen/ds_space_3"
+        android:src="@drawable/ic_close"
+        app:tint="@color/ds_ink_soft" />
+</LinearLayout>

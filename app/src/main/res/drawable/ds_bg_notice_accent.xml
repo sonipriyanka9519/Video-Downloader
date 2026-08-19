@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  An accent-soft notice block — screen 13's pre-selection banner.
+
+  Accent-soft rather than surface-alt because this one is about something the app just did: it needs
+  to be read once, and a neutral block beside a list of neutral rows is read by nobody. The radius is
+  the card's, not the inset's, since it sits on the screen rather than inside a sheet.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent_soft" />
+    <corners android:radius="@dimen/ds_radius_card" />
+</shape>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The address pill in a private tab.
+
+  Same shape as ds_bg_pill, different fill. The ordinary pill is ds_surface_alt, a warm tint that
+  sat on the grey chrome as a patch of another colour entirely - the one thing left in the bar
+  still saying "ordinary tab". This keeps the field readable as a field without introducing a
+  second hue. It is the only break in the flat colour, and it is there because an address field
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_private_inset" />
+    <corners android:radius="@dimen/ds_radius_pill" />
+</shape>

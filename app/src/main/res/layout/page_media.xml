@@ -3,6 +3,15 @@
   The download button sits outside the scrolling area on purpose. Inside it, a video with
   several qualities pushed it past the bottom of the pager and it looked missing.
 -->
+<!--
+  match_parent, and it has to be: ViewPager2 refuses any page that is not, and throws
+  "Pages must fill the whole ViewPager2" at layout time.
+
+  The page is still only as tall as its contents, but that is arranged from the other end —
+  MediaSheet measures this view against an unspecified height and sets the pager to match. See
+  MediaSheet.resizePagerToPage. Nothing here stretches, so that measurement is the content
+  height and no empty band appears under a video with a single row of qualities.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,24 +19,35 @@
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/_14sdp">
 
+    <!--
+      Everything above the buttons scrolls, and only when it has to.
+
+      A video with one row of qualities is short and the sheet is short with it; a video with three
+      is taller than the room a sheet may take, and without this the extra rows simply pushed the
+      Download button off the bottom. Weighted rather than wrap_content so the scroll view gives way
+      first and the button keeps its place — see MediaSheet.resizePagerToPage, which is what decides
+      how much room there is.
+    -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false"
+        android:fillViewport="true"
         android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-            <!-- Width and height are set at bind time: a portrait reel gets a tall, narrow,
-                 centred frame rather than a wide one that crops its middle out. -->
+            <!-- The height is fixed for every video; only the width is set at bind time, so a
+                 portrait reel gets a narrow, centred frame instead of a wide one that crops its
+                 middle out. Declared here as well as in code so the preview measures correctly
+                 on the first pass, before any binding has happened. -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/thumbCard"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_113sdp"
+                android:layout_height="@dimen/ds_preview_height"
                 android:layout_gravity="center_horizontal"
                 app:cardCornerRadius="@dimen/_11sdp"
                 app:cardElevation="0dp"
@@ -37,11 +57,12 @@
                     android:id="@+id/thumb"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/colorSurfaceVariant"
+                    android:background="@color/ds_surface_alt"
                     android:contentDescription="@string/thumbnail"
                     android:scaleType="centerCrop" />
 
                 <!-- Covers the frame until the preview settles, then hides itself. -->
+
                 <com.ms.webview.ui.ShimmerView
                     android:id="@+id/thumbShimmer"
                     android:layout_width="match_parent"
@@ -64,7 +85,7 @@
                     android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_2sdp"
                     android:text="@string/now_playing"
-                    android:textColor="@color/white"
+                    android:textColor="@color/ds_on_media"
                     android:textSize="@dimen/_7ssp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -78,7 +99,7 @@
                     android:background="@drawable/bg_badge"
                     android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_2sdp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/ds_on_media"
                     android:textSize="@dimen/_8ssp"
                     android:visibility="gone" />
             </com.google.android.material.card.MaterialCardView>
@@ -90,7 +111,7 @@
                 android:layout_marginTop="@dimen/_9sdp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/on_surface"
+                android:textColor="@color/ds_ink"
                 android:textSize="@dimen/_13ssp"
                 android:textStyle="bold" />
 
@@ -101,46 +122,93 @@
                 android:layout_marginTop="@dimen/_2sdp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/on_surface_variant"
+                android:textColor="@color/ds_ink_soft"
                 android:textSize="@dimen/_9ssp" />
 
             <TextView
                 android:id="@+id/qualityLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:letterSpacing="0.09"
+                android:layout_marginTop="@dimen/ds_space_3"
                 android:text="@string/quality"
-                android:textAllCaps="true"
-                android:textColor="@color/on_surface_variant"
-                android:textSize="@dimen/_8ssp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.Ds.Label" />
 
-            <!-- Three across, centred, wrapping onto as many rows as needed. The count is
-                 recalculated at bind time so one quality fills the row instead of a third. -->
+            <!--
+              Three across, wrapping onto a second row. Every rung is on screen at once — a row
+              that scrolled sideways hid the cheaper qualities off the edge, and a viewer who
+              cannot see a rung does not know there is a choice to make.
+
+              The columns share the width equally rather than each card naming its own, so three
+              rungs fill the row and a short final row lines up beneath the one above it.
+            -->
             <GridLayout
                 android:id="@+id/qualities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:layout_marginBottom="@dimen/ds_space_1"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:columnCount="3"
                 android:useDefaultMargins="false" />
-        </LinearLayout>
+
+            <!--
+              Replaces the download button when every rung is locked. Saying so here, before the
+              tap, is the whole point: the alternative is a button that looks live and fails.
+            -->
+            <LinearLayout
+                android:id="@+id/protectedNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:background="@drawable/ds_bg_inset"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/ds_space_3"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_icon_small"
+                    android:layout_height="@dimen/ds_icon_small"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_shield"
+                    app:tint="@color/ds_ink_soft" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ds_space_2"
+                    android:text="@string/protected_notice"
+                    android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+            </LinearLayout>
+    </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!--
+      Hidden until asked for, and a text button rather than a second filled one — the design is
+      explicit that nothing should compete with Download for the eye. Appears only when the page
+      holds more than one video.
+    -->
+    <TextView
+        android:id="@+id/btnDownloadAll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_touch_min"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_accent"
+        android:visibility="gone" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDownload"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_6sdp"
-        android:backgroundTint="@color/primary"
-        android:letterSpacing="0.01"
+        android:layout_height="@dimen/ds_button_height"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:layout_marginBottom="@dimen/ds_space_2"
+        android:backgroundTint="@color/ds_accent"
         android:text="@string/download"
-        android:textColor="@color/on_primary"
-        android:textSize="@dimen/_11ssp"
-        android:textStyle="bold"
-        app:cornerRadius="@dimen/_11sdp" />
+        android:textAppearance="@style/TextAppearance.Ds.Button"
+        android:textColor="@color/ds_on_accent"
+        app:cornerRadius="@dimen/ds_radius_card" />
 
 </LinearLayout>

@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  History — screen 12.
+
+  A sheet at 90% of the screen rather than a screen of its own, and the 10% is the whole argument:
+  the page stays visible behind it, so this reads as a lookup you can drop rather than somewhere you
+  navigated to. Tapping a row goes straight back to that page in the tab already open.
+
+  No close button. The grabber, a swipe down, a tap outside and back all dismiss it, and a fifth way
+  in the corner would only take up the room the title needs.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:orientation="vertical">
+    android:background="@drawable/ds_bg_sheet_top"
+    android:clipToOutline="true"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_2"
+    android:theme="@style/ThemeOverlay.Ds">
 
+    <View
+        android:layout_width="@dimen/ds_grabber_width"
+        android:layout_height="@dimen/ds_grabber_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/ds_space_3"
+        android:background="@drawable/ds_bg_grabber" />
+
+    <!-- Title left, the only bulk action right — and it greys out rather than vanishing when
+         there is nothing to clear, so the control does not move about. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:baselineAligned="true"
+        android:gravity="bottom"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/_8sdp"
-        android:paddingVertical="@dimen/_8sdp">
-
-        <ImageButton
-            android:id="@+id/btnCloseHistory"
-            style="?attr/borderlessButtonStyle"
-            android:layout_width="@dimen/_28sdp"
-            android:layout_height="@dimen/_28sdp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/close_tabs_view"
-            android:src="@drawable/ic_close"
-            app:tint="@color/on_surface" />
+        android:paddingHorizontal="@dimen/ds_screen_padding"
+        android:paddingBottom="@dimen/ds_space_3">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
             android:layout_weight="1"
             android:text="@string/history"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/_14ssp"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.Ds.Title" />
 
         <TextView
             android:id="@+id/btnClearHistory"
@@ -41,28 +52,129 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:padding="@dimen/_6sdp"
+            android:minHeight="@dimen/ds_touch_min"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/ds_space_3"
             android:text="@string/clear_all"
-            android:textColor="@color/brand_crimson"
-            android:textSize="@dimen/_11ssp" />
+            android:textAppearance="@style/TextAppearance.Ds.Button"
+            android:textColor="@color/ds_accent"
+            android:textSize="14sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/historyEmpty"
+    <!--
+      Search inside the sheet, not on a screen of its own: the list narrows in place and says how
+      many it found, so there is no transition to sit through and nothing to come back from.
+    -->
+    <LinearLayout
+        android:id="@+id/historySearchBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/_20sdp"
-        android:text="@string/no_history"
-        android:textAlignment="center"
-        android:textColor="@color/on_surface_variant"
-        android:textSize="@dimen/_10ssp"
-        android:visibility="gone" />
+        android:layout_height="@dimen/ds_search_pill"
+        android:layout_marginHorizontal="@dimen/ds_screen_padding"
+        android:layout_marginBottom="@dimen/ds_space_2"
+        android:background="@drawable/ds_bg_pill"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_4"
+        android:paddingEnd="@dimen/ds_space_1">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/historyList"
+        <ImageView
+            android:layout_width="@dimen/ds_icon_small"
+            android:layout_height="@dimen/ds_icon_small"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_search"
+            app:tint="@color/ds_ink_faint" />
+
+        <EditText
+            android:id="@+id/historySearch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/history_search_hint"
+            android:imeOptions="actionSearch|flagNoExtractUi"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingVertical="0dp"
+            android:singleLine="true"
+            android:textColor="@color/ds_ink"
+            android:textColorHint="@color/ds_ink_faint"
+            android:textSize="14sp" />
+
+        <!-- Gone until there is something to clear: an X beside an empty field is a control that
+             does nothing. -->
+        <ImageButton
+            android:id="@+id/btnClearSearch"
+            android:layout_width="@dimen/ds_history_search_clear"
+            android:layout_height="@dimen/ds_history_search_clear"
+            android:background="@drawable/ds_bg_circle_alt"
+            android:contentDescription="@string/clear"
+            android:padding="@dimen/ds_space_1"
+            android:src="@drawable/ic_close"
+            android:visibility="gone"
+            app:tint="@color/ds_ink_soft"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/_12sdp" />
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/ds_space_5"
+            tools:itemCount="6"
+            tools:listitem="@layout/item_history_visit" />
+
+        <!--
+          Two empty states in one, because they are not the same fact: nothing has been visited yet,
+          or nothing matched what was typed. The second must never say the first — it would read as
+          the search having deleted the history.
+        -->
+        <LinearLayout
+            android:id="@+id/historyEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_space_8"
+            android:paddingBottom="@dimen/ds_space_8"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/historyEmptyIcon"
+                android:layout_width="@dimen/ds_empty_block"
+                android:layout_height="@dimen/ds_empty_block"
+                android:background="@drawable/ds_bg_block_neutral"
+                android:contentDescription="@null"
+                android:padding="@dimen/ds_space_6"
+                android:src="@drawable/ic_history"
+                app:tint="@color/ds_ink_faint" />
+
+            <TextView
+                android:id="@+id/historyEmptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_3"
+                android:gravity="center"
+                android:text="@string/history_empty_title"
+                android:textAppearance="@style/TextAppearance.Ds.Title" />
+
+            <TextView
+                android:id="@+id/historyEmptyBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:gravity="center"
+                android:maxWidth="@dimen/ds_empty_max_width"
+                android:text="@string/history_empty_body"
+                android:textAppearance="@style/TextAppearance.Ds.BodySm" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

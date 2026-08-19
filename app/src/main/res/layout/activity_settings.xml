@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The settings screen's window, and nothing else.
+
+  Everything in it is SettingsFragment, which is also the bottom navigation's third tab. The host is
+  this thin so the two can never drift: there is one settings list in the app and it is laid out in
+  one file.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsHost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_bg" />
