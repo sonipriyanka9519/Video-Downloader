@@ -2,14 +2,15 @@ package com.ms.webview.ui.tabs;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -196,7 +197,8 @@ public class TabSwitcherSheet extends BottomSheetDialogFragment
      * away, which is the right distance for it.
      */
     private void showMenu(View anchor) {
-        PopupMenu menu = new PopupMenu(requireContext(), anchor);
+        androidx.appcompat.widget.PopupMenu menu = new PopupMenu(new ContextThemeWrapper(
+                requireContext(), R.style.ThemeOverlay_Ds_PopupMenu), anchor);
         menu.getMenu().add(R.string.close_all_tabs).setOnMenuItemClickListener(item -> {
             confirmCloseAll();
             return true;

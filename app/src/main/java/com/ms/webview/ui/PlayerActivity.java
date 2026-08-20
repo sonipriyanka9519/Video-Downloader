@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsetsController;
@@ -542,7 +543,8 @@ public class PlayerActivity extends AppCompatActivity implements PlayerChrome.Ho
      */
     @Override
     public void onOverflow(View anchor) {
-        PopupMenu menu = new PopupMenu(this, anchor);
+        androidx.appcompat.widget.PopupMenu menu = new androidx.appcompat.widget.PopupMenu(new ContextThemeWrapper(
+                this, R.style.ThemeOverlay_Ds_PopupMenu), anchor);
         menu.getMenu().add(0, MENU_LOOP, 0, R.string.loop_video)
                 .setCheckable(true).setChecked(looping);
         menu.getMenu().add(0, MENU_SPEED, 1, R.string.playback_speed);

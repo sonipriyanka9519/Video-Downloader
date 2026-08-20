@@ -10,12 +10,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,6 +26,7 @@ import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.annotation.StringRes;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -694,7 +695,10 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
     private void showCollectionMenu(View anchor) {
         if (TextUtils.isEmpty(collection)) return;
 
-        PopupMenu menu = new PopupMenu(requireContext(), anchor);
+        // Wrapped, like the browser's overflow: a popup reads its background off the theme, so
+        // this is the only way to give it the app's corners instead of the platform's square card.
+        PopupMenu menu = new PopupMenu(new ContextThemeWrapper(
+                requireContext(), R.style.ThemeOverlay_Ds_PopupMenu), anchor);
         menu.getMenu().add(0, 1, 0, R.string.rename);
         menu.getMenu().add(0, 2, 1, R.string.delete);
         menu.setOnMenuItemClickListener(item -> {

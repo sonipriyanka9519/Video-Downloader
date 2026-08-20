@@ -156,7 +156,7 @@
     <dimen name="ds_card_thumb_width">@dimen/_123sdp</dimen>
     <dimen name="ds_card_thumb_height">@dimen/_69sdp</dimen>
     <dimen name="ds_play_glyph">@dimen/_33sdp</dimen>
-    <dimen name="ds_progress_thin">@dimen/_3sdp</dimen>
+    <dimen name="ds_progress_thin">@dimen/_2sdp</dimen>
     <dimen name="ds_unwatched_dot">@dimen/_7sdp</dimen>
 
     <!-- Home shortcut grid: 4 columns of 56dp tiles. -->
