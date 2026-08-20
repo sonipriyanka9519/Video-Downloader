@@ -1,5 +1,6 @@
 package com.ms.webview.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ms.webview.ui.settings.SettingsPrefs;
 import com.ms.webview.MainActivity;
 import com.ms.webview.R;
+import com.ms.webview.ads.Interstitials;
 import com.ms.webview.core.Formats;
 import com.ms.webview.detect.MediaItem;
 import com.ms.webview.detect.MediaVariant;
@@ -102,6 +104,8 @@ public class MediaSheet extends BottomSheetDialogFragment {
         btnPrev.setOnClickListener(v -> step(-1));
         btnNext.setOnClickListener(v -> step(1));
 
+        // Asked for as the sheet opens, so it is in hand by the time Download is tapped.
+        Interstitials.preload(requireContext());
         adapter = new MediaPagerAdapter(this::enqueue);
         adapter.setOnDownloadAll(this::enterSelectMode);
         pager.setAdapter(adapter);
@@ -320,7 +324,24 @@ public class MediaSheet extends BottomSheetDialogFragment {
         // Wi-Fi is a failure dressed as progress; the viewer turned that setting on and is owed
         // the reminder that it is why nothing is happening.
         notice(getString(waiting ? R.string.queued_waiting_wifi : R.string.queued_toast));
+        finishAfterDownload();
+    }
+
+    /**
+     * Closes the sheet, then shows the interstitial.
+     *
+     * <p>The download is already handed to the service before this runs, so nothing here can stop
+     * it arriving — an ad that fails, or is declined, or never loads costs the viewer nothing.
+     *
+     * <p>This order and not the other one: the sheet goes first so the ad is not laid over a
+     * half-dismissed dialog, and the break is real — the task is finished and the viewer is on
+     * their way somewhere else.
+     */
+    private void finishAfterDownload() {
+        Activity host = getActivity();
         dismissAllowingStateLoss();
+        Interstitials.showThen(host, () -> {
+        });
     }
 
     /** The word about a started download, above the tab bar — see MainActivity. */
@@ -506,6 +527,6 @@ public class MediaSheet extends BottomSheetDialogFragment {
         notice(SettingsPrefs.willWaitForWifi(requireContext())
                 ? getResources().getQuantityString(R.plurals.queued_n_waiting_wifi, queued, queued)
                 : getResources().getQuantityString(R.plurals.queued_n, queued, queued));
-        dismissAllowingStateLoss();
+        finishAfterDownload();
     }
 }

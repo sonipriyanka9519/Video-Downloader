@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The way out of the app, asked rather than assumed.
+
+  Back at the end of the browser's history used to close the app outright. It still can - this only
+  adds a confirmation - but the press that leaves an app is worth one question, because the page
+  and the tab grid behind it are gone the moment it is answered.
+
+  On the ad, and the order things sit in:
+
+  The ad is at the top and the buttons are at the bottom, with the title and the message physically
+  between them. That is deliberate and it is the whole reason the layout is this way round. A sheet
+  rises from the bottom of the screen, so the bottom is where a thumb already is; putting the paid
+  card there and the buttons above it would place a call to action exactly where a finger lands to
+  dismiss something. Two text blocks of separation is the point, not decoration.
+
+  The "Ad" badge inside the card is what marks it, and it is never the thing being answered here -
+  neither button is an ad, and the ad is not a button.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ds_bg_sheet_top"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/ds_space_5"
+    android:paddingBottom="@dimen/ds_space_5"
+    android:theme="@style/ThemeOverlay.Ds">
+
+    <!-- Gone until an ad arrives, so the sheet is the same shape with or without one. -->
+    <FrameLayout
+        android:id="@+id/exitAdSlot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ds_space_2"
+        android:layout_marginBottom="@dimen/ds_space_5"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/exit_title"
+        android:paddingHorizontal="@dimen/ds_space_6"
+        android:textAppearance="@style/TextAppearance.Ds.Title"
+        android:textColor="@color/ds_ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:paddingHorizontal="@dimen/ds_space_6"
+        android:text="@string/exit_body"
+        android:textAppearance="@style/TextAppearance.Ds.Body"
+        android:textColor="@color/ds_ink_soft" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/ds_space_5"
+        android:paddingHorizontal="@dimen/ds_space_6"
+        android:gravity="center_vertical"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/btnExitCancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_touch_min"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/ds_space_2"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/ds_space_6"
+            android:text="@string/exit_cancel"
+            android:textAppearance="@style/TextAppearance.Ds.Button"
+            android:textColor="@color/ds_ink_soft" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExitConfirm"
+            style="@style/Widget.Ds.Button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:paddingHorizontal="@dimen/ds_space_6"
+            android:layout_height="@dimen/ds_button_height"
+            android:text="@string/exit_confirm" />
+
+    </LinearLayout>
+</LinearLayout>

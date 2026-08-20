@@ -13,6 +13,8 @@
 <resources>
 
     <!-- Surfaces -->
+    <!-- The press feedback on an icon-only control - see ds_ripple_borderless. -->
+    <color name="ds_ripple">#1F1A1A1A</color>
     <color name="ds_bg">#FAF7F6</color>
     <color name="ds_surface">#FFFFFF</color>
     <color name="ds_surface_alt">#F2ECEA</color>
@@ -126,5 +128,11 @@
     -->
     <color name="ds_private_bg">#D8D0CC</color>
     <color name="ds_private_inset">#CBC1BC</color>
+
+    <!--
+      The "Ad" badge. Yellow because it must not be mistaken for the app's own accent - the label
+      saying a row is paid for should not be the same colour as every control the viewer trusts.
+    -->
+    <color name="ds_ad_badge">#F4B400</color>
 
 </resources>

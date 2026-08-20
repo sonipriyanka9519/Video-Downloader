@@ -56,6 +56,6 @@
             android:text="@string/history_retention"
             android:textAppearance="@style/TextAppearance.Ds.BodySm"
             android:textColor="@color/ds_ink"
-            android:textSize="13sp" />
+            android:textSize="@dimen/_11ssp" />
     </LinearLayout>
 </LinearLayout>

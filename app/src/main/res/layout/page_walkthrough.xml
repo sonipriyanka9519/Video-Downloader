@@ -24,7 +24,7 @@
         android:letterSpacing="0.04"
         android:paddingHorizontal="@dimen/ds_space_3"
         android:textColor="@color/ds_accent"
-        android:textSize="12sp"
+        android:textSize="@dimen/_10ssp"
         android:textStyle="bold"
         tools:text="STEP 1 OF 4" />
 

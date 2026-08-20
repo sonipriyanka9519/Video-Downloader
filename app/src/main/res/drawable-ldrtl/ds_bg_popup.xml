@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The browser overflow's background, mirrored - see drawable/ds_bg_popup.xml for the reasoning.
+
+  <corners> takes literal left and right rather than start and end, so a right-to-left layout needs
+  its own copy rather than a flag. The ⋮ is on the left in RTL, so the square side moves with it and
+  the radius goes down the right.
+-->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:inset="@dimen/ds_space_1">
+    <shape android:shape="rectangle">
+        <solid android:color="@color/ds_surface" />
+        <corners
+            android:bottomLeftRadius="0dp"
+            android:bottomRightRadius="@dimen/ds_radius_dialog"
+            android:topLeftRadius="0dp"
+            android:topRightRadius="@dimen/ds_radius_dialog" />
+    </shape>
+</inset>

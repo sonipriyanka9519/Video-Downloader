@@ -31,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ms.webview.data.DownloadEntity;
 import com.ms.webview.data.DownloadStatus;
 import com.ms.webview.push.PushLink;
+import com.ms.webview.ads.Interstitials;
 import com.ms.webview.ui.BrowserFragment;
 import com.ms.webview.ui.MainPagerAdapter;
 import com.ms.webview.ui.Snacks;
@@ -114,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Anything the player owed on the way out — see Interstitials.queueForNextScreen.
+        Interstitials.showIfQueued(this);
+
         // The status bar is set on the window, not on a view, so nothing restores it for us. Put
         // it back to whatever the browser last asked for - after a theme change, after returning
         // from the player, after anything that ran onCreate again.

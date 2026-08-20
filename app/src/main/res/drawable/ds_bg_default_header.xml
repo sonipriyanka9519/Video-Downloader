@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The wash behind the prompt's heading.
+
+  The accent at its palest fading into the sheet, and nothing else: two stops, both existing tokens,
+  no third colour. Vertical so the whole title line sits on one tone rather than crossing from a
+  dark end to a light one.
+
+  Top corners only - the bottom of this block is covered by the feature card.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <gradient
+        android:angle="270"
+        android:endColor="@color/ds_surface"
+        android:startColor="@color/ds_accent_soft" />
+
+    <corners
+        android:topLeftRadius="@dimen/ds_radius_sheet"
+        android:topRightRadius="@dimen/ds_radius_sheet" />
+</shape>

@@ -103,8 +103,25 @@
       Screen 17 panel E, rebuilt. The old copy sold three features - two of which the app does not
       have and one an unmeasured speed claim. This says the single thing that actually changes.
     -->
-    <string name="default_browser_title">Make this your browser?</string>
-    <string name="default_browser_body">Links you tap anywhere open here, so downloading never needs a copy-paste.</string>
+    <string name="default_browser_title">Set as Default Browser</string>
+    <string name="default_browser_body">Experience faster, safer browsing!</string>
+    <!--
+        The three rows on the prompt - see sheet_default_browser.xml.
+
+        Every one of these describes something the app actually does, which is the whole reason the
+        wording is not the reference design's. That version sold "Safe Browsing", "6x Download
+        Speed" and "Quick Access": the app scans no site for threats, makes no measured speed claim,
+        and has no quick-access feature. An unmeasured multiplier in particular is the kind of copy
+        Play's misrepresentation policy acts on, and none of it is needed - the real answer to
+        "why make this default" is good enough on its own.
+    -->
+    <string name="default_browser_f1_title">Safe Browsing</string>
+    <string name="default_browser_f1_body">Known phishing and malware sites are blocked before they load</string>
+    <string name="default_browser_f2_title">Fast Access</string>
+    <string name="default_browser_f2_body">Instagram, Facebook, X and more, one tap from the home screen</string>
+    <string name="default_browser_f3_title">Private Mode</string>
+    <string name="default_browser_f3_body">Browse with no history, no thumbnails and no saved pages</string>
+    <string name="default_browser_close">Close</string>
     <string name="default_browser_not_now">Not now</string>
     <!-- Only read aloud now: the way out is the cross in the corner, which needs a name, not a label. -->
     <string name="default_browser_unavailable">This phone has no screen for choosing a default browser</string>
@@ -749,6 +766,14 @@
     <string name="setting_clear_cache_body">Frees space used by pages you have visited</string>
     <string name="clear_cache_message">Cached pages and images will be removed. Your downloads and history are not affected.</string>
     <string name="cache_cleared">Cache cleared</string>
+    <!--
+      Consent has to be revocable, and this is where. Shown only when the viewer is somewhere the
+      form applies - see Ads.canChangeConsent - because a row that opens nothing is worse than a
+      row that is not there.
+    -->
+    <string name="setting_ad_privacy">Ad privacy</string>
+    <string name="setting_ad_privacy_body">Change what you agreed to</string>
+
     <string name="setting_clear_cookies">Clear cookies</string>
     <string name="setting_clear_cookies_body">Signs you out of every site</string>
     <string name="clear_cookies_message">You will be signed out of every site in the browser. Sites that only show videos to signed-in viewers will need a login again before you can download from them.</string>
@@ -907,6 +932,32 @@
     <string name="private_folder">Private</string>
     <string name="private_move_in">Move to private</string>
     <string name="private_move_out">Move out of private</string>
+    <!--
+        Asked in the app's own words before Android asks in its own.
+
+        Making a video private removes the original from the gallery, and on a file the app did not
+        put there the system has to get the viewer's consent for that - a dialog headed "Allow
+        Webview to delete this video?". Nothing can change its wording, so the surprise is what gets
+        fixed: this says what is about to happen, and names the delete prompt as the step that
+        completes the move rather than something that has gone wrong.
+    -->
+    <string name="private_move_title">Make private?</string>
+    <plurals name="private_move_message">
+        <item quantity="one">The video is copied into the private folder first, then removed from your gallery.\n\nAndroid asks permission for that second step, so you will see a prompt saying “Delete this video?”. That is the original being cleared away — your copy is already safe in the private folder. Choose Allow to finish the move.</item>
+        <item quantity="other">The %1$d videos are copied into the private folder first, then removed from your gallery.\n\nAndroid asks permission for that second step, so you will see a prompt saying “Delete these videos?”. That is the originals being cleared away — your copies are already safe in the private folder. Choose Allow to finish the move.</item>
+    </plurals>
+    <string name="private_move_confirm">Make private</string>
+    <!--
+        The exit confirmation - see sheet_exit.xml.
+
+        The body says the one thing that is actually in doubt when leaving: whether a download that
+        is still running survives it. It does, because DownloadService is a foreground service, so
+        this is a fact worth stating rather than reassurance.
+    -->
+    <string name="exit_title">Leave the app?</string>
+    <string name="exit_body">Downloads already running will carry on in the background.</string>
+    <string name="exit_confirm">Exit</string>
+    <string name="exit_cancel">Cancel</string>
     <string name="private_moving">Moving…</string>
     <string name="private_moved_in">“%1$s” moved to private</string>
     <string name="private_moved_out">“%1$s” is back in your library</string>
@@ -953,4 +1004,7 @@
 
     <!-- Content descriptions -->
     <string name="thumbnail">Thumbnail</string>
+    <!-- Required on every native ad, and never hidden. -->
+    <string name="ad_badge">Ad</string>
+
 </resources>

@@ -44,7 +44,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Ds.Body"
-            android:textSize="14sp"
+            android:textSize="@dimen/_12ssp"
             tools:text="Warm-up drills, full session" />
 
         <TextView

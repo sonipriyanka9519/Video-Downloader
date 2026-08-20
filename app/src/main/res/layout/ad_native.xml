@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A native ad, drawn in the app's own card language.
+
+  Plain views throughout - TextView, ImageView, LinearLayout - and no Material components. A native
+  ad is assembled and registered asset by asset, and the fewer layers of behaviour between the
+  advertiser's content and the NativeAdView the better: a Material button brings its own insets,
+  ripple and touch handling to a view whose clicks the SDK is supposed to own.
+
+  Laid out as a row: the picture first, then the text beside it. Stacked, this card stood about as
+  tall as three shortcut tiles and pushed Recent downloads off the screen — a paid row should not be
+  the largest thing on a page it is a guest on. Sideways it is roughly half the height and reads at
+  a glance, which is all an in-page ad has ever needed.
+
+  Two things are not ours to restyle and are required by policy:
+
+    - the "Ad" badge, which must be visible and legible on every impression
+    - the MediaView, which the SDK fills and measures itself
+
+  Every id below is registered with the NativeAdView in NativeAds. An asset that is displayed but
+  not registered is an impression the SDK cannot report, and a policy violation.
+-->
+<com.google.android.gms.ads.nativead.NativeAdView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--
+      No margin here. The inset belongs to the slot this is put into, not to the card inside the
+      NativeAdView - the SDK draws its AdChoices badge in the corner of the NativeAdView itself, so
+      any margin here leaves that badge floating outside the card it is supposed to label.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_ad_card_height"
+        android:background="@drawable/ds_bg_card"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/ds_space_2">
+
+        <!--
+          The picture leads, because it is what the eye lands on and what tells the viewer at a
+          glance that this row is an advert rather than one of their videos. Fixed width and the
+          full height of the row, so the picture and the text end level - it used to size itself and
+          left a band of empty card above and below whatever the advertiser happened to send.
+        -->
+        <com.google.android.gms.ads.nativead.MediaView
+            android:id="@+id/adMedia"
+            android:layout_width="@dimen/ds_ad_media_width"
+            android:layout_height="match_parent"
+            android:background="@drawable/ds_bg_ad_media"
+            android:clipToOutline="true" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/ds_space_2"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <!--
+              The badge on its own line, above everything else.
+
+              Inline beside the headline it was competing with it for the same row, and on a short
+              card the headline kept winning - the label that says this row is paid for was the
+              first thing to be squeezed. Given its own line it cannot be crowded out, and it is
+              read before the ad rather than alongside it.
+            -->
+            <TextView
+                android:id="@+id/adBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ds_bg_ad_badge"
+                android:paddingHorizontal="@dimen/ds_space_2"
+                android:paddingVertical="@dimen/ds_space_0"
+                android:text="@string/ad_badge"
+                android:textAllCaps="true"
+                android:textColor="@color/ds_ink"
+                android:textSize="@dimen/_6ssp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/adIcon"
+                    android:layout_width="@dimen/ds_ad_icon"
+                    android:layout_height="@dimen/ds_ad_icon"
+                    android:clipToOutline="true"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop" />
+
+                <!--
+                  Two lines, not one. An advertiser's headline is whatever length they chose, and a
+                  single line cut it off mid-word on most of them.
+                -->
+                <TextView
+                    android:id="@+id/adHeadline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ds_space_1"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Ds.BodySm"
+                    android:textColor="@color/ds_ink"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Two lines as well, and ellipsised past that rather than cut mid-sentence. -->
+            <TextView
+                android:id="@+id/adBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.Ds.Caption"
+                android:textColor="@color/ds_ink_soft" />
+
+            <!--
+              The call to action, in the app's button shape but never in the accent — an advert must
+              not be the most prominent thing on a screen, and a full-width crimson button beside the
+              app's own controls is exactly the accidental tap the rules are written to prevent.
+
+              Sized to its text and left-aligned rather than filling the row, so it cannot be reached
+              by a thumb heading for something else - which matters more now that it is twice the
+              height it was.
+            -->
+            <TextView
+                android:id="@+id/adCta"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ds_ad_cta_height"
+                android:layout_marginTop="@dimen/ds_space_1"
+                android:background="@drawable/ds_bg_ad_cta"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/ds_space_3"
+                android:textColor="@color/ds_on_accent"
+                android:textSize="@dimen/_11ssp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.gms.ads.nativead.NativeAdView>

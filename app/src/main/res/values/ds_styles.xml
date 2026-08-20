@@ -37,7 +37,7 @@
         <item name="android:minHeight">@dimen/ds_button_height_compact</item>
         <item name="android:paddingStart">@dimen/ds_space_5</item>
         <item name="android:paddingEnd">@dimen/ds_space_5</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
     </style>
 
     <!-- Text button: "Download all 4…", "See all", "Skip". Never a filled second action. -->
@@ -226,13 +226,13 @@
 
     <style name="Widget.Ds.Snackbar.Text" parent="Widget.Material3.Snackbar.TextView">
         <item name="android:textColor">@color/ds_snackbar_ink</item>
-        <item name="android:textSize">13.5sp</item>
+        <item name="android:textSize">@dimen/_11ssp</item>
     </style>
 
     <style name="Widget.Ds.Snackbar.Action" parent="Widget.Material3.Button.TextButton.Snackbar">
         <item name="android:textColor">@color/ds_snackbar_action</item>
         <item name="android:textAppearance">@style/TextAppearance.Ds.Button</item>
-        <item name="android:textSize">13.5sp</item>
+        <item name="android:textSize">@dimen/_11ssp</item>
     </style>
 
     <!--
@@ -282,9 +282,9 @@
         <item name="backgroundTint">@color/ds_accent</item>
         <item name="tint">@color/ds_on_accent</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Ds.Pill</item>
-        <item name="elevation">6dp</item>
-        <item name="hoveredFocusedTranslationZ">6dp</item>
-        <item name="pressedTranslationZ">6dp</item>
+        <item name="elevation">@dimen/_5sdp</item>
+        <item name="hoveredFocusedTranslationZ">@dimen/_5sdp</item>
+        <item name="pressedTranslationZ">@dimen/_5sdp</item>
     </style>
 
     <!--
@@ -368,7 +368,7 @@
         <item name="android:focusable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">@dimen/_20ssp</item>
     </style>
 
     <style name="Widget.Ds.PinDot" parent="">
@@ -496,7 +496,7 @@
         <item name="android:paddingTop">@dimen/ds_space_1</item>
         <item name="android:paddingBottom">@dimen/ds_space_1</item>
         <item name="android:textColor">@color/ds_ink_soft</item>
-        <item name="android:textSize">9.5sp</item>
+        <item name="android:textSize">@dimen/_8ssp</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
@@ -511,7 +511,7 @@
         <item name="android:paddingTop">@dimen/ds_space_1</item>
         <item name="android:paddingBottom">@dimen/ds_space_1</item>
         <item name="android:textColor">@color/ds_ink</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">@dimen/_8ssp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">true</item>
     </style>
@@ -547,8 +547,40 @@
       the menu itself.
     -->
     <style name="ThemeOverlay.Ds.PopupMenu" parent="ThemeOverlay.Material3">
-        <item name="android:popupBackground">@drawable/ds_bg_popup</item>
+        <!--
+          Through popupMenuStyle, not straight onto the theme.
+
+          android.widget.PopupMenu builds a ListPopupWindow and takes its background from the
+          widget style this attribute points at. An android:popupBackground set directly on the
+          overlay - which is what used to be here - is simply never read, so the menu kept the
+          platform's own square card no matter what ds_bg_popup said.
+        -->
+        <item name="android:popupMenuStyle">@style/Widget.Ds.PopupMenu</item>
+        <!--
+          And the AppCompat one, which is what actually gets asked on most devices - see the import
+          in showBrowserMenu. Both are set because the two are read by different classes and a
+          vendor-skinned platform popup ignores the first.
+        -->
+        <item name="popupMenuStyle">@style/Widget.Ds.PopupMenu.Compat</item>
         <item name="android:textColorPrimary">@color/ds_ink</item>
     </style>
+
+    <!-- The surface behind the browser's overflow. See ds_bg_popup for the shape. -->
+    <style name="Widget.Ds.PopupMenu" parent="@android:style/Widget.Material.PopupMenu">
+        <item name="android:popupBackground">@drawable/ds_bg_popup</item>
+        <!--
+          Hung below the button rather than over it. The shape is square down the side it is
+          pinned to, and that reads as a panel coming out of the ⋮ only if the ⋮ is still visible
+          above it.
+        -->
+        <item name="android:overlapAnchor">false</item>
+    </style>
+
+    <!-- The same, for androidx.appcompat.widget.PopupMenu. -->
+    <style name="Widget.Ds.PopupMenu.Compat" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@drawable/ds_bg_popup</item>
+        <item name="android:overlapAnchor">false</item>
+    </style>
+
 
 </resources>

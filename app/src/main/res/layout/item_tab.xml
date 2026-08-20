@@ -55,7 +55,7 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.Ds.Caption"
                 android:textColor="@color/ds_ink"
-                android:textSize="12sp"
+                android:textSize="@dimen/_10ssp"
                 tools:text="Jersey outfit ideas" />
 
             <!-- 28dp of glyph inside a 40dp target: small enough not to crowd a short title,

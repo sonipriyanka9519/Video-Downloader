@@ -36,7 +36,6 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +44,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.webkit.Profile;
 import androidx.webkit.ProfileStore;
 import androidx.webkit.WebViewCompat;
@@ -60,6 +60,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ms.webview.App;
+import com.ms.webview.ads.AdIds;
+import com.ms.webview.ads.FullScreenAds;
+import com.ms.webview.ads.NativeAds;
 import com.ms.webview.MainActivity;
 import com.ms.webview.data.DownloadEntity;
 import com.ms.webview.data.DownloadStatus;
@@ -259,6 +262,7 @@ public class BrowserFragment extends Fragment
     private RecyclerView shortcutGrid;
     /** The grid and the walkthrough button together: what "the home screen" means here. */
     private View homePanel;
+    private ViewGroup homeAdSlot;
     private ImageView fab;
     private TextView fabBadge;
     /**
@@ -450,6 +454,10 @@ public class BrowserFragment extends Fragment
         pageProgress = view.findViewById(R.id.pageProgress);
         shortcutGrid = view.findViewById(R.id.shortcutGrid);
         homePanel = view.findViewById(R.id.homePanel);
+        // The banner between the grid and Recent downloads. Loaded once per view; the slot stays
+        // gone unless an ad actually arrives.
+        homeAdSlot = view.findViewById(R.id.homeAdSlot);
+        NativeAds.load(requireActivity(), homeAdSlot, AdIds.nativeAd());
         fab = view.findViewById(R.id.fabDownload);
         fabBadge = view.findViewById(R.id.fabBadge);
         browserRoot = view.findViewById(R.id.browserRoot);
@@ -1650,8 +1658,23 @@ public class BrowserFragment extends Fragment
                 // press belong to the activity, and leaving the app.
                 if (goBack()) return;
 
-                setEnabled(false);
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                // Nowhere left to go, so this press ends the session - and that is the one Back in
+                // this app that cannot be undone. Asked before it is acted on; cancelling leaves
+                // everything exactly as it was, because nothing has happened yet.
+                ExitSheet.show(getActivity(), () -> {
+                    if (!isAdded()) return;
+                    setEnabled(false);
+                    // finishAndRemoveTask, not a plain finish. Finishing ended the activity and
+                    // left the task and the process behind, which is why reopening was not a
+                    // fresh start: ProcessLifecycleOwner reported a stop, the next launch looked
+                    // like a return from the background, and an ad fired over the splash.
+                    //
+                    // What it deliberately does not do is kill the process. A download in
+                    // progress is a foreground service, and that service is the reason the sheet
+                    // can promise downloads carry on - see exit_body. Killing the process here
+                    // would make that copy false and drop the transfer.
+                    requireActivity().finishAndRemoveTask();
+                });
             }
         };
         requireActivity().getOnBackPressedDispatcher()
@@ -1661,6 +1684,7 @@ public class BrowserFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+        FullScreenAds.watch(adWatcher);
         // The private grey is given back whenever this tab steps aside, so coming back to it has
         // to claim it again — otherwise returning from downloads left a private tab looking
         // ordinary until something else happened to redraw the mark.
@@ -1680,7 +1704,11 @@ public class BrowserFragment extends Fragment
             // leaves a blank page behind the chrome.
             webView.setVisibility(View.VISIBLE);
             webView.onResume();
-            resumePlayback();
+            // Not under a full-screen ad. Coming back from the background, the ad is shown from
+            // ProcessLifecycleOwner's onStart - after this fragment's onStart and before this
+            // line - so starting the video here means it plays, audibly, behind an advert that
+            // arrives a moment later. The watcher below starts it again once the ad has gone.
+            if (!FullScreenAds.busy()) resumePlayback();
         }
         openPendingLink();
         openPendingShortcut();
@@ -2560,6 +2588,33 @@ public class BrowserFragment extends Fragment
     }
 
     /**
+     * Quiet while a full-screen ad is over the app, and back where it was afterwards.
+     *
+     * <p>An ad activity is translucent and runs in this app's own task, so this fragment is paused
+     * but never stopped and the page underneath keeps running. onPause's careful pause does not
+     * cover it, because on the return-from-background path the ad and the resume race each other.
+     */
+    private final FullScreenAds.Watcher adWatcher = showing -> {
+        // The ad can outlive the view it was announced to.
+        if (!isAdded() || webView == null) return;
+        final WebView page = webView;
+        if (showing) {
+            pauseMediaOf(page, () -> {
+                if (page == null) return;
+                page.onPause();
+                page.pauseTimers();
+            });
+            return;
+        }
+        // Only if this tab is actually the one in front. A watcher firing on a fragment that is
+        // paged away would start a video on a screen nobody is looking at.
+        if (!isResumed() || !browsing) return;
+        page.resumeTimers();
+        page.onResume();
+        resumePlayback();
+    };
+
+    /**
      * Every tab's browser, not just the one in front.
      *
      * <p>Each is a view attached to a container that is about to go away, and each holds a
@@ -2567,6 +2622,10 @@ public class BrowserFragment extends Fragment
      */
     @Override
     public void onDestroyView() {
+        FullScreenAds.unwatch(adWatcher);
+
+        // An AdView outliving its fragment holds the whole view tree.
+        NativeAds.destroy(homeAdSlot);
         // A dialog outlives the view it was raised from, and a shown one still attached when the
         // window goes is a leaked window.
         dismissClipboardDialog();

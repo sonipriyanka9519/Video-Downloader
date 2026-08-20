@@ -7,6 +7,10 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.ms.webview.data.DownloadRepository;
+import com.ms.webview.ads.Ads;
+import com.ms.webview.ads.AppOpenAds;
+import com.ms.webview.ads.Interstitials;
+import com.ms.webview.ads.NativeAds;
 import com.ms.webview.ui.BrowserFragment;
 import com.ms.webview.ui.notify.UnwatchedReminder;
 import com.ms.webview.ui.settings.SettingsPrefs;
@@ -58,6 +62,17 @@ public class App extends Application {
         // is the definition of "when the app is opened" — onStart would have re-armed it on every
         // return from another app, and that is how a one-off question becomes a nag.
         BrowserFragment.askAboutDefaultBrowser();
+        // Watches the whole process go background and foreground, which is the only thing an
+        // app-open ad is triggered by. Registered here rather than in an activity because there is
+        // no single activity the app always returns to.
+        AppOpenAds.install(this);
+        // One kept in hand from the moment consent allows it. Showing on every download and every
+        // exit from the player means the two can be seconds apart, and an ad that only starts
+        // loading when a screen opens will not be there when that screen is left again.
+        Ads.whenReady(() -> Interstitials.preload(this));
+        // The same for the in-page ad, which had no preload at all — every slot began its own
+        // request once the screen was already built, which is the pause that was visible.
+        NativeAds.preload(this);
         logPushToken();
     }
 

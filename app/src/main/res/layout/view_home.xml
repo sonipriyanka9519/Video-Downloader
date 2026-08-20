@@ -52,11 +52,11 @@
 
             <ImageView
                 android:id="@+id/pasteIcon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
                 android:background="@drawable/ds_bg_chip_square"
                 android:contentDescription="@null"
-                android:padding="3dp"
+                android:padding="@dimen/_3sdp"
                 android:src="@drawable/ic_link"
                 app:tint="@color/ds_ink_soft" />
 
@@ -70,7 +70,7 @@
                 android:singleLine="true"
                 android:text="@string/home_link_copied"
                 android:textAppearance="@style/TextAppearance.Ds.Body"
-                android:textSize="13.5sp" />
+                android:textSize="@dimen/_11ssp" />
 
             <TextView
                 android:id="@+id/pasteOpen"
@@ -84,7 +84,7 @@
                 android:text="@string/home_open"
                 android:textAppearance="@style/TextAppearance.Ds.Button"
                 android:textColor="@color/ds_accent"
-                android:textSize="13.5sp" />
+                android:textSize="@dimen/_11ssp" />
 
             <ImageButton
                 android:id="@+id/pasteDismiss"
@@ -145,6 +145,23 @@
 
           Private items are never in this row.
         -->
+                <!--
+          The banner, between the shortcut grid and Recent downloads.
+
+          Here because it is the one seam on this screen that is not next to anything tappable:
+          the grid ends above it and a section heading starts below. Gone until an ad actually
+          arrives - see Banners - so a failed request leaves no gap and nothing shifts under a
+          finger already on its way to a shortcut.
+        -->
+        <FrameLayout
+            android:id="@+id/homeAdSlot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ds_ads_padding"
+            android:layout_marginTop="@dimen/ds_space_5"
+            android:layout_marginBottom="@dimen/ds_space_2"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/recentSection"
             android:layout_width="match_parent"
@@ -244,7 +261,7 @@
                 android:text="@string/home_how_it_works"
                 android:textAppearance="@style/TextAppearance.Ds.Button"
                 android:textColor="@color/ds_accent"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
     </LinearLayout>

@@ -27,6 +27,6 @@
         android:layout_marginStart="@dimen/ds_space_2"
         android:fontFeatureSettings="tnum"
         android:textAppearance="@style/TextAppearance.Ds.Body"
-        android:textSize="12.5sp"
+        android:textSize="@dimen/_10ssp"
         tools:text="Videos 1.2 GB" />
 </LinearLayout>

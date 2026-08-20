@@ -72,7 +72,7 @@
                     android:id="@+id/addressPrivate"
                     android:layout_width="@dimen/ds_icon_tiny"
                     android:layout_height="@dimen/ds_icon_tiny"
-                    android:layout_marginEnd="7dp"
+                    android:layout_marginEnd="@dimen/_6sdp"
                     android:contentDescription="@string/private_tabs"
                     android:src="@drawable/ic_eye_off"
                     android:visibility="gone"
@@ -87,7 +87,7 @@
                     android:id="@+id/addressLock"
                     android:layout_width="@dimen/ds_icon_tiny"
                     android:layout_height="@dimen/ds_icon_tiny"
-                    android:layout_marginEnd="7dp"
+                    android:layout_marginEnd="@dimen/_6sdp"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_lock"
                     android:visibility="gone"
@@ -116,7 +116,7 @@
                     android:textAppearance="@style/TextAppearance.Ds.Body"
                     android:textColor="@color/ds_ink"
                     android:textColorHint="@color/ds_ink_faint"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <!-- Refresh, and an X while the page is still arriving. -->
                 <ImageButton
@@ -133,8 +133,8 @@
             <!-- How many tabs are open, and the way into them. -->
             <TextView
                 android:id="@+id/btnTabs"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/_27sdp"
+                android:layout_height="@dimen/_27sdp"
                 android:layout_marginStart="@dimen/ds_space_1"
                 android:layout_marginEnd="@dimen/ds_space_1"
                 android:background="@drawable/ds_bg_tab_counter"
@@ -144,7 +144,7 @@
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.Ds.Chip"
                 android:textColor="@color/ds_ink"
-                android:textSize="13sp" />
+                android:textSize="@dimen/_11ssp" />
 
             <ImageButton
                 android:id="@+id/btnBrowserMenu"
@@ -268,7 +268,7 @@
                         android:paddingHorizontal="@dimen/ds_space_1"
                         android:textAppearance="@style/TextAppearance.Ds.Caption"
                         android:textColor="@color/ds_on_fab_count"
-                        android:textSize="11sp"
+                        android:textSize="@dimen/_9ssp"
                         android:textStyle="bold"
                         android:visibility="gone" />
                 </FrameLayout>

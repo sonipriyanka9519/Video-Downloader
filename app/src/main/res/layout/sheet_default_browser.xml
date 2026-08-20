@@ -2,79 +2,227 @@
 <!--
   Screen 17, panel E — the default-browser prompt.
 
-  Rebuilt from the MVP's version, which sold three features: Safe Browsing, "6x Download Speed" and
-  Quick Access. Two of those describe things the app does not do and the third is a performance
-  claim nobody measured — the kind of copy Play's misrepresentation policy acts on, and a poor trade
-  for a prompt that only has to explain one thing.
+  Laid out after the reference design: a warm wash behind a two-tone heading, a raised card of three
+  reasons, one wide action, and a close in the corner. The colours are this app's own rather than
+  the reference's orange and purple — the wash is the accent at its palest, and the three tiles use
+  accent, success and warning, so the rows are told apart by hue without introducing a palette the
+  rest of the app has never seen.
 
-  What it explains is the one real consequence: links open here instead of somewhere else. One
-  sentence, one button, and a way out that does not look like a mistake.
+  The copy is deliberately not the reference's. That version sold "Safe Browsing", "6x Download
+  Speed" and "Quick Access": this app scans no site for threats, has published no measured speed
+  figure, and has no quick-access feature. An unmeasured multiplier is exactly the claim Play's
+  misrepresentation policy acts on, and it buys nothing here — the honest reasons are strong enough
+  on their own, and all three below are things the app genuinely does.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ds_bg_sheet_top"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingHorizontal="@dimen/ds_space_6"
-    android:paddingTop="@dimen/ds_space_3"
-    android:paddingBottom="@dimen/ds_space_5"
     android:theme="@style/ThemeOverlay.Ds">
 
     <!--
-      The mark, on the accent-soft tile the app uses wherever an icon has to carry a heading. Not
-      the launcher icon: this is a question about browsing, and the globe says which of the app's
-      two halves is being asked about.
+      The wash sits behind everything and stops short of the card. Fixed height rather than wrapped
+      so the fade always ends in the same place, whatever the heading does at a large font scale.
     -->
-    <ImageView
-        android:layout_width="@dimen/ds_icon_block"
-        android:layout_height="@dimen/ds_icon_block"
-        android:layout_marginTop="@dimen/ds_space_5"
-        android:background="@drawable/ds_bg_block_accent"
-        android:contentDescription="@null"
-        android:padding="@dimen/ds_space_4"
-        android:src="@drawable/ic_globe"
-        app:tint="@color/ds_accent" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds_default_wash"
+        android:background="@drawable/ds_bg_default_header" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ds_space_5"
-        android:gravity="center_horizontal"
-        android:text="@string/default_browser_title"
-        android:textAppearance="@style/TextAppearance.Ds.Title"
-        android:textColor="@color/ds_ink" />
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ds_space_5"
+        android:paddingTop="@dimen/ds_space_6"
+        android:paddingBottom="@dimen/ds_space_5">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ds_space_2"
-        android:gravity="center_horizontal"
-        android:text="@string/default_browser_body"
-        android:textAppearance="@style/TextAppearance.Ds.Body"
-        android:textColor="@color/ds_ink_soft" />
+        <!--
+          Two-tone, as in the reference: the plain half names the action and the accent half names
+          the thing. One TextView rather than two, so it wraps as a sentence at a large font scale
+          instead of breaking into a column.
+        -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+id/defaultTitle"
+            android:text="@string/default_browser_title"
+            android:textAppearance="@style/TextAppearance.Ds.Heading"
+            android:textColor="@color/ds_ink"
+            android:textStyle="bold" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSetDefault"
-        style="@style/Widget.Ds.Button"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ds_button_height"
-        android:layout_marginTop="@dimen/ds_space_5"
-        android:text="@string/default_browser_set" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:gravity="center_horizontal"
+            android:text="@string/default_browser_body"
+            android:textAppearance="@style/TextAppearance.Ds.BodySm"
+            android:textColor="@color/ds_ink_soft" />
+
+        <!-- The three reasons, on the app's card surface so they lift off the wash. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_5"
+            android:background="@drawable/ds_bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/ds_space_5">
+
+            <!-- Why it matters at all: a tapped link arrives somewhere that can act on it. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_default_tile"
+                    android:layout_height="@dimen/ds_default_tile"
+                    android:background="@drawable/ds_bg_tile_soft"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/ds_space_2"
+                    android:src="@drawable/ic_shield_check"
+                    app:tint="@color/ds_accent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ds_space_4"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_browser_f1_title"
+                        android:textAppearance="@style/TextAppearance.Ds.Body"
+                        android:textColor="@color/ds_ink"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_0"
+                        android:text="@string/default_browser_f1_body"
+                        android:textAppearance="@style/TextAppearance.Ds.Caption"
+                        android:textColor="@color/ds_ink_soft" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- What the app is for, stated without a speed claim attached. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_5"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_default_tile"
+                    android:layout_height="@dimen/ds_default_tile"
+                    android:background="@drawable/ds_bg_tile_soft"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/ds_space_2"
+                    android:src="@drawable/ic_globe"
+                    app:tint="@color/ds_accent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ds_space_4"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_browser_f2_title"
+                        android:textAppearance="@style/TextAppearance.Ds.Body"
+                        android:textColor="@color/ds_ink"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_0"
+                        android:text="@string/default_browser_f2_body"
+                        android:textAppearance="@style/TextAppearance.Ds.Caption"
+                        android:textColor="@color/ds_ink_soft" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- The privacy half, which is real and is never sold anywhere else in the app. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_5"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/ds_default_tile"
+                    android:layout_height="@dimen/ds_default_tile"
+                    android:background="@drawable/ds_bg_tile_soft"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/ds_space_2"
+                    android:src="@drawable/ic_eye_off"
+                    app:tint="@color/ds_accent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ds_space_4"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_browser_f3_title"
+                        android:textAppearance="@style/TextAppearance.Ds.Body"
+                        android:textColor="@color/ds_ink"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_0"
+                        android:text="@string/default_browser_f3_body"
+                        android:textAppearance="@style/TextAppearance.Ds.Caption"
+                        android:textColor="@color/ds_ink_soft" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSetDefault"
+            style="@style/Widget.Ds.Button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_marginTop="@dimen/ds_space_5"
+            android:text="@string/default_browser_set" />
+    </LinearLayout>
 
     <!--
-      "Not now", not "Cancel". Declining is a perfectly ordinary answer and the app will ask again
-      later; cancel would suggest something is being abandoned.
+      The way out, in the corner as in the reference - and it is the only one now, so it carries a
+      content description rather than relying on a label. Declining is an ordinary answer: the app
+      asks again later, and nothing about this control should suggest otherwise.
     -->
-    <TextView
+    <ImageButton
         android:id="@+id/btnDefaultClose"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/ds_touch_min"
         android:layout_height="@dimen/ds_touch_min"
-        android:layout_marginTop="@dimen/ds_space_2"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/default_browser_not_now"
-        android:textAppearance="@style/TextAppearance.Ds.Button"
-        android:textColor="@color/ds_ink_soft" />
-</LinearLayout>
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/ds_space_2"
+        android:background="@drawable/ds_ripple_borderless"
+        android:contentDescription="@string/default_browser_close"
+        android:padding="@dimen/ds_space_3"
+        android:src="@drawable/ic_close"
+        app:tint="@color/ds_ink_soft" />
+</FrameLayout>

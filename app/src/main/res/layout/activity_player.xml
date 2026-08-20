@@ -79,7 +79,7 @@
             android:gravity="center"
             android:maxLines="2"
             android:textColor="@color/ds_player_ink"
-            android:textSize="17sp"
+            android:textSize="@dimen/_14ssp"
             android:textStyle="bold"
             tools:text="Podcast clip — the storage problem" />
 
@@ -93,7 +93,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:textColor="@color/ds_player_ink_dim"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             tools:text="Audio · 2.1 MB · 3:12" />
     </LinearLayout>
 
@@ -127,7 +127,7 @@
             android:layout_marginTop="@dimen/ds_space_1"
             android:fontFeatureSettings="tnum"
             android:textColor="@color/ds_player_ink"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             android:textStyle="bold"
             tools:text="-10s" />
     </LinearLayout>
@@ -169,7 +169,7 @@
             android:layout_height="wrap_content"
             android:fontFeatureSettings="tnum"
             android:textColor="@color/ds_player_ink"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             android:textStyle="bold"
             tools:text="2x" />
 
@@ -228,7 +228,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/ds_player_ink"
-                android:textSize="15sp"
+                android:textSize="@dimen/_13ssp"
                 android:textStyle="bold"
                 tools:text="Warm-up drills, full session" />
 
@@ -331,7 +331,7 @@
                     android:layout_height="wrap_content"
                     android:fontFeatureSettings="tnum"
                     android:textColor="@color/ds_player_ink"
-                    android:textSize="12.5sp"
+                    android:textSize="@dimen/_10ssp"
                     tools:text="3:14" />
 
                 <!--
@@ -358,7 +358,7 @@
                     android:layout_height="wrap_content"
                     android:fontFeatureSettings="tnum"
                     android:textColor="@color/ds_player_ink_dim"
-                    android:textSize="12.5sp"
+                    android:textSize="@dimen/_10ssp"
                     tools:text="8:02" />
             </LinearLayout>
 
@@ -384,13 +384,13 @@
                     android:minWidth="@dimen/ds_player_chip_min"
                     android:paddingHorizontal="@dimen/ds_space_3"
                     android:textColor="@color/ds_player_ink"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/_11ssp"
                     android:textStyle="bold"
                     tools:text="1x" />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/_1sdp"
                     android:layout_weight="1" />
 
                 <!-- What is queued after this one. Hidden when there is nothing after it. -->
@@ -419,7 +419,7 @@
                         android:layout_marginStart="@dimen/ds_space_1"
                         android:fontFeatureSettings="tnum"
                         android:textColor="@color/ds_player_ink"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11ssp"
                         tools:text="12" />
                 </LinearLayout>
             </LinearLayout>
@@ -457,7 +457,7 @@
                 android:letterSpacing="0.08"
                 android:text="@string/up_next"
                 android:textColor="@color/ds_player_ink_dim"
-                android:textSize="12sp"
+                android:textSize="@dimen/_10ssp"
                 android:textStyle="bold" />
 
             <FrameLayout
@@ -494,7 +494,7 @@
                     app:indicatorColor="@color/ds_player_accent"
                     app:indicatorSize="@dimen/ds_player_upnext_ring"
                     app:trackColor="@color/ds_player_track"
-                    app:trackThickness="3dp" />
+                    app:trackThickness="@dimen/_3sdp" />
 
                 <ImageView
                     android:layout_width="@dimen/ds_icon"
@@ -515,7 +515,7 @@
                 android:maxLines="2"
                 android:maxWidth="@dimen/ds_player_upnext_text"
                 android:textColor="@color/ds_player_ink"
-                android:textSize="15sp"
+                android:textSize="@dimen/_13ssp"
                 tools:text="Kettlebell swing — form check" />
 
             <TextView
@@ -525,7 +525,7 @@
                 android:layout_marginTop="@dimen/ds_space_3"
                 android:fontFeatureSettings="tnum"
                 android:textColor="@color/ds_player_ink_dim"
-                android:textSize="13sp"
+                android:textSize="@dimen/_11ssp"
                 tools:text="Playing in 3s" />
 
             <TextView
@@ -538,7 +538,7 @@
                 android:paddingHorizontal="@dimen/ds_space_4"
                 android:text="@android:string/cancel"
                 android:textColor="@color/ds_player_accent"
-                android:textSize="14sp"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>

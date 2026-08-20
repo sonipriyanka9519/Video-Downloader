@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A borderless ripple, as a drawable rather than a theme attribute.
+
+  ?attr/selectableItemBackgroundBorderless resolves against whatever theme the inflating context
+  carries. A row is inflated by an adapter, and an adapter is handed whatever context its
+  RecyclerView was created with - which is not always one of this app's themes. When it is not, the
+  attribute does not resolve and the tooling reports it as unresolvable.
+
+  Named colours instead, so the ripple is the same in every context that ever inflates a row. The
+  oval mask is what makes it borderless: without one the ripple fills the button's bounds.
+-->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/ds_ripple">
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="oval">
+            <solid android:color="@color/ds_ink" />
+        </shape>
+    </item>
+</ripple>

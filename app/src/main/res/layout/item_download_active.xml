@@ -53,7 +53,7 @@
             android:layout_gravity="center"
             android:fontFeatureSettings="tnum"
             android:textColor="@color/ds_on_media"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             android:textStyle="bold"
             tools:text="52%" />
     </com.google.android.material.card.MaterialCardView>

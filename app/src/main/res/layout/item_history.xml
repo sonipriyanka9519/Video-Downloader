@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.Ds.Body"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
             android:id="@+id/historyUrl"

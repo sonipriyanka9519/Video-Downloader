@@ -57,7 +57,7 @@
                 android:textAppearance="@style/TextAppearance.Ds.Body"
                 android:textColor="@color/ds_ink"
                 android:textColorHint="@color/ds_ink_faint"
-                android:textSize="15sp" />
+                android:textSize="@dimen/_13ssp" />
 
             <!-- Appears only with text in the field: an X on an empty field clears nothing. -->
             <ImageButton
@@ -232,7 +232,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/link_you_copied"
                             android:textAppearance="@style/TextAppearance.Ds.Body"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/_12ssp" />
 
                         <!--
                           Middle-ellipsised, so both ends of the address survive: a share link
@@ -293,7 +293,7 @@
                 android:text="@string/clear_searches"
                 android:textAppearance="@style/TextAppearance.Ds.Body"
                 android:textColor="@color/ds_ink_soft"
-                android:textSize="14sp"
+                android:textSize="@dimen/_12ssp"
                 android:visibility="gone" />
         </LinearLayout>
     </ScrollView>

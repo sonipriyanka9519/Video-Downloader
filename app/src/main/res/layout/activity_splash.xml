@@ -73,7 +73,7 @@
             android:layout_marginTop="@dimen/ds_space_3"
             android:text="@string/splash_subtitle"
             android:textAppearance="@style/TextAppearance.Ds.BodySm"
-            android:textSize="13sp" />
+            android:textSize="@dimen/_11ssp" />
     </LinearLayout>
 
     <!--
@@ -92,6 +92,8 @@
         android:max="100"
         android:progress="0"
         android:progressDrawable="@drawable/ds_bg_splash_progress"
+        android:indeterminateTint="@color/ds_accent"
+        android:indeterminateTintMode="src_in"
         android:visibility="invisible"
         tools:visibility="visible" />
 

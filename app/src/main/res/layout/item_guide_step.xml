@@ -26,7 +26,7 @@
             android:background="@drawable/ds_bg_walk_disc_accent"
             android:gravity="center"
             android:textColor="@color/ds_on_accent"
-            android:textSize="11sp"
+            android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
             tools:text="1" />
 
@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/ds_space_2"
             android:layout_weight="1"
             android:textAppearance="@style/TextAppearance.Ds.Body"
-            android:textSize="14.5sp"
+            android:textSize="@dimen/_12ssp"
             tools:text="Open Instagram and tap Copy link" />
     </LinearLayout>
 

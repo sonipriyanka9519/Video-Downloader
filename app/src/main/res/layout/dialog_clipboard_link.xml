@@ -51,7 +51,7 @@
         android:paddingHorizontal="@dimen/ds_space_3"
         android:paddingVertical="@dimen/ds_space_2"
         android:textAppearance="@style/TextAppearance.Ds.Body"
-        android:textSize="13sp"
+        android:textSize="@dimen/_11ssp"
         tools:text="instagram.com/reel/C8xQ2mR…/?igsh=MXQ" />
 
     <com.google.android.material.button.MaterialButton
@@ -72,5 +72,5 @@
         android:text="@android:string/cancel"
         android:textAppearance="@style/TextAppearance.Ds.Button"
         android:textColor="@color/ds_ink_soft"
-        android:textSize="14sp" />
+        android:textSize="@dimen/_12ssp" />
 </LinearLayout>

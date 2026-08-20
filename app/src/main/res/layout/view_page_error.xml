@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ds_space_2"
         android:gravity="center"
-        android:maxWidth="250dp"
+        android:maxWidth="@dimen/_208sdp"
         android:text="@string/page_error_body"
         android:textAppearance="@style/TextAppearance.Ds.BodySm" />
 
@@ -58,6 +58,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/ds_button_height"
         android:layout_marginTop="@dimen/ds_space_5"
-        android:maxWidth="220dp"
+        android:maxWidth="@dimen/_183sdp"
         android:text="@string/retry" />
 </LinearLayout>

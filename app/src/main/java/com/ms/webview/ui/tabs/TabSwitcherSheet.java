@@ -19,6 +19,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ms.webview.R;
+import com.ms.webview.ads.AdIds;
+import com.ms.webview.ads.Banners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,10 @@ public class TabSwitcherSheet extends BottomSheetDialogFragment
     }
 
     private TabAdapter adapter;
+
+    /** The banner, held so it can be released with the view that showed it. */
+    private ViewGroup tabsAdSlot;
+
     private TextView title;
     private View segments;
     private MaterialButton segmentTabs;
@@ -95,9 +101,26 @@ public class TabSwitcherSheet extends BottomSheetDialogFragment
         behavior.setSkipCollapsed(true);
     }
 
+    /**
+     * The banner goes with the view, not with the fragment.
+     *
+     * <p>This sheet is opened and dismissed constantly - it is how tabs are switched - and a banner
+     * left attached to a destroyed view keeps a running request and a web view of its own alive,
+     * once per open.
+     */
+    @Override
+    public void onDestroyView() {
+        Banners.destroy(tabsAdSlot);
+        super.onDestroyView();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         title = view.findViewById(R.id.tabsTitle);
+
+        tabsAdSlot = view.findViewById(R.id.tabsAdSlot);
+        Banners.load(requireContext(), tabsAdSlot, AdIds.banner());
         RecyclerView grid = view.findViewById(R.id.tabGrid);
 
         adapter = new TabAdapter(this);

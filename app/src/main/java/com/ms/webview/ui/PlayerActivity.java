@@ -18,6 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,7 @@ import androidx.media3.ui.PlayerView;
 
 import com.ms.webview.App;
 import com.ms.webview.R;
+import com.ms.webview.ads.Interstitials;
 import com.ms.webview.core.Formats;
 import com.ms.webview.ui.downloads.WatchedStore;
 import com.ms.webview.ui.player.PlayerChrome;
@@ -154,6 +156,16 @@ public class PlayerActivity extends AppCompatActivity implements PlayerChrome.Ho
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        // Asked for now so it is in hand when the video ends. Requesting it at the
+        // moment of showing is requesting it after the moment has gone.
+        Interstitials.preload(this);
+        // The system gesture and button, routed to the same exit as the arrow.
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                leave();
+            }
+        });
 
         // ── 2. Make status bar icons dark-on-light or light-on-dark.
         //        We have a black background, so we want light (white) icons.
@@ -327,7 +339,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerChrome.Ho
 
     @Override
     public void onBack() {
-        finish();
+        // The arrow and the system back go the same way - see leave(). The error exits above do
+        // not: a video that would not open is not a moment to sell anything.
+        leave();
     }
 
     @Override
@@ -422,11 +436,49 @@ public class PlayerActivity extends AppCompatActivity implements PlayerChrome.Ho
      * the last frame, which is what "the end" looks like and is what somebody who turned autoplay
      * off asked for.
      */
+    /** Set on the way out, so a second back press cannot start the exit twice. */
+    private boolean leaving;
+
     private void onPlaybackEnded() {
         recordProgress();
         PlayerQueue.Item next = queue.next();
-        if (!autoplay() || next == null) return;
-        upNext.start(next);
+        if (autoplay() && next != null) {
+            upNext.start(next);
+            return;
+        }
+
+        // Nothing here. The ad for this screen is on the way out — see leave().
+    }
+
+    /**
+     * The one way out of the player, and where its ad lives.
+     *
+     * <p>Both exits come through here: the arrow in the chrome and the system back gesture. Two
+     * doors out of one room should not behave differently, and wiring only one of them is how an ad
+     * ends up feeling random.
+     *
+     * <p>The activity finishes whether the ad shows, fails, or never loaded — showThen guarantees
+     * the callback runs exactly once, so leaving can never depend on an advert.
+     *
+     * <p>Nothing is shown during playback, and the two-minute floor in Interstitials means opening
+     * and closing three videos in a row is not three full-screen ads.
+     */
+    private void leave() {
+        if (leaving) return;
+        leaving = true;
+
+        // Written before anything else. Stopping is what makes the position final, and onPause
+        // cannot be relied on to run first once the screen starts going away.
+        recordProgress();
+        if (player != null) {
+            player.pause();
+        }
+
+        // Queued, not shown. This screen is about to stop existing and cannot host an ad through
+        // its own dismissal — see Interstitials.queueForNextScreen. The video closes now and the
+        // ad appears on the screen behind it.
+        Interstitials.queueForNextScreen();
+        finish();
     }
 
     /**

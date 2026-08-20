@@ -57,7 +57,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/ds_player_ink"
-            android:textSize="14sp"
+            android:textSize="@dimen/_12ssp"
             tools:text="Kettlebell swing — form check" />
 
         <LinearLayout
@@ -86,7 +86,7 @@
                 android:fontFeatureSettings="tnum"
                 android:maxLines="1"
                 android:textColor="@color/ds_player_ink_dim"
-                android:textSize="12.5sp"
+                android:textSize="@dimen/_10ssp"
                 tools:text="0:45" />
         </LinearLayout>
     </LinearLayout>

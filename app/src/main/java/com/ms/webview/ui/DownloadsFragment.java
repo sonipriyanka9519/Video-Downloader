@@ -36,6 +36,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.ms.webview.ads.AdIds;
+import com.ms.webview.ads.Interstitials;
+import com.ms.webview.ads.NativeAds;
 import com.ms.webview.App;
 import com.ms.webview.R;
 import com.ms.webview.core.Formats;
@@ -246,6 +249,11 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
         view.findViewById(R.id.btnEmptyHowTo).setOnClickListener(v ->
                 WalkthroughActivity.open(requireContext()));
 
+        downloadsAdSlot = view.findViewById(R.id.downloadsAdSlot);
+        // Not loaded here. An empty library shows an explanation of what this screen is for, and
+        // an advert above it would be the largest thing on a page that has nothing of the
+        // viewer's on it at all. The ad follows the rows - see the empty-state branch in bind.
+
         setUpSearch(view);
         setUpFilters(view);
         setUpSelectMode(view);
@@ -265,6 +273,8 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
      *
      * <p>Starts at -1 so the first build always happens.
      */
+    private ViewGroup downloadsAdSlot;
+
     private int shownWatchRevision = -1;
 
     /** Fewer than this is not a backlog. Matches UnwatchedReminder, deliberately. */
@@ -305,6 +315,7 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
 
     @Override
     public void onDestroyView() {
+        NativeAds.destroy(downloadsAdSlot);
         // A sheet outlives the view it was raised from, and a shown one still attached when the
         // window goes is a leaked window.
         if (moreSheet != null) moreSheet.dismiss();
@@ -408,6 +419,13 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
         list.setVisibility(nothing ? View.GONE : View.VISIBLE);
         empty.setVisibility(nothing ? View.VISIBLE : View.GONE);
         if (nothing) bindEmptyState();
+
+        // The ad belongs to a list with something in it. Destroyed rather than merely hidden when
+        // the last row goes, because a hidden slot still holds a NativeAd and the whole view tree
+        // behind it - and this branch is reached on every filter change, not only on an empty
+        // library. Loading is safe to repeat: a slot that already has a card keeps the one it has.
+        if (nothing) NativeAds.destroy(downloadsAdSlot);
+        else NativeAds.load(requireActivity(), downloadsAdSlot, AdIds.nativeAd());
 
         // After the rows exist, not before: the selection is made by matching against them.
         applyWatchedReview();
@@ -1353,6 +1371,30 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
     }
 
     /**
+     * Asks first, in the app's own words.
+     *
+     * <p>The move ends in the system's delete consent dialog for any original the app does not own,
+     * which is most of them — a video saved by a previous install, or one that was already on the
+     * phone. "Allow Webview to delete this video?" is the system's wording and cannot be changed,
+     * and arriving at it unannounced reads as the wrong thing having been tapped.
+     *
+     * <p>So it is announced. This says what the move does and names the prompt as the step that
+     * finishes it, which turns a dialog that looks like a mistake into one that looks like the
+     * question it is.
+     */
+    private void moveSelectionToPrivate(List<DownloadEntity> chosen) {
+        if (chosen.isEmpty()) return;
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Ds_Dialog)
+                .setTitle(R.string.private_move_title)
+                .setMessage(getResources().getQuantityString(
+                        R.plurals.private_move_message, chosen.size(), chosen.size()))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.private_move_confirm,
+                        (dialog, which) -> performMoveToPrivate(chosen))
+                .show();
+    }
+
+    /**
      * Moves several videos into the private folder in one pass.
      *
      * <p>Copy every one first, then remove the originals in a <em>single</em> batch. One request
@@ -1365,7 +1407,7 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
      * video twice, one of them invisible. So every original is looked at again when the request
      * returns, whatever the answer, and any copy whose original is still there is undone.
      */
-    private void moveSelectionToPrivate(List<DownloadEntity> chosen) {
+    private void performMoveToPrivate(List<DownloadEntity> chosen) {
         List<DownloadEntity> movable = new ArrayList<>();
         for (DownloadEntity d : chosen) {
             if (d.status == DownloadStatus.COMPLETED && !TextUtils.isEmpty(d.outputUri)) {
@@ -1378,6 +1420,10 @@ public class DownloadsFragment extends Fragment implements DownloadAdapter.Actio
         }
 
         snack(getString(R.string.private_moving));
+        // No ad on the way out of this. The move ends in the system's delete consent dialog, whose
+        // dismissal resumes this screen - and an interstitial owed from an earlier exit from the
+        // player would arrive right on top of the answer just given, looking like its consequence.
+        Interstitials.holdOffOnce();
         final Context app = requireContext().getApplicationContext();
 
         privateIo.execute(() -> {

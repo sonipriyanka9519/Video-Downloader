@@ -40,7 +40,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Ds.Body"
-            android:textSize="14.5sp"
+            android:textSize="@dimen/_12ssp"
             tools:text="Episode 4 — full stream" />
 
         <TextView
@@ -50,7 +50,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Ds.BodySm"
-            android:textSize="12.5sp"
+            android:textSize="@dimen/_10ssp"
             tools:text="1080p • 22:14" />
     </LinearLayout>
 
@@ -61,7 +61,7 @@
         android:layout_marginStart="@dimen/ds_space_2"
         android:fontFeatureSettings="tnum"
         android:textAppearance="@style/TextAppearance.Ds.Heading"
-        android:textSize="13.5sp"
+        android:textSize="@dimen/_11ssp"
         tools:text="218 MB" />
 
     <ImageButton

@@ -66,7 +66,7 @@
             android:gravity="center"
             android:text="@string/lock_unlock_title"
             android:textColor="@color/ds_lock_ink"
-            android:textSize="18sp"
+            android:textSize="@dimen/_15ssp"
             android:textStyle="bold" />
 
         <TextView
@@ -77,7 +77,7 @@
             android:gravity="center"
             android:maxWidth="@dimen/ds_lock_text"
             android:textColor="@color/ds_lock_ink_dim"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             tools:text="Touch the sensor, or enter your PIN below." />
 
         <!-- Only when the phone has one and the viewer asked for it. -->
@@ -106,7 +106,7 @@
             android:layout_marginTop="@dimen/ds_space_3"
             android:gravity="center"
             android:textColor="?attr/colorError"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             android:visibility="invisible"
             tools:text="Wrong PIN. Try again."
             tools:visibility="visible" />
@@ -122,7 +122,7 @@
             android:paddingHorizontal="@dimen/ds_space_4"
             android:text="@string/lock_forgot_pin"
             android:textColor="@color/ds_lock_accent"
-            android:textSize="13.5sp"
+            android:textSize="@dimen/_11ssp"
             android:textStyle="bold" />
     </LinearLayout>
     </ScrollView>
@@ -134,4 +134,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/ds_keypad_bottom" />
+
+    <!--
+      The banner, last in the column and therefore above the gesture bar - lockRoot carries the
+      system-bar inset, so this lands clear of it without a hardcoded margin.
+
+      The gap above it is not spacing for its own sake. The row of keys directly overhead is where
+      a thumb repeatedly lands, and an advert immediately under it is the accidental tap the
+      placement rules are written to prevent; ds_space_4 is what keeps the two apart.
+
+      Gone until an ad arrives, so a failed request cannot shift the keypad after a finger is
+      already on its way to a key.
+    -->
+    <FrameLayout
+        android:id="@+id/lockAdSlot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:visibility="gone" />
 </LinearLayout>
+

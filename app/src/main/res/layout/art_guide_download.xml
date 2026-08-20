@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="@string/guide_art_detected"
             android:textColor="@color/ds_ink"
-            android:textSize="10sp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -60,7 +60,7 @@
             android:paddingVertical="@dimen/ds_space_1"
             android:text="@string/download"
             android:textColor="@color/ds_on_accent"
-            android:textSize="10sp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold" />
     </LinearLayout>
 </FrameLayout>

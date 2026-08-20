@@ -37,6 +37,6 @@
         android:gravity="center"
         android:text="@string/walk_badge_count"
         android:textColor="@color/ds_accent"
-        android:textSize="16sp"
+        android:textSize="@dimen/_13ssp"
         android:textStyle="bold" />
 </FrameLayout>

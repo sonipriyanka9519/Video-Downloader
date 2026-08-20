@@ -137,11 +137,27 @@
     </LinearLayout>
 
     <!--
+      The banner, between the grid and the button.
+
+      Its margins are what make the placement safe rather than merely tidy: the primary action is
+      directly below it and is the most-tapped control on this sheet, so the ad needs real distance
+      from it, not a hairline. Gone until an ad arrives, so the button never moves under a thumb
+      already travelling towards it.
+    -->
+    <FrameLayout
+        android:id="@+id/tabsAdSlot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:visibility="gone" />
+
+    <!--
       The one primary action, full width and under the thumb. Sits outside the grid so it stays
       put while the tabs scroll behind it.
     -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNewTab"
+
         android:layout_width="match_parent"
         android:layout_height="@dimen/ds_button_height"
         android:layout_marginHorizontal="@dimen/ds_screen_padding"

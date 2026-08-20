@@ -160,10 +160,9 @@
 
         <ImageButton
             android:id="@+id/btnMore"
-            style="?attr/borderlessButtonStyle"
             android:layout_width="@dimen/_26sdp"
             android:layout_height="@dimen/_26sdp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/ds_ripple_borderless"
             android:contentDescription="@string/more_options"
             android:padding="@dimen/_2sdp"
             android:src="@drawable/ic_more_vert"

@@ -23,6 +23,15 @@
         <item name="colorOnSecondaryContainer">@color/on_secondary_container</item>
 
         <item name="android:colorBackground">@color/surface</item>
+        <!--
+          What the window paints before any layout has drawn on it.
+          
+          Without this it falls back to colorBackground, which is #FFFBFF - white. Every screen in
+          the app is ds_bg, #FAF7F6, so there was a white frame at the front of every activity
+          transition. Barely noticeable between two of the app's own screens; very noticeable
+          coming back from a full-screen ad, which is where it was finally spotted.
+        -->
+        <item name="android:windowBackground">@color/ds_bg</item>
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
         <item name="colorSurfaceVariant">@color/surface_variant</item>
@@ -93,7 +102,9 @@
     </style>
 
     <!--
-      The opening itself: white, so the status-bar icons have to be dark to be seen at all.
+      The opening itself. Its ground is splash_surface, which holds the same value as ds_bg in
+      both themes - so the splash, the window behind every activity, and the app's own pages are
+      one continuous colour and no transition between them shows a seam.
     -->
     <style name="Theme.Webview.SplashContent" parent="Theme.Webview">
         <item name="android:windowBackground">@color/splash_surface</item>
@@ -165,8 +176,16 @@
         <item name="android:letterSpacing">0.01</item>
     </style>
 
-    <!-- The player is the one place a dark surround is right. -->
+    <!--
+      The player is the one place a dark surround is right.
+
+      Its parent is a Material theme rather than this app's, because the dark surround is the whole
+      point - which also meant it inherited none of Base.Theme.Webview, including the shared screen
+      animation. It slid in from the side while every other screen grew into place, and it was the
+      only screen in the app that did. Named here rather than left to the parent.
+    -->
     <style name="Theme.Webview.Player" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/Animation.Ds.Activity</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="android:statusBarColor">@android:color/black</item>
         <item name="android:navigationBarColor">@android:color/black</item>

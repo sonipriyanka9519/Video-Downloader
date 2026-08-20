@@ -46,7 +46,7 @@
                 android:letterSpacing="0.08"
                 android:text="@string/autoplay_next"
                 android:textColor="@color/ds_player_ink_dim"
-                android:textSize="12sp"
+                android:textSize="@dimen/_10ssp"
                 android:textStyle="bold" />
 
             <!-- Where the queue came from, in the viewer's own terms. -->
@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/ds_player_ink_faint"
-                android:textSize="12sp"
+                android:textSize="@dimen/_10ssp"
                 tools:text="Queue follows the Workout filter" />
         </LinearLayout>
 

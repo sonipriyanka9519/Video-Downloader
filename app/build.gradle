@@ -21,6 +21,13 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+
+        buildConfig true
+
+    }
+
+
     buildTypes {
         release {
             optimization {
@@ -44,6 +51,12 @@ dependencies {
     implementation libs.viewpager2
     implementation libs.swiperefreshlayout
     implementation libs.core.splashscreen
+
+    // AdMob, and the consent form the ads may not be requested without.
+    implementation libs.play.services.ads
+    implementation libs.user.messaging.platform
+    // Whole-process foreground/background, which is what an app-open ad is triggered by.
+    implementation libs.lifecycle.process
 
     // Scalable dp/sp units, so one set of sizes holds across screen sizes
     implementation libs.sdp

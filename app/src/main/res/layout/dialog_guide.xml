@@ -63,7 +63,7 @@
             android:letterSpacing="0.03"
             android:paddingHorizontal="@dimen/ds_space_3"
             android:textColor="@color/ds_accent"
-            android:textSize="11.5sp"
+            android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
             tools:text="STEP 1" />
 
@@ -74,7 +74,7 @@
             android:layout_marginStart="@dimen/ds_space_2"
             android:fontFeatureSettings="tnum"
             android:textColor="@color/ds_ink_faint"
-            android:textSize="12.5sp"
+            android:textSize="@dimen/_10ssp"
             tools:text="of 4" />
     </LinearLayout>
 
@@ -130,5 +130,5 @@
         android:text="@string/guide_got_it"
         android:textAppearance="@style/TextAppearance.Ds.Button"
         android:textColor="@color/ds_ink_soft"
-        android:textSize="14sp" />
+        android:textSize="@dimen/_12ssp" />
 </LinearLayout>

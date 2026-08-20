@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        A key for View.setTag, not a view.
+
+        setTag(int, Object) demands an id from a resource file - anything else throws - and the ad
+        card borrows one to keep its NativeAd with the NativeAdView showing it, so both can be
+        released together. Declared here rather than reusing a layout id, which would tie the two
+        together for no reason and read as a mistake.
+    -->
+    <item name="tag_native_ad" type="id" />
+</resources>

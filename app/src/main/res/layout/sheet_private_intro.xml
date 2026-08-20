@@ -72,7 +72,7 @@
             android:layout_marginStart="@dimen/ds_space_3"
             android:layout_weight="1"
             android:text="@string/private_intro_gallery"
-            android:textSize="14sp"
+            android:textSize="@dimen/_12ssp"
             android:textAppearance="@style/TextAppearance.Ds.Body" />
     </LinearLayout>
 
@@ -96,7 +96,7 @@
             android:layout_marginStart="@dimen/ds_space_3"
             android:layout_weight="1"
             android:text="@string/private_intro_unlock"
-            android:textSize="14sp"
+            android:textSize="@dimen/_12ssp"
             android:textAppearance="@style/TextAppearance.Ds.Body" />
     </LinearLayout>
 
@@ -120,7 +120,7 @@
             android:layout_marginStart="@dimen/ds_space_3"
             android:layout_weight="1"
             android:text="@string/private_intro_hidden"
-            android:textSize="14sp"
+            android:textSize="@dimen/_12ssp"
             android:textAppearance="@style/TextAppearance.Ds.Body" />
     </LinearLayout>
 
@@ -141,6 +141,6 @@
         android:layout_marginTop="@dimen/ds_space_3"
         android:gravity="center"
         android:text="@string/private_intro_footnote"
-        android:textSize="12.5sp"
+        android:textSize="@dimen/_10ssp"
         android:textAppearance="@style/TextAppearance.Ds.Caption" />
 </LinearLayout>

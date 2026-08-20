@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.ms.webview.ads.Ads;
 import com.ms.webview.App;
 import com.ms.webview.R;
 import com.ms.webview.core.Formats;
@@ -211,6 +212,14 @@ public class SettingsFragment extends Fragment {
                 getString(R.string.setting_clear_cache_body), false, this::confirmClearCache);
         row(R.drawable.ic_globe, R.string.setting_clear_cookies,
                 getString(R.string.setting_clear_cookies_body), false, this::confirmClearCookies);
+
+        // Consent is revocable or it is not consent. Present only where the form applies, so a
+        // viewer outside the EEA and the UK is not offered a row that opens nothing.
+        if (Ads.canChangeConsent()) {
+            row(R.drawable.ic_shield, R.string.setting_ad_privacy,
+                    getString(R.string.setting_ad_privacy_body), true,
+                    () -> Ads.showPrivacyForm(requireActivity()));
+        }
 
         divider();
         section(R.string.settings_notifications);

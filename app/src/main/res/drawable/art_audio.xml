@@ -8,8 +8,8 @@
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="96dp"
-        android:height="96dp"
+        android:width="@dimen/_80sdp"
+        android:height="@dimen/_80sdp"
         android:drawable="@drawable/ic_audio_white"
         android:gravity="center" />
 </layer-list>

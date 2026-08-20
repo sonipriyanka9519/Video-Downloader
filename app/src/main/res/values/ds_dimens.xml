@@ -9,196 +9,197 @@
 <resources>
 
     <!-- Spacing scale. Nothing outside this ladder. -->
-    <dimen name="ds_space_1">4dp</dimen>
-    <dimen name="ds_space_2">4dp</dimen>
-    <dimen name="ds_space_3">12dp</dimen>
-    <dimen name="ds_space_4">16dp</dimen>
-    <dimen name="ds_space_5">20dp</dimen>
-    <dimen name="ds_space_6">24dp</dimen>
-    <dimen name="ds_space_8">32dp</dimen>
+    <dimen name="ds_space_1">@dimen/_3sdp</dimen>
+    <dimen name="ds_space_2">@dimen/_3sdp</dimen>
+    <dimen name="ds_space_3">@dimen/_10sdp</dimen>
+    <dimen name="ds_space_4">@dimen/_13sdp</dimen>
+    <dimen name="ds_space_5">@dimen/_17sdp</dimen>
+    <dimen name="ds_space_6">@dimen/_20sdp</dimen>
+    <dimen name="ds_space_8">@dimen/_27sdp</dimen>
 
     <!-- Screen padding, section gap, and the padding inside a list row. -->
-    <dimen name="ds_screen_padding">16dp</dimen>
+    <dimen name="ds_screen_padding">@dimen/_13sdp</dimen>
+    <dimen name="ds_ads_padding">@dimen/_3sdp</dimen>
     <!--
       Cancels the screen padding for one child, so a row whose highlight has to reach the edge can
       do that while its text still lines up with everything above it. Paired with the same value as
       the row's own padding — never used on its own.
     -->
-    <dimen name="ds_screen_padding_bleed">-16dp</dimen>
-    <dimen name="ds_section_gap">24dp</dimen>
-    <dimen name="ds_row_padding">12dp</dimen>
+    <dimen name="ds_screen_padding_bleed">@dimen/_minus13sdp</dimen>
+    <dimen name="ds_section_gap">@dimen/_20sdp</dimen>
+    <dimen name="ds_row_padding">@dimen/_10sdp</dimen>
 
     <!-- Radii -->
     <dimen name="ds_radius_pill">999dp</dimen>
-    <dimen name="ds_radius_sheet">20dp</dimen>
-    <dimen name="ds_radius_dialog">16dp</dimen>
-    <dimen name="ds_radius_card">12dp</dimen>
-    <dimen name="ds_radius_inset">10dp</dimen>
-    <dimen name="ds_radius_thumb">8dp</dimen>
-    <dimen name="ds_radius_chip_square">6dp</dimen>
-    <dimen name="ds_radius_progress">2dp</dimen>
+    <dimen name="ds_radius_sheet">@dimen/_17sdp</dimen>
+    <dimen name="ds_radius_dialog">@dimen/_13sdp</dimen>
+    <dimen name="ds_radius_card">@dimen/_10sdp</dimen>
+    <dimen name="ds_radius_inset">@dimen/_8sdp</dimen>
+    <dimen name="ds_radius_thumb">@dimen/_7sdp</dimen>
+    <dimen name="ds_radius_chip_square">@dimen/_5sdp</dimen>
+    <dimen name="ds_radius_progress">@dimen/_2sdp</dimen>
 
     <!-- Strokes -->
-    <dimen name="ds_stroke">1dp</dimen>
+    <dimen name="ds_stroke">@dimen/_1sdp</dimen>
     <!-- An outline meant to be seen as a shape in its own right, not as a card's edge. -->
-    <dimen name="ds_stroke_thick">2dp</dimen>
-    <dimen name="ds_stroke_heavy">3dp</dimen>
+    <dimen name="ds_stroke_thick">@dimen/_2sdp</dimen>
+    <dimen name="ds_stroke_heavy">@dimen/_3sdp</dimen>
     <!-- Selected quality rung and the active tab card. -->
-    <dimen name="ds_stroke_selected">1.5dp</dimen>
-    <dimen name="ds_stroke_active_tab">2dp</dimen>
+    <dimen name="ds_stroke_selected">@dimen/_1sdp</dimen>
+    <dimen name="ds_stroke_active_tab">@dimen/_2sdp</dimen>
 
     <!--
       Touch targets. 48dp is the floor for anything tappable, including the icon buttons drawn
       at 40dp — those carry the difference as padding rather than shrinking the target.
     -->
-    <dimen name="ds_touch_min">48dp</dimen>
-    <dimen name="ds_icon_button">40dp</dimen>
-    <dimen name="ds_icon">24dp</dimen>
-    <dimen name="ds_icon_small">20dp</dimen>
-    <dimen name="ds_icon_tiny">16dp</dimen>
+    <dimen name="ds_touch_min">@dimen/_40sdp</dimen>
+    <dimen name="ds_icon_button">@dimen/_33sdp</dimen>
+    <dimen name="ds_icon">@dimen/_20sdp</dimen>
+    <dimen name="ds_icon_small">@dimen/_17sdp</dimen>
+    <dimen name="ds_icon_tiny">@dimen/_13sdp</dimen>
     <!-- The unwatched marker beside a title. -->
-    <dimen name="ds_dot">8dp</dimen>
+    <dimen name="ds_dot">@dimen/_7sdp</dimen>
     <!-- The square tick on a collection row in add mode. -->
-    <dimen name="ds_tick">22dp</dimen>
+    <dimen name="ds_tick">@dimen/_18sdp</dimen>
     <!-- The drag handle at the top of a sheet. -->
-    <dimen name="ds_grabber_width">32dp</dimen>
-    <dimen name="ds_grabber_height">4dp</dimen>
+    <dimen name="ds_grabber_width">@dimen/_27sdp</dimen>
+    <dimen name="ds_grabber_height">@dimen/_3sdp</dimen>
 
     <!-- A running transfer's row: the thumbnail it burns the percent onto, and its bar. -->
-    <dimen name="ds_active_thumb_width">96dp</dimen>
-    <dimen name="ds_active_thumb_height">54dp</dimen>
-    <dimen name="ds_progress_thickness">3dp</dimen>
+    <dimen name="ds_active_thumb_width">@dimen/_80sdp</dimen>
+    <dimen name="ds_active_thumb_height">@dimen/_45sdp</dimen>
+    <dimen name="ds_progress_thickness">@dimen/_3sdp</dimen>
 
     <!-- A sheet's action rows are inset a touch further than its header, per screen 07. -->
-    <dimen name="ds_sheet_action_padding">18dp</dimen>
+    <dimen name="ds_sheet_action_padding">@dimen/_15sdp</dimen>
     <!-- The label column in Properties, fixed so every value starts at the same place. -->
-    <dimen name="ds_property_label_width">76dp</dimen>
+    <dimen name="ds_property_label_width">@dimen/_63sdp</dimen>
 
     <!-- The player's chrome — screen 09. -->
-    <dimen name="ds_player_scrim_top">120dp</dimen>
-    <dimen name="ds_player_scrim_bottom">150dp</dimen>
-    <dimen name="ds_player_play_size">64dp</dimen>
-    <dimen name="ds_player_chip_height">30dp</dimen>
-    <dimen name="ds_player_chip_min">44dp</dimen>
-    <dimen name="ds_player_seek_track">3dp</dimen>
+    <dimen name="ds_player_scrim_top">@dimen/_100sdp</dimen>
+    <dimen name="ds_player_scrim_bottom">@dimen/_125sdp</dimen>
+    <dimen name="ds_player_play_size">@dimen/_53sdp</dimen>
+    <dimen name="ds_player_chip_height">@dimen/_25sdp</dimen>
+    <dimen name="ds_player_chip_min">@dimen/_37sdp</dimen>
+    <dimen name="ds_player_seek_track">@dimen/_3sdp</dimen>
     <!-- 14dp across in the design. Width and height both, so the thumb is a circle. -->
-    <dimen name="ds_player_seek_thumb">14dp</dimen>
-    <dimen name="ds_player_gesture_disc">132dp</dimen>
-    <dimen name="ds_player_rail_width">34dp</dimen>
-    <dimen name="ds_player_rail_height">150dp</dimen>
-    <dimen name="ds_player_rail_track">5dp</dimen>
-    <dimen name="ds_player_badge_top">78dp</dimen>
+    <dimen name="ds_player_seek_thumb">@dimen/_12sdp</dimen>
+    <dimen name="ds_player_gesture_disc">@dimen/_110sdp</dimen>
+    <dimen name="ds_player_rail_width">@dimen/_28sdp</dimen>
+    <dimen name="ds_player_rail_height">@dimen/_125sdp</dimen>
+    <dimen name="ds_player_rail_track">@dimen/_4sdp</dimen>
+    <dimen name="ds_player_badge_top">@dimen/_65sdp</dimen>
 
     <!-- The queue sheet and the up-next countdown, from screen 09 panels C and D. -->
-    <dimen name="ds_player_queue_rail">4dp</dimen>
-    <dimen name="ds_player_queue_thumb_width">72dp</dimen>
-    <dimen name="ds_player_queue_thumb_height">40dp</dimen>
-    <dimen name="ds_player_queue_peek">340dp</dimen>
-    <dimen name="ds_player_upnext_width">148dp</dimen>
-    <dimen name="ds_player_upnext_height">83dp</dimen>
-    <dimen name="ds_player_upnext_ring">56dp</dimen>
-    <dimen name="ds_player_upnext_ring_track">3dp</dimen>
-    <dimen name="ds_player_upnext_text">250dp</dimen>
+    <dimen name="ds_player_queue_rail">@dimen/_3sdp</dimen>
+    <dimen name="ds_player_queue_thumb_width">@dimen/_60sdp</dimen>
+    <dimen name="ds_player_queue_thumb_height">@dimen/_33sdp</dimen>
+    <dimen name="ds_player_queue_peek">@dimen/_283sdp</dimen>
+    <dimen name="ds_player_upnext_width">@dimen/_123sdp</dimen>
+    <dimen name="ds_player_upnext_height">@dimen/_69sdp</dimen>
+    <dimen name="ds_player_upnext_ring">@dimen/_47sdp</dimen>
+    <dimen name="ds_player_upnext_ring_track">@dimen/_3sdp</dimen>
+    <dimen name="ds_player_upnext_text">@dimen/_208sdp</dimen>
 
     <!-- A sound file, panel F: the art sits between the two bars of chrome. -->
-    <dimen name="ds_player_audio_top">96dp</dimen>
-    <dimen name="ds_player_audio_bottom">210dp</dimen>
-    <dimen name="ds_player_audio_glyph">72dp</dimen>
+    <dimen name="ds_player_audio_top">@dimen/_80sdp</dimen>
+    <dimen name="ds_player_audio_bottom">@dimen/_175sdp</dimen>
+    <dimen name="ds_player_audio_glyph">@dimen/_60sdp</dimen>
     <!-- How much of the page still shows either side of a dialog. -->
-    <dimen name="ds_dialog_inset">24dp</dimen>
+    <dimen name="ds_dialog_inset">@dimen/_20sdp</dimen>
     <!--
       The side margin inside a dialog. A custom view handed to MaterialAlertDialog goes into a
       full-bleed panel and gets none of the padding the title and buttons have, so a field set
       this way touches both edges while the heading above it does not.
     -->
-    <dimen name="ds_dialog_content_padding">24dp</dimen>
+    <dimen name="ds_dialog_content_padding">@dimen/_20sdp</dimen>
 
     <!-- Components -->
-    <dimen name="ds_toolbar_height">56dp</dimen>
-    <dimen name="ds_bottom_nav_height">56dp</dimen>
-    <dimen name="ds_button_height">52dp</dimen>
-    <dimen name="ds_button_height_compact">40dp</dimen>
-    <dimen name="ds_field_height">44dp</dimen>
-    <dimen name="ds_address_pill_height">40dp</dimen>
-    <dimen name="ds_chip_height">32dp</dimen>
+    <dimen name="ds_toolbar_height">@dimen/_47sdp</dimen>
+    <dimen name="ds_bottom_nav_height">@dimen/_47sdp</dimen>
+    <dimen name="ds_button_height">@dimen/_43sdp</dimen>
+    <dimen name="ds_button_height_compact">@dimen/_33sdp</dimen>
+    <dimen name="ds_field_height">@dimen/_37sdp</dimen>
+    <dimen name="ds_address_pill_height">@dimen/_33sdp</dimen>
+    <dimen name="ds_chip_height">@dimen/_27sdp</dimen>
     <!--
       Negative on purpose. Each chip reserves 48dp of box for its touch target while drawing a 32dp
       pill, so two wrapped lines sit 16dp apart before any spacing is added at all. This takes 10 of
       that back, leaving the lines close enough to read as one control that ran out of width - and
       the boxes still overlap only in space neither chip draws in.
     -->
-    <dimen name="ds_chip_row_gap">-10dp</dimen>
+    <dimen name="ds_chip_row_gap">@dimen/_minus8sdp</dimen>
     <!-- Between wrapped lines of chips: tighter than the gap along a line, so a row that wraps
          reads as one control that ran out of width rather than as two rows of things. -->
-    <dimen name="ds_list_row_min">72dp</dimen>
-    <dimen name="ds_action_row_height">56dp</dimen>
-    <dimen name="ds_settings_row_height">56dp</dimen>
-    <dimen name="ds_radio_row_height">60dp</dimen>
+    <dimen name="ds_list_row_min">@dimen/_60sdp</dimen>
+    <dimen name="ds_action_row_height">@dimen/_47sdp</dimen>
+    <dimen name="ds_settings_row_height">@dimen/_47sdp</dimen>
+    <dimen name="ds_radio_row_height">@dimen/_50sdp</dimen>
 
-    <dimen name="ds_fab_size">56dp</dimen>
-    <dimen name="ds_fab_badge">20dp</dimen>
-    <dimen name="ds_fab_margin">16dp</dimen>
+    <dimen name="ds_fab_size">@dimen/_47sdp</dimen>
+    <dimen name="ds_fab_badge">@dimen/_17sdp</dimen>
+    <dimen name="ds_fab_margin">@dimen/_13sdp</dimen>
 
     <!-- Sheet drag handle: 32 x 4, 8dp from the top. -->
-    <dimen name="ds_handle_width">32dp</dimen>
-    <dimen name="ds_handle_height">4dp</dimen>
-    <dimen name="ds_handle_margin_top">8dp</dimen>
+    <dimen name="ds_handle_width">@dimen/_27sdp</dimen>
+    <dimen name="ds_handle_height">@dimen/_3sdp</dimen>
+    <dimen name="ds_handle_margin_top">@dimen/_7sdp</dimen>
 
     <!-- Media -->
-    <dimen name="ds_thumb_list_width">96dp</dimen>
-    <dimen name="ds_thumb_list_height">54dp</dimen>
-    <dimen name="ds_thumb_sheet_width">64dp</dimen>
-    <dimen name="ds_thumb_sheet_height">36dp</dimen>
-    <dimen name="ds_thumb_select_width">72dp</dimen>
-    <dimen name="ds_thumb_select_height">40dp</dimen>
+    <dimen name="ds_thumb_list_width">@dimen/_80sdp</dimen>
+    <dimen name="ds_thumb_list_height">@dimen/_45sdp</dimen>
+    <dimen name="ds_thumb_sheet_width">@dimen/_53sdp</dimen>
+    <dimen name="ds_thumb_sheet_height">@dimen/_30sdp</dimen>
+    <dimen name="ds_thumb_select_width">@dimen/_60sdp</dimen>
+    <dimen name="ds_thumb_select_height">@dimen/_33sdp</dimen>
     <!-- Continue Watching / Recent cards. -->
-    <dimen name="ds_card_thumb_width">148dp</dimen>
-    <dimen name="ds_card_thumb_height">83dp</dimen>
-    <dimen name="ds_play_glyph">40dp</dimen>
-    <dimen name="ds_progress_thin">3dp</dimen>
-    <dimen name="ds_unwatched_dot">8dp</dimen>
+    <dimen name="ds_card_thumb_width">@dimen/_123sdp</dimen>
+    <dimen name="ds_card_thumb_height">@dimen/_69sdp</dimen>
+    <dimen name="ds_play_glyph">@dimen/_33sdp</dimen>
+    <dimen name="ds_progress_thin">@dimen/_3sdp</dimen>
+    <dimen name="ds_unwatched_dot">@dimen/_7sdp</dimen>
 
     <!-- Home shortcut grid: 4 columns of 56dp tiles. -->
-    <dimen name="ds_shortcut_tile">56dp</dimen>
-    <dimen name="ds_shortcut_columns_gap">12dp</dimen>
+    <dimen name="ds_shortcut_tile">@dimen/_47sdp</dimen>
+    <dimen name="ds_shortcut_columns_gap">@dimen/_10sdp</dimen>
 
-    <dimen name="ds_clip_mark">48dp</dimen>
+    <dimen name="ds_clip_mark">@dimen/_40sdp</dimen>
 
     <!--
       The parts a guide illustration is built from. Small and specific on purpose: these are drawn
       shapes standing in for a screenshot, so each one is sized to read as the thing it stands for
       without ever looking like a control.
     -->
-    <dimen name="ds_guide_avatar">20dp</dimen>
-    <dimen name="ds_guide_name">74dp</dimen>
-    <dimen name="ds_guide_bar">8dp</dimen>
-    <dimen name="ds_guide_icon">14dp</dimen>
-    <dimen name="ds_guide_tile">28dp</dimen>
-    <dimen name="ds_guide_menu">104dp</dimen>
-    <dimen name="ds_guide_menu_top">28dp</dimen>
-    <dimen name="ds_guide_field">32dp</dimen>
-    <dimen name="ds_guide_pill">26dp</dimen>
-    <dimen name="ds_guide_arrow_width">60dp</dimen>
-    <dimen name="ds_guide_arrow_height">40dp</dimen>
-    <dimen name="ds_guide_arrow_inset">36dp</dimen>
+    <dimen name="ds_guide_avatar">@dimen/_17sdp</dimen>
+    <dimen name="ds_guide_name">@dimen/_62sdp</dimen>
+    <dimen name="ds_guide_bar">@dimen/_7sdp</dimen>
+    <dimen name="ds_guide_icon">@dimen/_12sdp</dimen>
+    <dimen name="ds_guide_tile">@dimen/_23sdp</dimen>
+    <dimen name="ds_guide_menu">@dimen/_87sdp</dimen>
+    <dimen name="ds_guide_menu_top">@dimen/_23sdp</dimen>
+    <dimen name="ds_guide_field">@dimen/_27sdp</dimen>
+    <dimen name="ds_guide_pill">@dimen/_22sdp</dimen>
+    <dimen name="ds_guide_arrow_width">@dimen/_50sdp</dimen>
+    <dimen name="ds_guide_arrow_height">@dimen/_33sdp</dimen>
+    <dimen name="ds_guide_arrow_inset">@dimen/_30sdp</dimen>
     <!-- The illustration box on a step page: 4:3, as the canvas draws it. -->
-    <dimen name="ds_guide_art_height">200dp</dimen>
-    <dimen name="ds_guide_number">20dp</dimen>
-    <dimen name="ds_guide_action">22dp</dimen>
-    <dimen name="ds_guide_rung">26dp</dimen>
+    <dimen name="ds_guide_art_height">@dimen/_167sdp</dimen>
+    <dimen name="ds_guide_number">@dimen/_17sdp</dimen>
+    <dimen name="ds_guide_action">@dimen/_18sdp</dimen>
+    <dimen name="ds_guide_rung">@dimen/_22sdp</dimen>
 
     <!-- Per-site guide — screen 15, panel A. -->
-    <dimen name="ds_guide_chip">24dp</dimen>
-    <dimen name="ds_guide_page">265dp</dimen>
-    <dimen name="ds_guide_button">48dp</dimen>
+    <dimen name="ds_guide_chip">@dimen/_20sdp</dimen>
+    <dimen name="ds_guide_page">@dimen/_221sdp</dimen>
+    <dimen name="ds_guide_button">@dimen/_40sdp</dimen>
     <!-- Pulls the close button back into the corner it would otherwise sit inside. -->
-    <dimen name="ds_guide_close_lift">-6dp</dimen>
-    <dimen name="ds_guide_dot">6dp</dimen>
-    <dimen name="ds_guide_dot_active">18dp</dimen>
+    <dimen name="ds_guide_close_lift">@dimen/_minus5sdp</dimen>
+    <dimen name="ds_guide_dot">@dimen/_5sdp</dimen>
+    <dimen name="ds_guide_dot_active">@dimen/_15sdp</dimen>
 
     <!-- Quality rung -->
-    <dimen name="ds_rung_width">100dp</dimen>
-    <dimen name="ds_rung_padding_v">11dp</dimen>
+    <dimen name="ds_rung_width">@dimen/_83sdp</dimen>
+    <dimen name="ds_rung_padding_v">@dimen/_9sdp</dimen>
     <!--
       The tick on a chosen rung, and how far it hangs off the card.
 
@@ -207,17 +208,17 @@
       which is the room the overhang moves back out into; the two are one measurement and must stay
       one, or the tick lands off-centre or gets clipped.
     -->
-    <dimen name="ds_rung_tick">18dp</dimen>
-    <dimen name="ds_rung_tick_out">9dp</dimen>
-    <dimen name="ds_rung_tick_out_neg">-5dp</dimen>
-    <dimen name="ds_rung_tick_padding">3dp</dimen>
+    <dimen name="ds_rung_tick">@dimen/_15sdp</dimen>
+    <dimen name="ds_rung_tick_out">@dimen/_8sdp</dimen>
+    <dimen name="ds_rung_tick_out_neg">@dimen/_minus4sdp</dimen>
+    <dimen name="ds_rung_tick_padding">@dimen/_3sdp</dimen>
     <!--
       Lifts the tick above the card it sits on. Both are siblings at the same depth and a tie in Z
       is settled by declaration order, which held until the card picked up a Z of its own from the
       Material style; the tick then lost, and all that showed was the sliver outside the rounded
       corner. Elevation with no outline sorts it above without casting a shadow.
     -->
-    <dimen name="ds_rung_tick_z">4dp</dimen>
+    <dimen name="ds_rung_tick_z">@dimen/_3sdp</dimen>
 
     <!--
       The detection sheet's preview.
@@ -228,14 +229,14 @@
       A portrait video still gets a narrow, centred frame so it is not cropped to a strip; only
       its width is derived, never its height.
     -->
-    <dimen name="ds_preview_height">180dp</dimen>
+    <dimen name="ds_preview_height">@dimen/_150sdp</dimen>
 
     <!--
       A tab card's snapshot. The card comes to roughly 216dp with its header strip, which is the
       height the design draws — tall enough that a page is recognisable at two columns, short
       enough that three rows of tabs fit on screen.
     -->
-    <dimen name="ds_tab_preview_height">184dp</dimen>
+    <dimen name="ds_tab_preview_height">@dimen/_153sdp</dimen>
 
     <!--
       App-lock keypad, measured off screen 11 panel C: 60dp keys, 16dp between rows, 24dp between
@@ -247,61 +248,61 @@
 
       Halved here, because each key carries its own margin and two neighbours contribute one each.
     -->
-    <dimen name="ds_keypad_key">60dp</dimen>
-    <dimen name="ds_keypad_gap_h">12dp</dimen>
-    <dimen name="ds_keypad_gap_v">8dp</dimen>
-    <dimen name="ds_keypad_bottom">34dp</dimen>
-    <dimen name="ds_pin_dot">14dp</dimen>
-    <dimen name="ds_method_icon">44dp</dimen>
-    <dimen name="ds_lock_top">92dp</dimen>
-    <dimen name="ds_lock_mark">72dp</dimen>
-    <dimen name="ds_lock_mark_glyph">38dp</dimen>
-    <dimen name="ds_lock_sensor">64dp</dimen>
-    <dimen name="ds_lock_text">240dp</dimen>
+    <dimen name="ds_keypad_key">@dimen/_50sdp</dimen>
+    <dimen name="ds_keypad_gap_h">@dimen/_10sdp</dimen>
+    <dimen name="ds_keypad_gap_v">@dimen/_7sdp</dimen>
+    <dimen name="ds_keypad_bottom">@dimen/_28sdp</dimen>
+    <dimen name="ds_pin_dot">@dimen/_12sdp</dimen>
+    <dimen name="ds_method_icon">@dimen/_37sdp</dimen>
+    <dimen name="ds_lock_top">@dimen/_77sdp</dimen>
+    <dimen name="ds_lock_mark">@dimen/_60sdp</dimen>
+    <dimen name="ds_lock_mark_glyph">@dimen/_32sdp</dimen>
+    <dimen name="ds_lock_sensor">@dimen/_53sdp</dimen>
+    <dimen name="ds_lock_text">@dimen/_200sdp</dimen>
 
     <!-- The private-folder intro's mark and its glyph — screen 11, panel D. -->
-    <dimen name="ds_private_mark">88dp</dimen>
-    <dimen name="ds_private_mark_glyph">44dp</dimen>
-    <dimen name="ds_radius_private_mark">24dp</dimen>
-    <dimen name="ds_private_bullet">19dp</dimen>
+    <dimen name="ds_private_mark">@dimen/_73sdp</dimen>
+    <dimen name="ds_private_mark_glyph">@dimen/_37sdp</dimen>
+    <dimen name="ds_radius_private_mark">@dimen/_20sdp</dimen>
+    <dimen name="ds_private_bullet">@dimen/_16sdp</dimen>
 
     <!--
       Walkthrough — screen 14. The diagrams are drawn from these rather than shipped as images, so
       dark mode costs nothing and nothing in them can be mistaken for a screenshot.
     -->
-    <dimen name="ds_walk_disc">180dp</dimen>
-    <dimen name="ds_walk_disc_mid">150dp</dimen>
-    <dimen name="ds_walk_disc_small">132dp</dimen>
-    <dimen name="ds_walk_ring">118dp</dimen>
-    <dimen name="ds_walk_tile">52dp</dimen>
-    <dimen name="ds_walk_tile_gap">8dp</dimen>
-    <dimen name="ds_walk_tap">32dp</dimen>
-    <dimen name="ds_walk_play">76dp</dimen>
-    <dimen name="ds_walk_fab">88dp</dimen>
-    <dimen name="ds_walk_badge">34dp</dimen>
-    <dimen name="ds_walk_bars">190dp</dimen>
-    <dimen name="ds_walk_bar">38dp</dimen>
-    <dimen name="ds_walk_bar_active">46dp</dimen>
-    <dimen name="ds_walk_dot">6dp</dimen>
-    <dimen name="ds_walk_dot_active">20dp</dimen>
-    <dimen name="ds_walk_dot_gap">7dp</dimen>
-    <dimen name="ds_walk_step_chip">26dp</dimen>
+    <dimen name="ds_walk_disc">@dimen/_150sdp</dimen>
+    <dimen name="ds_walk_disc_mid">@dimen/_125sdp</dimen>
+    <dimen name="ds_walk_disc_small">@dimen/_110sdp</dimen>
+    <dimen name="ds_walk_ring">@dimen/_98sdp</dimen>
+    <dimen name="ds_walk_tile">@dimen/_43sdp</dimen>
+    <dimen name="ds_walk_tile_gap">@dimen/_7sdp</dimen>
+    <dimen name="ds_walk_tap">@dimen/_27sdp</dimen>
+    <dimen name="ds_walk_play">@dimen/_63sdp</dimen>
+    <dimen name="ds_walk_fab">@dimen/_73sdp</dimen>
+    <dimen name="ds_walk_badge">@dimen/_28sdp</dimen>
+    <dimen name="ds_walk_bars">@dimen/_158sdp</dimen>
+    <dimen name="ds_walk_bar">@dimen/_32sdp</dimen>
+    <dimen name="ds_walk_bar_active">@dimen/_38sdp</dimen>
+    <dimen name="ds_walk_dot">@dimen/_5sdp</dimen>
+    <dimen name="ds_walk_dot_active">@dimen/_17sdp</dimen>
+    <dimen name="ds_walk_dot_gap">@dimen/_6sdp</dimen>
+    <dimen name="ds_walk_step_chip">@dimen/_22sdp</dimen>
     <!-- One thought per line: the heading sentence and the caption under the diagram. -->
-    <dimen name="ds_walk_text">290dp</dimen>
-    <dimen name="ds_walk_caption">250dp</dimen>
+    <dimen name="ds_walk_text">@dimen/_242sdp</dimen>
+    <dimen name="ds_walk_caption">@dimen/_208sdp</dimen>
     <!-- The splash's progress bar: 3dp, and only ever seen on a slow start. -->
-    <dimen name="ds_splash_bar">3dp</dimen>
-    <dimen name="ds_splash_bar_inset">100dp</dimen>
-    <dimen name="ds_splash_bar_bottom">64dp</dimen>
-    <dimen name="ds_splash_mark">96dp</dimen>
-    <dimen name="ds_splash_mark_glyph">52dp</dimen>
-    <dimen name="ds_splash_ornament_a">180dp</dimen>
-    <dimen name="ds_splash_ornament_b">220dp</dimen>
+    <dimen name="ds_splash_bar">@dimen/_3sdp</dimen>
+    <dimen name="ds_splash_bar_inset">@dimen/_83sdp</dimen>
+    <dimen name="ds_splash_bar_bottom">@dimen/_53sdp</dimen>
+    <dimen name="ds_splash_mark">@dimen/_80sdp</dimen>
+    <dimen name="ds_splash_mark_glyph">@dimen/_43sdp</dimen>
+    <dimen name="ds_splash_ornament_a">@dimen/_150sdp</dimen>
+    <dimen name="ds_splash_ornament_b">@dimen/_183sdp</dimen>
     <!-- Negative, so each ornament runs off its corner rather than sitting inside it. -->
-    <dimen name="ds_splash_ornament_offset">-40dp</dimen>
-    <dimen name="ds_splash_ornament_offset_b">-50dp</dimen>
-    <dimen name="ds_splash_ornament_bottom">120dp</dimen>
-    <dimen name="ds_radius_ornament">44dp</dimen>
+    <dimen name="ds_splash_ornament_offset">@dimen/_minus33sdp</dimen>
+    <dimen name="ds_splash_ornament_offset_b">@dimen/_minus42sdp</dimen>
+    <dimen name="ds_splash_ornament_bottom">@dimen/_100sdp</dimen>
+    <dimen name="ds_radius_ornament">@dimen/_37sdp</dimen>
     <!--
       Faint enough to read as texture. A dimen rather than a colour with alpha baked in, so the
       night copy can lift it — the same 4% over a dark ground is invisible.
@@ -309,55 +310,75 @@
     <item name="ds_splash_ornament_alpha" format="float" type="dimen">0.04</item>
 
     <!-- Storage — screen 13. -->
-    <dimen name="ds_storage_bar">10dp</dimen>
+    <dimen name="ds_storage_bar">@dimen/_8sdp</dimen>
     <!-- The gap between filled segments, so two colours never touch. -->
-    <dimen name="ds_storage_bar_gap">2dp</dimen>
+    <dimen name="ds_storage_bar_gap">@dimen/_2sdp</dimen>
     <!-- Videos always read as present even at a fraction of a percent of a large phone. -->
-    <dimen name="ds_storage_bar_min">9dp</dimen>
-    <dimen name="ds_legend_dot">9dp</dimen>
-    <dimen name="ds_radius_legend_dot">3dp</dimen>
-    <dimen name="ds_storage_tile">40dp</dimen>
-    <dimen name="ds_radius_tile">10dp</dimen>
-    <dimen name="ds_thumb_large_width">72dp</dimen>
-    <dimen name="ds_thumb_large_height">41dp</dimen>
+    <dimen name="ds_storage_bar_min">@dimen/_8sdp</dimen>
+    <dimen name="ds_legend_dot">@dimen/_8sdp</dimen>
+    <dimen name="ds_radius_legend_dot">@dimen/_3sdp</dimen>
+    <dimen name="ds_storage_tile">@dimen/_33sdp</dimen>
+    <dimen name="ds_radius_tile">@dimen/_8sdp</dimen>
+    <dimen name="ds_thumb_large_width">@dimen/_60sdp</dimen>
+    <dimen name="ds_thumb_large_height">@dimen/_34sdp</dimen>
     <!-- A secondary action inside a card: shorter than a screen's primary button. -->
-    <dimen name="ds_button_height_mid">44dp</dimen>
-    <dimen name="ds_storage_notice_width">230dp</dimen>
+    <dimen name="ds_button_height_mid">@dimen/_37sdp</dimen>
+    <dimen name="ds_storage_notice_width">@dimen/_192sdp</dimen>
 
     <!-- History — screen 12. -->
-    <dimen name="ds_search_pill">40dp</dimen>
+    <dimen name="ds_search_pill">@dimen/_33sdp</dimen>
     <!-- The X inside the search pill: a disc, inset from the pill's own edge. -->
-    <dimen name="ds_history_search_clear">26dp</dimen>
+    <dimen name="ds_history_search_clear">@dimen/_22sdp</dimen>
     <!-- Leaves an 18dp glyph inside a 48dp target — the design's mark, an accessible touch area. -->
-    <dimen name="ds_history_close_pad">15dp</dimen>
-    <dimen name="ds_history_chip">17dp</dimen>
+    <dimen name="ds_history_close_pad">@dimen/_13sdp</dimen>
+    <dimen name="ds_history_chip">@dimen/_14sdp</dimen>
 
     <!--
       The empty-state mark as every canvas draws it: 96dp with 24dp corners, holding a 44dp glyph.
       Not to be confused with ds_empty_icon_block below — that is 64dp and is the inline hint block
       on Home, which the canvases draw at that size deliberately.
     -->
-    <dimen name="ds_empty_block">96dp</dimen>
-    <dimen name="ds_empty_block_pad">26dp</dimen>
+    <dimen name="ds_empty_block">@dimen/_80sdp</dimen>
+    <dimen name="ds_empty_block_pad">@dimen/_22sdp</dimen>
 
     <!-- Empty state never wider than this, so the sentence stays one thought. -->
-    <dimen name="ds_empty_max_width">280dp</dimen>
-    <dimen name="ds_empty_icon_block">64dp</dimen>
+    <dimen name="ds_empty_max_width">@dimen/_233sdp</dimen>
+    <dimen name="ds_empty_icon_block">@dimen/_53sdp</dimen>
 
     <!-- Screen 17 panel D - the app mark above the About list. -->
-    <dimen name="ds_about_mark">64dp</dimen>
+    <dimen name="ds_about_mark">@dimen/_53sdp</dimen>
 
     <!-- Screen 17 panel E - the tile behind the icon that heads a prompt sheet. -->
-    <dimen name="ds_icon_block">72dp</dimen>
+    <!-- The default-browser prompt: the height of the accent wash, and its feature tiles. -->
+    <dimen name="ds_default_wash">@dimen/_120sdp</dimen>
+    <dimen name="ds_default_tile">@dimen/_30sdp</dimen>
+    <dimen name="ds_icon_block">@dimen/_60sdp</dimen>
 
     <!-- Screen 18 panel B - the stars over the rate prompt, larger than a row icon. -->
-    <dimen name="ds_icon_lg">28dp</dimen>
+    <dimen name="ds_icon_lg">@dimen/_23sdp</dimen>
 
     <!-- Side padding inside the downloads badge, which is what makes it a pill. -->
-    <dimen name="ds_badge_padding">8dp</dimen>
+    <dimen name="ds_badge_padding">@dimen/_7sdp</dimen>
 
     <!-- The Add tile's dashed ring - see bg_add_tile. Dash and gap are equal so it reads evenly. -->
-    <dimen name="ds_hairline">1dp</dimen>
-    <dimen name="ds_add_tile_dash">3dp</dimen>
+    <dimen name="ds_hairline">@dimen/_1sdp</dimen>
+    <dimen name="ds_add_tile_dash">@dimen/_3sdp</dimen>
+
+    <!-- The advertiser's icon on a native ad. -->
+    <dimen name="ds_icon_block_sm">@dimen/_33sdp</dimen>
+
+    <!--
+      The native ad, laid out as a row. 16:9 on the picture so every ad is the same size whatever
+      it contains. The card lands near 112dp: taller than the first row version, because the call
+      to action is a full-height button now rather than a chip - still a row rather than the block
+      it replaced.
+    -->
+    <!-- The row's height. Both columns fill it, so the picture and the text end level. -->
+    <dimen name="ds_space_0">@dimen/_2sdp</dimen>
+    <dimen name="ds_ad_card_height">@dimen/_115sdp</dimen>
+    <dimen name="ds_ad_media_width">@dimen/_135sdp</dimen>
+    <dimen name="ds_ad_media_height">@dimen/_117sdp</dimen>
+    <dimen name="ds_ad_icon">@dimen/_21sdp</dimen>
+    <dimen name="ds_ad_cta_height">@dimen/_32sdp</dimen>
 
 </resources>

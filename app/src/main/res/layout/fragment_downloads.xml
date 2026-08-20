@@ -143,7 +143,7 @@
                 android:textAppearance="@style/TextAppearance.Ds.Body"
                 android:textColor="@color/ds_ink"
                 android:textColorHint="@color/ds_ink_faint"
-                android:textSize="15sp" />
+                android:textSize="@dimen/_13ssp" />
 
             <ImageButton
                 android:id="@+id/btnSearchClear"
@@ -319,7 +319,7 @@
             android:layout_weight="1"
             android:textAppearance="@style/TextAppearance.Ds.BodySm"
             android:textColor="@color/ds_ink"
-            android:textSize="12.5sp"
+            android:textSize="@dimen/_10ssp"
             tools:text="Everything you've finished watching is pre-selected — 640 MB." />
     </LinearLayout>
 
@@ -400,6 +400,25 @@
     </LinearLayout>
 
     <!--
+      The banner, below the filter chips.
+
+      The gap above it is deliberate and is the point. The rules this app is built to say an ad may
+      never sit adjacent to an interactive control, and a chip row is nothing but interactive
+      controls — so the slot is pushed clear of them rather than tucked under them, and a missed
+      chip tap lands on empty space instead of on an advertiser's billing.
+
+      Gone until an ad arrives, so the list keeps its full height when there is nothing to show.
+    -->
+    <FrameLayout
+        android:id="@+id/downloadsAdSlot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ds_ads_padding"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:layout_marginBottom="@dimen/ds_space_2"
+        android:visibility="gone" />
+
+    <!--
       Screen 16, panel D - the reminder offer.
 
       Above the list rather than inside it: it is about the library as a whole, not about any row,
@@ -446,7 +465,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/reminder_offer_title"
                     android:textColor="@color/ds_ink"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/_13ssp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -455,7 +474,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ds_space_1"
                     android:textColor="@color/ds_ink_soft"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/_11ssp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -486,7 +505,7 @@
                 android:text="@string/reminder_offer_no"
                 android:textAppearance="@style/TextAppearance.Ds.Button"
                 android:textColor="@color/ds_ink_soft"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_12ssp" />
         </LinearLayout>
     </LinearLayout>
 

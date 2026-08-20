@@ -6,6 +6,15 @@
   system's own corner - so the one menu in the browser looked like it came from a different app
   than every sheet and dialog around it. Dialog radius, because that is what this is.
 
+  Rounded down the left, square down the right. The menu hangs from the ⋮ at the top of the screen
+  and is aligned to that edge, so the right side is where it comes out of the button and where it
+  meets the edge it is pinned to; rounding that side would leave the panel floating free of the
+  control that opened it. The two corners the eye actually reads as the shape of the menu are the
+  left pair, and those are the ones that get the radius.
+
+  Left and right here are literal, not start and end - <corners> has no start/end form. The mirror
+  image lives in drawable-ldrtl, where the ⋮ sits on the other side and the shape has to follow it.
+
   Inset on all sides: a popup background is drawn to the window's bounds, and without the inset
   the shadow has nowhere to fall and the corners get clipped square again.
 -->
@@ -13,6 +22,10 @@
     android:inset="@dimen/ds_space_1">
     <shape android:shape="rectangle">
         <solid android:color="@color/ds_surface" />
-        <corners android:radius="@dimen/ds_radius_dialog" />
+        <corners
+            android:bottomLeftRadius="@dimen/ds_radius_dialog"
+            android:bottomRightRadius="0dp"
+            android:topLeftRadius="@dimen/ds_radius_dialog"
+            android:topRightRadius="0dp" />
     </shape>
 </inset>

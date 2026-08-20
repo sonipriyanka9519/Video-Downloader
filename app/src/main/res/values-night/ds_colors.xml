@@ -8,6 +8,8 @@
 <resources>
 
     <!-- Surfaces -->
+    <!-- The press feedback on an icon-only control - see ds_ripple_borderless. -->
+    <color name="ds_ripple">#26FFFFFF</color>
     <color name="ds_bg">#171212</color>
     <color name="ds_surface">#201A19</color>
     <color name="ds_surface_alt">#2A2322</color>
@@ -19,6 +21,7 @@
     <color name="ds_ink_faint">#7D716C</color>
 
     <!-- Brand -->
+    <!-- The prompt's warm wash, in the dark. See the light file for the reasoning. -->
     <color name="ds_accent">#E05F5C</color>
     <color name="ds_accent_soft">#3E2422</color>
     <!--
@@ -108,5 +111,11 @@
     -->
     <color name="ds_private_bg">#4A403D</color>
     <color name="ds_private_inset">#564A47</color>
+
+    <!--
+      The "Ad" badge. Yellow because it must not be mistaken for the app's own accent - the label
+      saying a row is paid for should not be the same colour as every control the viewer trusts.
+    -->
+    <color name="ds_ad_badge">#E0A800</color>
 
 </resources>

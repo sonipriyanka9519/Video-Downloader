@@ -50,7 +50,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.Ds.Body"
-                android:textSize="14.5sp"
+                android:textSize="@dimen/_12ssp"
                 tools:text="Jersey outfit ideas — 32 pins" />
 
             <!--
@@ -68,7 +68,7 @@
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/ds_space_2"
                 android:textColor="@color/ds_ink_soft"
-                android:textSize="10.5sp"
+                android:textSize="@dimen/_9ssp"
                 android:textStyle="bold"
                 android:visibility="gone"
                 tools:text="×4"
@@ -83,7 +83,7 @@
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Ds.BodySm"
             android:textColor="@color/ds_ink_faint"
-            android:textSize="12.5sp"
+            android:textSize="@dimen/_10ssp"
             tools:text="pinterest.com" />
     </LinearLayout>
 
@@ -95,7 +95,7 @@
         android:layout_marginStart="@dimen/ds_space_2"
         android:fontFeatureSettings="tnum"
         android:textColor="@color/ds_ink_faint"
-        android:textSize="12sp"
+        android:textSize="@dimen/_10ssp"
         tools:text="16:43" />
 
     <ImageButton

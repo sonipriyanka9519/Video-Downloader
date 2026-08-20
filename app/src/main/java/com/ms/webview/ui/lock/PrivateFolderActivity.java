@@ -25,6 +25,9 @@ import com.ms.webview.ui.Snacks;
 import com.ms.webview.ui.downloads.DownloadAdapter;
 import com.ms.webview.ui.downloads.DownloadSort;
 import com.ms.webview.ui.downloads.PrivateStore;
+import com.ms.webview.ads.AdIds;
+import com.ms.webview.ads.Interstitials;
+import com.ms.webview.ads.NativeAds;
 import com.ms.webview.ui.PlayerActivity;
 
 import java.util.ArrayList;
@@ -51,6 +54,9 @@ public class PrivateFolderActivity extends AppCompatActivity implements Download
     private final Handler main = new Handler(Looper.getMainLooper());
 
     private DownloadAdapter adapter;
+
+    /** The in-page ad, held so it can be released with the screen. */
+    private android.view.ViewGroup adSlot;
     private View empty;
     /** Row id back to the private item it stands for, so an action knows what it is acting on. */
     private final Map<Long, PrivateStore.Item> byRow = new HashMap<>();
@@ -90,7 +96,32 @@ public class PrivateFolderActivity extends AppCompatActivity implements Download
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
 
+        adSlot = findViewById(R.id.privateAdSlot);
+
+        // The list is built in onResume, not here — and so is the ad, which follows it. See below.
+    }
+
+    /**
+     * Rebuilt on every return, not only on first open.
+     *
+     * <p>Built once in onCreate, this screen never noticed anything that happened while it was
+     * away: play a private video, come back, and the row still showed no progress bar because
+     * nothing had asked the store again. The watched fraction is read at bind time, so a rebind
+     * is all it takes — and the player is the only way back onto this screen anyway.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
         refresh();
+
+        // What the player owed on the way out. MainActivity pays the same debt, but a private
+        // video comes back here instead, and the ad would otherwise wait until the viewer
+        // happened to reach the library.
+        //
+        // expectReturn because onStop closes this folder when anything covers it: an
+        // interstitial would finish the screen underneath itself, and the viewer would dismiss
+        // the ad onto the library rather than back into the folder they were standing in.
+        if (Interstitials.showIfQueued(this)) expectReturn = true;
     }
 
     /**
@@ -111,6 +142,7 @@ public class PrivateFolderActivity extends AppCompatActivity implements Download
 
     @Override
     protected void onDestroy() {
+        NativeAds.destroy(adSlot);
         io.shutdownNow();
         super.onDestroy();
     }
@@ -135,6 +167,15 @@ public class PrivateFolderActivity extends AppCompatActivity implements Download
         // harmless behind the lock, and the price of using the library's rows unchanged.
         adapter.submit(this, rows, DownloadSort.NEWEST);
         empty.setVisibility(rows.isEmpty() ? View.VISIBLE : View.GONE);
+
+        // No ad over an empty folder. Panel D is the only place that explains what this folder is
+        // for, and an advert above that explanation would be the largest thing on a screen with
+        // nothing of the viewer's on it - on the one screen in the app where that reads worst.
+        //
+        // Destroyed rather than hidden when the last video leaves: a hidden slot still holds a
+        // NativeAd, and this runs on every resume.
+        if (rows.isEmpty()) NativeAds.destroy(adSlot);
+        else NativeAds.load(this, adSlot, AdIds.nativeAd());
     }
 
     // ------------------------------------------------------------------ row actions

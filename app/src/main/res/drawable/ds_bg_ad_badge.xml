@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The "Ad" badge. Yellow, so it is never mistaken for the content or for the app's own accent. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_ad_badge" />
+    <corners android:radius="@dimen/ds_radius_chip_square" />
+</shape>

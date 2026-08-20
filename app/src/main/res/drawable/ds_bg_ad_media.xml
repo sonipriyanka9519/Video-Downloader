@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The native ad's picture.
+
+  Both a background and the shape the content is clipped to - the MediaView centre-crops into its
+  own bounds, so without an outline to clip against, a rounded background sits behind square
+  corners and does nothing at all. See NativeAds, which turns clipToOutline on.
+
+  Same radius as a video thumbnail in the downloads list: an ad's picture and the app's own
+  pictures should be cut to the same shape.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_surface_alt" />
+    <corners android:radius="@dimen/ds_radius_thumb" />
+</shape>

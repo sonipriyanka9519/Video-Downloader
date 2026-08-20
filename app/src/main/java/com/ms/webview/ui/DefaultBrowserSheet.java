@@ -74,6 +74,7 @@ public final class DefaultBrowserSheet {
         final boolean[] accepted = {false};
 
         content.findViewById(R.id.btnSetDefault).setOnClickListener(v -> {
+
             accepted[0] = true;
             sheet.dismiss();
             onAccept.run();

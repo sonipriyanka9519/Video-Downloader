@@ -42,20 +42,20 @@
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Ds.Caption"
             android:textColor="@color/ds_ink"
-            android:textSize="12sp"
+            android:textSize="@dimen/_10ssp"
             tools:text="Instagram" />
     </LinearLayout>
 
     <!-- Edit mode only. Sits over the tile's top-left corner. -->
     <ImageView
         android:id="@+id/shortcutRemove"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/_17sdp"
+        android:layout_height="@dimen/_17sdp"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="@dimen/ds_space_1"
         android:background="@drawable/ds_bg_remove_badge"
         android:contentDescription="@string/remove"
-        android:padding="3dp"
+        android:padding="@dimen/_3sdp"
         android:src="@drawable/ic_close"
         android:translationX="-24dp"
         android:visibility="gone"

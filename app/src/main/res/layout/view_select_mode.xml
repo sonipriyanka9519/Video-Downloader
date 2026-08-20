@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:textAppearance="@style/TextAppearance.Ds.Button"
             android:textColor="@color/ds_ink"
-            android:textSize="14sp"
+            android:textSize="@dimen/_12ssp"
             tools:text="Select all 4" />
 
         <TextView
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ds_space_2"
         android:layout_marginHorizontal="@dimen/ds_screen_padding_bleed"
-        android:maxHeight="280dp"
+        android:maxHeight="@dimen/_233sdp"
         android:nestedScrollingEnabled="true"
         tools:itemCount="4"
         tools:listitem="@layout/item_select_video" />

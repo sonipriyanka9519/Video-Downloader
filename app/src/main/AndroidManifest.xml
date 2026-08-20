@@ -296,6 +296,25 @@
             android:name=".ui.notify.UnwatchedReminder"
             android:exported="false" />
 
+        <!--
+          AdMob's application id. A literal, because a manifest cannot read a constant - the same
+          value lives in AdIds.TEST_APP_ID and the two have to be changed together. Getting it
+          wrong throws on initialise rather than failing quietly, which is the good kind of wrong.
+
+          This is the test id. Replace it with the real one from the console before release.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <!--
+          The SDK otherwise starts itself on the first activity, on the main thread. Ads.start does
+          it off-thread and only after consent, so the automatic one is turned off.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
+            android:value="true" />
+
     </application>
 
 </manifest>

@@ -20,6 +20,8 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ms.webview.R;
+import com.ms.webview.ads.AdIds;
+import com.ms.webview.ads.Banners;
 import com.ms.webview.ui.SystemBars;
 
 import java.util.concurrent.ExecutorService;
@@ -83,6 +85,9 @@ public class AppLockActivity extends AppCompatActivity implements PinPad.Listene
         pad = new PinPad(findViewById(R.id.lockRoot), this);
         // Clear of the status bar and the gesture area — the app is drawn edge to edge.
         SystemBars.pad(findViewById(R.id.lockRoot));
+
+        lockAdSlot = findViewById(R.id.lockAdSlot);
+        Banners.load(this, lockAdSlot, AdIds.banner());
 
         findViewById(R.id.btnForgotPin).setOnClickListener(v -> askRecovery());
         sensor.setOnClickListener(v -> promptBiometric());
@@ -223,9 +228,13 @@ public class AppLockActivity extends AppCompatActivity implements PinPad.Listene
 
     @Override
     protected void onDestroy() {
+        Banners.destroy(lockAdSlot);
         io.shutdownNow();
         super.onDestroy();
     }
+
+    /** The banner, held so it can be released with the screen. */
+    private android.view.ViewGroup lockAdSlot;
 
     private int dp(int value) {
         return Math.round(value * getResources().getDisplayMetrics().density);

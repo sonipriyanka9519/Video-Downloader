@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/ds_ink_soft"
-            android:textSize="13sp"
+            android:textSize="@dimen/_11ssp"
             android:fontFeatureSettings="tnum"
             android:visibility="gone"
             tools:text="3 of 4 selected"

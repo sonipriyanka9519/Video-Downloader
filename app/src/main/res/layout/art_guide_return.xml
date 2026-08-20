@@ -42,7 +42,7 @@
                 android:singleLine="true"
                 android:text="@string/link_you_copied"
                 android:textColor="@color/ds_ink"
-                android:textSize="10sp"
+                android:textSize="@dimen/_8ssp"
                 android:textStyle="bold" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/ds_ink_faint"
-                android:textSize="9sp"
+                android:textSize="@dimen/_8ssp"
                 tools:text="instagram.com/…" />
         </LinearLayout>
 
@@ -67,7 +67,7 @@
             android:paddingBottom="@dimen/ds_space_1"
             android:text="@string/home_open"
             android:textColor="@color/ds_on_accent"
-            android:textSize="10sp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold" />
     </LinearLayout>
 

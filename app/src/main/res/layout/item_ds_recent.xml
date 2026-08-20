@@ -36,8 +36,8 @@
             android:layout_gravity="bottom|start"
             android:layout_margin="@dimen/ds_space_2"
             android:background="@drawable/ds_bg_duration_chip"
-            android:paddingHorizontal="7dp"
-            android:paddingVertical="1dp"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:paddingVertical="@dimen/_1sdp"
             android:textAppearance="@style/TextAppearance.Ds.Caption"
             android:textColor="@color/ds_on_media"
             tools:text="0:43" />

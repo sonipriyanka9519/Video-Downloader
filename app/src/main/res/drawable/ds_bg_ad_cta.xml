@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The native ad's call to action.
+
+  A drawable rather than a Material button style, because the button itself is a plain TextView
+  now - see ad_native. Solid accent by request. It was accent-soft on the reasoning that an advert
+  should not be the most prominent thing on a page it is a guest on; it is now the same red as the
+  app's own buttons, so the placement rules do the work instead - the card is inset from the
+  content column and its button is sized to its text rather than filling the row.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ds_accent" />
+    <corners android:radius="@dimen/ds_radius_card" />
+</shape>
