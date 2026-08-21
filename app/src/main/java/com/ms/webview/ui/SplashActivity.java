@@ -48,6 +48,25 @@ import com.ms.webview.ui.guide.WalkthroughActivity;
  */
 public class SplashActivity extends AppCompatActivity {
 
+    /**
+     * Whether the opening has already been played in this process.
+     *
+     * <p>The brand and the ad belong to the launch, and the launch happens once. Everything that
+     * can start the app from outside - a shared link, a tapped web link when this is the default
+     * browser, a download notification - arrives at MainActivity rather than here, so those
+     * openings skipped the splash and the ad with it. MainActivity checks this and sends the
+     * intent back through here when it is false; see MainActivity.onCreate.
+     *
+     * <p>Static rather than stored, because it is a fact about this process and not about the
+     * install: the next cold start should open properly again.
+     */
+    private static volatile boolean opened;
+
+    /** True once the splash has handed over in this process. */
+    public static boolean hasOpened() {
+        return opened;
+    }
+
     /** The entrance, and the whole of how long this screen is up. Well inside the 1.5s ceiling. */
     private static final long HOLD_MS = 100L;
 
@@ -254,10 +273,21 @@ public class SplashActivity extends AppCompatActivity {
         Intent next = HowTo.isSeen(this)
                 ? new Intent(this, MainActivity.class)
                 : WalkthroughActivity.firstRun(this);
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            next.putExtras(getIntent().getExtras());
+        // The whole intent, not only its extras.
+        //
+        // A shared link is ACTION_SEND carrying EXTRA_TEXT, but a tapped web link is ACTION_VIEW
+        // with a data uri - and a uri is not an extra. Copying extras alone would carry a
+        // notification's payload through and drop every link on the floor.
+        Intent from = getIntent();
+        if (from != null) {
+            if (from.getAction() != null) next.setAction(from.getAction());
+            if (from.getData() != null) next.setDataAndType(from.getData(), from.getType());
+            if (from.getExtras() != null) next.putExtras(from.getExtras());
         }
+        // Set before the handover, so the screen we start does not send us straight back here.
+        opened = true;
         startActivity(next);
+
         // No reverse transition: this screen must not come back on Back.
         finish();
         // And no forward one either, now that an ad can come between. A cross-fade here played the

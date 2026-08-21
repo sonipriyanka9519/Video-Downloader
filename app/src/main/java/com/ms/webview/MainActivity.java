@@ -32,6 +32,7 @@ import com.ms.webview.data.DownloadEntity;
 import com.ms.webview.data.DownloadStatus;
 import com.ms.webview.push.PushLink;
 import com.ms.webview.ads.Interstitials;
+import com.ms.webview.ui.SplashActivity;
 import com.ms.webview.ui.BrowserFragment;
 import com.ms.webview.ui.MainPagerAdapter;
 import com.ms.webview.ui.Snacks;
@@ -80,7 +81,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // The opening now belongs to SplashActivity; this is reached already branded.
         super.onCreate(savedInstanceState);
+
+        // Unless it did not. A share, a web link opened because this is the default browser, and a
+        // download notification all name this activity directly - they are filters and pending
+        // intents pointing here, not at the splash - so those launches arrived with no brand and,
+        // more to the point, no app-open ad.
+        //
+        // Rather than move the filters and retarget the notifications, the check sits at the one
+        // place all three arrive. The intent is handed to the splash whole and comes back through
+        // handOver once the opening has played.
+        //
+        // Two guards keep this from firing when it should not: hasOpened is false only on a cold
+        // start, so a share arriving at a running app still lands on onNewIntent and never reaches
+        // here; and a non-null savedInstanceState means the system is restoring this screen after
+        // killing it, where replaying the opening would throw away the state it just restored.
+        if (!SplashActivity.hasOpened() && savedInstanceState == null) {
+            Intent opening = new Intent(this, SplashActivity.class);
+            Intent from = getIntent();
+            if (from != null) {
+                if (from.getAction() != null) opening.setAction(from.getAction());
+                if (from.getData() != null) opening.setDataAndType(from.getData(), from.getType());
+                if (from.getExtras() != null) opening.putExtras(from.getExtras());
+            }
+            startActivity(opening);
+            // Finished before anything is inflated, so there is no frame of a half-built screen
+            // between the launcher and the brand.
+            finish();
+            return;
+        }
+
         EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_main);
 
         pager = findViewById(R.id.mainPager);
